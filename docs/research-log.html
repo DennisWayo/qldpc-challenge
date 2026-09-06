@@ -3,6 +3,60 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
+<section class=blk><h3><a href="codes/16-4-4.html">[[16,4,4]] — 16-4-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details open><summary>note</summary><div class=notebody><h3>[[16,4,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>local-2d-single × weight-6</code>. Before this campaign the cell held 6 entries with best kd²/n = 3.56 ([[18,4,4]]); the (n, 4, 4) point was unoccupied. Hypothesis (the campaign&#x27;s 2026-09-02 postmortem identified t=3 on small grids as the open move): t=3 detection — a CNF requiring every weight-≤3 Pauli error to be detected — forces d ≥ 4 by construction, and a SAT enumeration over locality-constrained anchor incidence can reach k ≥ 4 at d ≥ 4 on small grids where free-form SAT search collapses.</p>
+<h4>What was searched</h4>
+<p>Locality-constrained SAT enumeration (pysat CaDiCaL153, streamed CNF): qubits on a 4x4 grid, 6 generator rows per side, every check anchored within Euclidean radius 2.0 of a SAT-chosen anchor site, per-row weight ≤ 6 (sequential-counter encoding), t=3 detection clauses over all weight-≤3 errors, solutions blocked on the check-incidence pattern (one code per distinct matrix). ~50 raw solutions per configuration were screened with exact GF(2) k, an 800-trial RIS distance screen (keeping d ≥ 4 only), a board dominance pre-filter, and the trusted gate. This code is the configuration whose check matrix matches <code>codes/16-4-4.json</code> (fingerprint 3440fc480e2f); the full sweep parameters are in <code>provenance.construction</code>.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>RIS witness search (20,000 trials + accelerator pass): weight-4</li>
+<p>X-side logical and weight-4 Z-side logical, so d ≤ 4 on both sides. This is the tier the submission carries: witness-backed upper bound.</p>
+<li>Exact certification in staging: <code>verify/certify.py</code> (scipy/HiGHS MILP, one</li>
+<p>no-lighter-logical proof per logical-basis row, both sides) returned d_X = 4 and d_Z = 4 exact for this matrix. A maintainer can reproduce that with `uv run python verify/certify.py codes/16-4-4.json`; the board tier upgrades only on that server-side run.</p>
+<li>Trusted gate <code>verify/validate_candidate.py</code>: passed, board-advancing</li>
+<p>(novelty unverified against the wider literature).</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>t=3 at 6×6 with 15 rows/side needs tens of millions of auxiliary</li>
+<p>variables (13 GB measured footprint) — out of a 16 GB laptop with this encoder; 4x4 with 6 rows/side is the affordable cell.</p>
+<li>CryptoMiniSat (XOR-native, Gaussian elimination) budgeted out with zero</li>
+<p>yields on both t=3 cells where CaDiCaL yielded codes; kissat cannot enumerate at all (pysat wrapper aborts on incremental add_clause).</p>
+<li>Minisat22/Minicard lack pysat time budgets; unbounded solve/block rounds</li>
+<p>burned hours at zero yield before a round cap was added.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: GLM 5.3 Flash (matches provenance.model). Harness: an overnight locality-SAT enumerator built on python-sat with streamed clause emission, conflict budgets and a hard round cap; exact-distance verification via <code>verify/certify.py</code>; screening and packaging via the repo kit (<code>research/kit/</code>); gate via <code>verify/validate_candidate.py</code>. Compute: one MacBook Air (M-series), roughly two hours per configuration ladder.</p>
+<h4>Reproduction</h4>
+<p>Rebuild from the submitted checks directly: the X and Z supports in <code>codes/16-4-4.json</code> are the construction. To regenerate the family: enumerate locality-constrained CSS codes with the parameters in <code>provenance.construction</code> (4x4 grid, 6 rows/side, weight ≤ 6, radius 2.0, t=3 detection, CaDiCaL backend), screen for k ≥ 4 and RIS d ≥ 4, and match the fingerprint above. Verify with <code>uv run python verify/qldpc_verify.py codes/16-4-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/16-4-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/25-5-4.html">[[25,5,4]] — 25-5-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details open><summary>note</summary><div class=notebody><h3>[[25,5,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>local-2d-single × weight-6</code>. Before this campaign the cell held 6 entries with best kd²/n = 3.56 ([[18,4,4]]); the (n, 5, 4) point was unoccupied. Hypothesis (the campaign&#x27;s 2026-09-02 postmortem identified t=3 on small grids as the open move): t=3 detection — a CNF requiring every weight-≤3 Pauli error to be detected — forces d ≥ 4 by construction, and a SAT enumeration over locality-constrained anchor incidence can reach k ≥ 5 at d ≥ 4 on small grids where free-form SAT search collapses.</p>
+<h4>What was searched</h4>
+<p>Locality-constrained SAT enumeration (pysat CaDiCaL153, streamed CNF): qubits on a 5x5 grid, 10 generator rows per side, every check anchored within Euclidean radius 2.0 of a SAT-chosen anchor site, per-row weight ≤ 6 (sequential-counter encoding), t=3 detection clauses over all weight-≤3 errors, solutions blocked on the check-incidence pattern (one code per distinct matrix). ~50 raw solutions per configuration were screened with exact GF(2) k, an 800-trial RIS distance screen (keeping d ≥ 4 only), a board dominance pre-filter, and the trusted gate. This code is the configuration whose check matrix matches <code>codes/25-5-4.json</code> (fingerprint af05edd55bab); the full sweep parameters are in <code>provenance.construction</code>.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>RIS witness search (20,000 trials + accelerator pass): weight-4</li>
+<p>X-side logical and weight-4 Z-side logical, so d ≤ 4 on both sides. This is the tier the submission carries: witness-backed upper bound.</p>
+<li>Exact certification in staging: <code>verify/certify.py</code> (scipy/HiGHS MILP, one</li>
+<p>no-lighter-logical proof per logical-basis row, both sides) returned d_X = 4 and d_Z = 4 exact for this matrix. A maintainer can reproduce that with `uv run python verify/certify.py codes/25-5-4.json`; the board tier upgrades only on that server-side run.</p>
+<li>Trusted gate <code>verify/validate_candidate.py</code>: passed, board-advancing</li>
+<p>(novelty unverified against the wider literature).</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>t=3 at 6×6 with 15 rows/side needs tens of millions of auxiliary</li>
+<p>variables (13 GB measured footprint) — out of a 16 GB laptop with this encoder; 5x5 with 10 rows/side is the affordable cell.</p>
+<li>CryptoMiniSat (XOR-native, Gaussian elimination) budgeted out with zero</li>
+<p>yields on both t=3 cells where CaDiCaL yielded codes; kissat cannot enumerate at all (pysat wrapper aborts on incremental add_clause).</p>
+<li>Minisat22/Minicard lack pysat time budgets; unbounded solve/block rounds</li>
+<p>burned hours at zero yield before a round cap was added.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: GLM 5.3 Flash (matches provenance.model). Harness: an overnight locality-SAT enumerator built on python-sat with streamed clause emission, conflict budgets and a hard round cap; exact-distance verification via <code>verify/certify.py</code>; screening and packaging via the repo kit (<code>research/kit/</code>); gate via <code>verify/validate_candidate.py</code>. Compute: one MacBook Air (M-series), roughly two hours per configuration ladder.</p>
+<h4>Reproduction</h4>
+<p>Rebuild from the submitted checks directly: the X and Z supports in <code>codes/25-5-4.json</code> are the construction. To regenerate the family: enumerate locality-constrained CSS codes with the parameters in <code>provenance.construction</code> (5x5 grid, 10 rows/side, weight ≤ 6, radius 2.0, t=3 detection, CaDiCaL backend), screen for k ≥ 4 and RIS d ≥ 4, and match the fingerprint above. Verify with <code>uv run python verify/qldpc_verify.py codes/25-5-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/25-5-4.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/360-10-28.html">[[360,10,28]] — 360-10-28</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/shiy1022">@shiy1022</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[360,10,28]] — two-block group algebra on Z_30 : Z_6 with r = 19 (order 180)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-8 x unrestricted</code>. The board&#x27;s weight-8 cell is led on efficiency by high-rate codes (best kd^2/n ~ 124.5), but its **low-k, high-distance corner at moderate n is thinly populated** — the Pareto frontier there runs over (n, k, d, w) jointly, so a code can join it by filling an empty corner without leading on kd^2/n. This code sits at kd^2/n = 21.778, well below the cell leader, and advances the cell on that basis rather than on score. 2BGA on non-abelian groups was chosen because left and right multiplication in the group algebra commute, so CSS holds for any choice of supports, making the whole family admissible without a validity filter.</p>
@@ -37,7 +91,7 @@ mul, _ = metacyclic(30, 6, 19)
 HX, HZ = build_2bga(mul, [67, 61, 81, 91], [144, 166, 160, 171])
 </pre>
 <p>Gives n = 360, k = 10 (recomputed over GF(2)), max check weight 8. The distance witnesses are in the submission JSON; the verifier re-checks each support is in ker(H_opposite), outside rowspace(H_own), and of the claimed weight.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-10-28.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/480-8-30.html">[[480,8,30]] — 480-8-30</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[480,8,30]] weight-6 two-block group algebra code on C_3 x| C_80</h3>
+<section class=blk><h3><a href="codes/480-8-30.html">[[480,8,30]] — 480-8-30</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[480,8,30]] weight-6 two-block group algebra code on C_3 x| C_80</h3>
 <h4>Why this family</h4>
 <p>The board&#x27;s six check-weight-6 <code>2bga-coset</code> entries all stop at or below n = 240 against MAX_N = 700, and they trace to Table 1 of arXiv:2306.16400, which tabulates small groups. That is a provenance gap rather than evidence of a thin space, and it was tested by sweeping the two obvious non-abelian families past n = 240.</p>
 <p>A two-block group algebra code sets H_X = [Lm(a) | Rm(b)] and H_Z = [Rm(b)^T | Lm(a)^T]. Left and right multiplication commute for any group, so the CSS condition holds without the group being abelian; it was checked on every candidate rather than assumed.</p>
@@ -55,7 +109,7 @@ HX, HZ = build_2bga(mul, [67, 61, 81, 91], [144, 166, 160, 171])
 <p>gf2-validated witness at every level, stable across the last two decades of budget, final null at 8,000,000 trials.</p>
 <h4>A dead end worth recording</h4>
 <p>An earlier screen kept ONE representative pair per (n,k) class and measured its distance. On Z_255 at k = 16 that representative reads d &lt;= 2 where the board&#x27;s own [[510,16,24]] reads 24. k is a property of the ideal a pair generates and says nothing about distance, so a class has to be sampled, not represented. Every search here is two-level for that reason.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/480-8-30.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/240-6-22.html">[[240,6,22]] — 240-6-22</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/simsaidan">@simsaidan</a> &middot; Cursor Composer 2.5</div><details open><summary>note</summary><div class=notebody><h3>[[240,6,22]] — metacyclic 2BGA on Z_15 ⋊ Z_8 (r=4)</h3>
+<section class=blk><h3><a href="codes/240-6-22.html">[[240,6,22]] — 240-6-22</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/simsaidan">@simsaidan</a> &middot; Cursor Composer 2.5</div><details ><summary>note</summary><div class=notebody><h3>[[240,6,22]] — metacyclic 2BGA on Z_15 ⋊ Z_8 (r=4)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Aim: the unrestricted × weight-8 cell, via non-abelian 2BGA on metacyclic groups — the family line that historically produced board codes such as [[294,8,19]]. Random abelian BB is largely mined; metacyclic groups still leave moderate-n openings for weight-8 supports.</p>
 <h4>What was searched</h4>
