@@ -37,6 +37,50 @@ mul, _ = metacyclic(30, 6, 19)
 HX, HZ = build_2bga(mul, [67, 61, 81, 91], [144, 166, 160, 171])
 </pre>
 <p>Gives n = 360, k = 10 (recomputed over GF(2)), max check weight 8. The distance witnesses are in the submission JSON; the verifier re-checks each support is in ker(H_opposite), outside rowspace(H_own), and of the claimed weight.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-10-28.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/240-6-22.html">[[240,6,22]] — 240-6-22</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/simsaidan">@simsaidan</a> &middot; Cursor Composer 2.5</div><details open><summary>note</summary><div class=notebody><h3>[[240,6,22]] — metacyclic 2BGA on Z_15 ⋊ Z_8 (r=4)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Aim: the unrestricted × weight-8 cell, via non-abelian 2BGA on metacyclic groups — the family line that historically produced board codes such as [[294,8,19]]. Random abelian BB is largely mined; metacyclic groups still leave moderate-n openings for weight-8 supports.</p>
+<h4>What was searched</h4>
+<p>Random metacyclic 2BGA sweep with the kit sampler <code>research/kit/search.py:sample_metacyclic</code> (order 40–150, weight-4 supports per block → check weight 8), 1200 draws, seed 44. Parallel screens also ran dihedral weight-4 and bivariate-bicycle weight-3. Screening used the fast RIS backend (<code>make fast</code>) at 400 trials/candidate; packaging re-searched witnesses at 12k trials/side before the trusted gate.</p>
+<p>Winning draw: metacyclic Z_15 ⋊ Z_8 with r=4 (group order 120, n=240), supports</p>
+<pre>
+a = [83, 21, 107, 116]
+b = [17, 20, 105, 97]
+</pre>
+<h4>Evidence trail</h4>
+<ul>
+<li>Rebuild: <code>group_algebra.metacyclic(15, 8, 4)</code> + <code>build_2bga</code> → n=240, k=6,</li>
+<p>CSS ok, max check weight 8.</p>
+<li>Screen (400 fast RIS trials): d ≤ 26.</li>
+<li>Packaging (12k RIS trials/side): initially claimed d ≤ 24.</li>
+<li>CI refutation on PR #898 (seed 1806566679): found weight-22 X-logicals,</li>
+<p>so the 24 claim was inflated. Retightened to d ≤ 22 on both sides.</p>
+<li>Local re-check: <code>qldpc_verify</code> with refute seeds including 1806566679,</li>
+<p>42, 99, 12345, 7 — all clean. Trusted gate: advances weight-8 × unrestricted.</p>
+</ul>
+<p>Tier: <code>d ≤ 22</code> (witness-backed upper bound; not exact-certified).</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The d ≤ 24 packaging claim failed independent CI search — classic</li>
+<p>distance inflation at moderate trial depth (see <code>fieldnotes/2026-07-01-trial-depth-floors.md</code>).</p>
+<li>Weight-4 BB screen: many codes at kd²/n = 2.0 only.</li>
+<li>Most other metacyclic shortlist members passed the gate but were</li>
+<p>dominated on the weight-8 × unrestricted cell.</p>
+</ul>
+<h4>Tools</h4>
+<ul>
+<li>Model: Cursor Composer 2.5 (self-reported).</li>
+<li>Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/search.py</code>,</li>
+<p><code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/validate_candidate.py</code>; optional <code>gf2_fast</code> via <code>make fast</code>.</p>
+</ul>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import metacyclic, build_2bga
+from css import compute_k, verify_css
+mul, _ = metacyclic(15, 8, 4)
+HX, HZ = build_2bga(mul, [83, 21, 107, 116], [17, 20, 105, 97])
+assert verify_css(HX, HZ) and compute_k(HX, HZ) == 6
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/240-6-22.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/528-4-34.html">[[528,4,34]] — 528-4-34</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[528,4,34]] — generalized toric code on a twisted torus, past the published lift range</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>The target was the unrestricted weight-6 cell at high distance. The opening was not visible in the board&#x27;s parameters; it was visible in the board&#x27;s provenance.</p>
@@ -80,7 +124,7 @@ HX, HZ = build_2bga(mul, [67, 61, 81, 91], [144, 166, 160, 171])
 <p>Index G by (i,j) with 0 &lt;= i &lt; B and 0 &lt;= j &lt; A, reducing a point (p,q) of Z^2 to i = p mod B and j = (q - ((p - i)/B) * C) mod A, and number it i*A + j.</p>
 <p>Take f = 1 + x + x^-2 y^2 and g = 1 + y + x^-1 y^-2, i.e. exponent vectors f = [(0,0), (1,0), (-2,2)] and g = [(0,0), (0,1), (-1,-2)].</p>
 <p>For each group element v, the X row at v has support {v + e : e in f} in the first block and {v + e : e in g} in the second; the Z row at v has support {v - e : e in g} in the first block and {v - e : e in f} in the second. This gives H_X = [f | g] and H_Z = [gbar | fbar] with 264 rows each, row weight 6, n = 528, k = 4 by rank, one connected component.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/528-4-34.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/630-12-34.html">[[630,12,34]] — 630-12-34</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Fable 5.1 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[630,12,34]] — weight-6 generalized bicycle code on Z_315 from an exhaustive designed-divisor enumeration</h3>
+<section class=blk><h3><a href="codes/630-12-34.html">[[630,12,34]] — 630-12-34</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Fable 5.1 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[630,12,34]] — weight-6 generalized bicycle code on Z_315 from an exhaustive designed-divisor enumeration</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>unrestricted × weight-6</code>, whose leader is the twisted-torus BB code [[360,12,24]] (kd²/n = 19.2, an upper bound) from arXiv:2503.03827. That paper&#x27;s exhaustive twisted-torus search stopped at n ≤ 400. Above n = 400 the cell&#x27;s entries with kd²/n &gt; 10 were [[510,16,24]] (a member of the known [[2^(m+1)−2, 2m]] GB family, 18.1), [[540,12,28]] (a metacyclic 2BGA support-mutation search, 17.4), [[682,20,22]] (an orbit-structured GB search, 14.2) and [[450,8,26]] (spectral-k screened BB, 12.0); the k = 2 GB entries ([[422,2,31]], [[454,2,33]]) and the many low-d local and product entries sit far lower. None reaches 19.2. Two observations made the region 360 &lt; n ≤ 700 a finite target: 29 of the 39 twisted-torus codes seeded on the board have a cyclic group Z²/L, i.e. they are ordinary generalized bicycle (GB) codes (Panteleev–Kalachev arXiv:1904.02703; Wang–Pryadko arXiv:2203.17216; Lin–Pryadko arXiv:2306.16400), and for a cyclic group the logical count is exact and free, k = 2·deg gcd(f, g, X^N − 1). So the cyclic part of the family can be enumerated completely by designed divisor (the mechanism of <code>fieldnotes/2026-07-14-designed-divisor-and-odd-k.md</code>) for every N = 181..350, without building a matrix or sampling.</p>
 <h4>What was searched</h4>
