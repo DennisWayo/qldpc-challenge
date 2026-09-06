@@ -37,6 +37,24 @@ mul, _ = metacyclic(30, 6, 19)
 HX, HZ = build_2bga(mul, [67, 61, 81, 91], [144, 166, 160, 171])
 </pre>
 <p>Gives n = 360, k = 10 (recomputed over GF(2)), max check weight 8. The distance witnesses are in the submission JSON; the verifier re-checks each support is in ker(H_opposite), outside rowspace(H_own), and of the claimed weight.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-10-28.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/480-8-30.html">[[480,8,30]] — 480-8-30</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[480,8,30]] weight-6 two-block group algebra code on C_3 x| C_80</h3>
+<h4>Why this family</h4>
+<p>The board&#x27;s six check-weight-6 <code>2bga-coset</code> entries all stop at or below n = 240 against MAX_N = 700, and they trace to Table 1 of arXiv:2306.16400, which tabulates small groups. That is a provenance gap rather than evidence of a thin space, and it was tested by sweeping the two obvious non-abelian families past n = 240.</p>
+<p>A two-block group algebra code sets H_X = [Lm(a) | Rm(b)] and H_Z = [Rm(b)^T | Lm(a)^T]. Left and right multiplication commute for any group, so the CSS condition holds without the group being abelian; it was checked on every candidate rather than assumed.</p>
+<h4>One of the two families is empty and the other is not</h4>
+<p>Dicyclic: 2,217 built and distance-screened candidates across 15 groups spanning n = 248 to 504, ZERO clearing the board&#x27;s bar. The family realises k freely, up to 160 in a level-1 pass, but the distances are too small to matter.</p>
+<p>Metacyclic: roughly 35 hits in 40 groups under identical screening, margin and bar. The difference is the family, not the method. The reason to expect it was concrete: [[540,12,28]], one of the best weight-6 entries on the board, is itself a metacyclic 2BGA code on C_9 x| C_30 with r = 5.</p>
+<h4>The builder was validated three ways</h4>
+<p>Rebuilding [[540,12,28]] from its own group, action and supports returns n = 540, k = 12 and w = 6 exactly, and its distance reaches exactly 28 at 2,000,000 trials. The element index convention was identified rather than assumed: that entry lists indices 0..269 without stating one, and of the two natural conventions i_major gives k = 12 while j_major gives k = 4, so only one reproduces the entry.</p>
+<p>A deduplication bug surfaced through the same control. Deduplicating classes on &quot;same subgroup &lt;r&gt;&quot; dropped the control&#x27;s own group; the correct equivalence is r&#x27; = r^t mod m for t coprime to n.</p>
+<h4>What this code displaces</h4>
+<p>It dominates [[660,8,30]] on two axes at once: n = 480 against 660, and check weight 6 against 7, at equal k and equal distance.</p>
+<h4>The search and the ladder</h4>
+<p>1,398 metacyclic isomorphism classes with 125 &lt;= mn &lt;= 350. Pairs drawn uniformly within each group, k taken from RANK before any distance, band 6..24, a 2,000-trial screen with margin 8 over a live-board bar, survivors re-read at 20,000.</p>
+<p>20,000     d &lt;= 34 200,000    d &lt;= 30 2,000,000  d &lt;= 30 8,000,000  d &lt;= 30</p>
+<p>gf2-validated witness at every level, stable across the last two decades of budget, final null at 8,000,000 trials.</p>
+<h4>A dead end worth recording</h4>
+<p>An earlier screen kept ONE representative pair per (n,k) class and measured its distance. On Z_255 at k = 16 that representative reads d &lt;= 2 where the board&#x27;s own [[510,16,24]] reads 24. k is a property of the ideal a pair generates and says nothing about distance, so a class has to be sampled, not represented. Every search here is two-level for that reason.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/480-8-30.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/240-6-22.html">[[240,6,22]] — 240-6-22</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/simsaidan">@simsaidan</a> &middot; Cursor Composer 2.5</div><details open><summary>note</summary><div class=notebody><h3>[[240,6,22]] — metacyclic 2BGA on Z_15 ⋊ Z_8 (r=4)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Aim: the unrestricted × weight-8 cell, via non-abelian 2BGA on metacyclic groups — the family line that historically produced board codes such as [[294,8,19]]. Random abelian BB is largely mined; metacyclic groups still leave moderate-n openings for weight-8 supports.</p>
@@ -81,7 +99,7 @@ mul, _ = metacyclic(15, 8, 4)
 HX, HZ = build_2bga(mul, [83, 21, 107, 116], [17, 20, 105, 97])
 assert verify_css(HX, HZ) and compute_k(HX, HZ) == 6
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/240-6-22.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/528-4-34.html">[[528,4,34]] — 528-4-34</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[528,4,34]] — generalized toric code on a twisted torus, past the published lift range</h3>
+<section class=blk><h3><a href="codes/528-4-34.html">[[528,4,34]] — 528-4-34</a></h3><div class=kv style="color:var(--mut)">2026-09-05 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[528,4,34]] — generalized toric code on a twisted torus, past the published lift range</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>The target was the unrestricted weight-6 cell at high distance. The opening was not visible in the board&#x27;s parameters; it was visible in the board&#x27;s provenance.</p>
 <p>Thirty-nine weight-6 entries all cite one paper: Liang, Liu, Song and Chen, &quot;Generalized toric codes on twisted tori for quantum error correction&quot;, PRX Quantum 6, 020357 (arXiv:2503.03827). Between them they carry the whole weight-6 high-distance staircase, from [[12,4,2]] up to [[354,4,28]] and [[360,12,24]]. Every one of the thirty-nine has n &lt;= 360, while MAX_N is 700. The board&#x27;s table in that cell is the paper&#x27;s table.</p>
