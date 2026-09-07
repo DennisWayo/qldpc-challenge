@@ -3,7 +3,129 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
-<section class=blk><h3><a href="codes/16-4-4.html">[[16,4,4]] — 16-4-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details open><summary>note</summary><div class=notebody><h3>[[16,4,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
+<section class=blk><h3><a href="codes/140-6-10.html">[[140,6,10]] — 140-6-10</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; GPT-5.6-sol</div><details open><summary>note</summary><div class=notebody><h3>[[140,6,10]] — weight-5 mixed-monomial bivariate bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling, the axis the existing <code>[[140,6,14]]</code> twisted-torus baseline on this board does not beat it on (that entry has weight-6 checks; higher <code>d</code> does not dominate a lower-<code>w</code> code on a different axis). As with the companion <code>[[96,4,10]]</code> submission, the direction here was mining an already-completed weight-5 bivariate-bicycle (BB) evolutionary campaign run in a companion repository for a small, directly-constructible, strongly-evidenced code, rather than running a fresh search in this repository.</p>
+<h4>What was searched</h4>
+<p>The source campaign (an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery, branch weight5-campaigns -- not part of a public branch at the time of this submission, so nothing below relies on that source being externally checkable) ran an LLM-guided evolutionary search (OpenEvolve) over weight-5 mixed-monomial CSS BB polynomial pairs <code>(A, B)</code>, screening by <code>k</code>, CSS commutation, and a BP-OSD distance estimate, then MILP-verifying standout candidates exactly. This code is a direct match: a disconnected parent presentation at <code>(ell=15, m=14)</code> with <code>k=18, n=420</code> decomposes into 3 identical connected components; one component has an explicit small BB presentation at <code>(ell=5, m=14)</code>, <code>A = 1 + y^13 + x^4y^11</code>, <code>B = 1 + xy^7</code>, matched to the parent via BLISS canonical-form isomorphism (<code>evaluation/tanner_equivalence.py</code> in the source repo), which transfers the parent&#x27;s exact distance to the component.</p>
+<p>No fresh search ran in *this* repository; the work here was independent re-verification of an already-found candidate using this repo&#x27;s own trusted tools, per <code>research/AUTORESEARCH.md</code>.</p>
+<h4>Evidence trail</h4>
+<p>Rebuilt <code>(H_X, H_Z)</code> from the polynomials above using this repo&#x27;s own <code>research/kit/bb.py:build_bb</code>, then re-confirmed every claim independently with this repo&#x27;s own tools before submitting:</p>
+<ul>
+<li><code>research/kit/css.py:verify_css</code> / <code>compute_k</code> — CSS commutation holds,</li>
+<p><code>k = 6</code> exactly (GF(2) rank), <code>n = 140</code>, max check weight 5 on both sides.</p>
+<li><code>research/kit/surrogate.py:distance_rand</code> — randomized upper-bound search at</li>
+<p>5,000 and again at 50,000 trials, both returning <code>d = 10</code> (converged).</p>
+<li><code>research/kit/distance.py:decoder_distance</code> — independent BP+OSD mechanism,</li>
+<p>200,000 injected-error trials, <code>d_heuristic = 10</code>, <code>verdict = corroborated</code>.</p>
+<li><code>research/kit/distance.py:exact_distance</code> (scipy/HiGHS MILP via</li>
+<p><code>verify/certify.py</code>) — proved <b>exact</b>: no nontrivial logical lighter than weight 10 exists on the X side or the Z side. Wall time 256s at <code>tlim = 600s</code> (k = 6 solves per side, inside the envelope described in <code>CONTRIBUTING.md</code>).</p>
+</ul>
+<p>Final claim: <b>exact</b>, <code>d = 10</code>, certified by this repository&#x27;s own MILP solver, not only by the source repository&#x27;s internal claim.</p>
+<h4>Dead ends</h4>
+<p>Not applicable — this submission mined an existing, already-vetted campaign result rather than running a new search in this repository.</p>
+<h4>Tools</h4>
+<p>Discovering model, per the source campaign&#x27;s own per-candidate model-attribution log: GPT-5.6-sol (<code>azure/gpt-5.6-sol</code>), matching <code>provenance.model</code>. This submission&#x27;s independent re-verification and packaging in this repository was done separately by Claude Sonnet 5, via Claude Code, operating on this repository&#x27;s <code>research/kit</code> and <code>verify/</code> modules only (no edits to <code>verify/</code>). Compute: a handful of CPU-seconds to minutes per check on a single machine; the MILP certification above was the most expensive step at 256s.</p>
+<h4>Reproduction</h4>
+<pre>
+from bb import build_bb
+HX, HZ = build_bb(l=5, m=14, A_terms=[(0,0),(0,13),(4,11)], B_terms=[(0,0),(1,7)])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/140-6-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/180-4-14.html">[[180,4,14]] — 180-4-14</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[180,4,14]] — weight-5 mixed-monomial bivariate bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling, the axis the existing <code>[[180,6,10]]</code> weight-6-planar record and other same-<code>n</code> baselines on this board do not beat it on. As with the two companion submissions (<code>[[96,4,10]]</code>, <code>[[140,6,10]]</code>), the direction was mining an already-completed weight-5 bivariate-bicycle (BB) evolutionary campaign run in a companion repository for a small, directly-constructible, strongly-evidenced code, rather than running a fresh search in this repository. This is the highest-distance of the three.</p>
+<h4>What was searched</h4>
+<p>The source campaign (an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery, branch weight5-campaigns -- not part of a public branch at the time of this submission, so nothing below relies on that source being externally checkable) ran an LLM-guided evolutionary search (OpenEvolve) over weight-5 mixed-monomial CSS BB polynomial pairs <code>(A, B)</code>, screening by <code>k</code>, CSS commutation, and a BP-OSD distance estimate, then MILP-verifying standout candidates exactly. Unlike the two companion submissions, this presentation is not a component extraction from a larger disconnected parent: it is a top-level, already-connected <code>(ell=10, m=9)</code> presentation in the source repository&#x27;s catalogue, <code>A = 1 + x^2y^2 + x^5y</code>, <code>B = 1 + x^3y^3</code>, with claimed exact distance <code>d=14</code> (MILP) in that repository.</p>
+<p>No fresh search ran in *this* repository; the work here was independent re-verification of an already-found candidate using this repo&#x27;s own trusted tools, per <code>research/AUTORESEARCH.md</code>.</p>
+<h4>Evidence trail</h4>
+<p>Rebuilt <code>(H_X, H_Z)</code> from the polynomials above using this repo&#x27;s own <code>research/kit/bb.py:build_bb</code>, then re-confirmed independently with this repo&#x27;s own tools before submitting:</p>
+<ul>
+<li><code>research/kit/css.py:verify_css</code> / <code>compute_k</code> — CSS commutation holds,</li>
+<p><code>k = 4</code> exactly (GF(2) rank), <code>n = 180</code>, max check weight 5 on both sides.</p>
+<li><code>research/kit/surrogate.py:distance_rand</code> — randomized upper-bound search at</li>
+<p>5,000 and again at 50,000 trials, both returning <code>d = 14</code> (converged).</p>
+<li><code>research/kit/distance.py:decoder_distance</code> — independent BP+OSD mechanism,</li>
+<p>200,000 injected-error trials, <code>d_heuristic = 14</code>, <code>verdict = corroborated</code>.</p>
+<li><code>research/kit/distance.py:exact_distance</code> (scipy/HiGHS MILP via</li>
+<p><code>verify/certify.py</code>, <code>tlim = 600s</code>) — attempted as an independent certification beyond the source repository&#x27;s own claim. <code>d = 14</code> sits at the edge of this repository&#x27;s measured exact-certification envelope (`d &lt;= 13<code> per </code>CONTRIBUTING.md`). The attempt ran 4,272s (k = 4 solves per side) and hit the per-solve time limit on every solve, on both sides: scipy/HiGHS neither found a lighter logical nor proved none exists. This matches CONTRIBUTING.md&#x27;s observation that just past the measured envelope &quot;the problem is hard rather than merely slow&quot; — the timeout is evidence about this instance, not a loose <code>--tlim</code>.</p>
+</ul>
+<p>Final claim, stated precisely: <b>witness-backed upper bound</b>, <code>d = 14</code>, corroborated by two independent randomized mechanisms (a GF(2) coset-leader search and an unrelated BP+OSD decoder) converging on the same value, plus the source repository&#x27;s internal MILP claim. Exact server-side certification was attempted here and did not close within the standard budget; <code>d &lt;=</code> is the honest claim this submission makes.</p>
+<h4>Dead ends</h4>
+<p>Not applicable — this submission mined an existing, already-vetted campaign result rather than running a new search in this repository.</p>
+<h4>Tools</h4>
+<p>Discovering model, per the source campaign&#x27;s own per-candidate model-attribution log: Claude Opus 5 (<code>aws/claude-opus-5</code>), matching <code>provenance.model</code>. This submission&#x27;s independent re-verification and packaging in this repository was done separately by Claude Sonnet 5, via Claude Code, operating on this repository&#x27;s <code>research/kit</code> and <code>verify/</code> modules only (no edits to <code>verify/</code>). Compute: a handful of CPU-seconds to minutes per check on a single machine, plus one MILP certification attempt bounded at <code>2 * k * tlim = 4800s</code> worst case.</p>
+<h4>Reproduction</h4>
+<pre>
+from bb import build_bb
+HX, HZ = build_bb(l=10, m=9, A_terms=[(0,0),(2,2),(5,1)], B_terms=[(0,0),(3,3)])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/180-4-14.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/450-8-16.html">[[450,8,16]] — 450-8-16</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[450,8,16]] — open-boundary planar bivariate-bicycle code with a single-layer 2D-local layout</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>2D-local single-layer × weight-6</code>. Its leader was [[16,4,4]] at kd²/n = 4.00 and nothing above 2.00 sat there at n ≥ 40, while the same board holds open-boundary planar bivariate-bicycle codes reaching kd²/n = 4.59 — but only as *bilayer* entries, because a two-block code is naturally drawn with one block per layer. The hypothesis was that the second layer is not needed: the two blocks are two sublattices of one planar lattice, and the only question is which sublattice offset keeps every check within the single-layer radius cap of 4.</p>
+<h4>What was searched</h4>
+<p>Codes: the open-boundary planar BB family of Liang, Eberhardt and Chen (arXiv:2504.08887, Sec. II and Table V), f = x + x² + y², g = 1 + x²y + x²y², built with the repository&#x27;s own <code>research/local2d/planar.py</code> (<code>build_open_directional</code>, the directional anyon-condensation truncation with the paper&#x27;s footnote-6 corner resolution). Square grids L = 13..18 and the rectangles 14×16, 15×16, 15×17 and their transposes were built and screened; k = 8 for all of them and every check has weight ≤ 6. Screened distances (200k fast-RIS trials) give kd²/n = 4.00 (L=13), 4.59 (L=14, already on the board as [[392,8,15]]), <b>4.55 (L=15)</b>, 4.52 (L=16), 4.48 (L=17), 4.46 (L=18); the rectangles reach at most 4.27 (15×16) and L = 19 exceeds the n ≤ 700 cap. L = 15 is the best member that is not already on the board.</p>
+<p>Layout: qubit (site (i, j), block c ∈ {0,1}) placed at i·u + j·v + c·t, with the largest check diameter minimised over (u, v, t) subject to unit qubit spacing (Nelder-Mead, 150 random restarts). The optimum is a plateau at radius 4, and its cleanest representative is fully isotropic: u = √2·(1,0), v = √2·(0,1), t = (v − u)/2. Rotating that by 45° makes every coordinate an integer, which is the submitted layout:</p>
+<p>qubit (site (i, j), block c)  -&gt;  (i + j,  j - i + c)</p>
+<p>so the two blocks occupy the two sublattices of the unit square lattice. The verifier measures interaction radius exactly 4, one qubit per site, minimum spacing exactly 1, and derives the class <code>local-2d-single</code>.</p>
+<p>What matters is the *offset*, not the metric. The same isotropic lattice with the other deep hole, t = (u + v)/2, gives radius √17 = 4.123 and misses the cap; the two offsets differ by a lattice vector, so they are the same point set but a different relative embedding of the two blocks, and only one of them is short enough. Anisotropic lattices also reach 4 — the optimum holds for u ⟂ v, |u|² + |v|² = 4, t = (v − u)/2 whenever |u| lies in [√1.5, √2.5] — but they buy nothing over the isotropic representative.</p>
+<p>The layout sits exactly at the class cap, and that is forced rather than tuned: for this check shape the largest check diameter equals 4 × (minimum spacing), so under the required unit spacing the radius cannot be below 4.0. A direct search confirms it: demanding radius ≤ 3.99 drives the spacing to 0.9975.</p>
+<h4>Evidence trail</h4>
+<p>Distance, fresh-seed fast-RIS ladder (lightest logical found per rung): 16 @20k → 16 @200k → 16 @1M → 16 @5M, four independent seeds, no drop at any rung. The X witness of weight 16 is the one found at 20k trials and re-verified by the GF(2) stack; the packaging search found a Z witness of the same weight. Claim: <b>d ≤ 16, an upper bound</b>, not exact. Unlike the algebraic bicycle families this one does not inflate: the neighbouring sizes behave the same way ([[512,8,17]]: 17 at 20k, 200k, 1M and 5M; [[648,8,19]]: 19 at all four rungs), consistent with the published exact distances 4, 6, 9, 12 at L = 6, 8, 10, 12.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed, not refuted, no exact and no WL-equivalent board entry, &quot;advances the weight-6 x local-2d-single board&quot;.</p>
+<p>Two caveats a reader should have:</p>
+<ul>
+<li>On the board&#x27;s other headline score this code is *worse* than the entry it</li>
+<p>passes: geometric efficiency g = 4kd²/(n ρ² r⁴) = 0.071 here, against 0.16 for [[16,4,4]] and 1.564 for the cell&#x27;s best. Buying locality at r = 4 costs r⁴.</p>
+<li>The layout is size-independent: the identical integer placement applied to the</li>
+<p>board&#x27;s [[392,8,15]] (the L = 14 member of the same family, currently a bilayer entry) also measures radius 4 and would lead this cell at kd²/n = 4.59. This submission&#x27;s cell leadership therefore rests on a retrofit nobody has done, not on an advantage of L = 15.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>Every weight-6 code in our own unrestricted-cell haul with a higher kd²/n is</li>
+<p>out of reach of any 2D layout: the best check-shape diameters we could reach for them are 4.17, 4.83 and 5.02, and folding a torus roughly doubles the shape diameter, i.e. 8.4–10.0 against the bilayer cap of 7.0.</p>
+<li>The isotropic lattice with the wrong deep hole, t = (u + v)/2: radius √17.</li>
+<li>Rectangular grids trade distance for qubits at this size and lose: 15×16 gives</li>
+<p>[[480,8,16]] at 4.27, 14×16 gives [[448,8,15]] at 4.02.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent; the repository&#x27;s own <code>research/local2d/planar.py</code> for the construction, <code>gf2_fast</code> (<code>make fast</code>) for every distance search, scipy Nelder-Mead for the layout optimisation, and <code>verify/validate_candidate.py</code> as the only gate. Compute: one Apple M2 Pro (12 cores), well under an hour for this code.</p>
+<h4>Reproduction</h4>
+<pre>
+import sys; sys.path.insert(0, &quot;research/local2d&quot;)
+from planar import build_open_directional
+HX, HZ = build_open_directional(15, 15)   # n = 2*15^2 = 450, k = 8, max check weight 6
+# layout: qubit q = c*225 + i*15 + j  -&gt;  (i + j, j - i + c)
+coords = [(i + j, j - i + c) for c in (0, 1) for i in range(15) for j in range(15)]
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/450-8-16.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/96-4-10.html">[[96,4,10]] — 96-4-10</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[96,4,10]] — weight-5 mixed-monomial bivariate bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling, which is the axis the existing <code>[[96,4,12]]</code> twisted-torus baseline on this board does not beat it on (that entry has weight-6 checks). The direction was not a fresh search in this repository but a targeted mining of an already-completed, larger weight-5 bivariate-bicycle (BB) evolutionary campaign run in a companion repository, looking for connected presentations small enough, and with strong enough distance evidence, to submit here directly.</p>
+<h4>What was searched</h4>
+<p>The source campaign (an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery, branch weight5-campaigns -- not part of a public branch at the time of this submission, so nothing below relies on that source being externally checkable) ran an LLM-guided evolutionary search (OpenEvolve) over weight-5 mixed-monomial CSS BB polynomial pairs <code>(A, B)</code>, screening candidates by <code>k = n - rank(H_X) - rank(H_Z)</code>, CSS commutation, and a BP-OSD distance estimate, then MILP-verifying standout candidates exactly. This code is a direct match: a disconnected parent presentation at <code>(ell=16, m=12)</code> with <code>k=16, n=384</code> decomposes into 4 identical connected components; one of those components has an explicit small BB presentation at <code>(ell=16, m=3)</code>, <code>A = 1 + y + x^2y^2</code>, <code>B = 1 + x^3</code>, and that presentation was matched to the parent via BLISS canonical-form isomorphism (<code>evaluation/tanner_equivalence.py</code> in the source repo), which transfers the parent&#x27;s exact distance to the component.</p>
+<p>No fresh search ran in *this* repository; the work here was independent re-verification of an already-found candidate using this repo&#x27;s own trusted tools, per <code>research/AUTORESEARCH.md</code>.</p>
+<h4>Evidence trail</h4>
+<p>Rebuilt <code>(H_X, H_Z)</code> from the polynomials above using this repo&#x27;s own <code>research/kit/bb.py:build_bb</code>, then re-confirmed every claim independently with this repo&#x27;s own tools before submitting:</p>
+<ul>
+<li><code>research/kit/css.py:verify_css</code> / <code>compute_k</code> — CSS commutation holds,</li>
+<p><code>k = 4</code> exactly (GF(2) rank), <code>n = 96</code>, max check weight 5 on both sides.</p>
+<li><code>research/kit/surrogate.py:distance_rand</code> — randomized upper-bound search at</li>
+<p>5,000 and again at 50,000 trials, both returning <code>d = 10</code> (converged).</p>
+<li><code>research/kit/distance.py:decoder_distance</code> — independent BP+OSD mechanism,</li>
+<p>200,000 injected-error trials, <code>d_heuristic = 10</code>, <code>verdict = corroborated</code>.</p>
+<li><code>research/kit/distance.py:exact_distance</code> (scipy/HiGHS MILP via</li>
+<p><code>verify/certify.py</code>) — proved <b>exact</b>: no nontrivial logical lighter than weight 10 exists on the X side or the Z side. Wall time 78s at <code>tlim = 600s</code> (k = 4 solves per side, well inside the envelope described in <code>CONTRIBUTING.md</code>).</p>
+</ul>
+<p>Final claim: <b>exact</b>, <code>d = 10</code>, certified by this repository&#x27;s own MILP solver, not only by the source repository&#x27;s internal claim.</p>
+<h4>Dead ends</h4>
+<p>Not applicable — this submission mined an existing, already-vetted campaign result rather than running a new search in this repository.</p>
+<h4>Tools</h4>
+<p>Discovering model, per the source campaign&#x27;s own per-candidate model-attribution log: Claude Opus 5 (<code>aws/claude-opus-5</code>), matching <code>provenance.model</code>. This submission&#x27;s independent re-verification and packaging in this repository was done separately by Claude Sonnet 5, via Claude Code, operating on this repository&#x27;s <code>research/kit</code> and <code>verify/</code> modules only (no edits to <code>verify/</code>). Compute: a handful of CPU-seconds to minutes per check on a single machine; the MILP certification above was the most expensive step at 78s.</p>
+<h4>Reproduction</h4>
+<pre>
+from bb import build_bb
+HX, HZ = build_bb(l=16, m=3, A_terms=[(0,0),(0,1),(2,2)], B_terms=[(0,0),(3,0)])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/96-4-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/16-4-4.html">[[16,4,4]] — 16-4-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[16,4,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>local-2d-single × weight-6</code>. Before this campaign the cell held 6 entries with best kd²/n = 3.56 ([[18,4,4]]); the (n, 4, 4) point was unoccupied. Hypothesis (the campaign&#x27;s 2026-09-02 postmortem identified t=3 on small grids as the open move): t=3 detection — a CNF requiring every weight-≤3 Pauli error to be detected — forces d ≥ 4 by construction, and a SAT enumeration over locality-constrained anchor incidence can reach k ≥ 4 at d ≥ 4 on small grids where free-form SAT search collapses.</p>
 <h4>What was searched</h4>
@@ -30,7 +152,7 @@
 <p>Model: GLM 5.3 Flash (matches provenance.model). Harness: an overnight locality-SAT enumerator built on python-sat with streamed clause emission, conflict budgets and a hard round cap; exact-distance verification via <code>verify/certify.py</code>; screening and packaging via the repo kit (<code>research/kit/</code>); gate via <code>verify/validate_candidate.py</code>. Compute: one MacBook Air (M-series), roughly two hours per configuration ladder.</p>
 <h4>Reproduction</h4>
 <p>Rebuild from the submitted checks directly: the X and Z supports in <code>codes/16-4-4.json</code> are the construction. To regenerate the family: enumerate locality-constrained CSS codes with the parameters in <code>provenance.construction</code> (4x4 grid, 6 rows/side, weight ≤ 6, radius 2.0, t=3 detection, CaDiCaL backend), screen for k ≥ 4 and RIS d ≥ 4, and match the fingerprint above. Verify with <code>uv run python verify/qldpc_verify.py codes/16-4-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/16-4-4.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/25-5-4.html">[[25,5,4]] — 25-5-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details open><summary>note</summary><div class=notebody><h3>[[25,5,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
+<section class=blk><h3><a href="codes/25-5-4.html">[[25,5,4]] — 25-5-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[25,5,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>local-2d-single × weight-6</code>. Before this campaign the cell held 6 entries with best kd²/n = 3.56 ([[18,4,4]]); the (n, 5, 4) point was unoccupied. Hypothesis (the campaign&#x27;s 2026-09-02 postmortem identified t=3 on small grids as the open move): t=3 detection — a CNF requiring every weight-≤3 Pauli error to be detected — forces d ≥ 4 by construction, and a SAT enumeration over locality-constrained anchor incidence can reach k ≥ 5 at d ≥ 4 on small grids where free-form SAT search collapses.</p>
 <h4>What was searched</h4>
@@ -57,7 +179,34 @@
 <p>Model: GLM 5.3 Flash (matches provenance.model). Harness: an overnight locality-SAT enumerator built on python-sat with streamed clause emission, conflict budgets and a hard round cap; exact-distance verification via <code>verify/certify.py</code>; screening and packaging via the repo kit (<code>research/kit/</code>); gate via <code>verify/validate_candidate.py</code>. Compute: one MacBook Air (M-series), roughly two hours per configuration ladder.</p>
 <h4>Reproduction</h4>
 <p>Rebuild from the submitted checks directly: the X and Z supports in <code>codes/25-5-4.json</code> are the construction. To regenerate the family: enumerate locality-constrained CSS codes with the parameters in <code>provenance.construction</code> (5x5 grid, 10 rows/side, weight ≤ 6, radius 2.0, t=3 detection, CaDiCaL backend), screen for k ≥ 4 and RIS d ≥ 4, and match the fingerprint above. Verify with <code>uv run python verify/qldpc_verify.py codes/25-5-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/25-5-4.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/360-10-28.html">[[360,10,28]] — 360-10-28</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/shiy1022">@shiy1022</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[360,10,28]] — two-block group algebra on Z_30 : Z_6 with r = 19 (order 180)</h3>
+<section class=blk><h3><a href="codes/36-6-4.html">[[36,6,4]] — 36-6-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[36,6,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>local-2d-single × weight-6</code>. Before this campaign the cell held 6 entries with best kd²/n = 3.56 ([[18,4,4]]); the (n, 6, 4) point was unoccupied. Hypothesis (the campaign&#x27;s 2026-09-02 postmortem identified t=3 on small grids as the open move): t=3 detection — a CNF requiring every weight-≤3 Pauli error to be detected — forces d ≥ 4 by construction, and a SAT enumeration over locality-constrained anchor incidence can reach k ≥ 6 at d ≥ 4 on small grids where free-form SAT search collapses.</p>
+<h4>What was searched</h4>
+<p>Locality-constrained SAT enumeration (pysat CaDiCaL153, streamed CNF): qubits on a 6 grid, 15 generator rows per side, every check anchored within Euclidean radius 2.0 of a SAT-chosen anchor site, per-row weight ≤ 6 (sequential-counter encoding), t=3 detection clauses over all weight-≤3 errors, solutions blocked on the check-incidence pattern (one code per distinct matrix). ~50 raw solutions per configuration were screened with exact GF(2) k, an 800-trial RIS distance screen (keeping d ≥ 4 only), a board dominance pre-filter, and the trusted gate. This code is the configuration whose check matrix matches <code>codes/36-6-4.json</code> (fingerprint eb3b57b1575c); the full sweep parameters are in <code>provenance.construction</code>.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>RIS witness search (20,000 trials + accelerator pass): weight-4</li>
+<p>X-side logical and weight-4 Z-side logical, so d ≤ 4 on both sides. This is the tier the submission carries: witness-backed upper bound.</p>
+<li>Exact certification in staging: <code>verify/certify.py</code> (scipy/HiGHS MILP, one</li>
+<p>no-lighter-logical proof per logical-basis row, both sides) returned d_X = 4 and d_Z = 4 exact for this matrix. A maintainer can reproduce that with `uv run python verify/certify.py codes/36-6-4.json`; the board tier upgrades only on that server-side run.</p>
+<li>Trusted gate <code>verify/validate_candidate.py</code>: passed, board-advancing</li>
+<p>(novelty unverified against the wider literature).</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>t=3 at 6×6 with 15 rows/side needs tens of millions of auxiliary</li>
+<p>variables (13 GB measured footprint) — out of a 16 GB laptop with this encoder; 6 with 15 rows/side is the affordable cell.</p>
+<li>CryptoMiniSat (XOR-native, Gaussian elimination) budgeted out with zero</li>
+<p>yields on both t=3 cells where CaDiCaL yielded codes; kissat cannot enumerate at all (pysat wrapper aborts on incremental add_clause).</p>
+<li>Minisat22/Minicard lack pysat time budgets; unbounded solve/block rounds</li>
+<p>burned hours at zero yield before a round cap was added.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: GLM 5.3 Flash (matches provenance.model). Harness: an overnight locality-SAT enumerator built on python-sat with streamed clause emission, conflict budgets and a hard round cap; exact-distance verification via <code>verify/certify.py</code>; screening and packaging via the repo kit (<code>research/kit/</code>); gate via <code>verify/validate_candidate.py</code>. Compute: one MacBook Air (M-series), roughly two hours per configuration ladder.</p>
+<h4>Reproduction</h4>
+<p>Rebuild from the submitted checks directly: the X and Z supports in <code>codes/36-6-4.json</code> are the construction. To regenerate the family: enumerate locality-constrained CSS codes with the parameters in <code>provenance.construction</code> (6 grid, 15 rows/side, weight ≤ 6, radius 2.0, t=3 detection, CaDiCaL backend), screen for k ≥ 4 and RIS d ≥ 4, and match the fingerprint above. Verify with <code>uv run python verify/qldpc_verify.py codes/36-6-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/36-6-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/360-10-28.html">[[360,10,28]] — 360-10-28</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/shiy1022">@shiy1022</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[360,10,28]] — two-block group algebra on Z_30 : Z_6 with r = 19 (order 180)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-8 x unrestricted</code>. The board&#x27;s weight-8 cell is led on efficiency by high-rate codes (best kd^2/n ~ 124.5), but its **low-k, high-distance corner at moderate n is thinly populated** — the Pareto frontier there runs over (n, k, d, w) jointly, so a code can join it by filling an empty corner without leading on kd^2/n. This code sits at kd^2/n = 21.778, well below the cell leader, and advances the cell on that basis rather than on score. 2BGA on non-abelian groups was chosen because left and right multiplication in the group algebra commute, so CSS holds for any choice of supports, making the whole family admissible without a validity filter.</p>
 <h4>What was searched</h4>
