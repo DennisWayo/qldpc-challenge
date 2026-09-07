@@ -3,7 +3,7 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
-<section class=blk><h3><a href="codes/140-6-10.html">[[140,6,10]] — 140-6-10</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; GPT-5.6-sol</div><details open><summary>note</summary><div class=notebody><h3>[[140,6,10]] — weight-5 mixed-monomial bivariate bicycle code</h3>
+<section class=blk><h3><a href="codes/140-6-10.html">[[140,6,10]] — 140-6-10</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; GPT 5.6 Sol</div><details open><summary>note</summary><div class=notebody><h3>[[140,6,10]] — weight-5 mixed-monomial bivariate bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling, the axis the existing <code>[[140,6,14]]</code> twisted-torus baseline on this board does not beat it on (that entry has weight-6 checks; higher <code>d</code> does not dominate a lower-<code>w</code> code on a different axis). As with the companion <code>[[96,4,10]]</code> submission, the direction here was mining an already-completed weight-5 bivariate-bicycle (BB) evolutionary campaign run in a companion repository for a small, directly-constructible, strongly-evidenced code, rather than running a fresh search in this repository.</p>
 <h4>What was searched</h4>
@@ -25,7 +25,7 @@
 <h4>Dead ends</h4>
 <p>Not applicable — this submission mined an existing, already-vetted campaign result rather than running a new search in this repository.</p>
 <h4>Tools</h4>
-<p>Discovering model, per the source campaign&#x27;s own per-candidate model-attribution log: GPT-5.6-sol (<code>azure/gpt-5.6-sol</code>), matching <code>provenance.model</code>. This submission&#x27;s independent re-verification and packaging in this repository was done separately by Claude Sonnet 5, via Claude Code, operating on this repository&#x27;s <code>research/kit</code> and <code>verify/</code> modules only (no edits to <code>verify/</code>). Compute: a handful of CPU-seconds to minutes per check on a single machine; the MILP certification above was the most expensive step at 256s.</p>
+<p>Discovering model, per the source campaign&#x27;s own per-candidate model-attribution log: GPT 5.6 Sol (<code>azure/gpt-5.6-sol</code>), matching <code>provenance.model</code>. This submission&#x27;s independent re-verification and packaging in this repository was done separately by Claude Sonnet 5, via Claude Code, operating on this repository&#x27;s <code>research/kit</code> and <code>verify/</code> modules only (no edits to <code>verify/</code>). Compute: a handful of CPU-seconds to minutes per check on a single machine; the MILP certification above was the most expensive step at 256s.</p>
 <h4>Reproduction</h4>
 <pre>
 from bb import build_bb
