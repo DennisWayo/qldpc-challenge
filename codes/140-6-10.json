@@ -1031,11 +1031,11 @@
     ],
     "construction": "Bivariate bicycle code over F_2[x,y]/(x^5-1, y^14-1), weight-5 mixed-monomial polynomials A = 1 + y^13 + x^4 y^11, B = 1 + x y^7, found by an LLM-guided evolutionary search (OpenEvolve, weight-5 mixed-monomial campaign) over CSS BB polynomial pairs. This connected (ell=5, m=14) presentation is BLISS-isomorphic to one of 3 identical connected components of a disconnected parent BB code (ell=15, m=14, k=18, n=420, A = 1 + y^13 + x^12 y^11, B = 1 + x^3 y^7) whose exact distance d=10 was established by MILP in the source repository; the component presentation used here was independently re-verified exact (d_X=d_Z=10, no lighter logical on either side) with this repository's own verify/certify.py (scipy/HiGHS MILP, tlim=600s, 256s wall time).",
     "references": [
-      "github.com/qiskit-community/qcode-discovery @ 51754b5f5628a5cd68b89e6e8ee6d699150afb3a, results/weight5_publication_catalogue.jsonl"
+      "an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery (branch weight5-campaigns, not part of a public branch at the time of this submission -- this submission's own distance/CSS claims are independently re-derived and re-verified using only this repository's tools and do not rely on that source being externally checkable)"
     ],
     "date": "2026-09-07",
-    "notes": "Independently corroborated with this repo's own tools before submission: research/kit/surrogate.py distance_rand at 5,000 and 50,000 trials both returned d=10; research/kit/distance.py decoder_distance (BP+OSD, 200,000 injected-error trials) returned d_heuristic=10, verdict=corroborated; research/kit/distance.py exact_distance (scipy/HiGHS MILP) proved d_X=d_Z=10 exact.",
-    "model": "Claude Sonnet 5",
+    "notes": "Independently corroborated with this repo's own tools before submission: research/kit/surrogate.py distance_rand at 5,000 and 50,000 trials both returned d=10; research/kit/distance.py decoder_distance (BP+OSD, 200,000 injected-error trials) returned d_heuristic=10, verdict=corroborated; research/kit/distance.py exact_distance (scipy/HiGHS MILP) proved d_X=d_Z=10 exact. Discovered by GPT-5.6-sol (per the source campaign's own per-candidate model-attribution log, alias azure/gpt-5.6-sol); this submission's re-verification and packaging was done by Claude Sonnet 5.",
+    "model": "GPT-5.6-sol",
     "origin": "submission",
     "novelty": "unknown"
   },
