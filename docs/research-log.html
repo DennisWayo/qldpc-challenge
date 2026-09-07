@@ -97,6 +97,35 @@ HX, HZ = build_open_directional(15, 15)   # n = 2*15^2 = 450, k = 8, max check w
 # layout: qubit q = c*225 + i*15 + j  -&gt;  (i + j, j - i + c)
 coords = [(i + j, j - i + c) for c in (0, 1) for i in range(15) for j in range(15)]
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/450-8-16.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/90-4-9.html">[[90,4,9]] — 90-4-9</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; GPT 5.6 Sol, Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[90,4,9]] — weight-5 mixed-monomial bivariate bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling. As with the companion <code>[[96,4,10]]</code>, <code>[[140,6,10]]</code>, and <code>[[180,4,14]]</code> submissions, the direction here was mining an already-completed weight-5 bivariate-bicycle (BB) evolutionary campaign in a companion repository for a small, directly constructible, strongly-evidenced code, rather than running a fresh search in this repository.</p>
+<h4>What was searched</h4>
+<p>The source campaign (an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery, branch weight5-campaigns -- not part of a public branch at the time of this submission, so nothing below relies on that source being externally checkable) ran an LLM-guided evolutionary search (OpenEvolve) over weight-5 mixed-monomial CSS BB polynomial pairs <code>(A, B)</code>, screening by <code>k</code>, CSS commutation, and a BP-OSD distance estimate, then MILP-verifying standout candidates exactly. This code is a direct match: a disconnected parent presentation at <code>(ell=10, m=9)</code> with <code>k=8, n=180</code> decomposes into 2 identical connected components; one component has an explicit small BB presentation at <code>(ell=5, m=9)</code>, <code>A = 1 + x^2y^8 + x^3y^7</code>, <code>B = 1 + x^2y^6</code>, matched to the parent via BLISS canonical-form isomorphism (<code>evaluation/tanner_equivalence.py</code> in the source repo), which transfers the parent&#x27;s exact distance to the component.</p>
+<p>No fresh search ran in *this* repository; the work here was independent re-verification of an already-found candidate using this repo&#x27;s own trusted tools, per <code>research/AUTORESEARCH.md</code>.</p>
+<h4>Evidence trail</h4>
+<p>Rebuilt <code>(H_X, H_Z)</code> from the polynomials above using this repo&#x27;s own <code>research/kit/bb.py:build_bb</code>, then re-confirmed every claim independently with this repo&#x27;s own tools before submitting:</p>
+<ul>
+<li><code>research/kit/css.py:verify_css</code> / <code>compute_k</code> — CSS commutation holds,</li>
+<p><code>k = 4</code> exactly (GF(2) rank), <code>n = 90</code>, max check weight 5 on both sides.</p>
+<li><code>research/kit/surrogate.py:distance_rand</code> — randomized upper-bound search</li>
+<p>at 5,000 and again at 50,000 trials, both returning <code>d = 9</code> (converged).</p>
+<li><code>research/kit/distance.py:decoder_distance</code> — independent BP+OSD</li>
+<p>mechanism, 200,000 injected-error trials, <code>d_heuristic = 9</code>, `verdict = corroborated`.</p>
+<li><code>research/kit/distance.py:exact_distance</code> (scipy/HiGHS MILP via</li>
+<p><code>verify/certify.py</code>) — proved <b>exact</b>: no nontrivial logical lighter than weight 9 exists on the X side or the Z side. Wall time 70s at `tlim = 600s` (k = 4 solves per side, well inside the envelope described in <code>CONTRIBUTING.md</code>).</p>
+</ul>
+<p>Final claim: <b>exact</b>, <code>d = 9</code>, certified by this repository&#x27;s own MILP solver, not only by the source repository&#x27;s internal claim.</p>
+<h4>Dead ends</h4>
+<p>Not applicable — this submission mined an existing, already-vetted campaign result rather than running a new search in this repository.</p>
+<h4>Tools</h4>
+<p>Discovered independently by both GPT 5.6 Sol and Claude Opus 5 within the same LLM-ensemble evolutionary run in the source campaign (per that campaign&#x27;s own per-candidate model-attribution log: chronologically, GPT 5.6 Sol emitted this exact candidate first, and Claude Opus 5 independently rediscovered it later in the same run). This is recorded honestly as joint/dual attribution rather than collapsed to a single model. This submission&#x27;s re-verification and packaging in this repository — the work described under &quot;Evidence trail&quot; above — was done separately by Claude Sonnet 5, using only this repository&#x27;s own tooling (<code>research/kit/</code>, <code>verify/</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from research.kit.bb import build_bb
+HX, HZ = build_bb(l=5, m=9, A_terms=[(0,0),(2,8),(3,7)], B_terms=[(0,0),(2,6)])
+</pre>
+<p><code>verify/certify.py codes/90-4-9.json --tlim 600</code> reproduces the exact MILP certification (70s wall time).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/90-4-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/96-4-10.html">[[96,4,10]] — 96-4-10</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[96,4,10]] — weight-5 mixed-monomial bivariate bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling, which is the axis the existing <code>[[96,4,12]]</code> twisted-torus baseline on this board does not beat it on (that entry has weight-6 checks). The direction was not a fresh search in this repository but a targeted mining of an already-completed, larger weight-5 bivariate-bicycle (BB) evolutionary campaign run in a companion repository, looking for connected presentations small enough, and with strong enough distance evidence, to submit here directly.</p>
