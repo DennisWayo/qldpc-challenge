@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "name": "[[56,2,8]] generalized bicycle code",
   "code_type": "CSS",
   "n": 56,
@@ -731,5 +731,40 @@
       ]
     ],
     "layers": 2
+  },
+  "circuit": {
+    "d_circ": {
+      "X": {
+        "value": 8,
+        "confidence": "upper_bound",
+        "witness": [
+          0,
+          20,
+          124,
+          144,
+          405,
+          509,
+          1075,
+          1521
+        ]
+      },
+      "Z": {
+        "value": 8,
+        "confidence": "upper_bound",
+        "witness": [
+          12,
+          15,
+          92,
+          129,
+          203,
+          325,
+          326,
+          650
+        ]
+      }
+    },
+    "rounds": 8,
+    "stim_version": "1.16.0",
+    "notes": "Interleaved two-block extraction (Bravyi et al. arXiv:2308.07915 Table 5 style): joint reset and measurement layers, 7 CX layers per round; X-check term slots [6, 3, 4, 2, 5, 1], Z-check term slots [0, 3, 4, 2, 1, 5] over terms A_0..A_3, B_0..B_1; terms recovered from H by commuting permutation decomposition; order chosen by a seeded BP+OSD search on the DEM plus RIS (see PR #923)"
   }
 }
