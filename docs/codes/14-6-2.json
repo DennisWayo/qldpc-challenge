@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[14,6,2]] twisted-torus BB code (arXiv:2503.03827)",
  "code_type": "CSS",
  "n": 14,
@@ -219,5 +219,28 @@
   ],
   "interaction_radius": 3.605551275463989,
   "layers": 1
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 2,
+    "confidence": "upper_bound",
+    "witness": [
+     801,
+     802
+    ]
+   },
+   "Z": {
+    "value": 2,
+    "confidence": "upper_bound",
+    "witness": [
+     774,
+     775
+    ]
+   }
+  },
+  "rounds": 2,
+  "stim_version": "1.16.0",
+  "notes": "Interleaved two-block extraction (Bravyi et al. arXiv:2308.07915 Table 5 style): joint reset and measurement layers, 7 data CX layers per round; X-check term slots [6, 1, 5, 2, 3, 4], Z-check term slots [1, 5, 0, 3, 4, 2] over terms A_0..A_2, B_0..B_2; terms recovered from H alone by a commuting permutation decomposition. Order screened by RIS among the 1248 slot assignments satisfying the overlap-parity criterion (first one tried); the claim then survived 2 seeds x 1000 RIS trials per basis and an observable-constrained seeded BP+OSD search over symmetric seeds, whose lightest undetected logical fault set is weight 2 in both bases."
  }
 }

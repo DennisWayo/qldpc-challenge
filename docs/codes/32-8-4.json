@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[32,8,4]] two-block group algebra CSS (arXiv:2306.16400)",
  "code_type": "CSS",
  "n": 32,
@@ -500,5 +500,32 @@
    ]
   ],
   "layers": 2
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 4,
+    "confidence": "upper_bound",
+    "witness": [
+     303,
+     394,
+     721,
+     1152
+    ]
+   },
+   "Z": {
+    "value": 4,
+    "confidence": "upper_bound",
+    "witness": [
+     169,
+     170,
+     3083,
+     3217
+    ]
+   }
+  },
+  "rounds": 4,
+  "stim_version": "1.16.0",
+  "notes": "Interleaved two-block extraction (Bravyi et al. arXiv:2308.07915 Table 5 style): joint reset and measurement layers, 9 data CX layers per round; X-check term slots [6, 1, 2, 7, 4, 3, 8, 5], Z-check term slots [1, 6, 5, 0, 7, 2, 3, 4] over terms A_0..A_1, B_0..B_5; terms recovered from H alone by a commuting permutation decomposition. Only 24 slot assignments satisfy the overlap-parity criterion at this depth and the first one screened holds full distance; the claim then survived 2 seeds x 1000 RIS trials per basis and an observable-constrained seeded BP+OSD search over symmetric seeds, whose lightest undetected logical fault set is weight 4 in both bases."
  }
 }
