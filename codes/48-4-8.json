@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "name": "[[48,4,8]] twisted-torus BB code (arXiv:2503.03827)",
   "code_type": "CSS",
   "n": 48,
@@ -639,5 +639,40 @@
     ],
     "layers": 2,
     "interaction_radius": 5.831
+  },
+  "circuit": {
+    "d_circ": {
+      "X": {
+        "value": 8,
+        "confidence": "upper_bound",
+        "witness": [
+          445,
+          472,
+          576,
+          624,
+          680,
+          747,
+          748,
+          1104
+        ]
+      },
+      "Z": {
+        "value": 8,
+        "confidence": "upper_bound",
+        "witness": [
+          25,
+          33,
+          348,
+          473,
+          480,
+          538,
+          638,
+          794
+        ]
+      }
+    },
+    "rounds": 8,
+    "stim_version": "1.16.0",
+    "notes": "Interleaved two-block extraction (Bravyi et al. arXiv:2308.07915 Table 5 style): joint reset and measurement layers, 7 data CX layers per round plus flag layers (2 flag qubits per check ancilla, flag CX gaps 1,4;2,5); X-check term slots [3, 2, 4, 5, 1, 6], Z-check term slots [2, 4, 3, 0, 5, 1] over terms A_0..A_2, B_0..B_2; terms recovered from H by commuting permutation decomposition; order chosen by a seeded BP+OSD search on the DEM plus RIS"
   }
 }
