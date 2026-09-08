@@ -1209,12 +1209,9 @@
     "authors": [
       "@mathysrennela"
     ],
-    "construction": "Greedy check-deletion chain from board code codes/85-37-5.json (reconstructed from qecdb.org record 68e107e6). Deleted 3 X-checks [7, 8, 9] over 3 greedy steps, each priced by the check-deletion theorem (dem-linter @ 1ef09d73, claim 12.1). k' = 37 + 3 = 40 exact by rank; the deleted X rows weigh 24, above the inherited d <= 5 tier (term 1), so the packaged witnesses are gate-confirmed weight-5 logicals on both sides.",
-    "references": [
-      "https://github.com/MathysRennela/dem-linter/blob/1ef09d73/papers/taxonomy/CLAIMS.md"
-    ],
+    "construction": "Greedy check-deletion chain from board code codes/85-37-5.json (reconstructed from qecdb.org record 68e107e6). Deleted 3 X-checks [7, 8, 9] over 3 greedy steps, each priced by the check-deletion theorem (unpublished theorem by @mathysrennela, claim 12.1). k' = 37 + 3 = 40 exact by rank; the deleted X rows weigh 24, above the inherited d <= 5 tier (term 1), so the packaged witnesses are gate-confirmed weight-5 logicals on both sides.",
     "date": "2026-09-09",
-    "notes": "Derived code, honest provenance: check-deletion child of its source entry codes/85-37-5.json (k 37 -> 40 at equal n, distance tier, and weight class; different check sets, not equivalent to the source under any code symmetry). Deleted 3 X-checks [7, 8, 9]; the deleted X rows are the embedded per-side X witnesses, the source's Z witness is inherited unchanged (term-1 of the check-deletion theorem, dem-linter @ 1ef09d73). Parameter novelty vs the literature unverified.",
+    "notes": "Derived code, honest provenance: check-deletion child of its source entry codes/85-37-5.json (k 37 -> 40 at equal n, distance tier, and weight class; different check sets, not equivalent to the source under any code symmetry). Deleted 3 X-checks [7, 8, 9]; the deleted X rows are the embedded per-side X witnesses, the source's Z witness is inherited unchanged (term-1 of the check-deletion theorem, an unpublished theorem by @mathysrennela). Parameter novelty vs the literature unverified.",
     "origin": "submission",
     "model": "GLM 5.3 Flash",
     "novelty": "unknown"
