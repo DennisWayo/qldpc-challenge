@@ -109,6 +109,56 @@ HX, HZ = build_bb(l=5, m=14, A_terms=[(0,0),(0,13),(4,11)], B_terms=[(0,0),(1,7)
 from bb import build_bb
 HX, HZ = build_bb(l=10, m=9, A_terms=[(0,0),(2,2),(5,1)], B_terms=[(0,0),(3,3)])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/180-4-14.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/280-6-25.html">[[280,6,25]] — 280-6-25</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/simsaidan">@simsaidan</a> &middot; Cursor Composer 2.5</div><details ><summary>note</summary><div class=notebody><h3>[[280,6,25]] — metacyclic 2BGA on Z_35 ⋊ Z_4 (r=13)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Aim: the unrestricted × weight-8 cell after [[240,6,22]] (#898), still via non-abelian 2BGA on metacyclic groups. Moderate-n weight-8 supports on metacyclic groups continue to leave Pareto openings at low rate / higher distance (kd²/n ≈ 13.4 here), even when high-k LP rows like [[336,24,24]] dominate the efficiency table.</p>
+<h4>What was searched</h4>
+<p>Metacyclic weight-4 2BGA sweep (<code>research/kit</code> metacyclic sampler; order range covering n=2|G| ≲ 700), screened with <code>gf2_fast</code> RIS. Parallel screens also ran dihedral and abelian BB. This code is the draw</p>
+<pre>
+metacyclic(35, 4, 13)
+a = [31, 115, 119, 55]
+b = [131, 64, 54, 53]
+</pre>
+<p>(group order 140, n=280, k=6, check weight 8).</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Rebuild: <code>group_algebra.metacyclic(35, 4, 13)</code> + <code>build_2bga</code> → n=280,</li>
+<p>k=6, CSS ok, max check weight 8.</p>
+<li>Early screen: d ≤ 28 at shallow RIS depth.</li>
+<li>Packaging / stage gate: claimed d ≤ 25 with X/Z witnesses; advances</li>
+<p>weight-8 × unrestricted.</p>
+<li>Deep confirmation ladder (<code>distance_rand</code>, 3 seeds/level, <code>gf2_fast</code>):</li>
+<li>20k: d ≤ 25</li>
+<li>100k: d ≤ 25</li>
+<li>500k: d ≤ 25</li>
+<li>1M: d ≤ 25</li>
+<li>Witness re-pack: RIS X ≤ 26, Z ≤ 25. Trusted <code>validate_candidate</code> on</li>
+<p>current main: passed; board-advancing; not dominated.</p>
+</ul>
+<p>Tier: <code>d ≤ 25</code> (witness-backed upper bound; not exact-certified).</p>
+<h4>Dead ends</h4>
+<ul>
+<li>High-kd²/n metacyclic screens (e.g. claimed d ≤ 36 on n=336) routinely</li>
+<p>collapsed to d ≤ 22 under a 20k→200k ladder and were dominated by [[336,24,24]].</p>
+<li>Local mutations of published LP seeds ([[336,24,24]], [[288,24,18]])</li>
+<p>did not produce a deeper high-k advance; optimistic screens inflated then fell back to the board distances.</p>
+<li>Sibling staged distance hunters ([[288,4,26]], [[300,4,25]]) remain</li>
+<p>shallow-gate only and were not submitted here.</p>
+</ul>
+<h4>Tools</h4>
+<ul>
+<li>Model: Cursor Composer 2.5 (self-reported).</li>
+<li>Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>,</li>
+<p><code>research/kit/submit.py</code>, <code>verify/validate_candidate.py</code>; <code>gf2_fast</code> via <code>make fast</code>.</p>
+</ul>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import metacyclic, build_2bga
+from css import compute_k, verify_css
+mul, _ = metacyclic(35, 4, 13)
+HX, HZ = build_2bga(mul, [31, 115, 119, 55], [131, 64, 54, 53])
+assert verify_css(HX, HZ) and compute_k(HX, HZ) == 6
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/280-6-25.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/450-8-16.html">[[450,8,16]] — 450-8-16</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[450,8,16]] — open-boundary planar bivariate-bicycle code with a single-layer 2D-local layout</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>2D-local single-layer × weight-6</code>. Its leader was [[16,4,4]] at kd²/n = 4.00 and nothing above 2.00 sat there at n ≥ 40, while the same board holds open-boundary planar bivariate-bicycle codes reaching kd²/n = 4.59 — but only as *bilayer* entries, because a two-block code is naturally drawn with one block per layer. The hypothesis was that the second layer is not needed: the two blocks are two sublattices of one planar lattice, and the only question is which sublattice offset keeps every check within the single-layer radius cap of 4.</p>
