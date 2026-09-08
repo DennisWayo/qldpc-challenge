@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[42,8,3]] generalized bicycle code",
  "code_type": "CSS",
  "n": 42,
@@ -553,5 +553,30 @@
    ]
   ],
   "layers": 2
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 3,
+    "confidence": "upper_bound",
+    "witness": [
+     4347,
+     4348,
+     4377
+    ]
+   },
+   "Z": {
+    "value": 3,
+    "confidence": "upper_bound",
+    "witness": [
+     0,
+     6,
+     156
+    ]
+   }
+  },
+  "rounds": 3,
+  "stim_version": "1.16.0",
+  "notes": "Interleaved two-block extraction (Bravyi et al. arXiv:2308.07915 Table 5 style): joint reset and measurement layers, 7 data CX layers per round; X-check term slots [2, 4, 6, 3, 1, 5], Z-check term slots [3, 2, 0, 4, 5, 1] over terms A_0..A_3, B_0..B_1; terms recovered from H alone by a commuting permutation decomposition. Order screened by RIS among the 576 slot assignments satisfying the overlap-parity criterion (first one tried); the claim then survived 2 seeds x 1000 RIS trials per basis and an observable-constrained seeded BP+OSD search over symmetric seeds, whose lightest undetected logical fault set is weight 3 in both bases."
  }
 }
