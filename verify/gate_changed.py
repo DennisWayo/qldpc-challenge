@@ -737,36 +737,58 @@ def main(argv):
             deep = slug in records
         trials, budget, nseeds = _budget(int(doc["n"]), deep, fast=GF is not None)
         seeds = [seed, seed + 2, seed + 3][:nseeds]
-        # two independent mechanisms; a hit from EITHER (any seed) refutes.
         results = {}
-        for si, s in enumerate(seeds):
-            results[f"RIS#{si}"] = H.refute_check(doc, seed=s, max_seconds=budget,
-                                                  trials=trials)
-        if SD is not None:
-            results["syndrome-decoder"] = SD.refute_check(doc, seed=seed + 1)
-        # Frontier claims additionally face the accelerated deep search when the
-        # extension is built (CI builds it; see Makefile `fast`): ~150x the
-        # python trial target in the wall-clock freed by dropping 2 of the 3
-        # python seeds (see _budget: without the extension the 3-seed battery
-        # runs unchanged, so an absent/broken build can never weaken the gate).
-        # A fast hit counts only with a python-validated witness (_fast_refute);
-        # the remaining python seed is the audited floor and would surface a
-        # false-negative extension bug by finding what the fast pass missed.
-        ftrials = 0
-        if GF is not None and deep:
-            ftrials = min(8_000_000, 150 * trials)
-            results["RIS-fast"] = _fast_refute(doc, seed + 7, ftrials)
-        # Structure-aware pass (issue #942): strictly additive, and priced
-        # separately because it is not a general search -- it self-limits to
-        # circulant GB codes, where it is far stronger than trial count alone
-        # suggests, and returns immediately on everything else.
+
+        # STAGE 1 -- structure-aware pre-pass (issue #942). Cheapest mechanism
+        # in the gate and, on the one family it applies to, by far the
+        # strongest: it asks the accelerator whether H_X is [circ(a) | circ(b)]
+        # and, if so, hunts the logicals supported on a single block. A code
+        # that is not a circulant GB reports zero trials in microseconds and
+        # goes straight to stage 2, which is the ordinary path.
         struct_trials = 0
+        struct_refuted = False
         if GF is not None:
             st = STRUCT_TRIALS_DEEP if deep else STRUCT_TRIALS_STD
             sres = _structural_refute(doc, seed + 11, st)
             struct_trials = sres[3]
             if struct_trials:
                 results["circulant-GB"] = sres
+                struct_refuted = sres[0]
+
+        # A structural hit SETTLES the verdict, so stage 2 is skipped. This is
+        # sound, not a shortcut: _structural_refute counts a find only after the
+        # pinned python stack has validated the support as a genuine nontrivial
+        # logical lighter than the claim, and no further search can turn a
+        # validated refutation back into an acceptance. It is also where the
+        # time goes -- the accelerated pass costs ~44 min on a high-rate n=674
+        # entry against ~17 s for the structural search that already rejected it.
+        #
+        # The converse is NOT true and must not be read into this: a structural
+        # miss proves nothing, because that search only sees single-block
+        # logicals (86+96 of 427 kernel dimensions on the [[682,172]] entry).
+        # 52 of the board's 56 circulant GB entries have a mixed-support
+        # witness, so a code that survives stage 1 still owes the full battery.
+        ftrials = 0
+        if not struct_refuted:
+            # two independent mechanisms; a hit from EITHER (any seed) refutes.
+            for si, s in enumerate(seeds):
+                results[f"RIS#{si}"] = H.refute_check(doc, seed=s,
+                                                      max_seconds=budget,
+                                                      trials=trials)
+            if SD is not None:
+                results["syndrome-decoder"] = SD.refute_check(doc, seed=seed + 1)
+            # Frontier claims additionally face the accelerated deep search when
+            # the extension is built (CI builds it; see Makefile `fast`): ~150x
+            # the python trial target in the wall-clock freed by dropping 2 of
+            # the 3 python seeds (see _budget: without the extension the 3-seed
+            # battery runs unchanged, so an absent/broken build can never weaken
+            # the gate). A fast hit counts only with a python-validated witness
+            # (_fast_refute); the remaining python seed is the audited floor and
+            # would surface a false-negative extension bug by finding what the
+            # fast pass missed.
+            if GF is not None and deep:
+                ftrials = min(8_000_000, 150 * trials)
+                results["RIS-fast"] = _fast_refute(doc, seed + 7, ftrials)
         hits = {m: (dh, wit) for m, (ref, dh, wit, _) in results.items() if ref}
         # Circuit tier (RFC 0001 step 6): entries shipping syndrome circuits
         # additionally face a bounded RIS search on each memory DEM when the
@@ -775,24 +797,33 @@ def main(argv):
         # logical refutes d. FAILS CLOSED: unreadable or over-cap artifacts
         # are a gate failure, never a silent pass.
         circ_hits, circ_notes, circ_failed = run_circuit_gate()
-        fast_tag = (f" + fast x {ftrials}" if ftrials else "")
-        tag = (f"deep, {len(seeds)} RIS seeds x {trials} trials (<={budget:.0f}s each)"
-               f"{fast_tag}" if deep else f"standard, {trials} trials (<={budget:.0f}s)")
-        # The structural pass is priced on BOTH paths (it is cheap and does not
-        # depend on record status), so its tag is appended outside the branch --
-        # a standard-path run must still show that it ran.
-        if struct_trials:
-            tag += f" + circulant-GB x {struct_trials}"
+        if struct_refuted:
+            tag = (f"circulant-GB x {struct_trials} (refuted at stage 1; the "
+                   f"general battery cannot change a validated refutation and "
+                   f"was skipped)")
+        else:
+            fast_tag = (f" + fast x {ftrials}" if ftrials else "")
+            tag = (f"deep, {len(seeds)} RIS seeds x {trials} trials "
+                   f"(<={budget:.0f}s each){fast_tag}" if deep else
+                   f"standard, {trials} trials (<={budget:.0f}s)")
+            # The structural pass is priced on BOTH paths (it is cheap and does
+            # not depend on record status), so its tag is appended outside the
+            # deep/standard branch -- a standard-path run must still show it ran.
+            if struct_trials:
+                tag = f"circulant-GB x {struct_trials} + " + tag
         tag += f"; diff: {cls}"
         gate = {
             "refuted": bool(hits or circ_hits),
             "seed": seed,
-            "seeds": seeds,
-            "trials": trials,
-            "budget_seconds": budget,
+            "seeds": [] if struct_refuted else seeds,
+            "trials": 0 if struct_refuted else trials,
+            "budget_seconds": 0.0 if struct_refuted else budget,
             "deep": deep,
             "fast_trials": ftrials,
             "structural_trials": struct_trials,
+            # Names the mechanism that ended the run early, so a receipt with a
+            # short method list is self-explaining rather than looking truncated.
+            "short_circuited_by": "circulant-GB" if struct_refuted else None,
             "methods": list(results),
             "diff_class": cls,
             "diff_reason": why,
