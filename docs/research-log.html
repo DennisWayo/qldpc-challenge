@@ -278,6 +278,43 @@ HX, HZ = build_bb(18, 6,
                   B_terms=[(9,4),(13,1),(16,3),(17,0)])
 </pre>
 <p>Then <code>./qldpc submit &lt;npz&gt; --authors @MathysRennela --family bivariate-bicycle</code>. The construction string in the JSON carries the same polynomials.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/216-12-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/216-8-21.html">[[216,8,21]] — 216-8-21</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[216,8,21]] — weight-8 bivariate bicycle code on Z_27 x Z_4, from campaign 2 of the weight-8 sweep</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: weight-8 × unrestricted. Campaign 2 pushed the weight-8 BB family (weight-4 generators, the construction class of arXiv:2609.06572) beyond that paper&#x27;s n = 144 regime, to n in {192, 216, 288}. This is the k = 8 slot at n = 216 — an unclaimed (n, k) cell point where d = 21 clears everything at smaller n in the weight ≤ 8 cell.</p>
+<h4>What was searched</h4>
+<p>Same funnel as the campaign&#x27;s other submissions: 94.5k constant-term- normalized random pairs across 19 grid/weight configurations, 300-trial RIS screen (600 records), 20,000-trial deep screen of 150 non-dominated shortlisted records, frontier-checked against base-branch codes/. 121 survivors; five slots decoder-confirmed in the final round. Throwaway scripts feeding the kit&#x27;s <code>screen</code>; record lists are local working output. Seeds: numpy default_rng(20260910), screen seeds 31 and 32.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for this code (per side unless noted):</p>
+<ul>
+<li>300-trial RIS screen: upper bound d &lt;= 21.</li>
+<li>20,000-trial RIS (deep stage): d &lt;= 21 held.</li>
+<li>200,000-trial BP+OSD syndrome-decoder search (independent mechanism):</li>
+<p>lightest found is weight 21 on X and 22 on Z — nothing at or below 21 beaten.</p>
+<li>Packaging witness search (20,000-trial RIS): reproduced weight-21</li>
+<p>logicals on both sides.</p>
+<li>Validation gate (verify/validate_candidate.py): passed; fresh-seed RIS</li>
+<p>refutation found no lighter logical; no exact or WL-equivalent board entry.</p>
+</ul>
+<p>Claim precisely: witness-backed upper bound, d &lt;= 21. Two independent mechanisms put the distance at 21 or above the decoder&#x27;s reach; exact certification was not run, so the <code>d=</code> tier is not claimed.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The campaign&#x27;s [[192,12,16]] find coincides with an existing board entry</li>
+<p>(a dicyclic 2BGA at the same parameters and check weight) and was not submitted.</p>
+<li>The n = 72 asymmetric-weight retry produced no non-dominated survivors.</li>
+<li>Sibling slots [[192,10,20]], [[216,12,18]], [[216,6,23]] are submitted</li>
+<p>separately, one code per PR.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (opencode agent). Repo tooling: <code>research/kit/bb.py</code> (build_bb), <code>research/kit/css.py</code> (k), <code>research/kit/search.py</code> (screen, gf2_fast backend), <code>research/kit/distance.py</code> (BP+OSD decoder distance), <code>./qldpc submit</code> (witness extraction, verification), and the trusted gate <code>verify/validate_candidate.py</code>. Single machine; screening ~5 min, confirmation ~4 min per code.</p>
+<h4>Reproduction</h4>
+<p>Rebuild (H_X, H_Z) with the kit on the torus Z_27 x Z_4 (n = 2*27*4 = 216):</p>
+<pre>
+from bb import build_bb
+HX, HZ = build_bb(27, 4,
+                  A_terms=[(3,3),(13,3),(18,0),(25,0)],
+                  B_terms=[(3,3),(21,0),(22,0),(25,1)])
+</pre>
+<p>Then <code>./qldpc submit &lt;npz&gt; --authors @MathysRennela --family bivariate-bicycle</code>. The construction string in the JSON carries the same polynomials.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/216-8-21.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/228-84-10.html">[[228,84,10]] — 228-84-10</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[228,84,10]] — check-deletion of the board&#x27;s [[228,82,12]]</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Wave-1 census of the check-deletion move (theory pinned at github.com/MathysRennela/dem-linter @ 1ef09d73, <code>papers/taxonomy/CLAIMS.md</code> claim 12.1, PROVEN there): deleting <code>r</code> independent checks from a CSS code gives <code>k&#x27; = k + r</code> exactly and `d&#x27; = min(d, min deleted-check weight, min exposed-logical weight)`. Hypothesis: board sources whose checks are heavier than their distance carry slack — an independent deleted check becomes a logical of its own weight, so if no lighter exposed logical appears, k rises at equal distance tier. Per the maintainer&#x27;s census policy, one submission per source family champions the improvement; this is the 228-82-12 family&#x27;s point.</p>
@@ -300,6 +337,28 @@ HX, HZ = build_bb(18, 6,
 <p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: kit <code>css</code>/<code>gf2</code> rank arithmetic, <code>surrogate</code> fast RIS backend, <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, exhaustive weight&lt;=3 column-XOR pre-screen. Compute: census ~90 s of rank arithmetic; deep screen minutes per code; the trusted gate minutes per code.</p>
 <h4>Reproduction</h4>
 <p>From this PR&#x27;s tree: take <code>codes/228-82-12.json</code>, delete the X-checks with row indices [30, 38, 72] and the Z-checks with row indices [24, 26, 28] (0-indexed rows of <code>checks.X</code> / <code>checks.Z</code>). Verify k = 228 - rank - rank = 84; each deleted independent row commutes with the kept opposite-side matrix and lies outside the kept own rowspace, and those supports are witnesses. The screening method is fully specified above; the sweep scripts are session-local working output, not committed, per the one-concern-per-PR rule.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/228-84-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/276-101-10.html">[[276,101,10]] — 276-101-10</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[276,101,10]] — check-deletion of the board&#x27;s [[276,98,14]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Wave-1 census of the check-deletion move (theory pinned at github.com/MathysRennela/dem-linter @ 1ef09d73, <code>papers/taxonomy/CLAIMS.md</code> claim 12.1, PROVEN there): deleting <code>r</code> independent checks from a CSS code gives <code>k&#x27; = k + r</code> exactly and `d&#x27; = min(d, min deleted-check weight, min exposed-logical weight)`. Hypothesis: board sources whose checks are heavier than their distance carry slack — an independent deleted check becomes a logical of its own weight, so if no lighter exposed logical appears, k rises at equal distance tier. Per the maintainer&#x27;s census policy, one submission per source family champions the improvement; this is the 276-98-14 family&#x27;s point.</p>
+<h4>What was searched</h4>
+<p>Board-wide unary sweep over all 529 <code>codes/*.json</code> sources, 39,818 deletion moves (class-crossing deletions of all rows above a target weight, plus random r = 1, 2, 3 subsets per side, 24 samples each, fixed seed). Pruning ladder: the free bound <code>min(claimed d, min deleted-check weight)</code> (term 2, no matrix work), a board-potential prune against the candidate&#x27;s nested cell, combined-Tanner connectivity = 1 (issue #921 semantics, pre-filtered before the verifier enforces it), exact k&#x27; by GF(2) rank (never k+r bookkeeping), and a qubit-coverage filter. 600 survivors screened, 348 Pareto-nondominated at their screening tier; the non-dominated submission set for this and the sibling families was chosen per the maintainer&#x27;s one-champion-per-family policy.</p>
+<h4>Evidence trail</h4>
+<p>Ladder for the submitted code: 800-trial census screen -&gt; witnesses from terms 1 + 2 (the source&#x27;s own witnesses remain valid logicals of the child; the deleted independent checks are new logicals of their own weight — each pre-verified against the verifier&#x27;s criteria: commutes with the kept opposite checks, outside the kept own rowspace) -&gt; 300,000-trial RIS deep screen; a sibling point&#x27;s screen revised 12 to 10, and this point&#x27;s screen held at 10 -&gt; trusted validation gate (verify + refute + dedup). Final claim: <code>d &lt;= 10</code> per side, upper_bound confidence, witnesses explicit in the JSON. The code advances the weight-9plus x unrestricted cell; board-relative claim only, literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>At large n the randomized witness search is far from tight (weight-84/86</li>
+<p>finds where term-2 witnesses of weight 28 exist by construction): always inject the explicit term-1/term-2 witnesses.</p>
+<li>Witness vectors must be built from row *supports*, never dense rows —</li>
+<p>fancy indexing accepts the mistake silently.</p>
+<li>A qubit left unchecked by one side (deleting all of a side&#x27;s checks on a</li>
+<p>qubit) exposes weight-1 logicals; the coverage filter is mandatory.</p>
+<li>Companion moves tested the same day and closed: check-addition chains</li>
+<p>(0/122 — no gaugeable weight-&lt;=4 logicals exist in the target cells), union-layout fusion (validated builder, zero board-advancing across 17k+842 shapes), graft r=1 (3 candidates, parked on layout-identity transfer).</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: kit <code>css</code>/<code>gf2</code> rank arithmetic, <code>surrogate</code> fast RIS backend, <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, exhaustive weight&lt;=3 column-XOR pre-screen. Compute: census ~90 s of rank arithmetic; deep screen minutes per code; the trusted gate minutes per code.</p>
+<h4>Reproduction</h4>
+<p>From this PR&#x27;s tree: take <code>codes/276-98-14.json</code>, delete the X-checks with row indices [32, 38, 54] and the Z-checks with row indices [81, 85, 88] (0-indexed rows of <code>checks.X</code> / <code>checks.Z</code>). Verify k = 276 - rank - rank = 101; each deleted independent row commutes with the kept opposite-side matrix and lies outside the kept own rowspace, and those supports are witnesses. The screening method is fully specified above; the sweep scripts are session-local working output, not committed, per the one-concern-per-PR rule.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/276-101-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/288-12-24.html">[[288,12,24]] — 288-12-24</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[288,12,24]] — weight-8 bivariate bicycle code on Z_12 x Z_12, from campaign 2 of the weight-8 sweep</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 × unrestricted. Campaign 2 pushed the weight-8 BB family (weight-4 generators, the construction class of arXiv:2609.06572) beyond that paper&#x27;s n = 144 regime, to n in {192, 216, 288}. At n = 288 the k = 12 slot had no weight-8 entries on the board at all; the target was the rate-1/24 regime where kd²/n ~ 24 would rival the published weight-8 bar ([[168,20,14]] at 23.3).</p>
