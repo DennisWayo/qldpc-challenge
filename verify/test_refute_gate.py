@@ -155,6 +155,123 @@ def main():
     return 1 if _fail else 0
 
 
+def test_structural_gb_pass():
+    """The circulant-GB mechanism as the gate sees it (issue #942).
+
+    Skipped when the optional accelerator is not built: without it the gate
+    behaves exactly as it did before this mechanism existed, which is the whole
+    safety argument -- the pass is strictly additive and never a prerequisite.
+    """
+    try:
+        import gf2_fast                                     # noqa: F401
+    except ImportError:
+        import pytest
+        pytest.skip("gf2_fast not built (run `make fast`); the structural pass "
+                    "is strictly additive, so the gate is unchanged without it.")
+    import gate_changed as G
+
+    # A code that is not a circulant GB must be reported as NOT SEARCHED
+    # (trials 0), so the caller leaves it out of the mechanism list entirely
+    # rather than recording a meaningless null result against it.
+    doc = json.load(open(os.path.join(ROOT, "verify", "fixtures", "72-6-6.json")))
+    ref, found, wit, tr = G._structural_refute(doc, seed=11,
+                                               trials=G.STRUCT_TRIALS_STD)
+    check("non-circulant code is not searched",
+          (ref, found, wit, tr) == (False, None, None, 0))
+
+    # And a known over-stated circulant GB entry is refuted with a witness the
+    # pinned python stack validated (_structural_refute returns None otherwise).
+    path = os.path.join(ROOT, "codes", "390-68-28.json")
+    if os.path.exists(path):
+        doc = json.load(open(path))
+        ref, found, wit, tr = G._structural_refute(doc, seed=11,
+                                                   trials=G.STRUCT_TRIALS_STD)
+        claimed = int(doc["distance"]["d"])
+        check("over-stated circulant GB entry is refuted",
+              bool(ref and found is not None and found < claimed and wit))
+        if wit:
+            n = doc["n"]
+            v = np.zeros(n, dtype=np.int8)
+            v[list(wit)] = 1
+            HX = heuristic_distance._matrix(doc["checks"]["X"], n)
+            HZ = heuristic_distance._matrix(doc["checks"]["Z"], n)
+            in_ker = (not ((HX @ v) % 2).any()) or (not ((HZ @ v) % 2).any())
+            check("the returned witness is a real kernel vector", in_ker)
+    print(f"\n{'ALL PASS' if not _fail else 'FAILURES: ' + ', '.join(_fail)}")
+    assert not _fail, _fail
+
+
+def test_structural_stage_ordering():
+    """Stage 1 (circulant-GB) runs first and short-circuits ONLY on a hit.
+
+    Three paths, and the middle one is the one that matters most:
+      * circulant and over-claimed -> stage 1 refutes and the general battery
+        is skipped, because a validated refutation cannot be undone by more
+        searching (and the battery is where the ~44 min goes);
+      * circulant and honest -> stage 1 clears it and the FULL battery still
+        runs, because a structural miss proves nothing: that search only sees
+        single-block logicals, and most real witnesses are mixed-support;
+      * not circulant -> stage 1 is a no-op and the battery runs as before.
+    """
+    try:
+        import gf2_fast                                     # noqa: F401
+    except ImportError:
+        import pytest
+        pytest.skip("gf2_fast not built (run `make fast`); without it stage 1 "
+                    "never runs and the gate is unchanged.")
+    import shutil
+    import subprocess
+    import tempfile
+
+    def gate_receipt(src):
+        """Run the gate on a copy of `src` and return its receipt's gate block."""
+        dst = os.path.join(ROOT, "codes", "zz-stage-probe.json")
+        shutil.copy(os.path.join(ROOT, src), dst)
+        try:
+            with tempfile.TemporaryDirectory() as rd:
+                subprocess.run(
+                    [sys.executable, os.path.join(ROOT, "verify", "gate_changed.py"),
+                     "--seed", "0", "--receipt-dir", rd, dst],
+                    cwd=ROOT, capture_output=True, text=True)
+                rp = os.path.join(rd, "zz-stage-probe.json")
+                if not os.path.exists(rp):
+                    return None
+                r = json.load(open(rp))
+                return r["trusted_validation"]["distance_gate"]
+        finally:
+            if os.path.exists(dst):
+                os.remove(dst)
+
+    g = gate_receipt(os.path.join("codes", "674-170-76.json"))
+    if g is not None:
+        check("over-claimed circulant refutes at stage 1", bool(g["refuted"]))
+        check("stage 1 hit short-circuits the battery",
+              g.get("short_circuited_by") == "circulant-GB")
+        check("only the structural mechanism ran",
+              list(g["methods"]) == ["circulant-GB"])
+        check("no general trials were spent", g["trials"] == 0 and not g["seeds"])
+
+    g = gate_receipt(os.path.join("codes", "42-8-3.json"))
+    if g is not None:
+        check("honest circulant is not refuted", not g["refuted"])
+        check("stage 1 runs on it", "circulant-GB" in g["methods"])
+        check("a stage 1 MISS still pays the full battery",
+              any(m.startswith("RIS#") for m in g["methods"]))
+        check("no short circuit on a miss", g.get("short_circuited_by") is None)
+        check("general trials were spent", g["trials"] > 0)
+
+    g = gate_receipt(os.path.join("codes", "72-12-6.json"))
+    if g is not None:
+        check("non-circulant code never reaches the structural search",
+              "circulant-GB" not in g["methods"])
+        check("non-circulant code runs the battery immediately",
+              any(m.startswith("RIS#") for m in g["methods"]))
+        check("structural trials are zero for it", g["structural_trials"] == 0)
+
+    print(f"\n{'ALL PASS' if not _fail else 'FAILURES: ' + ', '.join(_fail)}")
+    assert not _fail, _fail
+
+
 def test_refute_gate():
     assert main() == 0
 
