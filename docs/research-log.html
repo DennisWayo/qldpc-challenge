@@ -591,6 +591,70 @@ HX, HZ = build_bb(l=5, m=9, A_terms=[(0,0),(2,8),(3,7)], B_terms=[(0,0),(2,6)])
 from bb import build_bb
 HX, HZ = build_bb(l=16, m=3, A_terms=[(0,0),(0,1),(2,2)], B_terms=[(0,0),(3,0)])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/96-4-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/144-16-10.html">[[144,16,10]] — 144-16-10</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; Liangdong Lu and Ruipan Yang and Guanmin Guo</div><details ><summary>note</summary><div class=notebody><h3>[[144,16,10]] — weight-8 bivariate bicycle code, reproduction of arXiv:2609.06572 Table 1 entry 1</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: weight-8 × unrestricted. The board&#x27;s weight-8 cell at n = 144 was thin: the incumbent at this (n, k) was [[144,16,8]], so a same-size code one point higher in distance was a concrete frontier opening. The source is the published census of Lu, Yang and Guo (arXiv:2609.06572), which develops the structure theory of BB-type codes with weight-4 generator polynomials (weight-8 checks) and reports this code with an exactly verified distance of 10. This entry is a faithful reproduction of their Table 1, entry 1, not a new search: the parameters exist in the literature, and the contribution here is an independently rebuilt, witness-backed board entry.</p>
+<h4>What was searched</h4>
+<p>No search. The generator polynomials were transcribed from the paper&#x27;s Table 1 and rebuilt with the repo kit: QC(A, B) on Z_12 x Z_6 with</p>
+<ul>
+<li>A = 1 + x^11 + y^5 + x^9 y^5</li>
+<li>B = x^3 y^2 + x^8 y^2 + x^4 y^3 + x^9 y^3</li>
+</ul>
+<p>(exponents written x^a y^b). The rebuild reproduced the paper&#x27;s parameters exactly before packaging: n = 144, k = 16 (recomputed by the verifier&#x27;s own rank arithmetic, not trusted from the paper), max check weight 8.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Source paper: the exact distance d = 10 was computed by their bit-mask DFS</li>
+<p>verifier, cross-validated against Magma&#x27;s Words enumeration (their Remark 4.4), and their census reproduces the BB benchmark d = 12 as a calibration check.</p>
+<li>This rebuild: the kit&#x27;s RIS surrogate found weight-10 logicals on both</li>
+<p>sides, so the staged claim is a witness-backed upper bound d &lt;= 10. The validation gate (verify/validate_candidate.py) ran an 8000-trial fresh-seed RIS refutation and found no lighter logical; the gate reports the code as board-advancing in the weight-8 x unrestricted cell.</p>
+<li>Claim precisely: <code>upper_bound</code>, d &lt;= 10. The paper&#x27;s exhaustive result says</li>
+<p>the true distance is exactly 10; per board policy that <code>d=</code> tier belongs to the server certifier, not to this submission.</p>
+</ul>
+<h4>Dead ends</h4>
+<p>Not applicable to a reproduction. One adjacent finding from evaluating the paper&#x27;s full Table 1 against the board: most of its weight-8 members ([[72,14,8]], [[144,10,12]], [[144,14,10]], [[144,20,8]], [[144,18,8]], [[144,8,12]]) are dominated by existing weight-8-cell entries here — e.g. [[64,18,8]] and the weight-6 BB benchmark [[144,12,12]] — so only this code and the paper&#x27;s [[144,6,d&gt;=15]] advance this board.</p>
+<h4>Tools</h4>
+<p>Human-authored source paper (Lu, Yang, Guo, arXiv:2609.06572). Reproduction harness: this repository&#x27;s kit — <code>research/kit/bb.py</code> (build_bb), <code>research/kit/css.py</code> (k recomputation), <code>research/kit/submit.py</code> and the CLI <code>./qldpc submit</code> (witness search, verification), <code>verify/validate_candidate.py</code> (gate). No AI model produced the code; <code>provenance.model</code> is <code>human</code>.</p>
+<h4>Reproduction</h4>
+<p>Rebuild (H_X, H_Z) with the kit on the torus Z_12 x Z_6 (n = 2*12*6 = 144):</p>
+<pre>
+from bb import build_bb
+HX, HZ = build_bb(12, 6,
+                  A_terms=[(0,0),(11,0),(0,5),(9,5)],
+                  B_terms=[(3,2),(8,2),(4,3),(9,3)])
+</pre>
+<p>Then <code>./qldpc submit &lt;npz&gt; --authors @MathysRennela --family bivariate-bicycle</code>. The construction string in the JSON carries the same polynomials. Source: arXiv:2609.06572 (https://arxiv.org/abs/2609.06572), Table 1, entry 1.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/144-16-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/144-6-15.html">[[144,6,15]] — 144-6-15</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; Liangdong Lu and Ruipan Yang and Guanmin Guo</div><details ><summary>note</summary><div class=notebody><h3>[[144,6,15]] — weight-8 bivariate bicycle code, reproduction of arXiv:2609.06572 Table 1 entry 9</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: weight-8 × unrestricted. The paper&#x27;s headline code: a weight-8 BB-type code whose distance strictly exceeds the BB benchmark&#x27;s 12 at the same length n = 144 — the board&#x27;s weight-8 cell had no entry at this (n, k) with d &gt;= 15 (all smaller-n codes with d &gt;= 15 carry checks of weight 12-16, so they live outside this cell). Lu, Yang and Guo report it in Table 1, entry 9, with a certified lower bound d &gt;= 15. This entry is a reproduction of that published code, not a new search.</p>
+<h4>What was searched</h4>
+<p>No search. Generator polynomials transcribed from the paper&#x27;s Table 1 and rebuilt with the repo kit: QC(A, B) on Z_8 x Z_9 with</p>
+<ul>
+<li>A = 1 + x^4 y^2 + y^4 + y^7</li>
+<li>B = 1 + x^2 y^6 + x^5 y^7 + x^7 y^8</li>
+</ul>
+<p>(exponents written x^a y^b). The rebuild reproduced the paper&#x27;s parameters: n = 144, k = 6 (recomputed by the verifier&#x27;s rank arithmetic), max check weight 8. Notably the paper&#x27;s subgroup-coset design rule (their Theorem 3.13) explains the high distance: neither generator is divisible by (1+x) or (1+y), so none of the cheap weight-l or weight-m coset logicals exist.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Source paper: their verifier exhaustively scanned all kernel vectors of</li>
+<p>weight &lt;= 14 and found no logical (certified d &gt;= 15); the scan is translation-anchored for completeness (their Theorem 4.5) and cross-validated against Magma (their Remark 4.4).</p>
+<li>This rebuild: the kit&#x27;s RIS surrogate found a weight-15 logical on the X</li>
+<p>side and weight-15 on the Z side, so the witness-backed claim is d &lt;= 15. The validation gate (verify/validate_candidate.py) ran an 8000-trial fresh-seed RIS refutation: no lighter logical found; the gate reports the code as board-advancing in the weight-8 x unrestricted cell.</p>
+<li>Claim precisely: <code>upper_bound</code>, d &lt;= 15. Source lower bound d &gt;= 15</li>
+<p>(exhaustive, published) plus this witness pins the true distance at 15, but the <code>d=</code> tier on this board requires the server certifier, so the entry ships as an upper bound.</p>
+</ul>
+<h4>Dead ends</h4>
+<p>Not applicable to a reproduction. As with the paper&#x27;s other Table 1 entries, most of its weight-8 census is dominated by existing board entries in this cell; this code and [[144,16,10]] (submitted separately, one code per PR) are the two that advance the board.</p>
+<h4>Tools</h4>
+<p>Human-authored source paper (Lu, Yang, Guo, arXiv:2609.06572); authorship of the code belongs to them — this entry is seeded as a baseline reproduction. Reproduction harness (by @MathysRennela): this repository&#x27;s kit — <code>research/kit/bb.py</code> (build_bb), <code>research/kit/css.py</code> (k recomputation), <code>research/kit/submit.py</code> and the CLI <code>./qldpc submit</code> (witness search, verification), <code>verify/validate_candidate.py</code> (gate).</p>
+<h4>Reproduction</h4>
+<p>Rebuild (H_X, H_Z) with the kit on the torus Z_8 x Z_9 (n = 2*8*9 = 144):</p>
+<pre>
+from bb import build_bb
+HX, HZ = build_bb(8, 9,
+                  A_terms=[(0,0),(4,2),(0,4),(0,7)],
+                  B_terms=[(0,0),(2,6),(5,7),(7,8)])
+</pre>
+<p>Then <code>./qldpc submit &lt;npz&gt; --authors &quot;Liangdong Lu&quot; &quot;Ruipan Yang&quot; &quot;Guanmin Guo&quot; --anonymous --family bivariate-bicycle</code>. The construction string in the JSON carries the same polynomials. Source: arXiv:2609.06572 (https://arxiv.org/abs/2609.06572), Table 1, entry 9.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/144-6-15.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/16-4-4.html">[[16,4,4]] — 16-4-4</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[16,4,4]] — SAT-discovered weight-6 single-layer checkerboard code (a)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>local-2d-single × weight-6</code>. Before this campaign the cell held 6 entries with best kd²/n = 3.56 ([[18,4,4]]); the (n, 4, 4) point was unoccupied. Hypothesis (the campaign&#x27;s 2026-09-02 postmortem identified t=3 on small grids as the open move): t=3 detection — a CNF requiring every weight-≤3 Pauli error to be detected — forces d ≥ 4 by construction, and a SAT enumeration over locality-constrained anchor incidence can reach k ≥ 4 at d ≥ 4 on small grids where free-form SAT search collapses.</p>
