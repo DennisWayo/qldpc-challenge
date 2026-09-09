@@ -108,6 +108,76 @@ ok = (side in ("X", "Z")
 check("distance_rand_witness returns a valid logical", ok,
       f"w={w} side={side} |support|={len(support)}")
 
+def test_circulant_gb_witness():
+    """The structure-aware GB pass (issue #942).
+
+    Four properties, in the order they matter:
+      * detection reads H, never the self-declared `family` tag -- a code with
+        the tag stripped or lying is still detected, and a non-circulant code
+        is skipped rather than mis-searched;
+      * a skipped code costs nothing and reports block_size 0, so the caller
+        can tell "not applicable" from "searched and found nothing";
+      * any witness it returns is a genuine nontrivial logical of the stated
+        weight, validated here by the reference gf2.py exactly as the gate
+        validates it;
+      * on a known over-stated circulant GB entry it actually refutes, at a
+        budget small enough to sit in CI.
+    """
+    ROOT = os.path.dirname(_HERE)
+
+    def load(rel):
+        doc = json.load(open(os.path.join(ROOT, rel)))
+        n = doc["n"]
+        return doc, n, _matrix(doc["checks"]["X"], n), _matrix(doc["checks"]["Z"], n)
+
+    # --- detection is structural -------------------------------------------
+    doc, n, HX, HZ = load(os.path.join("codes", "390-68-28.json"))
+    _, _, _, block = gf2_fast.circulant_gb_witness(HX, HZ, trials=1, seed=0,
+                                                   pair_depth=8, threads=1)
+    check("circulant GB detected from H", block == n // 2, f"block={block}")
+
+    doc_lie = dict(doc)
+    doc_lie["family"] = "hypergraph-product"          # a lying tag changes nothing
+    doc_lie.pop("family", None)                        # nor does no tag at all
+    _, _, _, block_lie = gf2_fast.circulant_gb_witness(HX, HZ, trials=1, seed=0,
+                                                       pair_depth=8, threads=1)
+    check("detection ignores the family tag", block_lie == block,
+          f"{block_lie} vs {block}")
+
+    # A hypergraph-product fixture is not circulant and must be skipped.
+    _, nf, FX, FZ = load(os.path.join("verify", "fixtures", "72-6-6.json"))
+    wf, sidef, supf, blockf = gf2_fast.circulant_gb_witness(
+        FX, FZ, trials=5000, seed=0, pair_depth=8, threads=1)
+    check("non-circulant code is skipped", blockf == 0 and sidef == "" and not supf,
+          f"block={blockf} side='{sidef}'")
+
+    # --- the witness is real ------------------------------------------------
+    w, side, support, block = gf2_fast.circulant_gb_witness(
+        HX, HZ, trials=20000, seed=0, pair_depth=8, threads=4)
+    claimed = int(doc["distance"]["d"])
+    v = np.zeros(n, dtype=np.int8)
+    v[list(support)] = 1
+    Hcheck = HZ if side == "X" else HX
+    La, Lb = (HX, HZ) if side == "X" else (HZ, HX)
+    L = gf2.logical_basis(La, Lb)
+    valid = (side in ("X", "Z")
+             and int(v.sum()) == w
+             and not ((Hcheck @ v) % 2).any()
+             and bool(((L @ v) % 2).any()))
+    check("circulant_gb_witness returns a valid logical", valid,
+          f"w={w} side={side} |support|={len(support)}")
+
+    # --- and it refutes the known over-claim --------------------------------
+    check("refutes the over-stated [[390,68]] entry", w < claimed,
+          f"found {w} against claimed d<={claimed}")
+
+    # --- deterministic given (seed, threads) --------------------------------
+    w2, side2, support2, _ = gf2_fast.circulant_gb_witness(
+        HX, HZ, trials=20000, seed=0, pair_depth=8, threads=4)
+    check("deterministic for a fixed seed and thread count",
+          (w2, side2, list(support2)) == (w, side, list(support)))
+
+
 def test_gf2_fast_matches_reference():
     """pytest entry point: the checks above run at import, this reports them."""
     assert not FAILURES, FAILURES

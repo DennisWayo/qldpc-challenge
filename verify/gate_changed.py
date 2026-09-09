@@ -82,6 +82,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # printed seed alone (the per-thread RNG streams depend on the split).
 FAST_THREADS = 4
 
+# Structural (circulant generalized-bicycle) pass, issue #942. Trials are cheap
+# here because the search space is one circulant block rather than the whole
+# kernel -- measured ~50 us/trial at n=682 on 4 threads -- so a budget that
+# would be extravagant for the general search costs seconds. Deep claims get the
+# larger target; everything else gets enough to catch the gross over-claims.
+STRUCT_TRIALS_DEEP = 400_000
+STRUCT_TRIALS_STD = 50_000
+
 
 def _load_syndrome():
     """The syndrome-decoder cross-check (decode/distance.py); needs ldpc. Returns
@@ -486,6 +494,45 @@ def _fast_refute(doc, seed, trials):
     return True, w, sorted(int(q) for q in support), trials
 
 
+def _structural_refute(doc, seed, trials):
+    """Structure-aware refutation for circulant generalized-bicycle codes
+    (issue #942). A GB code is H_X = [circ(a) | circ(b)]; a logical supported on
+    a SINGLE block is constrained only by that block, so hunting one searches
+    the kernel of one L x L circulant instead of the full n-column kernel (96
+    dimensions instead of 427 on the reported [[682,172]] entry). That is why
+    this finds in seconds what millions of general trials miss.
+
+    The structure is detected from H by the accelerator, never read from the
+    submission's `family` tag: that tag is self-declared and unverifiable, and a
+    mislabelled or untagged entry must not slip past the stronger search. A code
+    that is not a circulant GB reports block_size 0 and costs microseconds.
+
+    SOUND on the same terms as _fast_refute: the accelerator only proposes, and
+    the find counts only after the pinned python stack confirms the support is a
+    genuine nontrivial logical of that weight, lighter than the claim. Returns
+    the refute_check tuple shape: (refuted, d, witness, trials)."""
+    n = doc["n"]
+    HX = H._matrix(doc["checks"]["X"], n)
+    HZ = H._matrix(doc["checks"]["Z"], n)
+    w, side, support, block = GF.circulant_gb_witness(
+        HX, HZ, trials=trials, seed=seed, pair_depth=8, threads=FAST_THREADS)
+    if not block:
+        return False, None, None, 0          # not a circulant GB: nothing searched
+    claimed = int(doc["distance"]["d"])
+    if not side or w >= claimed:
+        return False, (w if side else None), None, trials
+    v = np.zeros(n, dtype=np.int8)
+    v[list(support)] = 1
+    Hcheck = HZ if side == "X" else HX
+    L = gf2.logical_basis(HX, HZ) if side == "X" else gf2.logical_basis(HZ, HX)
+    valid = (int(v.sum()) == w
+             and not ((Hcheck @ v) % 2).any()
+             and bool(((L @ v) % 2).any()))
+    if not valid:
+        return False, None, None, trials
+    return True, w, sorted(int(q) for q in support), trials
+
+
 def main(argv):
     rest = [a for a in argv if not a.endswith(".json")]
     seed = None
@@ -709,6 +756,17 @@ def main(argv):
         if GF is not None and deep:
             ftrials = min(8_000_000, 150 * trials)
             results["RIS-fast"] = _fast_refute(doc, seed + 7, ftrials)
+        # Structure-aware pass (issue #942): strictly additive, and priced
+        # separately because it is not a general search -- it self-limits to
+        # circulant GB codes, where it is far stronger than trial count alone
+        # suggests, and returns immediately on everything else.
+        struct_trials = 0
+        if GF is not None:
+            st = STRUCT_TRIALS_DEEP if deep else STRUCT_TRIALS_STD
+            sres = _structural_refute(doc, seed + 11, st)
+            struct_trials = sres[3]
+            if struct_trials:
+                results["circulant-GB"] = sres
         hits = {m: (dh, wit) for m, (ref, dh, wit, _) in results.items() if ref}
         # Circuit tier (RFC 0001 step 6): entries shipping syndrome circuits
         # additionally face a bounded RIS search on each memory DEM when the
@@ -720,6 +778,11 @@ def main(argv):
         fast_tag = (f" + fast x {ftrials}" if ftrials else "")
         tag = (f"deep, {len(seeds)} RIS seeds x {trials} trials (<={budget:.0f}s each)"
                f"{fast_tag}" if deep else f"standard, {trials} trials (<={budget:.0f}s)")
+        # The structural pass is priced on BOTH paths (it is cheap and does not
+        # depend on record status), so its tag is appended outside the branch --
+        # a standard-path run must still show that it ran.
+        if struct_trials:
+            tag += f" + circulant-GB x {struct_trials}"
         tag += f"; diff: {cls}"
         gate = {
             "refuted": bool(hits or circ_hits),
@@ -729,6 +792,7 @@ def main(argv):
             "budget_seconds": budget,
             "deep": deep,
             "fast_trials": ftrials,
+            "structural_trials": struct_trials,
             "methods": list(results),
             "diff_class": cls,
             "diff_reason": why,

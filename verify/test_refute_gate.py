@@ -155,6 +155,52 @@ def main():
     return 1 if _fail else 0
 
 
+def test_structural_gb_pass():
+    """The circulant-GB mechanism as the gate sees it (issue #942).
+
+    Skipped when the optional accelerator is not built: without it the gate
+    behaves exactly as it did before this mechanism existed, which is the whole
+    safety argument -- the pass is strictly additive and never a prerequisite.
+    """
+    try:
+        import gf2_fast                                     # noqa: F401
+    except ImportError:
+        import pytest
+        pytest.skip("gf2_fast not built (run `make fast`); the structural pass "
+                    "is strictly additive, so the gate is unchanged without it.")
+    import gate_changed as G
+
+    # A code that is not a circulant GB must be reported as NOT SEARCHED
+    # (trials 0), so the caller leaves it out of the mechanism list entirely
+    # rather than recording a meaningless null result against it.
+    doc = json.load(open(os.path.join(ROOT, "verify", "fixtures", "72-6-6.json")))
+    ref, found, wit, tr = G._structural_refute(doc, seed=11,
+                                               trials=G.STRUCT_TRIALS_STD)
+    check("non-circulant code is not searched",
+          (ref, found, wit, tr) == (False, None, None, 0))
+
+    # And a known over-stated circulant GB entry is refuted with a witness the
+    # pinned python stack validated (_structural_refute returns None otherwise).
+    path = os.path.join(ROOT, "codes", "390-68-28.json")
+    if os.path.exists(path):
+        doc = json.load(open(path))
+        ref, found, wit, tr = G._structural_refute(doc, seed=11,
+                                                   trials=G.STRUCT_TRIALS_STD)
+        claimed = int(doc["distance"]["d"])
+        check("over-stated circulant GB entry is refuted",
+              bool(ref and found is not None and found < claimed and wit))
+        if wit:
+            n = doc["n"]
+            v = np.zeros(n, dtype=np.int8)
+            v[list(wit)] = 1
+            HX = heuristic_distance._matrix(doc["checks"]["X"], n)
+            HZ = heuristic_distance._matrix(doc["checks"]["Z"], n)
+            in_ker = (not ((HX @ v) % 2).any()) or (not ((HZ @ v) % 2).any())
+            check("the returned witness is a real kernel vector", in_ker)
+    print(f"\n{'ALL PASS' if not _fail else 'FAILURES: ' + ', '.join(_fail)}")
+    assert not _fail, _fail
+
+
 def test_refute_gate():
     assert main() == 0
 
