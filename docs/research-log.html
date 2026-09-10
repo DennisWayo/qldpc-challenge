@@ -241,6 +241,46 @@ HX, HZ = build_bb(12, 8,
 <p>GLM 5.3 Flash (matches <code>provenance.model</code>). Repo kit: GF(2) rank core, RIS surrogate, trusted verifier. The greedy-chain driver is fully specified above (~50 lines against the kit) and is deliberately not committed with this PR (one concern per PR).</p>
 <h4>Reproduction</h4>
 <p>1. Load <code>codes/192-40-12.json</code> from this PR&#x27;s tree. 2. Delete the listed X-checks by 0-based index; keep every other check verbatim (indices refer to the parent&#x27;s <code>checks.X</code> ordering). 3. <code>k&#x27; = n - rank(H&#x27;_X) - rank(H_Z)</code> = 43. 4. Verify: <code>uv run python verify/qldpc_verify.py codes/192-43-12.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/192-43-12.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/198-8-9.html">[[198,8,9]] — 198-8-9</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[198,8,9]] — r=1 graft of the board&#x27;s [[200,8,9]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The r=1 lattice-graft move (arXiv:2504.08887 Sec. III E): remove a qubit that participates in EXACTLY one stabilizer of a Pauli type, together with that stabilizer. Commutation is preserved automatically; k is unchanged exactly (rank arithmetic), so n falls at held k and distance tier — a frontier win in the source&#x27;s own (weight x locality) cell. Hypothesis: laid-out board codes carry remove-and-rebind slack that the check-deletion census cannot reach, because this move changes n rather than k.</p>
+<h4>What was searched</h4>
+<p>Board-wide sweep over every board code with a 2D layout and claimed d &gt;= 3, defending each code&#x27;s own claimed d as the floor (conservative: a claimed d is an upper bound, so a loose claim only costs removals, never soundness). Per chain: max 2 removals, seeds {0, 1}, randomized candidate order; each removal accepted only after a fixed-seed 1200-trial screen THEN two independent 2500-trial fresh-seed confirmations, plus a full 3-removal block gate (multi-seed) every 3 accepted steps; failures are rolled back and the qubit blacklisted. 23 gate-passed codes staged, 7 board-advancing; this is the codes/200-8-9.json point.</p>
+<h4>Evidence trail</h4>
+<p>The submitted code&#x27;s chain: 2 removals accepted, every step passing the per-step screen + 2-seed confirm and the block gate at d_rand &gt;= 9; final (n, k) = (198, 8) re-derived by GF(2) rank at packaging. Witnesses were computed by the kit&#x27;s submission packaging and embedded in the JSON; final claim <code>d &lt;= 9</code> per side, upper_bound confidence. Passed the trusted validation gate (verify + refute + dedup), which also confirms board advancement in the weight-6 x local-2d-single cell. Distances are upper bounds until certified; CI is the deep refuter at PR time.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Deep grafts (up to 14 removals on the same move set) also pass the gate</li>
+<p>but do not advance the board — depth is the wrong axis; the light -2 removal is the advancing currency.</p>
+<li>The identity-transfer packaging gap: without the tool&#x27;s original-qubit</li>
+<p>identity output, the source layout cannot be transferred honestly. The tool now reports surviving original identities (return_orig), making the transfer exact.</p>
+<li>Long randomized distance screens are a memory hazard on macOS (issue</li>
+<p>#966): run them solo and chunked.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: research/local2d/boundary_engine.py <code>graft_r1_safe</code> (return_orig mode), kit <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, kit <code>css</code> rank arithmetic. Compute: minutes per code (the per-step confirms dominate).</p>
+<h4>Reproduction</h4>
+<p>From this PR&#x27;s tree: load <code>codes/200-8-9.json</code>, build HX/HZ from <code>checks.X</code>/<code>checks.Z</code>, and run `graft_r1_safe(HX, HZ, max_removals=2, seed=0, d_floor=9, return_orig=True)<code> from </code>research/local2d/boundary_engine.py`. The chain is deterministic for the fixed seed; it returns the surviving ORIGINAL qubit identities — subset the source layout&#x27;s coordinates by identity to rebuild the 198-qubit code with its locality block.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/198-8-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/214-15-11.html">[[214,15,11]] — 214-15-11</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[214,15,11]] — r=1 graft of the board&#x27;s [[216,15,11]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The r=1 lattice-graft move (arXiv:2504.08887 Sec. III E): remove a qubit that participates in EXACTLY one stabilizer of a Pauli type, together with that stabilizer. Commutation is preserved automatically; k is unchanged exactly (rank arithmetic), so n falls at held k and distance tier — a frontier win in the source&#x27;s own (weight x locality) cell. Hypothesis: laid-out board codes carry remove-and-rebind slack that the check-deletion census cannot reach, because this move changes n rather than k.</p>
+<h4>What was searched</h4>
+<p>Board-wide sweep over every board code with a 2D layout and claimed d &gt;= 3, defending each code&#x27;s own claimed d as the floor (conservative: a claimed d is an upper bound, so a loose claim only costs removals, never soundness). Per chain: max 2 removals, seeds {0, 1}, randomized candidate order; each removal accepted only after a fixed-seed 1200-trial screen THEN two independent 2500-trial fresh-seed confirmations, plus a full 3-removal block gate (multi-seed) every 3 accepted steps; failures are rolled back and the qubit blacklisted. 23 gate-passed codes staged, 7 board-advancing; this is the codes/216-15-11.json point.</p>
+<h4>Evidence trail</h4>
+<p>The submitted code&#x27;s chain: 2 removals accepted, every step passing the per-step screen + 2-seed confirm and the block gate at d_rand &gt;= 11; final (n, k) = (214, 15) re-derived by GF(2) rank at packaging. Witnesses were computed by the kit&#x27;s submission packaging and embedded in the JSON; final claim <code>d &lt;= 11</code> per side, upper_bound confidence. Passed the trusted validation gate (verify + refute + dedup), which also confirms board advancement in the weight-8 x local-2d-bilayer cell. Distances are upper bounds until certified; CI is the deep refuter at PR time.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Deep grafts (up to 14 removals on the same move set) also pass the gate</li>
+<p>but do not advance the board — depth is the wrong axis; the light -2 removal is the advancing currency.</p>
+<li>The identity-transfer packaging gap: without the tool&#x27;s original-qubit</li>
+<p>identity output, the source layout cannot be transferred honestly. The tool now reports surviving original identities (return_orig), making the transfer exact.</p>
+<li>Long randomized distance screens are a memory hazard on macOS (issue</li>
+<p>#966): run them solo and chunked.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: research/local2d/boundary_engine.py <code>graft_r1_safe</code> (return_orig mode), kit <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, kit <code>css</code> rank arithmetic. Compute: minutes per code (the per-step confirms dominate).</p>
+<h4>Reproduction</h4>
+<p>From this PR&#x27;s tree: load <code>codes/216-15-11.json</code>, build HX/HZ from <code>checks.X</code>/<code>checks.Z</code>, and run `graft_r1_safe(HX, HZ, max_removals=2, seed=0, d_floor=11, return_orig=True)<code> from </code>research/local2d/boundary_engine.py`. The chain is deterministic for the fixed seed; it returns the surviving ORIGINAL qubit identities — subset the source layout&#x27;s coordinates by identity to rebuild the 214-qubit code with its locality block.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/214-15-11.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/216-12-18.html">[[216,12,18]] — 216-12-18</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[216,12,18]] — weight-8 bivariate bicycle code on Z_18 x Z_6, from campaign 2 of the weight-8 sweep</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 × unrestricted. Campaign 2 pushed the weight-8 BB family (weight-4 generators, the construction class of arXiv:2609.06572) beyond that paper&#x27;s n = 144 regime, to n in {192, 216, 288}. This is the k = 12 slot at n = 216 — the board had no weight-8 entry at this (n, k), and the target kd²/n ~ 18 is well above anything at this size in the cell.</p>
@@ -653,6 +693,26 @@ HX, HZ = build_open_directional(16, 16)   # [[512,8,&lt;=17]], k = 8, max check 
 </pre>
 <p>then carry <code>orig = list(range(512))</code> alongside the matrices and repeat until nothing fires: (1) <b>graft</b> — pick a qubit q of column weight 1 in H_X or H_Z, delete that row, that column and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 8 and a RIS search finds nothing lighter than 17; (2) <b>cleanup</b> — call <code>_cleanup(HX, HZ)</code> and compose its returned index array into <code>orig</code>; (3) <b>merge-graft</b> — pick a qubit q of column weight 2 in one matrix, with rows R₁, R₂; if R₁ + R₂ has weight ≤ 6 and maximum pairwise distance ≤ 4, replace R₂ by R₁ + R₂ and graft q as in (1), plus a full recomputation of the layout radius. Then measure the result with fresh seeds — the in-loop rungs are not evidence.</p>
 <p>The layout is <code>(i + j, j - i + c)</code> for each surviving <code>q = c*256 + i*16 + j</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/454-8-17.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/48-6-3.html">[[48,6,3]] — 48-6-3</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[48,6,3]] — r=1 graft of the board&#x27;s [[50,6,3]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The r=1 lattice-graft move (arXiv:2504.08887 Sec. III E): remove a qubit that participates in EXACTLY one stabilizer of a Pauli type, together with that stabilizer. Commutation is preserved automatically; k is unchanged exactly (rank arithmetic), so n falls at held k and distance tier — a frontier win in the source&#x27;s own (weight x locality) cell. Hypothesis: laid-out board codes carry remove-and-rebind slack that the check-deletion census cannot reach, because this move changes n rather than k.</p>
+<h4>What was searched</h4>
+<p>Board-wide sweep over every board code with a 2D layout and claimed d &gt;= 3, defending each code&#x27;s own claimed d as the floor (conservative: a claimed d is an upper bound, so a loose claim only costs removals, never soundness). Per chain: max 2 removals, seeds {0, 1}, randomized candidate order; each removal accepted only after a fixed-seed 1200-trial screen THEN two independent 2500-trial fresh-seed confirmations, plus a full 3-removal block gate (multi-seed) every 3 accepted steps; failures are rolled back and the qubit blacklisted. 23 gate-passed codes staged, 7 board-advancing; this is the codes/50-6-3.json point.</p>
+<h4>Evidence trail</h4>
+<p>The submitted code&#x27;s chain: 2 removals accepted, every step passing the per-step screen + 2-seed confirm and the block gate at d_rand &gt;= 3; final (n, k) = (48, 6) re-derived by GF(2) rank at packaging. Witnesses were computed by the kit&#x27;s submission packaging and embedded in the JSON; final claim <code>d &lt;= 3</code> per side, upper_bound confidence. Passed the trusted validation gate (verify + refute + dedup), which also confirms board advancement in the weight-4 x local-2d-single cell. Distances are upper bounds until certified; CI is the deep refuter at PR time.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Deep grafts (up to 14 removals on the same move set) also pass the gate</li>
+<p>but do not advance the board — depth is the wrong axis; the light -2 removal is the advancing currency.</p>
+<li>The identity-transfer packaging gap: without the tool&#x27;s original-qubit</li>
+<p>identity output, the source layout cannot be transferred honestly. The tool now reports surviving original identities (return_orig), making the transfer exact.</p>
+<li>Long randomized distance screens are a memory hazard on macOS (issue</li>
+<p>#966): run them solo and chunked.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: research/local2d/boundary_engine.py <code>graft_r1_safe</code> (return_orig mode), kit <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, kit <code>css</code> rank arithmetic. Compute: minutes per code (the per-step confirms dominate).</p>
+<h4>Reproduction</h4>
+<p>From this PR&#x27;s tree: load <code>codes/50-6-3.json</code>, build HX/HZ from <code>checks.X</code>/<code>checks.Z</code>, and run `graft_r1_safe(HX, HZ, max_removals=2, seed=0, d_floor=3, return_orig=True)<code> from </code>research/local2d/boundary_engine.py`. The chain is deterministic for the fixed seed; it returns the surviving ORIGINAL qubit identities — subset the source layout&#x27;s coordinates by identity to rebuild the 48-qubit code with its locality block.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/48-6-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/700-216-28.html">[[700,216,28]] — 700-216-28</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[700,216,28]] — check-deletion chain of codes/700-206-28.json</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Check-deletion move (an unpublished check-deletion theorem by @mathysrennela, PROVEN by the author; numbered claim 12.1 in the author&#x27;s taxonomy): deleting <code>r</code> independent checks gives <code>k&#x27; = k + r</code> exact and `d&#x27; = min(d, min deleted-check weight, min exposed-logical weight)`. The board-wide wave-1 census (529 sources, 39,818 moves, 348 survivors at 31 distinct points) promoted [[700,212,28]] (PR #934, merged). Wave 2 asked whether *greedy chains* keep going: delete one check per step, re-price, repeat. This chain: 10 accepted steps, deleting X-checks [0..9] of <code>codes/700-206-28.json</code>, one per step, each still gaining +1 k.</p>
@@ -2504,29 +2564,6 @@ H_Z = [R(b)^T | L(a)^T]
 <p>Model: GLM 5.3 Flash (agent harness). Tooling: the repo&#x27;s multi-band builder (bit-exact against <code>research/build_dense_surface.py</code> and all 15 board members), <code>research/kit/submit.make_submission</code>, <code>verify/validate_candidate.py</code>. Compute: single laptop.</p>
 <h4>Reproduction</h4>
 <p><code>research/local2d/multiband.py::build(3, 10, 7, 4)</code> rebuilds (H_X, H_Z) exactly; data qubits at odd/odd sites, X-checks where (x+y) % 4 == 2. Parameters: d = 3, rows = 10, m = 7, pitch = 4.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/477-65-3.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/48-6-3.html">[[48,6,3]] — 48-6-3</a></h3><div class=kv style="color:var(--mut)">2026-09-01 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[48,6,3]] — multi-band dense-packed code (rows=4, m=2, pitch=4)</h3>
-<h4>Direction &amp; hypothesis</h4>
-<p>Track cell <code>weight-4 × local-2d-single</code>, d = 3 band. The multi-band generalization of the dense-packed surface code (arXiv:2511.06758 base, raised-pitch variant) places rows of m patches at vertical pitch <code>pitch</code>; boundary overhead between bands goes to zero or negative as rows grow, so k/n holds near the family asymptote while n stays under the 700 cap. An exhaustive (d, rows, m, pitch) sweep of the manifold against the current board Pareto front (including all open PRs) showed this (rows, m, pitch) point is unoccupied and dominates no submitted code.</p>
-<h4>What was searched</h4>
-<p>Full enumeration of the multi-band parameter space: d in {3, 5, 7, 9, 11, 13}, rows 1-8, m 1-20, pitch in [d-2, d+3], n &lt;= 700 — 13,376 parameter points, each scored by exact GF(2) rank arithmetic (n, k) and filtered against the board Pareto front (local codes plus all nine open PRs from this account). 549 unique Pareto survivors were witness-screened at 4000 randomized trials each; this configuration is among the survivors.</p>
-<h4>Evidence trail</h4>
-<ul>
-<li>k computed exactly: n - rank(H_X) - rank(H_Z) over GF(2).</li>
-<li>d: witness-backed upper bound. The staging search ran 20,000 RIS</li>
-<p>trials/side finding no logical below 3; the trusted gate (<code>verify/validate_candidate.py</code>) re-searched independently and returned <code>passed: true</code>, <code>board_advancing: true</code>, <code>dominated_by: []</code>.</p>
-<li>Claim tier: upper bound, not certified exact.</li>
-</ul>
-<h4>Dead ends</h4>
-<ul>
-<li>The g values from rank arithmetic alone (up to 5.5 at d = 13) are</li>
-<p>artifacts of degenerate masks; the witness screen refuted 213 of 549 unique survivors. Distance claims here are only as good as the witness budget.</p>
-<li>Configs duplicating or tying any open PR code were excluded from the</li>
-<p>survivor set before screening.</p>
-</ul>
-<h4>Tools</h4>
-<p>Model: GLM 5.3 Flash (agent harness). Tooling: the repo&#x27;s multi-band builder (bit-exact against <code>research/build_dense_surface.py</code> and all 15 board members), <code>research/kit/submit.make_submission</code>, <code>verify/validate_candidate.py</code>. Compute: single laptop.</p>
-<h4>Reproduction</h4>
-<p><code>research/local2d/multiband.py::build(3, 4, 2, 4)</code> rebuilds (H_X, H_Z) exactly; data qubits at odd/odd sites, X-checks where (x+y) % 4 == 2. Parameters: d = 3, rows = 4, m = 2, pitch = 4.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/48-6-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/484-4-11.html">[[484,4,11]] — 484-4-11</a></h3><div class=kv style="color:var(--mut)">2026-09-01 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[484,4,11]] — multi-band dense-packed code (rows=1, m=4, pitch=9)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Track cell <code>weight-4 × local-2d-single</code>, d = 11 band. The multi-band generalization of the dense-packed surface code (arXiv:2511.06758 base, raised-pitch variant) places rows of m patches at vertical pitch <code>pitch</code>; boundary overhead between bands goes to zero or negative as rows grow, so k/n holds near the family asymptote while n stays under the 700 cap. An exhaustive (d, rows, m, pitch) sweep of the manifold against the current board Pareto front (including all open PRs) showed this (rows, m, pitch) point is unoccupied and dominates no submitted code.</p>
