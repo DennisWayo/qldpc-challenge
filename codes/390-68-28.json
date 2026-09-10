@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[390,68,28]] cyclic GB divisor code on Z_195 (weight-13)",
  "code_type": "CSS",
  "n": 390,
@@ -5861,74 +5861,36 @@
   ]
  },
  "distance": {
-  "d": 28,
+  "d": 26,
   "X": {
-   "value": 28,
+   "value": 26,
    "confidence": "upper_bound",
    "witness": [
-    8,
-    23,
-    24,
-    29,
-    43,
-    50,
-    106,
-    112,
-    118,
-    138,
-    153,
-    155,
-    165,
-    192,
-    200,
-    203,
-    218,
-    229,
-    250,
-    266,
-    271,
-    292,
-    313,
-    321,
-    328,
-    339,
-    348,
-    354
-   ]
+    2, 7, 17, 22, 32, 37, 47, 52, 62, 67, 77, 82, 92,
+    97, 107, 112, 122, 127, 137, 142, 152, 157, 167, 172,
+    182, 187
+   ],
+   "witness_provenance": {
+    "found_by": ["@ethanfeld"],
+    "date": "2026-09-09",
+    "found_at_samples": 1,
+    "tool": "Issue #942 witness report; search budget not reported"
+   }
   },
   "Z": {
-   "value": 28,
+   "value": 26,
    "confidence": "upper_bound",
    "witness": [
-    36,
-    42,
-    51,
-    62,
-    69,
-    77,
-    98,
-    119,
-    124,
-    140,
-    161,
-    172,
-    187,
-    190,
-    198,
-    225,
-    235,
-    237,
-    252,
-    272,
-    278,
-    284,
-    340,
-    347,
-    361,
-    366,
-    367,
-    382
-   ]
+    2, 7, 17, 22, 32, 37, 47, 52, 62, 67, 77, 82, 92,
+    97, 107, 112, 122, 127, 137, 142, 152, 157, 167, 172,
+    182, 187
+   ],
+   "witness_provenance": {
+    "found_by": ["@ethanfeld"],
+    "date": "2026-09-09",
+    "found_at_samples": 1,
+    "tool": "Issue #942 witness report; search budget not reported"
+   }
   }
  },
  "provenance": {
@@ -5942,7 +5904,7 @@
    "arXiv:2203.17216"
   ],
   "date": "2026-07-15",
-  "notes": "Search and verification by Claude Fable 5. Sibling of the [[390,82,27]] entry: lower check weight (13 vs 16) and higher distance at lower k; Pareto-incomparable, kd^2/n = 136.7."
+  "notes": "Search and verification by Claude Fable 5. Sibling of the [[390,82,27]] entry: lower check weight (13 vs 16) and higher distance at lower k; Pareto-incomparable, kd^2/n = 136.7. Distance corrected from d<=28 to d<=26 using the verified weight-26 X and Z witnesses reported in issue #942. The issue's verification checks place both witnesses in the appropriate opposite-check kernels and outside the stabilizer row spaces; the search budget is not reported. @ethanfeld supplied the correction."
  },
  "family": "generalized-bicycle"
 }

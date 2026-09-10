@@ -601,6 +601,124 @@ WitnessResult dem_rand_witness_cpp(const GF2Matrix& H, const GF2Matrix& L,
     return res;
 }
 
+
+// =====================================================================
+//  Circulant generalized-bicycle structure (issue #942)
+// =====================================================================
+//
+// A generalized bicycle code has H_X = [A | B], H_Z = [B^T | A^T] with A, B
+// commuting circulants over F_2[x]/(x^L - 1). That structure leaks distance:
+// a logical whose support lies entirely in ONE block is constrained only by
+// that block, so hunting it means searching the kernel of a single L x L
+// circulant instead of the whole n-column kernel. On the reported [[682,172]]
+// entry that is 96 dimensions instead of 427, which is why a few minutes of
+// this finds what 2,000,000 general trials missed.
+//
+// The structure is DETECTED from H, never taken from the submission's
+// self-declared `family` tag: the tag is unverifiable and a mislabelled or
+// untagged entry must not escape the stronger search. Detection is exact --
+// every row of each half must be the cyclic shift of its first row -- so a
+// non-circulant code simply falls through to the general search unharmed.
+
+// Returns the circulant block size L if H_X is [circ(a) | circ(b)], else 0.
+static int circulant_block_size(const GF2Matrix& HX) {
+    int n = HX.cols_, rows = HX.rows_;
+    if (n <= 0 || n % 2 != 0) return 0;
+    int L = n / 2;
+    if (rows != L || L == 0) return 0;
+    for (int half = 0; half < 2; ++half) {
+        int off = half * L;
+        for (int i = 1; i < L; ++i) {
+            for (int c = 0; c < L; ++c) {
+                int src = c - i;
+                src %= L;
+                if (src < 0) src += L;
+                if (HX.get(i, off + c) != HX.get(0, off + src))
+                    return 0;
+            }
+        }
+    }
+    return L;
+}
+
+// Kernel vectors of H that are supported ONLY on columns [off, off+L).
+// Rows are returned embedded in the full n columns, so they drop straight into
+// the existing search core and the existing nontriviality test.
+static GF2Matrix single_block_kernel(const GF2Matrix& H, int off, int L, int n) {
+    GF2Matrix blk(H.rows_, L);
+    for (int r = 0; r < H.rows_; ++r)
+        for (int c = 0; c < L; ++c)
+            if (H.get(r, off + c)) blk.set(r, c, true);
+    GF2Matrix kb = kernel_basis(blk);
+    GF2Matrix out(kb.rows_, n);
+    for (int r = 0; r < kb.rows_; ++r)
+        for (int c = 0; c < L; ++c)
+            if (kb.get(r, c)) out.set(r, off + c, true);
+    return out;
+}
+
+struct CirculantResult {
+    int weight;
+    int side;                       // 0 = X, 1 = Z, -1 = nothing found
+    std::vector<uint64_t> witness;
+    int n;
+    int block_size;                 // 0 when the code is not a circulant GB
+};
+
+// Single-block search on both sides and both blocks. Reuses the SAME trial
+// core as the general search -- only the kernel handed to it is restricted --
+// so the nontriviality test and the witness contract are unchanged.
+CirculantResult circulant_gb_witness_cpp(const GF2Matrix& HX, const GF2Matrix& HZ,
+                                         int trials, uint64_t seed, int pair_depth,
+                                         int n_threads) {
+    CirculantResult res;
+    res.n = HX.cols_;
+    res.weight = res.n + 1;
+    res.side = -1;
+    res.block_size = 0;
+
+    int L = circulant_block_size(HX);
+    if (L == 0) return res;                 // not circulant: nothing searched
+    res.block_size = L;
+    if (n_threads < 1) n_threads = 1;
+    int n = res.n;
+
+    // side 0 (X-type): lives in ker(H_Z); side 1 (Z-type): lives in ker(H_X).
+    auto run_side = [&](const GF2Matrix& A, const GF2Matrix& B,
+                        std::vector<uint64_t>& wit) -> int {
+        GF2Matrix LZ = logical_basis(A, B);
+        int best = n + 1;
+        for (int half = 0; half < 2; ++half) {
+            GF2Matrix K = single_block_kernel(B, half * L, L, n);
+            if (K.rows_ == 0) continue;
+            int per = (trials + n_threads - 1) / n_threads;
+            std::vector<int> results(n_threads, n + 1);
+            std::vector<std::vector<uint64_t>> wits(n_threads);
+            std::vector<std::thread> pool;
+            pool.reserve(n_threads);
+            for (int t = 0; t < n_threads; ++t) {
+                uint64_t s = seed + 0x9e3779b97f4a7c15ULL * (uint64_t)(t + 1)
+                                  + 0x2545f4914f6cdd1dULL * (uint64_t)(half + 1);
+                pool.emplace_back([&, t, s]() {
+                    results[t] = min_logical_weight_rand_core(n, K, LZ, per, s,
+                                                              pair_depth, &wits[t]);
+                });
+            }
+            for (auto& th : pool) th.join();
+            for (int t = 0; t < n_threads; ++t)
+                if (results[t] < best) { best = results[t]; wit = wits[t]; }
+        }
+        return best;
+    };
+
+    std::vector<uint64_t> witX, witZ;
+    int dx = run_side(HX, HZ, witX);
+    int dz = run_side(HZ, HX, witZ);
+    if (dx <= dz && dx <= n)      { res.weight = dx; res.side = 0; res.witness = witX; }
+    else if (dz <= n)             { res.weight = dz; res.side = 1; res.witness = witZ; }
+    return res;
+}
+
 int compute_k_cpp(const GF2Matrix& HX, const GF2Matrix& HZ) {
     int n = (HX.rows_ > 0) ? HX.cols_ :
             (HZ.rows_ > 0) ? HZ.cols_ : 0;
@@ -707,6 +825,30 @@ static py::tuple py_dem_rand_witness(py::array_t<int8_t> H_np,
 }
 
 
+static py::tuple py_circulant_gb_witness(py::array_t<int8_t> HX_np,
+                                         py::array_t<int8_t> HZ_np,
+                                         int trials, uint64_t seed,
+                                         int pair_depth, int threads) {
+    if (HX_np.size() == 0 || HZ_np.size() == 0) {
+        int n = (HX_np.ndim() == 2) ? (int)HX_np.shape(1) : 0;
+        return py::make_tuple(n + 1, py::str(""), py::list(), 0);
+    }
+    auto HX = GF2Matrix::from_numpy(HX_np);
+    auto HZ = GF2Matrix::from_numpy(HZ_np);
+    CirculantResult res;
+    {   // workers touch no Python objects -> drop the GIL so they run in parallel
+        py::gil_scoped_release release;
+        res = circulant_gb_witness_cpp(HX, HZ, trials, seed, pair_depth, threads);
+    }
+    py::list support;
+    if (res.side >= 0)
+        for (int c = 0; c < res.n; ++c)
+            if ((res.witness[c / 64] >> (c % 64)) & 1)
+                support.append(c);
+    const char* side = (res.side == 0) ? "X" : (res.side == 1) ? "Z" : "";
+    return py::make_tuple(res.weight, py::str(side), support, res.block_size);
+}
+
 static int py_compute_k(py::array_t<int8_t> HX_np, py::array_t<int8_t> HZ_np) {
     GF2Matrix HX = (HX_np.size() > 0) ? GF2Matrix::from_numpy(HX_np)
                                        : GF2Matrix(0, (HZ_np.ndim() == 2) ? (int)HZ_np.shape(1) : 0);
@@ -764,6 +906,18 @@ PYBIND11_MODULE(gf2_fast, m) {
           "a DEM's parity-check and observable matrices. Returns (weight, "
           "sorted mechanism indices) or (None, None). Proposes only -- "
           "callers validate with circuit_tools.witness_errors.");
+
+    m.def("circulant_gb_witness", &py_circulant_gb_witness,
+          "Structure-aware refutation for circulant generalized-bicycle codes "
+          "(issue #942). DETECTS [circ(a) | circ(b)] from H itself -- never from "
+          "the self-declared family tag -- and, when found, searches only the "
+          "logicals supported on a single block, which is a far smaller space "
+          "than the full kernel. Returns (weight, side, support, block_size); "
+          "block_size is 0 when the code is not a circulant GB and nothing was "
+          "searched, and side is '' when the search found nothing.",
+          py::arg("HX"), py::arg("HZ"),
+          py::arg("trials") = 300, py::arg("seed") = 0,
+          py::arg("pair_depth") = 8, py::arg("threads") = 8);
 
     m.def("compute_k", &py_compute_k,
           "Number of logical qubits: n - rank(HX) - rank(HZ).",
