@@ -22054,7 +22054,7 @@
     "construction": "Cyclic generalized-bicycle code over Z_341; divisor ideal degree 70 from x^341+1 over GF(2); divisor_poly=0x725946e001e3c38d9d; a=[0, 1, 11, 15, 22, 32, 110, 132, 139, 170, 176, 187, 264, 308, 325]; b=[42, 82, 87, 97, 116, 155, 157, 170, 178, 217, 244, 257, 267, 283, 300]; H_X=[circ(a)|circ(b)], H_Z=[circ(b)^T|circ(a)^T].",
     "date": "2026-09-10",
     "model": "OpenAI Codex (GPT-5)",
-    "notes": "Private staging candidate from scripts/attack_records.py. Distance is a witness-backed upper bound, not an exact-distance claim. Rank 41 in the 20260910T115734 frozen snapshot survived 20 structural passes of 500,000 trials and 10 full-kernel passes of 200,000 trials with no validated witness below 88. The global qLDPC Challenge target score used here is 1573.977.",
+    "notes": "Private staging candidate from a structural/full-kernel attack harness. Distance is a witness-backed upper bound, not an exact-distance claim. Rank 41 in the 20260910T115734 frozen snapshot survived 20 structural passes of 500,000 trials and 10 full-kernel passes of 200,000 trials with no validated witness below 88. The global qLDPC Challenge target score used here is 1573.977.",
     "novelty": "unknown",
     "origin": "submission",
     "references": []
