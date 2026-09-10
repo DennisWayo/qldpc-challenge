@@ -472,6 +472,26 @@ HX, HZ = build_bb(12, 12,
                   B_terms=[(5,3),(6,10),(8,7),(10,0)])
 </pre>
 <p>Then <code>./qldpc submit &lt;npz&gt; --authors @MathysRennela --family bivariate-bicycle</code>. The construction string in the JSON carries the same polynomials.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/288-18-20.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/34-4-3.html">[[34,4,3]] — 34-4-3</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[34,4,3]] — r=1 graft of the board&#x27;s [[36,4,3]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The r=1 lattice-graft move (arXiv:2504.08887 Sec. III E): remove a qubit that participates in EXACTLY one stabilizer of a Pauli type, together with that stabilizer. Commutation is preserved automatically; k is unchanged exactly (rank arithmetic), so n falls at held k and distance tier — a frontier win in the source&#x27;s own (weight x locality) cell. Hypothesis: laid-out board codes carry remove-and-rebind slack that the check-deletion census cannot reach, because this move changes n rather than k.</p>
+<h4>What was searched</h4>
+<p>Board-wide sweep over every board code with a 2D layout and claimed d &gt;= 3, defending each code&#x27;s own claimed d as the floor (conservative: a claimed d is an upper bound, so a loose claim only costs removals, never soundness). Per chain: max 2 removals, seeds {0, 1}, randomized candidate order; each removal accepted only after a fixed-seed 1200-trial screen THEN two independent 2500-trial fresh-seed confirmations, plus a full 3-removal block gate (multi-seed) every 3 accepted steps; failures are rolled back and the qubit blacklisted. 23 gate-passed codes staged, 7 board-advancing; this is the codes/36-4-3.json point.</p>
+<h4>Evidence trail</h4>
+<p>The submitted code&#x27;s chain: 2 removals accepted, every step passing the per-step screen + 2-seed confirm and the block gate at d_rand &gt;= 3; final (n, k) = (34, 4) re-derived by GF(2) rank at packaging. Witnesses were computed by the kit&#x27;s submission packaging and embedded in the JSON; final claim <code>d &lt;= 3</code> per side, upper_bound confidence. Passed the trusted validation gate (verify + refute + dedup), which also confirms board advancement in the weight-4 x local-2d-single cell. Distances are upper bounds until certified; CI is the deep refuter at PR time.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Deep grafts (up to 14 removals on the same move set) also pass the gate</li>
+<p>but do not advance the board — depth is the wrong axis; the light -2 removal is the advancing currency.</p>
+<li>The identity-transfer packaging gap: without the tool&#x27;s original-qubit</li>
+<p>identity output, the source layout cannot be transferred honestly. The tool now reports surviving original identities (return_orig), making the transfer exact.</p>
+<li>Long randomized distance screens are a memory hazard on macOS (issue</li>
+<p>#966): run them solo and chunked.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: research/local2d/boundary_engine.py <code>graft_r1_safe</code> (return_orig mode), kit <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, kit <code>css</code> rank arithmetic. Compute: minutes per code (the per-step confirms dominate).</p>
+<h4>Reproduction</h4>
+<p>From this PR&#x27;s tree: load <code>codes/36-4-3.json</code>, build HX/HZ from <code>checks.X</code>/<code>checks.Z</code>, and run `graft_r1_safe(HX, HZ, max_removals=2, seed=0, d_floor=3, return_orig=True)<code> from </code>research/local2d/boundary_engine.py`. The chain is deterministic for the fixed seed; it returns the surviving ORIGINAL qubit identities — subset the source layout&#x27;s coordinates by identity to rebuild the 34-qubit code with its locality block.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/34-4-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/373-8-15.html">[[373,8,15]] — 373-8-15</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[373,8,15]] — reduced single-layer planar bivariate-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>This is @mathysrennela&#x27;s [[392,8,15]] (<code>codes/392-8-15.json</code>, the unreduced L = 14 member of the open-boundary planar bivariate-bicycle family) with 19 of its qubits removed and its layout tightened from two layers to one. It dominates that entry on all four axes — same k, same d, same check weight, 19 fewer qubits — and it lands in the strictest locality class rather than the bilayer one.</p>
