@@ -15,9 +15,11 @@ import glob
 import importlib.util
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import qldpc_verify
+import verify_all
 
 verify = qldpc_verify.verify
 
@@ -54,6 +56,33 @@ def main():
     r = rep(GOOD)
     check("valid code passes", r["ok"])
     check("earns a distance tier", "d" in r["earned_distance"])
+    check("connected Tanner graph passes",
+          "tanner_connected" not in failed_checks(r))
+    check("X and Z checks use one combined graph",
+          qldpc_verify._tanner_component_count(
+              {"X": [[0], [1]], "Z": [[0, 1]]}, 2) == 1)
+
+    disconnected = {
+        "schema_version": "0.1",
+        "name": "disconnected synthetic code",
+        "code_type": "CSS",
+        "n": 3,
+        "k": 1,
+        "checks": {"X": [[0]], "Z": [[1]]},
+        "distance": {
+            "d": 1,
+            "X": {"value": 1, "confidence": "upper_bound", "witness": [2]},
+            "Z": {"value": 1, "confidence": "upper_bound", "witness": [2]},
+        },
+        "provenance": {"authors": ["@test"], "construction": "synthetic"},
+    }
+    r = rep(disconnected)
+    check("disconnected Tanner graph rejected",
+          not r["ok"] and "tanner_connected" in failed_checks(r))
+    tanner_check = next(c for c in r["checks"]
+                        if c["check"] == "tanner_connected")
+    check("isolated qubit is counted as a component",
+          tanner_check["detail"] == "Tanner graph has 3 connected component(s)")
 
     print("\nREJECT tampered submissions:")
 
@@ -306,13 +335,21 @@ def main():
 
     # every shipped example/code still verifies
     print("\nshipped submissions still verify:")
-    for p in (sorted(glob.glob(os.path.join(ROOT, "codes", "*.json")))
-              + sorted(glob.glob(os.path.join(ROOT, "verify", "fixtures", "*.json")))):
-        ok = verify(json.load(open(p)))["ok"]
-        if not ok:
-            check(f"{os.path.basename(p)} verifies", False)
+    tracked_codes = subprocess.check_output(
+        ["git", "ls-files", "codes"], cwd=ROOT, text=True).splitlines()
+    paths = [os.path.join(ROOT, p) for p in tracked_codes if p.endswith(".json")]
+    paths += sorted(glob.glob(os.path.join(ROOT, "verify", "fixtures", "*.json")))
+    for p in paths:
+        doc = json.load(open(p))
+        r = verify(doc)
+        rel = os.path.relpath(p, ROOT)
+        if rel in verify_all.LEGACY_DISCONNECTED:
+            check(f"{os.path.basename(p)} is an explicit legacy connectivity failure",
+                  not r["ok"] and failed_checks(r) == {"tanner_connected"})
+        else:
+            check(f"{os.path.basename(p)} verifies", r["ok"])
     if not _fail:
-        print("  ok    all shipped submissions verify")
+        print("  ok    all shipped submissions verify or are explicit legacy entries")
 
     check("normal file size accepted",
           qldpc_verify.file_size_error(__file__) == "")
