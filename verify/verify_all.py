@@ -22,58 +22,6 @@ from ler_verify import verify_ler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Temporary migration exception for entries that predate issue #921. The hard
-# verifier still rejects these graphs; this board sweep reports them as warnings
-# until the follow-up cleanup PR removes the entries and this set.
-LEGACY_DISCONNECTED = frozenset({
-    "codes/112-8-5.json",
-    "codes/120-5-8.json",
-    "codes/128-12-8.json",
-    "codes/144-16-8.json",
-    "codes/144-24-6.json",
-    "codes/153-5-9.json",
-    "codes/162-36-4.json",
-    "codes/176-22-4.json",
-    "codes/192-24-4.json",
-    "codes/192-6-8.json",
-    "codes/214-15-11.json",
-    "codes/216-15-11.json",
-    "codes/231-5-11.json",
-    "codes/242-2-11.json",
-    "codes/261-16-12.json",
-    "codes/263-16-12.json",
-    "codes/288-32-8.json",
-    "codes/288-48-6.json",
-    "codes/299-5-13.json",
-    "codes/324-4-9.json",
-    "codes/338-2-13.json",
-    "codes/360-16-14.json",
-    "codes/360-24-10.json",
-    "codes/360-32-6.json",
-    "codes/45-5-4.json",
-    "codes/484-4-11.json",
-    "codes/66-5-5.json",
-    "codes/676-4-13.json",
-    "codes/78-6-5.json",
-    "codes/88-8-7.json",
-    "codes/90-6-5.json",
-    "codes/91-5-7.json",
-    "codes/96-12-4-mvb.json",
-    "codes/96-12-4.json",
-})
-
-
-def allow_legacy_disconnected(path, report):
-    """Downgrade only the reviewed legacy connectivity failure to a warning."""
-    failed = [c["check"] for c in report["checks"] if not c["ok"]]
-    if path not in LEGACY_DISCONNECTED or failed != ["tanner_connected"]:
-        return False
-    detail = next(c["detail"] for c in report["checks"]
-                  if c["check"] == "tanner_connected")
-    print(f"WARN  {path}  -> {detail} (legacy entry; cleanup pending)")
-    report["ok"] = True
-    return True
-
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
@@ -103,7 +51,6 @@ if __name__ == "__main__":
         with open(p) as f:
             doc = json.load(f)
         rep = verify(doc)   # structural checks; refutation lives in gate_changed / refute_board
-        allow_legacy_disconnected(rel, rep)
         circ = ""
         if rep["ok"] and is_code and doc.get("circuit"):
             slug = os.path.splitext(os.path.basename(p))[0]
