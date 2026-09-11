@@ -203,6 +203,33 @@ def _vec(support, n):
     return v
 
 
+def _tanner_component_count(checks, n):
+    """Count connected components of the combined qubit/check Tanner graph."""
+    rows = checks["X"] + checks["Z"]
+    neighbors = [[] for _ in range(n + len(rows))]
+    for i, support in enumerate(rows):
+        check_vertex = n + i
+        for qubit in support:
+            neighbors[qubit].append(check_vertex)
+            neighbors[check_vertex].append(qubit)
+
+    seen = bytearray(len(neighbors))
+    components = 0
+    for start in range(len(neighbors)):
+        if seen[start]:
+            continue
+        components += 1
+        seen[start] = 1
+        stack = [start]
+        while stack:
+            vertex = stack.pop()
+            for neighbor in neighbors[vertex]:
+                if not seen[neighbor]:
+                    seen[neighbor] = 1
+                    stack.append(neighbor)
+    return components
+
+
 def verify(doc, refute=False, seed=None):
     """Verify a submission. If ``refute`` is set, run the distance refutation with
     ``seed`` -- when ``seed is None`` a fresh RANDOM seed is drawn, so the gate is
@@ -264,6 +291,13 @@ def _verify_semantic(doc, report, record, refute=False, seed=None):
                   if len(set(s)) != len(s)]
     record("no_repeated_qubits_in_a_check", not empty_rows,
            f"rows with repeats: {empty_rows[:5]}")
+
+    # The challenge rule applies to the combined X/Z Tanner graph. Count all
+    # qubit and check vertices, including isolated vertices, so a disconnected
+    # direct sum or an unused qubit cannot pass by construction.
+    ncomponents = _tanner_component_count(doc["checks"], n)
+    record("tanner_connected", ncomponents == 1,
+           f"Tanner graph has {ncomponents} connected component(s)")
 
     # 3. CSS commutation
     css = not bool(((HX @ HZ.T) % 2).any())

@@ -266,6 +266,8 @@ accepted and recorded but will not sit on the frontier. See `TRACKS.md`.
 - Store `interaction_radius` as the exact measured max check diameter, not a
   rounded value.
 - Do not repeat a qubit index within a single check.
+- Submit one connected code, not a direct sum: the combined X and Z Tanner
+  graph must be a single connected component.
 - Use `provenance.origin` only for provenance (`baseline` vs `submission`), not
   novelty. If the same `[[n,k,d]]` parameter set exists in the literature, set
   `provenance.novelty` to `known_parameters` and cite it in
