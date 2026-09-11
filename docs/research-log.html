@@ -454,6 +454,24 @@ HZ = np.hstack([B.T, A.T])                       # [[630,14,&lt;=30]], every che
 </ul>
 <h4>Reproduction</h4>
 <p>Run <code>uv run python verify/qldpc_verify.py codes/20-8-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/20-8-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/350-70-14.html">[[350,70,14]] — 350-70-14</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/EthanFeld">@EthanFeld</a></div><details ><summary>note</summary><div class=notebody><h3>[[350,70,14]] ? lifted-product group-algebra candidate</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the unrestricted, weight-9plus frontier. The search explored sparse 1x2 group-algebra chain products, retaining structurally valid CSS candidates and comparing them on blocklength, rate, witness-backed distance, and maximum check weight. This candidate was selected because it is a non-dominated point in the local track-frontier corpus and the challenge preflight labels it board-advancing.</p>
+<h4>What was searched</h4>
+<p>The track-first cycle used unrestricted group families and a fixed screening ladder: 96 seed draws per target, 16-trial seed screening, 24-trial product screening, 128-trial deep screening, and a 4,096-trial confirmation pass. The retained construction is:</p>
+<p><code>generic 1x2 group-algebra chain product over semidirect(5,14,4); A=[[55, 59, 65], [0, 52, 57]]; B=[[49, 55, 67], [0, 29, 54]]</code></p>
+<p>The complete check supports and witnesses are committed in <code>codes/350-70-14.json</code>.</p>
+<h4>Evidence trail</h4>
+<p>The submitted claim is <code>d &lt;= 14</code> on both sides, with explicit X and Z logical witnesses in <code>codes/350-70-14.json</code>. The trusted challenge preflight then ran 8,000 RIS refutation trials per side with seed <code>410005</code> and found no lighter logical. This supports the upper-bound claim; it does not prove the exact distance.</p>
+<p>The structural verifier reports <code>n=350</code>, <code>k=70</code>, CSS commutation, valid nontrivial witnesses on both sides, and maximum check weight <code>9</code>. No exact or WL-equivalent board match was reported in the preflight. Frontier status is board-relative and can change as new submissions land.</p>
+<h4>Dead ends</h4>
+<p>Candidates that screened at low trial counts were not promoted solely on screening. The final selection required structural validation, explicit witnesses, trusted refutation preflight, and a non-dominated board comparison. The discarded local-corpus points and their Pareto comparisons remain outside this PR.</p>
+<h4>Tools</h4>
+<p>Python GF(2) construction and rank/CSS checks, the track-first candidate campaign, and the challenge repository&#x27;s trusted verifier and RIS refutation gate. No locality layout is claimed; the verifier therefore classifies this code as unrestricted.</p>
+<h4>Reproduction</h4>
+<p>Reconstruct the group-algebra chain product from the <code>construction</code> string above and compare the resulting supports with <code>codes/350-70-14.json</code>. Run:</p>
+<p><code>uv run python verify/qldpc_verify.py codes/350-70-14.json</code></p>
+<p>The JSON is the complete reproducible artifact: it contains both check matrices as sparse support lists and the witness for each reported side.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-70-14.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/682-140-86.html">[[682,140,86]] — 682-140-86</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/DennisWayo">@DennisWayo</a> &middot; OpenAI Codex (GPT-5)</div><details ><summary>note</summary><div class=notebody><h3>[[682,140,86]] - cyclic-ideal generalized-bicycle code</h3>
 <p>Distance is a witness-backed upper bound (<code>d &lt;= 86</code>), not an exact-distance claim.</p>
 <h4>Direction</h4>
