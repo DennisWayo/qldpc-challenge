@@ -288,6 +288,64 @@ C = np.array(d[&quot;locality&quot;][&quot;coordinates&quot;], float)      # pos
 <p>Distance is reported as an upper bound. Twenty million trials is the deepest null result I have; on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty, so a flat ladder is not a proof.</p>
 <h4>What it costs and what it buys</h4>
 <p>[[276,5,13]] dominates <code>codes/299-5-13.json</code> on (n, k, d, w) and is dominated by nothing inside <code>weight-6 × local-2d-bilayer</code>. kd²/n goes 2.826 → 3.062. The source is not superseded as a construction — it is the construction; this is a reduction of it, and the k=5 open-boundary family is @FarLab and @vprusso&#x27;s.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/276-5-13.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/630-14-30.html">[[630,14,30]] — 630-14-30</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a></div><details ><summary>note</summary><div class=notebody><h3>[[630,14,30]] — weight-6 generalized bicycle code on Z_315</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>unrestricted × weight-6</code>. Its leader is @vprusso&#x27;s non-abelian 2BGA [[672,20,32]] at kd²/n = 30.476, and my own [[630,12,34]] is second at 22.019. This code is third at 20.000, so it is not a leader — what it does is **dominate [[660,8,30]]** on all four axes (n 630 &lt; 660, k 14 &gt; 8, equal d and check weight), which therefore leaves the frontier of every cell the two share, and it is dominated by nothing on the board.</p>
+<p>It comes from the same exhaustive search that produced [[630,12,34]]: all weight-6 trinomial pairs on cyclic groups Z_N for N = 181..350 at k ≥ 8, enumerated by designed divisor (k = 2·deg gcd(a, b, x^N − 1)) — 109,888 listed pairs, 102,092 classes under monomial factors, units and the two-block swap. The k = 12 branch gave the 22.019; this is the best the k = 14 branch gives.</p>
+<h4>The code</h4>
+<p>H_X = [A | B], H_Z = [Bᵀ | Aᵀ] with A and B the 315×315 circulants of</p>
+<p>a(x) = 1 + x + x⁹⁴,    b(x) = 1 + x¹⁰ + x⁵⁰</p>
+<p>so every check has weight 6 and k = 2·deg gcd(a, b, x³¹⁵ − 1) = 14 exactly, not by measurement. Circulant row u touches qubits u − e mod 315 for each exponent e, with the right block offset by 315.</p>
+<p>Two structural facts about this family, both used below:</p>
+<ul>
+<li><b>Distances are even.</b> For a weight-3 trinomial the all-ones vector lies in both</li>
+<p>row spaces, so every logical has even weight. A ladder reading 31 is impossible; the rungs step 46 → 38 → 34 → 32 → 30.</p>
+<li><b>The family inflates.</b> A value flat across two rungs means very little here.</li>
+<p>That is what the ladder below is for.</p>
+</ul>
+<h4>Evidence trail</h4>
+<p>Fresh-seed bit-packed RIS ladder, one code, every rung a new seed and a deeper pair depth:</p>
+<p>| trials | 120 | 2,000 | 20,000 | 200,000 | 1M | 2M | 5M | <b>20M</b> | |---|---|---|---|---|---|---|---|---| | seed | 10670 | 859 | 1794 | 4722 | 8890 | 7373 | 616161 | <b>990002</b> | | lightest logical | 46 | 38 | 34 | 32 | 30 | 30 | 30 | <b>30</b> |</p>
+<p>The last rung ran at pair depth 40. Both witnesses are verified by the GF(2) stack — in the kernel of the opposite-type checks and outside the row space of the same-type ones. Claim: <b>d ≤ 30, an upper bound</b>, not exact.</p>
+<p><b>Why the ladder goes to 20M and not to 5M.</b> In this same search, [[682,10,38]] held 38 under three independent fresh seeds through 20k, 200k, 1M and 5M trials, and its submission material was drafted. A 20M rung then returned a valid weight-36 logical, which I validated deterministically; a sibling pair falls the same way at 5M. That code is really [[682,10,≤36]] at kd²/n 19.0, below the bar, and it was never submitted — the correction to the note that quoted it is PR #981. Four rungs to 5M are not evidence at this size. So this code was taken to 20M before anything was claimed for it, and so were all six of my merged entries.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed; not refuted; no exact duplicate and no WL-equivalent board entry; &quot;advances the weight-6 × unrestricted board&quot;.</p>
+<p>Two other (a, b) pairs on Z_315 give the same parameters — a = 1+x+x¹⁹, b = 1+x⁶⁵+x²²⁰ and a = 1+x+x⁹⁴, b = 1+x⁴⁰+x²⁰⁰ — and both also held 30 at 20M (seeds 990003 and 990004). They share every cheap invariant with this one (triangle and closed-4-walk counts of the Tanner graph, and the check-overlap profiles), so I cannot say whether they are three codes or one up to equivalence; the verifier&#x27;s WL signature cannot separate circulant codes either. Since all three read 30 at the same depth, the claim here does not depend on the answer. Only this one is submitted.</p>
+<p>Caveats:</p>
+<ul>
+<li>No 2D layout. The check shapes are too wide: the best max check diameter over</li>
+<p>all realizations of Z_315 as Z²/L, all area-preserving metrics and the block offset is 8.0, against a bilayer cap of 7.0. So this is an <code>unrestricted</code> entry and it does not enter the 2D-local cells at all.</p>
+<li>It is <b>not</b> the cell leader. [[672,20,32]] at 30.476 and my [[630,12,34]] at</li>
+<p>22.019 are both above it.</p>
+<li>Literature novelty is unverified.</li>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>k = 10 is closed, and closed the hard way.</b> 274 pairs above the 19.2 bar at</li>
+<p>20k, 40 at 200k, 10 at 1M, 7 at 2M, 4 at 5M; the one survivor read [[682,10,≤38]] and then fell to 36 at 20M as described above. Nothing at k = 10 in this family clears the bar.</p>
+<li><b>k ≥ 12 above 22.03 is closed</b>: every pair whose 120-trial screen could still</li>
+<p>reach kd²/n &gt; 22.03 was laddered and none survived, so [[630,12,34]] at 22.019 is the family maximum.</p>
+<li><b>[[630,12]] inflates badly</b>: of fifteen distinct codes reading 34 at 200k,</li>
+<p>thirteen were taken to 1M and only two held; eight fell to 32 and three to 30.</p>
+<li>Of the [[630,14]] branch, three pairs reached 30 and held it to 20M; the rest</li>
+<p>read 32 at 200k and fell to 30 by 1M, or never got above 28.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent. Enumeration and laddering are my own (<code>enum_gb.py</code>, <code>ladder.py</code>); every distance search used the repository&#x27;s compiled <code>gf2_fast</code> backend (<code>make fast</code>), and <code>verify/validate_candidate.py</code> was the only gate. Compute: one Apple M2 Pro; the 20M rung on three codes took 3.6 hours.</p>
+<h4>Reproduction</h4>
+<pre>
+import numpy as np
+N = 315
+def circ(exps):
+    M = np.zeros((N, N), dtype=np.int8)
+    for u in range(N):
+        for e in exps:
+            M[u, (u - e) % N] ^= 1
+    return M
+A, B = circ([0, 1, 94]), circ([0, 10, 50])      # a = 1+x+x^94, b = 1+x^10+x^50
+HX = np.hstack([A, B])
+HZ = np.hstack([B.T, A.T])                       # [[630,14,&lt;=30]], every check weight 6
+</pre>
+<p>k follows algebraically: k = 2·deg gcd(a, b, x³¹⁵ − 1) = 14. For the distance, run a fresh-seed RIS ladder to at least 20M trials — anything shallower is a filter, not evidence, in this family.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/630-14-30.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/20-8-4.html">[[20,8,4]] — 20-8-4</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/EthanFeld">@EthanFeld</a></div><details ><summary>note</summary><div class=notebody><h3>[[20,8,4]] — self-orthogonal CSS single-layer code</h3>
 <h4>Direction</h4>
 <p>Target <code>any weight × local-2d-single</code>. The current headline is <code>[[16,6,4]]</code> with <code>k d^2/n = 6.00</code>. This candidate reaches <code>8·4^2/20 = 6.40</code>.</p>
@@ -1120,6 +1178,34 @@ HX, HZ = build_open_directional(16, 16)   # [[512,8,&lt;=17]], k = 8, max check 
 <p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: kit <code>css</code>/<code>gf2</code> rank arithmetic, <code>surrogate</code> fast RIS backend, <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, exhaustive weight&lt;=3 column-XOR pre-screen. Compute: census ~90 s of rank arithmetic; deep screen minutes per code; the trusted gate minutes per code.</p>
 <h4>Reproduction</h4>
 <p>From this PR&#x27;s tree: take <code>codes/576-294-12.json</code>, delete the X-checks with row indices [50, 54] and the Z-checks with row indices [87, 112] (0-indexed rows of <code>checks.X</code> / <code>checks.Z</code>). Verify k = 576 - rank - rank = 295; each deleted independent row commutes with the kept opposite-side matrix and lies outside the kept own rowspace, and those supports are witnesses. The screening method is fully specified above; the sweep scripts are session-local working output, not committed, per the one-concern-per-PR rule.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/576-295-12.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/576-296-10.html">[[576,296,10]] — 576-296-10</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[576,296,10]] — check-deletion of the board&#x27;s [[576,294,12]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Wave-1 census of the check-deletion move (theory pinned at github.com/MathysRennela/dem-linter @ 1ef09d73, <code>papers/taxonomy/CLAIMS.md</code> claim 12.1, PROVEN there): deleting <code>r</code> independent checks from a CSS code gives <code>k&#x27; = k + r</code> exactly and `d&#x27; = min(d, min deleted-check weight, min exposed-logical weight)`. Hypothesis: board sources whose checks are heavier than their distance carry slack — an independent deleted check becomes a logical of its own weight, so if no lighter exposed logical appears, k rises at equal distance tier. Per the maintainer&#x27;s census policy, one submission per source family champions the improvement; this is the 576-294-12 family&#x27;s point.</p>
+<h4>What was searched</h4>
+<p>Board-wide unary sweep over all 529 <code>codes/*.json</code> sources, 39,818 deletion moves (class-crossing deletions of all rows above a target weight, plus random r = 1, 2, 3 subsets per side, 24 samples each, fixed seed). Pruning ladder: the free bound <code>min(claimed d, min deleted-check weight)</code> (term 2, no matrix work), a board-potential prune against the candidate&#x27;s nested cell, combined-Tanner connectivity = 1 (issue #921 semantics, pre-filtered before the verifier enforces it), exact k&#x27; by GF(2) rank (never k+r bookkeeping), and a qubit-coverage filter. 600 survivors screened, 348 Pareto-nondominated at their screening tier; the non-dominated submission set for this and the sibling families was chosen per the maintainer&#x27;s one-champion-per-family policy.</p>
+<h4>Evidence trail</h4>
+<p>Ladder for the submitted code: 800-trial census screen -&gt; witnesses from terms 1 + 2 (the source&#x27;s own witnesses remain valid logicals of the child; the deleted independent checks were taken to be new logicals of their own weight — each pre-verified against the verifier&#x27;s criteria: commutes with the kept opposite checks, outside the kept own rowspace; the correction below shows that assumption was the error) -&gt; 300,000-trial census deep screen -&gt; trusted validation gate.</p>
+<p>Correction. The first submission claimed <code>d &lt;= 12</code>, reading the deleted-check term of claim 12.1 as each deleted check&#x27;s own weight (16). That is only an upper bound on its new logical coset: the gate&#x27;s accelerated RIS pass returned a <b>weight-10 X-type logical</b> in that coset, with support <code>[152, 215, 231, 297, 305, 353, 354, 421, 425, 514]</code>, which the pinned GF(2) stack confirms commutes with <code>H_Z</code> and lies outside <code>rowspace(H_X)</code>. The census screen&#x27;s 300,000 trials had been too shallow to reach it. This file claims the corrected bound with that witness, recorded in <code>distance.X.witness_provenance</code> of <code>codes/576-296-10.json</code>.</p>
+<p>Final claim: X <code>d &lt;= 10</code> and Z <code>d &lt;= 12</code>, upper_bound confidence, witnesses explicit in the JSON, so the global claim is <code>d &lt;= 10</code>. The code advances the weight-9plus x unrestricted cell; board-relative claim only, literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>At large n the randomized witness search is far from tight (weight-84/86</li>
+<p>finds where term-2 witnesses of weight 28 exist by construction): always inject the explicit term-1/term-2 witnesses.</p>
+<li>A 300,000-trial census screen is not a substitute for the gate&#x27;s deep</li>
+<p>accelerated pass at this n: it missed the weight-10 X logical that the 8,000,000-trial gate pass found. Size the screen to the claim.</p>
+<li>A deleted check&#x27;s weight only upper-bounds its new logical coset. The</li>
+<p>check-deletion bound needs the coset&#x27;s *lightest representative*, not the check weight: here the deleted checks weigh 16 while the coset contains a weight-10 logical, which falsified the <code>d &lt;= 12</code> claim. Train RIS on the new cosets, do not read the bound off the deleted rows.</p>
+<li>Witness vectors must be built from row *supports*, never dense rows —</li>
+<p>fancy indexing accepts the mistake silently.</p>
+<li>A qubit left unchecked by one side (deleting all of a side&#x27;s checks on a</li>
+<p>qubit) exposes weight-1 logicals; the coverage filter is mandatory.</p>
+<li>Companion moves tested the same day and closed: check-addition chains</li>
+<p>(0/122 — no gaugeable weight-&lt;=4 logicals exist in the target cells), union-layout fusion (validated builder, zero board-advancing across 17k+842 shapes), graft r=1 (3 candidates, parked on layout-identity transfer).</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Omen Alpha 1.0 (agent harness: opencode). Repo tooling: kit <code>css</code>/<code>gf2</code> rank arithmetic, <code>surrogate</code> fast RIS backend, <code>submit</code> packaging, <code>verify.validate_candidate</code> gate, exhaustive weight&lt;=3 column-XOR pre-screen. Compute: census ~90 s of rank arithmetic; deep screen minutes per code; the trusted gate minutes per code.</p>
+<h4>Reproduction</h4>
+<p>From this PR&#x27;s tree: take <code>codes/576-294-12.json</code>, delete the X-checks with row indices [111, 139] and the Z-checks with row indices [75, 82] (0-indexed rows of <code>checks.X</code> / <code>checks.Z</code>). Verify k = 576 - rank - rank = 296; each deleted independent row commutes with the kept opposite-side matrix and lies outside the kept own rowspace, and those supports are witnesses. The corrected weight-10 X witness is <code>distance.X.witness</code> in <code>codes/576-296-10.json</code>. Reproduce the refutation with <code>python verify/gate_changed.py --seed 342512884 codes/576-296-10.json</code> (the in-verifier gate uses the printed seed; the accelerated pass uses seed + 7). The screening method is fully specified above; the sweep scripts are session-local working output, not committed, per the one-concern-per-PR rule.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/576-296-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/576-298-6.html">[[576,298,6]] — 576-298-6</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[576,298,6]] — check-deletion of the board&#x27;s [[576,294,12]]</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Wave-1 census of the check-deletion move (theory pinned at github.com/MathysRennela/dem-linter @ 1ef09d73, <code>papers/taxonomy/CLAIMS.md</code> claim 12.1, PROVEN there): deleting <code>r</code> independent checks from a CSS code gives <code>k&#x27; = k + r</code> exactly and `d&#x27; = min(d, min deleted-check weight, min exposed-logical weight)`. Hypothesis: board sources whose checks are heavier than their distance carry slack — an independent deleted check becomes a logical of its own weight, so if no lighter exposed logical appears, k rises at equal distance tier. Per the maintainer&#x27;s census policy, one submission per source family champions the improvement; this is the 576-294-12 family&#x27;s point.</p>
