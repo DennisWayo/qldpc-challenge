@@ -495,6 +495,29 @@ HX, HZ = build_open_directional(13, 13)   # [[338,8,&lt;=13]], k = 8, max check 
 </pre>
 <p>then carry <code>orig = list(range(338))</code> alongside the matrices and repeat until nothing fires: (1) <b>graft</b> — pick a qubit q of column weight 1 in H_X or H_Z, delete that row, that column and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 8 and a RIS search finds nothing lighter than 13; (2) <b>cleanup</b> — call <code>_cleanup(HX, HZ)</code> and compose its returned index array into <code>orig</code>; (3) <b>merge-graft</b> — pick a qubit q of column weight r ≤ 3 in one matrix, pick a pivot row R_p among the r rows containing it, replace every other R_i by R_p + R_i, and if every merged row still has weight ≤ 6 and maximum pairwise distance ≤ 4, graft q as in (1) plus a full recomputation of the layout radius. Then measure the result with fresh seeds to 20M — the in-loop rungs are a filter, not evidence.</p>
 <p>The layout is <code>(i + j, j - i + c)</code> for each surviving <code>q = c*169 + i*13 + j</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/300-8-13.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/332-6-14.html">[[332,6,14]] — 332-6-14</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[332,6,14]] — reduction of the board&#x27;s [[336,6,14]]</h3>
+<h4>Where the qubits came from</h4>
+<p><code>codes/336-6-14.json</code> is @FarLab and @vprusso&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 4 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 2</code> three times, <code>|S| = 4</code> once.</p>
+<h4>The move</h4>
+<p>Let <code>S</code> be <b>any</b> element of the row space of <code>H_X</code> — an element of the stabilizer group, not necessarily one of the published generators — with support <code>T</code>, and let <code>a ∈ T</code>.</p>
+<p>1. Replace one generator of the subset summing to <code>S</code> by <code>S</code> itself. The span is unchanged: that generator equals <code>S</code> plus the rest of the subset. 2. Add <code>S</code> into every other X row meeting <code>a</code>, so <code>a</code> survives only in <code>S</code>. 3. Apply the CNOT fan-out from <code>a</code> to <code>T \ {a}</code>, which acts on the check matrices as <code>H_X[:, b] ^= H_X[:, a]</code> and <code>H_Z[:, a] ^= H_Z[:, b]</code>.</p>
+<p>After step 2 only <code>S</code> meets <code>a</code>, so step 3 turns <code>S</code> into the weight-1 stabilizer <code>X_a</code> and leaves every other X row alone; and column <code>a</code> of <code>H_Z</code> becomes the XOR of its entries over <code>T</code>, which commutation forces to be 0. Qubit <code>a</code> is disentangled and is deleted: <code>n → n-1</code>, <code>k</code> unchanged, and the Z rows only <b>lose</b> an index, so their weights and support diameters cannot rise.</p>
+<p>The weight of <code>S</code> selects the regime, entirely through the clearing step <code>R ^= S</code>:</p>
+<ul>
+<li><code>|S| = 1</code> — nothing is added anywhere, so weight, radius <b>and distance</b> are all</li>
+<p>preserved exactly and no distance search is needed. This is the row-space form of the weight-1 stabilizer cleanup of Liang, Eberhardt and Chen (arXiv:2504.08887 Sec. III D step 4); <code>research/local2d/boundary_engine.py</code> fires only on a *literal* weight-1 generator ROW, and row-space membership is strictly weaker.</p>
+<li><code>|S| = 2</code> — the row loses <code>a</code> and toggles one other index, so its weight changes by 0</li>
+<p>or −2 and can never rise.</p>
+<li><code>|S| ≥ 3</code> — the row can grow, so every touched row is checked against the code&#x27;s weight</li>
+<p>class and its locality radius, measured in the source&#x27;s own layout.</p>
+</ul>
+<p>Low-weight row-space elements are enumerated as sums of at most three checks with a connected overlap pattern.</p>
+<h4>Verification</h4>
+<p>Fresh-seed RIS ladder: 14 at 20k → 200k → 1M → 5M → 20M trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 14 appeared. Each graft was also screened and confirmed twice in the loop with independent seeds; those rungs are a filter, not the evidence. The distance is a witness-backed upper bound — on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty million, so a flat ladder is not a proof.</p>
+<p><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, <code>dominated_by: []</code>, no duplicate and no WL-equivalent entry, cell <code>weight-6 × local-2d-bilayer</code>.</p>
+<h4>Numbers</h4>
+<p>Max check weight 6 throughout. Interaction radius unchanged at 4.12311, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/336-6-14.json</code>, and the reduction only deletes. kd²/n 3.500 → 3.542.</p>
+<p>It dominates <code>336-6-14</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/332-6-14.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/630-14-30.html">[[630,14,30]] — 630-14-30</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a></div><details ><summary>note</summary><div class=notebody><h3>[[630,14,30]] — weight-6 generalized bicycle code on Z_315</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>unrestricted × weight-6</code>. Its leader is @vprusso&#x27;s non-abelian 2BGA [[672,20,32]] at kd²/n = 30.476, and my own [[630,12,34]] is second at 22.019. This code is third at 20.000, so it is not a leader — what it does is **dominate [[660,8,30]]** on all four axes (n 630 &lt; 660, k 14 &gt; 8, equal d and check weight), which therefore leaves the frontier of every cell the two share, and it is dominated by nothing on the board.</p>
@@ -553,6 +576,23 @@ HX = np.hstack([A, B])
 HZ = np.hstack([B.T, A.T])                       # [[630,14,&lt;=30]], every check weight 6
 </pre>
 <p>k follows algebraically: k = 2·deg gcd(a, b, x³¹⁵ − 1) = 14. For the distance, run a fresh-seed RIS ladder to at least 20M trials — anything shallower is a filter, not evidence, in this family.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/630-14-30.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/684-20-72.html">[[684,20,72]] — 684-20-72</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/EthanFeld">@EthanFeld</a> &middot; GPT-5.6 Luna</div><details ><summary>note</summary><div class=notebody><h3>[[684,20,72]] — Stage 1 non-cyclic group-algebra search</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Stage 1 targeted the unrestricted weight-8 cell. The search used a two-block group-algebra CSS construction and kept only candidates whose maximum check weight was at most 8. The construction metadata is:</p>
+<p><code>two-block-group-algebra CSS construction over semidirect(19,18,2); with A=[[25,136,177,278]]; and B=[[35,233,240,309]]; generated by the non-cyclic Stage 1 search.</code></p>
+<p>The search objective was to exceed the Stage 1 reference score <code>66</code> while preserving CSS commutation, the claimed logical dimension, and the weight cap.</p>
+<h4>What was searched</h4>
+<p>The phylogenetic search ran 386 campaigns and passed candidates through the native RIS screening and validation queue. Candidate bytes were frozen before validation. The promoted candidate has n=684, k=20, 342 X checks, 342 Z checks, and maximum check weight 8.</p>
+<h4>Evidence trail</h4>
+<p>The distance values below are witness-backed upper bounds, not exact-distance claims. The independent <code>cpp_fast.css_ris_parallel</code> validation ran 20,000 trials per side and observed:</p>
+<p>| side | observed witness weight | witness seed | witness chunk | |---|---:|---:|---:| | X | 74 | 2250333489147 | 848 | | Z | 72 | 1039910778483 | 392 |</p>
+<p>The submission therefore reports d ≤ 72, with X ≤ 74 and Z ≤ 72. The validation receipt records <code>status=clean_budget_complete</code> and totals of 20,000,000 X trials and 20,000,000 Z trials. The witnesses in <code>codes/684-20-72.json</code> are the exact supports from that receipt.</p>
+<h4>Dead ends and safeguards</h4>
+<p>The initial screen metadata claimed d=102. That value was not promoted: the 20M validation found the lighter Z witness of weight 72 and an X witness of weight 74. The submission uses the validated upper bound d=72, avoiding an overstated distance claim. No exact certification or literature novelty claim is made.</p>
+<h4>Tools</h4>
+<p>The candidate was produced by the repository&#x27;s non-cyclic phylogenetic search, then checked with the native C++ RIS backend and the qLDPC challenge verifier. The validation receipt and the byte-frozen source candidate are included in the bundle evidence for audit.</p>
+<h4>Reproduction</h4>
+<p>The complete sparse supports are in <code>codes/684-20-72.json</code>; the equivalent dense matrices are in the accompanying NPZ artifact. Run the challenge repository&#x27;s verifier on that JSON, then review the validation receipt before making any distance claim stronger than this upper bound.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/684-20-72.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/20-8-4.html">[[20,8,4]] — 20-8-4</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/EthanFeld">@EthanFeld</a> &middot; GPT-5.6 Luna</div><details ><summary>note</summary><div class=notebody><h3>[[20,8,4]] — self-orthogonal CSS single-layer code</h3>
 <h4>Direction</h4>
 <p>Target <code>any weight × local-2d-single</code>. The current headline is <code>[[16,6,4]]</code> with <code>k d^2/n = 6.00</code>. This candidate reaches <code>8·4^2/20 = 6.40</code>.</p>
