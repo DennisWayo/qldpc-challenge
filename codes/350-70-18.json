@@ -4828,10 +4828,8 @@
     "origin": "submission",
     "novelty": "unknown",
     "construction": "generic 1x2 group-algebra chain product over product(cyclic(5),dihedral(14)); A=[[6, 14, 24, 31, 33], [0, 29, 32, 38, 63]]; B=[[20, 36, 42, 53, 63], [0, 31, 55, 56, 69]]",
-    "references": [
-      "https://github.com/unitaryfoundation/qldpc-challenge/blob/main/schema/code.schema.json",
-      "https://github.com/unitaryfoundation/qldpc-challenge/blob/main/CONTRIBUTING.md"
-    ],
+    "references": [],
+    "model": "GPT-5.6 Luna",
     "date": "2026-09-10",
     "notes": "Track-frontier candidate from an unrestricted group-algebra search. Local trusted preflight found no exact or WL-equivalent board match. Distance is a witness-backed upper bound, not an exact certification."
   },
