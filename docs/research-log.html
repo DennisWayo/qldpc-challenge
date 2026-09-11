@@ -3,7 +3,292 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
-<section class=blk><h3><a href="codes/20-8-4.html">[[20,8,4]] — 20-8-4</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/EthanFeld">@EthanFeld</a></div><details open><summary>note</summary><div class=notebody><h3>[[20,8,4]] — self-orthogonal CSS single-layer code</h3>
+<section class=blk><h3><a href="codes/164-12-10.html">[[164,12,10]] — 164-12-10</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[164,12,10]] — reduction of the board&#x27;s [[181,12,10]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right: <code>codes/181-12-10.json</code> and <code>codes/183-12-10.json</code> are theirs, and both merged. This code is the first of them carried 17 qubits further, by a move set their tool does not have.</p>
+<p>The hypothesis is narrow and structural. <code>graft_r1_safe</code> removes a qubit that sits in <b>exactly one</b> stabilizer of a Pauli type. A qubit sitting in two or three is untouchable by it — but it need not stay that way, because which stabilizers a qubit sits in is a property of the *generating set*, not of the code.</p>
+<h4>The move set</h4>
+<p>Three moves, applied to a fixpoint, on the source&#x27;s own coordinates:</p>
+<p>1. <b>Graft</b> (Liang, Eberhardt, Chen, arXiv:2504.08887 Sec. III E): remove a qubit in exactly one stabilizer of some type, together with that stabilizer. CSS commutation survives automatically, because no other same-type row touches the qubit, so truncating the opposite-type rows keeps every overlap even. 2. <b>Weight-1 cleanup</b> (Sec. III D step 4, the repository&#x27;s <code>boundary_engine._cleanup</code>): a qubit carrying a weight-1 stabilizer cannot appear in any opposite-type check, every same-type row can be multiplied by that row to drop it, and every logical class has a representative avoiding it. So k and d are preserved *exactly*, by argument, and it runs no distance search because it needs none. Grafting is what creates weight-1 stabilizers, so the two moves feed each other. 3. <b>Capped merge-graft</b> — mine, introduced with [[454,8,17]] (#935). If a qubit lies in exactly r ≤ 3 stabilizers of one type, pick a pivot row R_p and replace every other R_i by R_p + R_i. Those are row operations on the stabilizer generators: the code is unchanged, only the generating set moves, and afterwards the qubit sits in R_p alone, where move 1 applies. Every choice of pivot is tried, since each gives a different resulting code.</p>
+<p>Moves 1 and 2 can only shrink a check. Move 3 genuinely can widen one, so every merged row is accepted only if it still has weight ≤ 8 and, in the source&#x27;s own layout, a support diameter within the bilayer cap; the whole layout radius is re-measured after every accepted move. Here it did not move: **6.7082 before and after**, so this code is no less local than its source.</p>
+<p>Qubits keep the positions they have in <code>codes/181-12-10.json</code>. The reduction only deletes, so the layout is inherited rather than re-derived.</p>
+<h4>What it displaces</h4>
+<p>It dominates <b>[[181,12,10]]</b> (@mathysrennela) and <b>[[183,12,10]]</b> (@MathysRennela) on all four axes — same k, same d, same check weight, 17 and 19 fewer qubits — so both leave the frontier of every cell they share with it. Inside <code>local-2d-bilayer × weight-8</code> nothing dominates this code. kd²/n rises from 6.630 and 6.557 to <b>7.317</b>. It is not the cell leader: [[360,12,24]] holds that at 19.200.</p>
+<h4>Evidence trail</h4>
+<p>The in-loop screen and confirm rungs are a <b>filter, not evidence</b>. Each accepted removal was screened at 20,000 trials with a fixed seed and confirmed at 200,000 with a rotating one, against the source&#x27;s claimed d as the floor — a conservative choice, since a claimed distance is an upper bound, so a loose claim costs removals rather than soundness. What the claim rests on is the final code&#x27;s own fresh-seed ladder:</p>
+<p><b>10 @20k → 10 @200k → 10 @1M → 10 @5M → 10 @20M</b>, seeds 777001, 777138, 777275, 777412, 777549 (one base seed plus a stride of 137), no drop at any rung, every rung searching both sides jointly. Both weight-10 witnesses are re-verified by the GF(2) stack — in the kernel of the opposite-type checks, not in the row space of the same-type ones. Claim: <b>d ≤ 10, an upper bound</b>.</p>
+<p>The ladder goes to 20M because 5M is demonstrably not enough in my work. A generalized-bicycle candidate of mine held its distance under three independent fresh seeds through 5M and then fell at 20M; the correction that followed is #981. All of my merged entries have since been re-measured at that depth.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed; not refuted; no exact duplicate and no WL-equivalent entry; &quot;advances the weight-8 × local-2d-bilayer board&quot;.</p>
+<p>Caveats:</p>
+<ul>
+<li>This is <b>not an independent construction</b>. It is @mathysrennela&#x27;s code with</li>
+<p>qubits removed. The credit for the code is theirs; the reduction is mine.</p>
+<li>Distance is an upper bound, and it is *inherited* as a floor from the source&#x27;s</li>
+<p>claim. If [[181,12,10]] were ever shown to have d &lt; 10, this code would need re-measuring — though its own 20M ladder found nothing lighter than 10 either.</p>
+<li>It is not the cell leader, and it does not enter the single-layer cells.</li>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>The cell leaders do not reduce.</b> [[360,12,24]] (bilayer weight-6 leader),</li>
+<p>[[672,20,32]] (unrestricted weight-6 leader) and [[16,6,4]] (single-layer weight-8 leader) each accept <b>zero</b> moves.</p>
+<li><b>Small codes do not reduce.</b> [[54,20,4]], [[15,7,3]], [[40,10,4]], [[16,4,4]],</li>
+<p>[[54,6,7]], [[25,5,4]], [[84,6,10]] and [[80,9,8]] all gave zero.</p>
+<li>Across fifteen board codes the rule is clean: a code reduces if and only if it</li>
+<p>is a larger open-boundary construction with a truncated edge. The move set removes boundary qubits, and a code without a truncated boundary has none.</p>
+<li><b>The convergence is not a seed artifact.</b> Re-attacking the sibling reductions&#x27;</li>
+<p>converged states with fresh candidate orders (seeds 91, 92, 93) accepted zero further moves in every case.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent. The cleanup is the repository&#x27;s own <code>boundary_engine._cleanup</code>; the graft and merge-graft driver is mine, because <code>graft_r1</code> and <code>graft_r1_safe</code> return <code>(H_X, H_Z, n_removed)</code> — a count, with no map from surviving columns back to original qubit indices, which is what an inherited layout needs. Every distance search used <code>gf2_fast</code> (<code>make fast</code>); <code>verify/validate_candidate.py</code> was the only gate.</p>
+<h4>Reproduction</h4>
+<pre>
+import json, numpy as np, sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+from boundary_engine import _cleanup
+d = json.load(open(&quot;codes/181-12-10.json&quot;))
+n = d[&quot;n&quot;]
+HX = np.zeros((len(d[&quot;checks&quot;][&quot;X&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;X&quot;]): HX[r, s] = 1
+HZ = np.zeros((len(d[&quot;checks&quot;][&quot;Z&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;Z&quot;]): HZ[r, s] = 1
+C = np.array(d[&quot;locality&quot;][&quot;coordinates&quot;], float)      # positions are inherited
+</pre>
+<p>Carry <code>orig = list(range(n))</code> alongside and repeat until nothing fires: pick a qubit q of column weight r ≤ 3 in H_X or H_Z; pick a pivot row R_p among the r rows containing it and replace every other R_i by R_p + R_i, rejecting the move unless every merged row still has weight ≤ 8 and support diameter ≤ 7 under C; then delete R_p, column q and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 12, a RIS search finds nothing lighter than 10, and the recomputed layout radius is still within 7. Call <code>_cleanup(HX, HZ)</code> between rounds and compose its index array into <code>orig</code>. The reduction is a randomised search, so the surviving qubit set is recorded by the coordinates in the submitted JSON rather than re-derived. Then measure with fresh seeds to 20M — the in-loop rungs are not evidence.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/164-12-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/201-15-11.html">[[201,15,11]] — 201-15-11</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[201,15,11]] — reduction of the board&#x27;s [[216,15,11]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right, with <code>codes/240-12-12-graft.json</code>. This code applies the same idea to @FarLab&#x27;s <code>codes/216-15-11.json</code>, taking out 15 qubits with a move set that tool does not have.</p>
+<p>The hypothesis is narrow and structural. <code>graft_r1_safe</code> removes a qubit that sits in <b>exactly one</b> stabilizer of a Pauli type. A qubit sitting in two or three is untouchable by it — but it need not stay that way, because which stabilizers a qubit sits in is a property of the *generating set*, not of the code.</p>
+<h4>The move set</h4>
+<p>Three moves, applied to a fixpoint, on the source&#x27;s own coordinates:</p>
+<p>1. <b>Graft</b> (Liang, Eberhardt, Chen, arXiv:2504.08887 Sec. III E): remove a qubit in exactly one stabilizer of some type, together with that stabilizer. CSS commutation survives automatically, because no other same-type row touches the qubit, so truncating the opposite-type rows keeps every overlap even. 2. <b>Weight-1 cleanup</b> (Sec. III D step 4, the repository&#x27;s <code>boundary_engine._cleanup</code>): a qubit carrying a weight-1 stabilizer cannot appear in any opposite-type check, every same-type row can be multiplied by that row to drop it, and every logical class has a representative avoiding it. So k and d are preserved *exactly*, by argument, and it runs no distance search because it needs none. Grafting is what creates weight-1 stabilizers, so the two moves feed each other. 3. <b>Capped merge-graft</b> — mine, introduced with [[454,8,17]] (#935). If a qubit lies in exactly r ≤ 3 stabilizers of one type, pick a pivot row R_p and replace every other R_i by R_p + R_i. Those are row operations on the stabilizer generators: the code is unchanged, only the generating set moves, and afterwards the qubit sits in R_p alone, where move 1 applies. Every choice of pivot is tried, since each gives a different resulting code.</p>
+<p>Moves 1 and 2 can only shrink a check. Move 3 genuinely can widen one, so every merged row is accepted only if it still has weight ≤ 8 and, in the source&#x27;s own layout, a support diameter within the bilayer cap; the whole layout radius is re-measured after every accepted move. Here it did not move: **5.3852 before and after**, so this code is no less local than its source.</p>
+<p>Qubits keep the positions they have in <code>codes/216-15-11.json</code>. The reduction only deletes, so the layout is inherited rather than re-derived.</p>
+<h4>What it displaces</h4>
+<p>It dominates <b>[[216,15,11]]</b> (@FarLab) and <b>[[214,15,11]]</b> (@mathysrennela) on all four axes — same k, same d, same check weight, 15 and 13 fewer qubits — so both leave the frontier of every cell they share with it. Inside <code>local-2d-bilayer × weight-8</code> nothing dominates this code. kd²/n rises from 8.403 and 8.481 to <b>9.030</b>. It is not the cell leader: [[360,12,24]] holds that at 19.200.</p>
+<h4>Evidence trail</h4>
+<p>The in-loop screen and confirm rungs are a <b>filter, not evidence</b>. Each accepted removal was screened at 20,000 trials with a fixed seed and confirmed at 200,000 with a rotating one, against the source&#x27;s claimed d as the floor — a conservative choice, since a claimed distance is an upper bound, so a loose claim costs removals rather than soundness. What the claim rests on is the final code&#x27;s own fresh-seed ladder:</p>
+<p><b>11 @20k → 11 @200k → 11 @1M → 11 @5M → 11 @20M</b>, seeds 777001, 777138, 777275, 777412, 777549 (one base seed plus a stride of 137), no drop at any rung, every rung searching both sides jointly. Both weight-11 witnesses are re-verified by the GF(2) stack — in the kernel of the opposite-type checks, not in the row space of the same-type ones. Claim: <b>d ≤ 11, an upper bound</b>.</p>
+<p>The ladder goes to 20M because 5M is demonstrably not enough in my work. A generalized-bicycle candidate of mine held its distance under three independent fresh seeds through 5M and then fell at 20M; the correction that followed is #981. All of my merged entries have since been re-measured at that depth.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed; not refuted; no exact duplicate and no WL-equivalent entry; &quot;advances the weight-8 × local-2d-bilayer board&quot;.</p>
+<p>Caveats:</p>
+<ul>
+<li>This is <b>not an independent construction</b>. It is @FarLab&#x27;s code with qubits</li>
+<p>removed. The credit for the code is theirs; the reduction is mine.</p>
+<li>Distance is an upper bound, and it is *inherited* as a floor from the source&#x27;s</li>
+<p>claim. If [[216,15,11]] were ever shown to have d &lt; 11, this code would need re-measuring — though its own 20M ladder found nothing lighter than 11 either. The sibling reduction [[202,15,11]], from @mathysrennela&#x27;s [[214,15,11]], also held 11 to 20M independently.</p>
+<li>It is not the cell leader, and it does not enter the single-layer cells.</li>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>The cell leaders do not reduce.</b> [[360,12,24]] (bilayer weight-6 leader),</li>
+<p>[[672,20,32]] (unrestricted weight-6 leader) and [[16,6,4]] (single-layer weight-8 leader) each accept <b>zero</b> moves.</p>
+<li><b>Small codes do not reduce.</b> [[54,20,4]], [[15,7,3]], [[40,10,4]], [[16,4,4]],</li>
+<p>[[54,6,7]], [[25,5,4]], [[84,6,10]] and [[80,9,8]] all gave zero.</p>
+<li>Across fifteen board codes the rule is clean: a code reduces if and only if it</li>
+<p>is a larger open-boundary construction with a truncated edge. The move set removes boundary qubits, and a code without a truncated boundary has none.</p>
+<li><b>The convergence is not a seed artifact.</b> Re-attacking the converged states</li>
+<p>with fresh candidate orders (seeds 91, 92, 93) accepted zero further moves in every case tried.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent. The cleanup is the repository&#x27;s own <code>boundary_engine._cleanup</code>; the graft and merge-graft driver is mine, because <code>graft_r1</code> and <code>graft_r1_safe</code> return <code>(H_X, H_Z, n_removed)</code> — a count, with no map from surviving columns back to original qubit indices, which is what an inherited layout needs. Every distance search used <code>gf2_fast</code> (<code>make fast</code>); <code>verify/validate_candidate.py</code> was the only gate.</p>
+<h4>Reproduction</h4>
+<pre>
+import json, numpy as np, sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+from boundary_engine import _cleanup
+d = json.load(open(&quot;codes/216-15-11.json&quot;))
+n = d[&quot;n&quot;]
+HX = np.zeros((len(d[&quot;checks&quot;][&quot;X&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;X&quot;]): HX[r, s] = 1
+HZ = np.zeros((len(d[&quot;checks&quot;][&quot;Z&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;Z&quot;]): HZ[r, s] = 1
+C = np.array(d[&quot;locality&quot;][&quot;coordinates&quot;], float)      # positions are inherited
+</pre>
+<p>Carry <code>orig = list(range(n))</code> alongside and repeat until nothing fires: pick a qubit q of column weight r ≤ 3 in H_X or H_Z; pick a pivot row R_p among the r rows containing it and replace every other R_i by R_p + R_i, rejecting the move unless every merged row still has weight ≤ 8 and support diameter ≤ 7 under C; then delete R_p, column q and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 15, a RIS search finds nothing lighter than 11, and the recomputed layout radius is still within 7. Call <code>_cleanup(HX, HZ)</code> between rounds and compose its index array into <code>orig</code>. The reduction is a randomised search, so the surviving qubit set is recorded by the coordinates in the submitted JSON rather than re-derived. Then measure with fresh seeds to 20M — the in-loop rungs are not evidence.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/201-15-11.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/211-12-12.html">[[211,12,12]] — 211-12-12</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[211,12,12]] — reduction of the board&#x27;s [[240,12,12]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right: <code>codes/240-12-12-graft.json</code> is @vprusso&#x27;s [[242,12,12]] with two qubits taken out by <code>graft_r1_safe</code>, and it merged. This code is that result carried 29 qubits further, by a move set their tool does not have.</p>
+<p>The hypothesis is narrow and structural. <code>graft_r1_safe</code> removes a qubit that sits in <b>exactly one</b> stabilizer of a Pauli type. A qubit sitting in two or three is untouchable by it — but it need not stay that way, because which stabilizers a qubit sits in is a property of the *generating set*, not of the code.</p>
+<h4>The move set</h4>
+<p>Three moves, applied to a fixpoint, on the source&#x27;s own coordinates:</p>
+<p>1. <b>Graft</b> (Liang, Eberhardt, Chen, arXiv:2504.08887 Sec. III E): remove a qubit in exactly one stabilizer of some type, together with that stabilizer. CSS commutation survives automatically, because no other same-type row touches the qubit, so truncating the opposite-type rows keeps every overlap even. 2. <b>Weight-1 cleanup</b> (Sec. III D step 4, the repository&#x27;s <code>boundary_engine._cleanup</code>): a qubit carrying a weight-1 stabilizer cannot appear in any opposite-type check, every same-type row can be multiplied by that row to drop it, and every logical class has a representative avoiding it. So k and d are preserved *exactly*, by argument, and it runs no distance search because it needs none. Grafting is what creates weight-1 stabilizers, so the two moves feed each other. 3. <b>Capped merge-graft</b> — mine, introduced with [[454,8,17]] (#935). If a qubit lies in exactly r ≤ 3 stabilizers of one type, pick a pivot row R_p and replace every other R_i by R_p + R_i. Those are row operations on the stabilizer generators: the code is unchanged, only the generating set moves, and afterwards the qubit sits in R_p alone, where move 1 applies. Every choice of pivot is tried, since each gives a different resulting code.</p>
+<p>Moves 1 and 2 can only shrink a check. Move 3 genuinely can widen one, so every merged row is accepted only if it still has weight ≤ 8 and, in the source&#x27;s own layout, a support diameter within the bilayer cap; the whole layout radius is re-measured after every accepted move. Here it did not move: **6.7082 before and after**, so this code is no less local than its source.</p>
+<p>Qubits keep the positions they have in <code>codes/240-12-12-graft.json</code>. The reduction only deletes, so the layout is inherited rather than re-derived.</p>
+<h4>What it displaces</h4>
+<p>It dominates <b>[[240,12,12]]</b> (@mathysrennela) and <b>[[242,12,12]]</b> (@MathysRennela) on all four axes — same k, same d, same check weight, 29 and 31 fewer qubits — so both leave the frontier of every cell they share with it. Inside <code>local-2d-bilayer × weight-8</code> nothing dominates this code. kd²/n rises from 7.200 and 7.140 to <b>8.190</b>. It is not the cell leader: [[360,12,24]] holds that at 19.200.</p>
+<h4>Evidence trail</h4>
+<p>The in-loop screen and confirm rungs are a <b>filter, not evidence</b>. Each accepted removal was screened at 20,000 trials with a fixed seed and confirmed at 200,000 with a rotating one, against the source&#x27;s claimed d as the floor — a conservative choice, since a claimed distance is an upper bound, so a loose claim costs removals rather than soundness. What the claim rests on is the final code&#x27;s own fresh-seed ladder:</p>
+<p><b>12 @20k → 12 @200k → 12 @1M → 12 @5M → 12 @20M</b>, seeds 777001, 777138, 777275, 777412, 777549 (one base seed plus a stride of 137), no drop at any rung, every rung searching both sides jointly. Both weight-12 witnesses are re-verified by the GF(2) stack — in the kernel of the opposite-type checks, not in the row space of the same-type ones. Claim: <b>d ≤ 12, an upper bound</b>.</p>
+<p>The ladder goes to 20M because 5M is demonstrably not enough in my work. A generalized-bicycle candidate of mine held its distance under three independent fresh seeds through 5M and then fell at 20M; the correction that followed is #981. All of my merged entries have since been re-measured at that depth.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed; not refuted; no exact duplicate and no WL-equivalent entry; &quot;advances the weight-8 × local-2d-bilayer board&quot;.</p>
+<p>Caveats:</p>
+<ul>
+<li>This is <b>not an independent construction</b>. It is @mathysrennela&#x27;s code, which</li>
+<p>is in turn @vprusso&#x27;s, with qubits removed. The credit for the code is theirs; the reduction is mine.</p>
+<li>Distance is an upper bound, and it is *inherited* as a floor from the source&#x27;s</li>
+<p>claim. If [[240,12,12]] were ever shown to have d &lt; 12, this code would need re-measuring — though its own 20M ladder found nothing lighter than 12 either.</p>
+<li>It is not the cell leader, and it does not enter the single-layer cells.</li>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>The cell leaders do not reduce.</b> [[360,12,24]] (bilayer weight-6 leader),</li>
+<p>[[672,20,32]] (unrestricted weight-6 leader) and [[16,6,4]] (single-layer weight-8 leader) each accept <b>zero</b> moves.</p>
+<li><b>Small codes do not reduce.</b> [[54,20,4]], [[15,7,3]], [[40,10,4]], [[16,4,4]],</li>
+<p>[[54,6,7]], [[25,5,4]], [[84,6,10]] and [[80,9,8]] all gave zero.</p>
+<li>Across fifteen board codes the rule is clean: a code reduces if and only if it</li>
+<p>is a larger open-boundary construction with a truncated edge. The move set removes boundary qubits, and a code without a truncated boundary has none.</p>
+<li><b>The convergence is not a seed artifact.</b> Re-attacking this code&#x27;s converged</li>
+<p>state with a fresh candidate order (seed 92) accepted zero further moves.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent. The cleanup is the repository&#x27;s own <code>boundary_engine._cleanup</code>; the graft and merge-graft driver is mine, because <code>graft_r1</code> and <code>graft_r1_safe</code> return <code>(H_X, H_Z, n_removed)</code> — a count, with no map from surviving columns back to original qubit indices, which is what an inherited layout needs. Every distance search used <code>gf2_fast</code> (<code>make fast</code>); <code>verify/validate_candidate.py</code> was the only gate.</p>
+<h4>Reproduction</h4>
+<pre>
+import json, numpy as np, sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+from boundary_engine import _cleanup
+d = json.load(open(&quot;codes/240-12-12-graft.json&quot;))
+n = d[&quot;n&quot;]
+HX = np.zeros((len(d[&quot;checks&quot;][&quot;X&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;X&quot;]): HX[r, s] = 1
+HZ = np.zeros((len(d[&quot;checks&quot;][&quot;Z&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;Z&quot;]): HZ[r, s] = 1
+C = np.array(d[&quot;locality&quot;][&quot;coordinates&quot;], float)      # positions are inherited
+</pre>
+<p>Carry <code>orig = list(range(n))</code> alongside and repeat until nothing fires: pick a qubit q of column weight r ≤ 3 in H_X or H_Z; pick a pivot row R_p among the r rows containing it and replace every other R_i by R_p + R_i, rejecting the move unless every merged row still has weight ≤ 8 and support diameter ≤ 7 under C; then delete R_p, column q and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 12, a RIS search finds nothing lighter than 12, and the recomputed layout radius is still within 7. Call <code>_cleanup(HX, HZ)</code> between rounds and compose its index array into <code>orig</code>. The reduction is a randomised search, so the surviving qubit set is recorded by the coordinates in the submitted JSON rather than re-derived. Then measure with fresh seeds to 20M — the in-loop rungs are not evidence.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/211-12-12.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/236-16-12.html">[[236,16,12]] — 236-16-12</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[236,16,12]] — reduction of the board&#x27;s [[261,16,12]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right: <code>codes/261-16-12.json</code> is theirs and merged. This code is that entry with 25 qubits removed, by a move set their tool does not have.</p>
+<p>The hypothesis is narrow and structural. <code>graft_r1_safe</code> removes a qubit that sits in <b>exactly one</b> stabilizer of a Pauli type. A qubit sitting in two or three is untouchable by it — but it need not stay that way, because which stabilizers a qubit sits in is a property of the *generating set*, not of the code.</p>
+<h4>The move set</h4>
+<p>Three moves, applied to a fixpoint, on the source&#x27;s own coordinates:</p>
+<p>1. <b>Graft</b> (Liang, Eberhardt, Chen, arXiv:2504.08887 Sec. III E): remove a qubit in exactly one stabilizer of some type, together with that stabilizer. CSS commutation survives automatically, because no other same-type row touches the qubit, so truncating the opposite-type rows keeps every overlap even. 2. <b>Weight-1 cleanup</b> (Sec. III D step 4, the repository&#x27;s <code>boundary_engine._cleanup</code>): a qubit carrying a weight-1 stabilizer cannot appear in any opposite-type check, every same-type row can be multiplied by that row to drop it, and every logical class has a representative avoiding it. So k and d are preserved *exactly*, by argument, and it runs no distance search because it needs none. Grafting is what creates weight-1 stabilizers, so the two moves feed each other. 3. <b>Capped merge-graft</b> — mine, introduced with [[454,8,17]] (#935). If a qubit lies in exactly r ≤ 3 stabilizers of one type, pick a pivot row R_p and replace every other R_i by R_p + R_i. Those are row operations on the stabilizer generators: the code is unchanged, only the generating set moves, and afterwards the qubit sits in R_p alone, where move 1 applies. Every choice of pivot is tried, since each gives a different resulting code.</p>
+<p>Moves 1 and 2 can only shrink a check. Move 3 genuinely can widen one, so every merged row is accepted only if it still has weight ≤ 8 and, in the source&#x27;s own layout, a support diameter within the bilayer cap; the whole layout radius is re-measured after every accepted move. Here it <b>did</b> move: the source&#x27;s interaction radius is 5.0000 and this code&#x27;s is 6.0000. That is still inside the bilayer cap of 7, so the cell is unchanged and the (n, k, d, w) domination stands, but the reduced code is genuinely less local than its source and the note says so rather than leaving it to be discovered.</p>
+<p>Qubits keep the positions they have in <code>codes/261-16-12.json</code>. The reduction only deletes, so the layout is inherited rather than re-derived.</p>
+<h4>What it displaces</h4>
+<p>It dominates <b>four</b> board entries on all four axes — [[261,16,12]] (@mathysrennela), [[263,16,12]] (@FarLab), [[240,12,12]] and [[242,12,12]] (@mathysrennela) — so all four leave the frontier of every cell they share with it. Inside <code>local-2d-bilayer × weight-8</code> nothing dominates this code. kd²/n rises from 8.828 to <b>9.763</b>. It is not the cell leader: [[360,12,24]] holds that at 19.200.</p>
+<h4>Evidence trail</h4>
+<p>The in-loop screen and confirm rungs are a <b>filter, not evidence</b>. Each accepted removal was screened at 20,000 trials with a fixed seed and confirmed at 200,000 with a rotating one, against the source&#x27;s claimed d as the floor — a conservative choice, since a claimed distance is an upper bound, so a loose claim costs removals rather than soundness. What the claim rests on is the final code&#x27;s own fresh-seed ladder:</p>
+<p><b>12 @20k → 12 @200k → 12 @1M → 12 @5M → 12 @20M</b>, seeds 777001, 777138, 777275, 777412, 777549 (one base seed plus a stride of 137), no drop at any rung, every rung searching both sides jointly. Both weight-12 witnesses are re-verified by the GF(2) stack — in the kernel of the opposite-type checks, not in the row space of the same-type ones. Claim: <b>d ≤ 12, an upper bound</b>.</p>
+<p>The ladder goes to 20M because 5M is demonstrably not enough in my work. A generalized-bicycle candidate of mine held its distance under three independent fresh seeds through 5M and then fell at 20M; the correction that followed is #981. All of my merged entries have since been re-measured at that depth.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed; not refuted; no exact duplicate and no WL-equivalent entry; &quot;advances the weight-8 × local-2d-bilayer board&quot;.</p>
+<p>Caveats:</p>
+<ul>
+<li>This is <b>not an independent construction</b>. It is @mathysrennela&#x27;s code with</li>
+<p>qubits removed. The credit for the code is theirs; the reduction is mine.</p>
+<li>Distance is an upper bound, and it is *inherited* as a floor from the source&#x27;s</li>
+<p>claim. If [[261,16,12]] were ever shown to have d &lt; 12, this code would need re-measuring — though its own 20M ladder found nothing lighter than 12 either.</p>
+<li>It is not the cell leader, and it does not enter the single-layer cells.</li>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>The cell leaders do not reduce.</b> [[360,12,24]] (bilayer weight-6 leader),</li>
+<p>[[672,20,32]] (unrestricted weight-6 leader) and [[16,6,4]] (single-layer weight-8 leader) each accept <b>zero</b> moves.</p>
+<li><b>Small codes do not reduce.</b> [[54,20,4]], [[15,7,3]], [[40,10,4]], [[16,4,4]],</li>
+<p>[[54,6,7]], [[25,5,4]], [[84,6,10]] and [[80,9,8]] all gave zero.</p>
+<li>Across fifteen board codes the rule is clean: a code reduces if and only if it</li>
+<p>is a larger open-boundary construction with a truncated edge. The move set removes boundary qubits, and a code without a truncated boundary has none.</p>
+<li><b>The convergence is not a seed artifact.</b> Re-attacking the converged states</li>
+<p>with fresh candidate orders (seeds 91, 92, 93) accepted zero further moves in every case tried.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent. The cleanup is the repository&#x27;s own <code>boundary_engine._cleanup</code>; the graft and merge-graft driver is mine, because <code>graft_r1</code> and <code>graft_r1_safe</code> return <code>(H_X, H_Z, n_removed)</code> — a count, with no map from surviving columns back to original qubit indices, which is what an inherited layout needs. Every distance search used <code>gf2_fast</code> (<code>make fast</code>); <code>verify/validate_candidate.py</code> was the only gate.</p>
+<h4>Reproduction</h4>
+<pre>
+import json, numpy as np, sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+from boundary_engine import _cleanup
+d = json.load(open(&quot;codes/261-16-12.json&quot;))
+n = d[&quot;n&quot;]
+HX = np.zeros((len(d[&quot;checks&quot;][&quot;X&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;X&quot;]): HX[r, s] = 1
+HZ = np.zeros((len(d[&quot;checks&quot;][&quot;Z&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;Z&quot;]): HZ[r, s] = 1
+C = np.array(d[&quot;locality&quot;][&quot;coordinates&quot;], float)      # positions are inherited
+</pre>
+<p>Carry <code>orig = list(range(n))</code> alongside and repeat until nothing fires: pick a qubit q of column weight r ≤ 3 in H_X or H_Z; pick a pivot row R_p among the r rows containing it and replace every other R_i by R_p + R_i, rejecting the move unless every merged row still has weight ≤ 8 and support diameter ≤ 7 under C; then delete R_p, column q and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 16, a RIS search finds nothing lighter than 12, and the recomputed layout radius is still within 7. Call <code>_cleanup(HX, HZ)</code> between rounds and compose its index array into <code>orig</code>. The reduction is a randomised search, so the surviving qubit set is recorded by the coordinates in the submitted JSON rather than re-derived. Then measure with fresh seeds to 20M — the in-loop rungs are not evidence.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/236-16-12.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/268-12-14.html">[[268,12,14]] — 268-12-14</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[268,12,14]] — reduction of the board&#x27;s [[294,12,14]]</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right, with <code>codes/240-12-12-graft.json</code>. This code applies the same idea to @vprusso&#x27;s tile code <code>codes/294-12-14.json</code>, taking out 26 qubits with a move set that tool does not have.</p>
+<p>The hypothesis is narrow and structural. <code>graft_r1_safe</code> removes a qubit that sits in <b>exactly one</b> stabilizer of a Pauli type. A qubit sitting in two or three is untouchable by it — but it need not stay that way, because which stabilizers a qubit sits in is a property of the *generating set*, not of the code.</p>
+<h4>The move set</h4>
+<p>Three moves, applied to a fixpoint, on the source&#x27;s own coordinates:</p>
+<p>1. <b>Graft</b> (Liang, Eberhardt, Chen, arXiv:2504.08887 Sec. III E): remove a qubit in exactly one stabilizer of some type, together with that stabilizer. CSS commutation survives automatically, because no other same-type row touches the qubit, so truncating the opposite-type rows keeps every overlap even. 2. <b>Weight-1 cleanup</b> (Sec. III D step 4, the repository&#x27;s <code>boundary_engine._cleanup</code>): a qubit carrying a weight-1 stabilizer cannot appear in any opposite-type check, every same-type row can be multiplied by that row to drop it, and every logical class has a representative avoiding it. So k and d are preserved *exactly*, by argument, and it runs no distance search because it needs none. Grafting is what creates weight-1 stabilizers, so the two moves feed each other. 3. <b>Capped merge-graft</b> — mine, introduced with [[454,8,17]] (#935). If a qubit lies in exactly r ≤ 3 stabilizers of one type, pick a pivot row R_p and replace every other R_i by R_p + R_i. Those are row operations on the stabilizer generators: the code is unchanged, only the generating set moves, and afterwards the qubit sits in R_p alone, where move 1 applies. Every choice of pivot is tried, since each gives a different resulting code.</p>
+<p>Moves 1 and 2 can only shrink a check. Move 3 genuinely can widen one, so every merged row is accepted only if it still has weight ≤ 8 and, in the source&#x27;s own layout, a support diameter within the bilayer cap; the whole layout radius is re-measured after every accepted move. Here it did not move: **6.7082 before and after**, so this code is no less local than its source.</p>
+<p>Qubits keep the positions they have in <code>codes/294-12-14.json</code>. The reduction only deletes, so the layout is inherited rather than re-derived.</p>
+<h4>What it displaces</h4>
+<p>It dominates <b>[[294,12,14]]</b> (@vprusso) on all four axes — same k, same d, same check weight, 26 fewer qubits — so it leaves the frontier of every cell the two share. Inside <code>local-2d-bilayer × weight-8</code> nothing dominates this code. kd²/n rises from 8.000 to <b>8.776</b>. It is not the cell leader: [[360,12,24]] holds that at 19.200.</p>
+<h4>Evidence trail</h4>
+<p>The in-loop screen and confirm rungs are a <b>filter, not evidence</b>. Each accepted removal was screened at 20,000 trials with a fixed seed and confirmed at 200,000 with a rotating one, against the source&#x27;s claimed d as the floor — a conservative choice, since a claimed distance is an upper bound, so a loose claim costs removals rather than soundness. What the claim rests on is the final code&#x27;s own fresh-seed ladder:</p>
+<p><b>14 @20k → 14 @200k → 14 @1M → 14 @5M → 14 @20M</b>, seeds 777001, 777138, 777275, 777412, 777549 (one base seed plus a stride of 137), no drop at any rung, every rung searching both sides jointly. Both weight-14 witnesses are re-verified by the GF(2) stack — in the kernel of the opposite-type checks, not in the row space of the same-type ones. Claim: <b>d ≤ 14, an upper bound</b>.</p>
+<p>The ladder goes to 20M because 5M is demonstrably not enough in my work. A generalized-bicycle candidate of mine held its distance under three independent fresh seeds through 5M and then fell at 20M; the correction that followed is #981. All of my merged entries have since been re-measured at that depth.</p>
+<p>Gate verdict (<code>verify/validate_candidate.py</code>): passed; not refuted; no exact duplicate and no WL-equivalent entry; &quot;advances the weight-8 × local-2d-bilayer board&quot;.</p>
+<p>Caveats:</p>
+<ul>
+<li>This is <b>not an independent construction</b>. It is @vprusso&#x27;s tile code with</li>
+<p>qubits removed. The credit for the code is theirs; the reduction is mine.</p>
+<li>Distance is an upper bound, and it is *inherited* as a floor from the source&#x27;s</li>
+<p>claim. If [[294,12,14]] were ever shown to have d &lt; 14, this code would need re-measuring — though its own 20M ladder found nothing lighter than 14 either.</p>
+<li>It is not the cell leader, and it does not enter the single-layer cells.</li>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>The cell leaders do not reduce.</b> [[360,12,24]] (bilayer weight-6 leader),</li>
+<p>[[672,20,32]] (unrestricted weight-6 leader) and [[16,6,4]] (single-layer weight-8 leader) each accept <b>zero</b> moves.</p>
+<li><b>Small codes do not reduce.</b> [[54,20,4]], [[15,7,3]], [[40,10,4]], [[16,4,4]],</li>
+<p>[[54,6,7]], [[25,5,4]], [[84,6,10]] and [[80,9,8]] all gave zero.</p>
+<li>Across fifteen board codes the rule is clean: a code reduces if and only if it</li>
+<p>is a larger open-boundary construction with a truncated edge. The move set removes boundary qubits, and a code without a truncated boundary has none.</p>
+<li>**One reduction in this batch did lose a unit of distance, and the ladder caught</li>
+<p>it.** Reducing [[384,12,17]] to n = 370 read a valid weight-16 logical at 200,000 fresh-seed trials, while the source itself holds 17 to 1M under the same seeds -- so the fault was my in-loop confirm, which used a single rotating seed, and a different seed at the same depth found the lighter logical at once. That code is recorded at [[370,12,≤16]] and is not submitted, and the driver now requires two independent confirm seeds. It is the clearest possible demonstration that the in-loop rungs are a filter and the final ladder is the evidence.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (Claude Code) as the agent. The cleanup is the repository&#x27;s own <code>boundary_engine._cleanup</code>; the graft and merge-graft driver is mine, because <code>graft_r1</code> and <code>graft_r1_safe</code> return <code>(H_X, H_Z, n_removed)</code> — a count, with no map from surviving columns back to original qubit indices, which is what an inherited layout needs. Every distance search used <code>gf2_fast</code> (<code>make fast</code>); <code>verify/validate_candidate.py</code> was the only gate.</p>
+<h4>Reproduction</h4>
+<pre>
+import json, numpy as np, sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+from boundary_engine import _cleanup
+d = json.load(open(&quot;codes/294-12-14.json&quot;))
+n = d[&quot;n&quot;]
+HX = np.zeros((len(d[&quot;checks&quot;][&quot;X&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;X&quot;]): HX[r, s] = 1
+HZ = np.zeros((len(d[&quot;checks&quot;][&quot;Z&quot;]), n), np.int8)
+for r, s in enumerate(d[&quot;checks&quot;][&quot;Z&quot;]): HZ[r, s] = 1
+C = np.array(d[&quot;locality&quot;][&quot;coordinates&quot;], float)      # positions are inherited
+</pre>
+<p>Carry <code>orig = list(range(n))</code> alongside and repeat until nothing fires: pick a qubit q of column weight r ≤ 3 in H_X or H_Z; pick a pivot row R_p among the r rows containing it and replace every other R_i by R_p + R_i, rejecting the move unless every merged row still has weight ≤ 8 and support diameter ≤ 7 under C; then delete R_p, column q and that entry of <code>orig</code>, keeping the removal only if <code>compute_k</code> is still 12, a RIS search finds nothing lighter than 14, and the recomputed layout radius is still within 7. Call <code>_cleanup(HX, HZ)</code> between rounds and compose its index array into <code>orig</code>. The reduction is a randomised search, so the surviving qubit set is recorded by the coordinates in the submitted JSON rather than re-derived. Then measure with fresh seeds to 20M — the in-loop rungs are not evidence.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/268-12-14.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/276-5-13.html">[[276,5,13]] — 276-5-13</a></h3><div class=kv style="color:var(--mut)">2026-09-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[276,5,13]] — reduction of the board&#x27;s [[299,5,13]]</h3>
+<h4>What is new here</h4>
+<p>The source, @FarLab and @vprusso&#x27;s <code>codes/299-5-13.json</code>, carries **ten qubits that are not entangled with anything**. They are removable by an argument, with no distance search of any kind, and the argument is what this note is mainly about. Twenty-three qubits come out in total; the other thirteen come from the graft moves used in my earlier reductions on this board.</p>
+<h4>Move 0: fixed qubits</h4>
+<p>Call a qubit *q* <b>fixed</b> when the unit vector <code>e_q</code> lies in the <b>row space</b> of <code>H_Z</code> — that is, when some element of the stabilizer group acts on *q* alone. It does not have to be one of the published generators.</p>
+<p>Three consequences, in order:</p>
+<p>1. Commutation forces <code>H_X</code> to have a zero column at *q*. An X-check meeting *q* would anticommute with a weight-1 Z element supported there. 2. So *q* carries a product state, and <code>n → n-1</code> leaves *k* unchanged: the rank of <code>H_Z</code> drops by exactly one and the rank of <code>H_X</code> cannot move. 3. The distance is unchanged <b>exactly</b>. Every logical representative can be multiplied by that weight-1 stabilizer until its support at *q* is empty, so the minimum logical weight cannot move in either direction.</p>
+<p>The repository already implements this idea, in <code>boundary_engine._cleanup</code> (arXiv:2504.08887 Sec. III D step 4) — but only for a <b>literal</b> weight-1 generator row. Membership in the row *space* is strictly weaker, and it is what the board actually contains. One RREF settles every qubit at once: *q* is fixed exactly when every null-space vector of <code>H_Z</code> vanishes at *q*, and the RREF row with pivot *q* is then <code>e_q</code> itself.</p>
+<p>The deletion is arranged so that no check can grow. Take the RREF with its row-operation record; exactly one generator of the subset summing to <code>e_q</code> is replaced by <code>e_q</code>, which leaves the row space unchanged because that generator equals <code>e_q</code> plus the rest of the subset; <code>e_q</code> then clears column *q* from the other rows, which can only lower their weights and their support diameters; the row and the column are then dropped. Maximum check weight stays 6 and the measured interaction radius stays 3.1623 across this stage.</p>
+<p>In <code>codes/299-5-13.json</code> the fixed qubits are 25, 38, 51, 64, 77, 90, 103, 116, 129 and 142 — a stride-13 tail, each lying in zero X-checks. Deleting them gives <b>[[289,5,13]] with the distance still exactly 13</b>, inheriting the source&#x27;s MILP-certified value rather than re-asserting it.</p>
+<p>Sweeping the whole board, thirteen entries carry fixed qubits. Most of them are codes I have already reduced further by other means; <code>codes/299-5-13.json</code> is the one where the fixed qubits are the interesting part of the story.</p>
+<h4>Moves 1–3: the graft set</h4>
+<p>Applied after move 0, to a fixpoint, on the source&#x27;s own coordinates.</p>
+<p>1. <b>Graft</b> (Liang, Eberhardt, Chen, arXiv:2504.08887 Sec. III E): remove a qubit lying in exactly one stabilizer of some type, together with that stabilizer. CSS commutation survives automatically, because no other same-type row touches the qubit. 2. <b>Weight-1 cleanup</b> (Sec. III D step 4): the literal form of move 0, which grafting creates opportunities for. Also exact, also search-free. 3. <b>Capped merge-graft</b> — mine, introduced with [[454,8,17]] (#935). If a qubit lies in exactly *r* ≤ 3 stabilizers of one type, pick a pivot row <code>R_p</code> and replace every other <code>R_i</code> by <code>R_p + R_i</code>. Those are row operations on the generators: the code is unchanged, only the generating set moves, and the qubit then sits in <code>R_p</code> alone, where move 1 applies. Every pivot choice is tried.</p>
+<p>Moves 1 and 2 can only shrink a check; move 3 can widen one, so every merged row is accepted only if it still has weight ≤ 6 and a support diameter within the bilayer cap, and the whole layout radius is re-measured after each accepted move. Here it moved: <b>3.1623 before, 4.0000 after</b>, still far inside the bilayer cap of 7.0 and in fact still inside the single-layer cap of 4.0, so the code stays in the cell it came from. Twelve merge-grafts and one cleanup took 289 → 276.</p>
+<p>Unlike move 0, move 3 has no distance argument. Each accepted merge-graft was screened and then confirmed twice with independent seeds — a filter, not evidence.</p>
+<h4>Verification</h4>
+<ul>
+<li>Qubit positions are the source&#x27;s. Every surviving qubit keeps the coordinate it</li>
+<p>has in <code>codes/299-5-13.json</code>; the reduction only deletes. Layers unchanged at 2.</p>
+<li>The fixed-qubit claim was re-derived outside the reducer: for each of the ten,</li>
+<p><code>rank([H_Z; e_q]) == rank(H_Z)</code> and the <code>H_X</code> column is empty; deleting the ten columns from the *original* matrices gives k = 5, commuting checks, and the same two row spaces as the packaged output.</p>
+<li>Fresh-seed RIS ladder on the reduced code: 13 at 20k → 200k → 1M → 5M → <b>20M</b></li>
+<p>trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 13 appeared. The lightest valid logical found is the witness in this file.</p>
+<li><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, no duplicate and</li>
+<p>no WL-equivalent entry, cell <code>weight-6 × local-2d-bilayer</code>.</p>
+</ul>
+<p>Distance is reported as an upper bound. Twenty million trials is the deepest null result I have; on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty, so a flat ladder is not a proof.</p>
+<h4>What it costs and what it buys</h4>
+<p>[[276,5,13]] dominates <code>codes/299-5-13.json</code> on (n, k, d, w) and is dominated by nothing inside <code>weight-6 × local-2d-bilayer</code>. kd²/n goes 2.826 → 3.062. The source is not superseded as a construction — it is the construction; this is a reduction of it, and the k=5 open-boundary family is @FarLab and @vprusso&#x27;s.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/276-5-13.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/20-8-4.html">[[20,8,4]] — 20-8-4</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/EthanFeld">@EthanFeld</a></div><details ><summary>note</summary><div class=notebody><h3>[[20,8,4]] — self-orthogonal CSS single-layer code</h3>
 <h4>Direction</h4>
 <p>Target <code>any weight × local-2d-single</code>. The current headline is <code>[[16,6,4]]</code> with <code>k d^2/n = 6.00</code>. This candidate reaches <code>8·4^2/20 = 6.40</code>.</p>
 <h4>Construction</h4>
@@ -21,7 +306,7 @@
 </ul>
 <h4>Reproduction</h4>
 <p>Run <code>uv run python verify/qldpc_verify.py codes/20-8-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/20-8-4.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/144-10-16.html">[[144,10,16]] — 144-10-16</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details open><summary>note</summary><div class=notebody><h3>[[144,10,16]] — weight-8 bivariate bicycle code on Z_12 x Z_6, from the weight-8 gap sweep</h3>
+<section class=blk><h3><a href="codes/144-10-16.html">[[144,10,16]] — 144-10-16</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[144,10,16]] — weight-8 bivariate bicycle code on Z_12 x Z_6, from the weight-8 gap sweep</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 × unrestricted. The sweep followed the construction family of arXiv:2609.06572 (weight-4 generator polynomials, weight-8 checks) but targeted the (k,d) gaps of the board&#x27;s weight-8-cell Pareto frontier and grids/weight profiles that paper did not search. This candidate aims at the k = 10 slot: the board&#x27;s frontier point there was [[144,10,12]], so any non-dominated claim needs d &gt;= 13.</p>
 <h4>What was searched</h4>
@@ -57,7 +342,7 @@ HX, HZ = build_bb(12, 6,
                   B_terms=[(5,0),(5,5),(6,4),(9,5)])
 </pre>
 <p>Then <code>./qldpc submit &lt;npz&gt; --authors @MathysRennela --family bivariate-bicycle</code>. The construction string in the JSON carries the same polynomials.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/144-10-16.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/144-16-12.html">[[144,16,12]] — 144-16-12</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details open><summary>note</summary><div class=notebody><h3>[[144,16,12]] — weight-8 bivariate bicycle code (asymmetric 3+5 generators) on Z_12 x Z_6, from the weight-8 gap sweep</h3>
+<section class=blk><h3><a href="codes/144-16-12.html">[[144,16,12]] — 144-16-12</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[144,16,12]] — weight-8 bivariate bicycle code (asymmetric 3+5 generators) on Z_12 x Z_6, from the weight-8 gap sweep</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 × unrestricted. The sweep followed the construction family of arXiv:2609.06572 but extended it to asymmetric generator weights: w_A + w_B = 8 still yields weight-8 checks, and the paper only searched the balanced 4+4 profile. This candidate aims at the k = 16 slot, where the board&#x27;s frontier point was [[144,16,10]]; a non-dominated claim needs d &gt;= 11.</p>
 <h4>What was searched</h4>
