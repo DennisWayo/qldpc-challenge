@@ -406,6 +406,39 @@ HZ = np.hstack([B.T, A.T])                       # [[630,14,&lt;=30]], every che
 </ul>
 <h4>Reproduction</h4>
 <p>Run <code>uv run python verify/qldpc_verify.py codes/20-8-4.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/20-8-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/682-140-86.html">[[682,140,86]] — 682-140-86</a></h3><div class=kv style="color:var(--mut)">2026-09-10 &middot; submission note &middot; <a href="https://github.com/DennisWayo">@DennisWayo</a> &middot; OpenAI Codex (GPT-5)</div><details ><summary>note</summary><div class=notebody><h3>[[682,140,86]] - cyclic-ideal generalized-bicycle code</h3>
+<p>Distance is a witness-backed upper bound (<code>d &lt;= 86</code>), not an exact-distance claim.</p>
+<h4>Direction</h4>
+<p>This entry targets the unrestricted / weight-9plus board. It records a high-distance length-682 cyclic generalized-bicycle code with <code>k = 140</code>, maximum check weight <code>30</code>, and adjusted score</p>
+<p><code>140 * 86^2 / 682 = 1518.240</code>.</p>
+<p>The candidate is a length-682 cyclic generalized-bicycle code over <code>Z_341</code> with fingerprint <code>a76bd7f863b99c7e</code>.</p>
+<h4>Construction</h4>
+<p>Let <code>A</code> and <code>B</code> be length-341 binary circulants over <code>Z_341</code>. Use first-row supports:</p>
+<p><code>a = [0, 1, 11, 15, 22, 32, 110, 132, 139, 170, 176, 187, 264, 308, 325]</code></p>
+<p><code>b = [42, 82, 87, 97, 116, 155, 157, 170, 178, 217, 244, 257, 267, 283, 300]</code></p>
+<p>Build the CSS checks as <code>H_X = [circ(a) | circ(b)]</code> and <code>H_Z = [circ(b)^T | circ(a)^T]</code>. The sparse parity-check supports and both distance witnesses are recorded in <code>codes/682-140-86.json</code>.</p>
+<p>The cyclic-ideal miner produced this record from a degree-70 divisor ideal of <code>x^341 + 1</code> over GF(2), with divisor polynomial <code>0x725946e001e3c38d9d</code>.</p>
+<h4>Evidence</h4>
+<p>This code was first staged as a <code>d &lt;= 88</code> upper-bound candidate after private structure-aware and full-kernel randomized searches found weight-88 witnesses on both sides and did not find a lighter validated logical at that depth.</p>
+<p>The challenge refutation gate later found a valid X-side logical of weight 86. This revision records that lighter witness and downgrades the claim to <code>d &lt;= 86</code>.</p>
+<p>The submitted witnesses are:</p>
+<ul>
+<li>X: weight 86, from the <code>verify/gate_changed.py</code> RIS-fast refutation gate,</li>
+<p>seed <code>1732209933</code>.</p>
+<li>Z: weight 88, from <code>verify/gf2_fast.cpp</code> randomized witness search, seed</li>
+<p><code>74361033</code>.</p>
+</ul>
+<p>Local validation:</p>
+<ul>
+<li><code>verify/qldpc_verify.py</code> accepts the JSON: CSS commutation, computed</li>
+<p><code>k = 140</code>, max check weight <code>30</code>, and valid X/Z witnesses.</p>
+<li>The local randomized refutation pass found no logical lighter than 86.</li>
+</ul>
+<h4>Follow-up</h4>
+<p>The exact distance has not been proved. This submission should be treated as a clean upper-bound entry; exact-distance certification remains separate follow-up work.</p>
+<h4>Tools</h4>
+<p>The search used the repository verifier stack, <code>verify/gf2_fast.cpp</code> for fast GF(2) randomized witness search, a cyclic-ideal generalized-bicycle miner, a structural/full-kernel attack harness, and <code>verify/validate_candidate.py</code> for the local candidate gate.</p>
+<p>This PR was supported by OpenAI Codex (GPT-5).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/682-140-86.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/144-10-16.html">[[144,10,16]] — 144-10-16</a></h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[144,10,16]] — weight-8 bivariate bicycle code on Z_12 x Z_6, from the weight-8 gap sweep</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 × unrestricted. The sweep followed the construction family of arXiv:2609.06572 (weight-4 generator polynomials, weight-8 checks) but targeted the (k,d) gaps of the board&#x27;s weight-8-cell Pareto frontier and grids/weight profiles that paper did not search. This candidate aims at the k = 10 slot: the board&#x27;s frontier point there was [[144,10,12]], so any non-dominated claim needs d &gt;= 13.</p>
