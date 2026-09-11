@@ -18,7 +18,6 @@ import os
 import sys
 import tempfile
 import qldpc_verify
-import verify_all
 
 verify = qldpc_verify.verify
 
@@ -339,14 +338,9 @@ def main():
     for p in paths:
         doc = json.load(open(p))
         r = verify(doc)
-        rel = os.path.relpath(p, ROOT)
-        if rel in verify_all.LEGACY_DISCONNECTED:
-            check(f"{os.path.basename(p)} is an explicit legacy connectivity failure",
-                  not r["ok"] and failed_checks(r) == {"tanner_connected"})
-        else:
-            check(f"{os.path.basename(p)} verifies", r["ok"])
+        check(f"{os.path.basename(p)} verifies", r["ok"])
     if not _fail:
-        print("  ok    all shipped submissions verify or are explicit legacy entries")
+        print("  ok    all shipped submissions verify")
 
     check("normal file size accepted",
           qldpc_verify.file_size_error(__file__) == "")
