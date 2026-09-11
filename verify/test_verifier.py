@@ -15,7 +15,6 @@ import glob
 import importlib.util
 import json
 import os
-import subprocess
 import sys
 import tempfile
 import qldpc_verify
@@ -335,10 +334,8 @@ def main():
 
     # every shipped example/code still verifies
     print("\nshipped submissions still verify:")
-    tracked_codes = subprocess.check_output(
-        ["git", "ls-files", "codes"], cwd=ROOT, text=True).splitlines()
-    paths = [os.path.join(ROOT, p) for p in tracked_codes if p.endswith(".json")]
-    paths += sorted(glob.glob(os.path.join(ROOT, "verify", "fixtures", "*.json")))
+    paths = (sorted(glob.glob(os.path.join(ROOT, "codes", "*.json")))
+             + sorted(glob.glob(os.path.join(ROOT, "verify", "fixtures", "*.json"))))
     for p in paths:
         doc = json.load(open(p))
         r = verify(doc)
