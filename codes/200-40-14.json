@@ -2780,10 +2780,8 @@
     "origin": "submission",
     "novelty": "unknown",
     "construction": "generic 1x2 group-algebra chain product over semidirect(5,8,4); A=[[2, 3, 4, 27, 39], [0, 8, 12, 15, 18]]; B=[[8, 14, 23, 26, 39], [0, 4, 8, 14, 18]]",
-    "references": [
-      "https://github.com/unitaryfoundation/qldpc-challenge/blob/main/schema/code.schema.json",
-      "https://github.com/unitaryfoundation/qldpc-challenge/blob/main/CONTRIBUTING.md"
-    ],
+    "references": [],
+    "model": "GPT-5.6 Luna",
     "date": "2026-09-10",
     "notes": "Track-frontier candidate from an unrestricted group-algebra search. Local trusted preflight found no exact or WL-equivalent board match. Distance is a witness-backed upper bound, not an exact certification."
   },
