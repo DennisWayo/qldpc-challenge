@@ -26,6 +26,29 @@
 <h4>Numbers</h4>
 <p>Max check weight 11 throughout. Interaction radius unchanged at 0, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/117-44-3.json</code>, and the reduction only deletes. kd²/n 3.385 → 3.474.</p>
 <p>It dominates <code>117-44-3</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/114-44-3.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/175-8-9.html">[[175,8,9]] — 175-8-9</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[175,8,9]] — reduction of the board&#x27;s [[198,8,9]]</h3>
+<h4>Where the qubits came from</h4>
+<p><code>codes/198-8-9.json</code> is @mathysrennela&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 23 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 1</code> three times, <code>|S| = 2</code> three times, <code>|S| = 3</code> six times, <code>|S| = 4</code> once, <code>|S| = 5</code> once, <code>|S| = 6</code> six times.</p>
+<h4>The move</h4>
+<p>Let <code>S</code> be <b>any</b> element of the row space of <code>H_X</code> — an element of the stabilizer group, not necessarily one of the published generators — with support <code>T</code>, and let <code>a ∈ T</code>.</p>
+<p>1. Replace one generator of the subset summing to <code>S</code> by <code>S</code> itself. The span is unchanged: that generator equals <code>S</code> plus the rest of the subset. 2. Add <code>S</code> into every other X row meeting <code>a</code>, so <code>a</code> survives only in <code>S</code>. 3. Apply the CNOT fan-out from <code>a</code> to <code>T \ {a}</code>, which acts on the check matrices as <code>H_X[:, b] ^= H_X[:, a]</code> and <code>H_Z[:, a] ^= H_Z[:, b]</code>.</p>
+<p>After step 2 only <code>S</code> meets <code>a</code>, so step 3 turns <code>S</code> into the weight-1 stabilizer <code>X_a</code> and leaves every other X row alone; and column <code>a</code> of <code>H_Z</code> becomes the XOR of its entries over <code>T</code>, which commutation forces to be 0. Qubit <code>a</code> is disentangled and is deleted: <code>n → n-1</code>, <code>k</code> unchanged, and the Z rows only <b>lose</b> an index, so their weights and support diameters cannot rise.</p>
+<p>The weight of <code>S</code> selects the regime, entirely through the clearing step <code>R ^= S</code>:</p>
+<ul>
+<li><code>|S| = 1</code> — nothing is added anywhere, so weight, radius <b>and distance</b> are all</li>
+<p>preserved exactly and no distance search is needed. This is the row-space form of the weight-1 stabilizer cleanup of Liang, Eberhardt and Chen (arXiv:2504.08887 Sec. III D step 4); <code>research/local2d/boundary_engine.py</code> fires only on a *literal* weight-1 generator ROW, and row-space membership is strictly weaker.</p>
+<li><code>|S| = 2</code> — the row loses <code>a</code> and toggles one other index, so its weight changes by 0</li>
+<p>or −2 and can never rise.</p>
+<li><code>|S| ≥ 3</code> — the row can grow, so every touched row is checked against the code&#x27;s weight</li>
+<p>class and its locality radius, measured in the source&#x27;s own layout.</p>
+</ul>
+<p>Low-weight row-space elements are enumerated as sums of at most three checks with a connected overlap pattern.</p>
+<h4>Verification</h4>
+<p>Fresh-seed RIS ladder: 9 at 20k → 200k → 1M → 5M → 20M trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 9 appeared. Each graft was also screened and confirmed twice in the loop with independent seeds; those rungs are a filter, not the evidence. The distance is a witness-backed upper bound — on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty million, so a flat ladder is not a proof.</p>
+<p><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, <code>dominated_by: []</code>, no duplicate and no WL-equivalent entry, cell <code>weight-6 × local-2d-bilayer</code>.</p>
+<h4>Numbers</h4>
+<p>Max check weight 6 throughout. Interaction radius 2.82843 → 3.60555, inside the local-2d-bilayer cap of 7; layers unchanged. An <code>|S| ≥ 3</code> graft can widen a check and is capped by the locality class rather than by the source&#x27;s own radius, so the reduced code is less local while staying in the same cell. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/198-8-9.json</code>, and the reduction only deletes. kd²/n 3.273 → 3.703.</p>
+<p>It dominates <code>198-8-9</code>, <code>200-8-9</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/175-8-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/372-8-15.html">[[372,8,15]] — 372-8-15</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[372,8,15]] — @mathysrennela&#x27;s [[392,8,15]] reduced and de-stacked onto one layer</h3>
 <p>Two halves, and neither works without the other. The code loses 20 qubits, and the layout loses a layer. The reduction has to be *held back* for the de-stack to be possible at all, which is the part worth reading.</p>
 <h4>Half one: the move</h4>
@@ -48,7 +71,7 @@
 <p>Max check weight 6 throughout. Interaction radius 4.0000 on <b>one</b> layer, against 2.8284 on the source&#x27;s two. kd²/n 4.592 → 4.839. It dominates <code>codes/392-8-15.json</code> and my own <code>codes/373-8-15.json</code> on (n, k, d, w).</p>
 <h4>Credit</h4>
 <p>The construction is @mathysrennela&#x27;s <code>codes/392-8-15.json</code>. The reduction, the layout and the 2-SAT argument are mine; the single-layer sublattice map is the one I introduced with [[450,8,16]] (#912).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/372-8-15.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/41-16-4.html">[[41,16,4]] — 41-16-4</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[41,16,4]] — reduction of the board&#x27;s [[45,16,4]]</h3>
+<section class=blk><h3><a href="codes/41-16-4.html">[[41,16,4]] — 41-16-4</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[41,16,4]] — reduction of the board&#x27;s [[45,16,4]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/45-16-4.json</code> is @mathysrennela&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 4 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 8</code> four times.</p>
 <h4>The move</h4>
