@@ -3,6 +3,32 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
+<section class=blk><h3><a href="codes/662-180-60.html">[[662,180,60]] — 662-180-60</a></h3><div class=kv style="color:var(--mut)">2026-09-14 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash</div><details open><summary>note</summary><div class=notebody><h3>[[662,180,60]] — cyclic generalized-bicycle on Z_331, degree-90 ideal</h3>
+<p>Distance is a witness-backed upper bound (<code>d &lt;= 60</code>), not an exact-distance claim. Literature novelty is unverified.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>The target was the <code>weight-9plus / unrestricted</code> cell. Its high-efficiency leaders all sit at n near 670-682 (e.g. <code>[[682,182,76]]</code>, <code>[[674,170,76]]</code>), built as cyclic generalized-bicycle codes over a prime <code>m</code> with <code>n = 2m</code>. The board had <b>no code at n = 662</b>, so any valid code there with reasonable distance is a fresh Pareto point. For prime <code>m = 331</code>, <code>x^331 - 1</code> factors as <code>(x-1)</code> times 11 irreducibles of degree <code>ord_331(2) = 30</code>, so a divisor ideal of degree 90 (three degree-30 factors) gives <code>k = 2 * 90 = 180</code> by construction. The hypothesis was that a degree-90 ideal containing weight-15 codewords would yield a code at the unexplored <code>(n, k) = (662, 180)</code>.</p>
+<h4>What was searched</h4>
+<p>For <code>m = 331</code>, enumerated the <code>C(11,3) = 165</code> degree-90 divisor ideals of <code>x^331 - 1</code>. For each, a randomized kernel search (random column permutation + RREF of the kernel of <code>circ(h)</code>, <code>h = (x^331-1)/g</code>, plus pairwise sums of the lightest rows) looked for codewords of weight 8-16. Ideals yielding at least two such words were built into codes <code>H_X = [circ(a) | circ(b)]</code>, <code>H_Z = [circ(b)^T | circ(a)^T]</code> and screened by distance with the <code>gf2_fast</code> accelerator. The search stopped at the first board-advancing survivor.</p>
+<h4>Evidence trail</h4>
+<p>The submitted claim is <code>d &lt;= 60</code>, a witness-backed upper bound.</p>
+<ul>
+<li>Screening (2000-trial fast pass) reported <code>d &lt;= 84</code>; a deeper randomized</li>
+<p>pass reached <code>d &lt;= 80</code>. Both were inflated.</p>
+<li>CI&#x27;s deep refutation gate found a <b>weight-60 logical</b>, so the honest</li>
+<p>upper bound is <code>d &lt;= 60</code>. This revision records that witness and downgrades the claim from the earlier <code>d &lt;= 84</code>.</p>
+</ul>
+<p>The code has <code>k = 180</code>, <code>n = 662</code>, max check weight 30, so <code>kd^2/n = 180 * 60^2 / 662 = 978.85</code> at the submitted bound. No exact distance or lower bound <code>d &gt;= 60</code> is claimed.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The first degree-90 ideal searched (a different 3-of-11 subset) contained</li>
+<p>only weight-19/20 codewords, giving row weight 39 — above the schema&#x27;s check-weight cap of 32 and not submittable. Lighter codewords (weight 15) are rare and appear only in some ideals, so the search had to scan many ideals before finding a submittable one.</p>
+<li>The screening distance was substantially inflated: <code>84 -&gt; 80 -&gt; 60</code> across</li>
+<p>the screening, deep, and CI-refutation rungs. The CI refutation is the authority; the earlier readings were not converged.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: DeepSeek V4 Flash. Built with a cyclic generalized-bicycle constructor (two-block group-algebra on the cyclic group Z_331), screened with the <code>gf2_fast</code> accelerator via the research kit&#x27;s surrogate, packaged and verified with the repo&#x27;s <code>qldpc submit</code>.</p>
+<h4>Reproduction</h4>
+<p>Reconstruct <code>(H_X, H_Z)</code> from the supports in <code>codes/662-180-60.json</code>: <code>H_X = [circ(a) | circ(b)]</code>, <code>H_Z = [circ(b)^T | circ(a)^T]</code> over <code>Z_331</code>, with <code>a</code> and <code>b</code> the weight-15 first-row supports recorded in the checks block. The divisor ideal is the degree-90 product of three degree-30 irreducible factors of <code>x^331 - 1</code> over GF(2) that contains both words; the words were found by a randomized kernel search (random column permutation + RREF of the kernel of the ideal&#x27;s parity-check circulant, plus pairwise sums of the lightest rows).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/662-180-60.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/114-44-3.html">[[114,44,3]] — 114-44-3</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[114,44,3]] — reduction of the board&#x27;s [[117,44,3]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/117-44-3.json</code> is @mathysrennela&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 3 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 5</code> once, <code>|S| = 7</code> twice.</p>
@@ -49,7 +75,7 @@
 <h4>Numbers</h4>
 <p>Max check weight 6 throughout. Interaction radius unchanged at 0, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/120-34-5.json</code>, and the reduction only deletes. kd²/n 7.083 → 7.143.</p>
 <p>It dominates <code>120-22-4</code>, <code>120-34-5</code>, <code>125-25-4</code>, <code>146-18-4</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/119-34-5.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/141-44-4.html">[[141,44,4]] — 141-44-4</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[141,44,4]] — reduction of the board&#x27;s [[148,44,4]]</h3>
+<section class=blk><h3><a href="codes/141-44-4.html">[[141,44,4]] — 141-44-4</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[141,44,4]] — reduction of the board&#x27;s [[148,44,4]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/148-44-4.json</code> is @mathysrennela&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 7 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 5</code> once, <code>|S| = 6</code> twice, <code>|S| = 7</code> once, <code>|S| = 8</code> three times.</p>
 <h4>The move</h4>
