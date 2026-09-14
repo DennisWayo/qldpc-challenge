@@ -62,18 +62,33 @@ _FAMILIES = {"bivariate-bicycle", "generalized-bicycle", "2bga-coset",
 _NOVELTY = {"unknown", "known_parameters", "new_parameters"}
 
 # Public CI resource limits. Finite by design so malformed or hostile JSON
-# cannot force unbounded work. MAX_N is also the blocklength cap from the
-# verification-budget rule (issue #249): above it the adaptive gate and MILP
-# certification cannot stand behind a claim, so the board is a finite-length
-# benchmark. Raise-only, as the tooling improves.
+# cannot force unbounded work. The blocklength cap is a verification-budget
+# rule: above it the distance gate cannot stand behind a claim. It has two
+# tiers, see admissible(): any code up to BASE_MAX_N, and up to MAX_N only for
+# sparse checks (weight <= EXT_MAX_CHECK_WEIGHT) with a claimed distance the
+# gate's search can reach (d <= EXT_MAX_D). Raise-only, as the tooling improves.
 MAX_SUBMISSION_BYTES = 5_000_000
-MAX_N = 700
+BASE_MAX_N = 700
+MAX_N = 1000
+EXT_MAX_CHECK_WEIGHT = 8
+EXT_MAX_D = 40
 MAX_CHECKS_PER_SIDE = 10_000
 MAX_CHECK_WEIGHT = 32
 MAX_TOTAL_SUPPORT = 200_000
 MAX_COORDINATES = MAX_N
 MAX_DENSE_MATRIX_CELLS = 50_000_000
 MAX_COMMUTATION_CELLS = 50_000_000
+
+
+def admissible(n, max_check_weight, claimed_d):
+    """The blocklength contract as one boolean: n <= BASE_MAX_N, or n <= MAX_N
+    with max check weight <= EXT_MAX_CHECK_WEIGHT and claimed d <= EXT_MAX_D.
+    Call it before searching, with the parameters a candidate would have, to
+    know whether the board can accept it at all."""
+    if n <= BASE_MAX_N:
+        return True
+    return (n <= MAX_N and max_check_weight <= EXT_MAX_CHECK_WEIGHT
+            and claimed_d <= EXT_MAX_D)
 
 
 def file_size_error(path):
@@ -93,10 +108,17 @@ def resource_errors(doc):
     X, Z = doc["checks"]["X"], doc["checks"]["Z"]
     supports = X + Z
     errs = []
-    if n > MAX_N:
-        errs.append(f"n={n} exceeds the blocklength cap {MAX_N} "
-                    f"(verification-budget rule, issue #249; the pipeline "
-                    f"cannot stand behind a distance claim above it)")
+    max_weight = max((len(s) for s in supports), default=0)
+    claimed = (doc.get("distance") or {}).get("d")
+    claimed = claimed if isinstance(claimed, int) else 0
+    if not admissible(n, max_weight, claimed):
+        if n > MAX_N:
+            errs.append(f"n={n} exceeds the blocklength cap {MAX_N}")
+        else:
+            errs.append(f"n={n} is above {BASE_MAX_N}, where the cap admits only "
+                        f"max check weight <= {EXT_MAX_CHECK_WEIGHT} and claimed "
+                        f"d <= {EXT_MAX_D} (found weight {max_weight}, claimed "
+                        f"d {claimed})")
     if len(X) > MAX_CHECKS_PER_SIDE:
         errs.append(f"checks.X has {len(X)} rows, limit is {MAX_CHECKS_PER_SIDE}")
     if len(Z) > MAX_CHECKS_PER_SIDE:
@@ -105,7 +127,6 @@ def resource_errors(doc):
     if total_support > MAX_TOTAL_SUPPORT:
         errs.append(f"total support entries {total_support} exceeds limit "
                     f"{MAX_TOTAL_SUPPORT}")
-    max_weight = max((len(s) for s in supports), default=0)
     if max_weight > MAX_CHECK_WEIGHT:
         errs.append(f"max check weight {max_weight} exceeds limit {MAX_CHECK_WEIGHT}")
     for label, rows in (("H_X", len(X)), ("H_Z", len(Z))):

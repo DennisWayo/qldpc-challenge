@@ -164,17 +164,39 @@ def main():
     r = rep(d)
     check("oversized n rejected", not r["ok"])
 
-    d = copy.deepcopy(GOOD)
-    d["checks"]["X"] = [d["checks"]["X"][0]] * (qldpc_verify.MAX_CHECKS_PER_SIDE + 1)
-    r = rep(d)
-    check("oversized row count rejected", not r["ok"])
+    # 6c. two-tier blocklength cap: above BASE_MAX_N only sparse checks with a
+    # reachable distance claim are admitted. Synthetic shapes checked at the
+    # resource layer, so no board code is pinned.
+    B, W, D = (qldpc_verify.BASE_MAX_N, qldpc_verify.EXT_MAX_CHECK_WEIGHT,
+               qldpc_verify.EXT_MAX_D)
+    adm = qldpc_verify.admissible
+    check("admissible: base tier takes any weight and distance",
+          adm(B, qldpc_verify.MAX_CHECK_WEIGHT, 10 * D))
+    check("admissible: extended tier at the bounds", adm(B + 1, W, D)
+          and adm(qldpc_verify.MAX_N, W, D))
+    check("admissible: extended tier refuses weight above the bound",
+          not adm(B + 1, W + 1, D))
+    check("admissible: extended tier refuses distance above the bound",
+          not adm(B + 1, W, D + 1))
+    check("admissible: nothing above MAX_N",
+          not adm(qldpc_verify.MAX_N + 1, W, D))
 
-    d = copy.deepcopy(GOOD)
-    heavy_row = list(range(qldpc_verify.MAX_CHECK_WEIGHT))
-    rows = (qldpc_verify.MAX_TOTAL_SUPPORT // qldpc_verify.MAX_CHECK_WEIGHT) + 1
-    d["checks"]["X"] = [heavy_row] * rows
-    r = rep(d)
-    check("oversized total support rejected", not r["ok"])
+    def tiered(n, weight, claimed_d):
+        row = list(range(weight))
+        return {"n": n, "checks": {"X": [row], "Z": [row]},
+                "distance": {"d": claimed_d}}
+
+    def cap_errors(doc):
+        return [e for e in qldpc_verify.resource_errors(doc)
+                if "cap" in e or "above" in e]
+
+    check("resource layer admits the extended tier", cap_errors(tiered(B + 1, W, D)) == [])
+    errs = cap_errors(tiered(B + 1, W + 1, D + 1))
+    check("resource layer rejects an over-cap extended-tier claim",
+          len(errs) == 1 and "check weight" in errs[0] and "claimed" in errs[0])
+    errs = cap_errors(tiered(qldpc_verify.MAX_N + 1, W, D))
+    check("resource layer rejects n above MAX_N",
+          len(errs) == 1 and "blocklength cap" in errs[0])
 
     if GOOD.get("locality"):
         d = copy.deepcopy(GOOD)

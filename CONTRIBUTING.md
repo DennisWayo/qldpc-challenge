@@ -110,16 +110,34 @@ by the weekly board sweep, in which case the code is removed. The seed is printe
 so any failure reproduces.
 
 Public CI also enforces resource limits before dense verifier matrices are
-allocated: 5 MB JSON files, `n <= 700`, at most 10000 checks per side, max check
-weight 32, at most 200000 total support entries, and at most 700 locality
-coordinates.
+allocated. A submission is admissible when all of these hold:
 
-The `n <= 700` cap is the verification-budget rule (issue #249): the adaptive
-distance gate runs under a fixed wall-clock budget, so its trials-per-qubit thin
-out as `n` grows, and exact MILP certification scales worse still. Above the cap
-the pipeline cannot stand behind a distance claim, so the board is kept a
-finite-length benchmark. The cap is raise-only: it states what the verification
-machinery can vouch for today, and rises as the tooling improves.
+- `n <= 700`, or `n <= 1000` with max check weight `w <= 8` and claimed `d <= 40`
+- at most 10000 checks per side
+- max check weight `w <= 32`
+- at most 200000 total support entries
+- at most 1000 locality coordinates
+- JSON file at most 5 MB
+
+The blocklength line is available as one boolean, so a search can test a
+candidate's `(n, w, d)` before spending anything on it:
+
+```python
+from qldpc_verify import admissible   # verify/ on sys.path
+admissible(n, w, d)                   # True or False
+```
+
+`structure_errors(doc)` returns `[]` when a full document meets every line.
+
+The blocklength cap is a verification-budget rule: the distance gate runs under
+a fixed budget, its trials-per-qubit thin out as `n` grows, and exact
+certification scales worse still, so above the cap the pipeline cannot stand
+behind a distance claim. Between 700 and 1000 the weight bound keeps the search
+at the sparse end (per-trial cost grows as roughly `n^2` and never depends on
+weight, about 87 CI minutes for the gate's 8M-trial pass at `n = 1000` against
+38 at `n = 700`), and the distance bound is the depth that pass actually
+reaches: a deeper claim would pass unrefuted without ever being reached. The
+cap is raise-only and rises as the tooling improves.
 
 ## Contribute with an LLM
 
