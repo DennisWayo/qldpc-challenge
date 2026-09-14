@@ -169,7 +169,9 @@ surface code to 1, but they answer different questions.
   [[630,126,<=20]], reaching kd^2/n ~ 20 to 80. Five of those six are seeded
   from this paper; [[150,30,10]] was already on the board from the ZSZ-LP
   seeding below and keeps that provenance, for the reason worked out in
-  notes/150-30-10.md. The remaining two exceed the cap and stay bars only:
+  notes/150-30-10.md. The remaining two exceed the 700 cap and, at check
+  weight 9, do not qualify for the extended tier (n <= 1000 needs w <= 8 and
+  d <= 40), so they stay bars only:
   [[780,156,<=22]] (kd^2/n ~ 96.8) and [[975,195,<=24]] (~115.2). The
   construction is fully
   specified (a 1x2 base matrix over F_2[G] for a non-abelian G, their
@@ -185,7 +187,8 @@ surface code to 1, but they answer different questions.
   not baselines: the paper's author submitted them directly (#357 to #368), so
   they carry origin `submission`. The paper's distances are SAT-exact through
   [[320,64,14]] and upper bounds above it, which the board's per-side
-  confidence fields mirror. The remaining two exceed the cap and stay bars
+  confidence fields mirror. The remaining two exceed the 700 cap and, at
+  check weight 9, do not qualify for the extended tier, so they stay bars
   only: [[775,155,<=22]] (kd^2/n ~ 96.8) and [[840,168,<=24]] (~115.2). Its
   Table 3 lists the group parameters (l1, l2, q) and the trinomials a, b, c, d
   for every instance, and each submission repeats its own generators in its

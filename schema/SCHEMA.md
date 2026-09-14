@@ -203,11 +203,11 @@ JSON cannot force unbounded dense-matrix allocation in CI. Current automatic
 limits are:
 
 - JSON file size: 5 MB.
-- `n <= 700` (the verification-budget cap, issue #249; raise-only).
+- `n <= 700`, or `n <= 1000` when max check weight is at most 8 and the claimed `d` at most 40 (the verification-budget cap, issues #249 and #1016; raise-only).
 - At most 10000 X-checks and 10000 Z-checks.
 - Max check weight 32 (issue #249: beyond this, validating a claim is not practical, and weight 32 is already beyond near-term hardware).
 - At most 200000 total support entries across all checks.
-- At most 600 locality coordinate entries.
+- At most 1000 locality coordinate entries.
 - Dense verifier intermediates capped at 50000000 cells.
 - Circuit tier: at most 25000 DEM error mechanisms per memory circuit
   (verification-budget rule: the refutation gate must be able to search the

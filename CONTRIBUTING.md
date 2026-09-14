@@ -110,16 +110,30 @@ by the weekly board sweep, in which case the code is removed. The seed is printe
 so any failure reproduces.
 
 Public CI also enforces resource limits before dense verifier matrices are
-allocated: 5 MB JSON files, `n <= 700`, at most 10000 checks per side, max check
-weight 32, at most 200000 total support entries, and at most 700 locality
+allocated: 5 MB JSON files, `n <= 700` (or `n <= 1000` when max check weight is
+at most 8 and the claimed `d` at most 40), at most 10000 checks per side, max
+check weight 32, at most 200000 total support entries, and at most 1000 locality
 coordinates.
 
-The `n <= 700` cap is the verification-budget rule (issue #249): the adaptive
+The blocklength cap is the verification-budget rule (issue #249): the adaptive
 distance gate runs under a fixed wall-clock budget, so its trials-per-qubit thin
 out as `n` grows, and exact MILP certification scales worse still. Above the cap
 the pipeline cannot stand behind a distance claim, so the board is kept a
 finite-length benchmark. The cap is raise-only: it states what the verification
 machinery can vouch for today, and rises as the tooling improves.
+
+It has two tiers (issue #1016). Any code up to `n = 700` is admitted. Between
+700 and 1000 a code is admitted only when its max check weight is at most 8 and
+its claimed `d` is at most 40. The weight bound keeps the per-trial search cost,
+which grows as roughly `n^2` and never depends on weight, at the sparse end
+(measured: the gate's 8M-trial pass costs about 87 CI minutes for a weight-8
+code at `n = 1000` against 38 at `n = 700`) and keeps the BP+OSD cross-check
+meaningful. The distance bound is the depth that pass actually reaches:
+information-set decoding hits a weight-`d` logical with probability roughly
+`c^d`, so reach is logarithmic in the trial budget, and a claim beyond it passes
+the gate as "inconclusive" (never reached) rather than corroborated. That gap is
+where every over-stated `n ~ 684` entry lived (issues #896, #907, #908, #942),
+so above 700 the verifier rejects claims the search could not have tested.
 
 ## Contribute with an LLM
 

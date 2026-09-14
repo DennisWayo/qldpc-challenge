@@ -164,6 +164,40 @@ def main():
     r = rep(d)
     check("oversized n rejected", not r["ok"])
 
+    # 6c. two-tier blocklength cap (issue #1016): above BASE_MAX_N only sparse
+    # checks with a reachable distance claim are admitted. Synthetic shapes,
+    # checked at the resource layer (before dense matrices), so no board code
+    # is pinned and the rule is tested independently of any real submission.
+    def tiered(n, weight, claimed_d):
+        row = list(range(weight))
+        return {"n": n, "checks": {"X": [row], "Z": [row]},
+                "distance": {"d": claimed_d}}
+
+    def cap_errors(doc):
+        return [e for e in qldpc_verify.resource_errors(doc)
+                if "cap" in e or "above" in e]
+
+    B, W, D = (qldpc_verify.BASE_MAX_N, qldpc_verify.EXT_MAX_CHECK_WEIGHT,
+               qldpc_verify.EXT_MAX_D)
+    check("base tier: heavy, deep claim admitted at n = BASE_MAX_N",
+          cap_errors(tiered(B, qldpc_verify.MAX_CHECK_WEIGHT, 10 * D)) == [])
+    check("extended tier: w <= 8, d <= 40 admitted just above BASE_MAX_N",
+          cap_errors(tiered(B + 1, W, D)) == [])
+    check("extended tier: w <= 8, d <= 40 admitted at MAX_N",
+          cap_errors(tiered(qldpc_verify.MAX_N, W, D)) == [])
+    errs = cap_errors(tiered(B + 1, W + 1, D))
+    check("extended tier: check weight above 8 rejected above BASE_MAX_N",
+          len(errs) == 1 and "check weight" in errs[0])
+    errs = cap_errors(tiered(B + 1, W, D + 1))
+    check("extended tier: claimed d above 40 rejected above BASE_MAX_N",
+          len(errs) == 1 and "claimed distance" in errs[0])
+    errs = cap_errors(tiered(B + 1, W + 1, D + 1))
+    check("extended tier: both violations reported",
+          len(errs) == 2)
+    errs = cap_errors(tiered(qldpc_verify.MAX_N + 1, W, D))
+    check("above MAX_N rejected even when sparse and shallow",
+          len(errs) == 1 and "blocklength cap" in errs[0])
+
     d = copy.deepcopy(GOOD)
     d["checks"]["X"] = [d["checks"]["X"][0]] * (qldpc_verify.MAX_CHECKS_PER_SIDE + 1)
     r = rep(d)

@@ -62,12 +62,26 @@ _FAMILIES = {"bivariate-bicycle", "generalized-bicycle", "2bga-coset",
 _NOVELTY = {"unknown", "known_parameters", "new_parameters"}
 
 # Public CI resource limits. Finite by design so malformed or hostile JSON
-# cannot force unbounded work. MAX_N is also the blocklength cap from the
-# verification-budget rule (issue #249): above it the adaptive gate and MILP
-# certification cannot stand behind a claim, so the board is a finite-length
-# benchmark. Raise-only, as the tooling improves.
+# cannot force unbounded work. The blocklength cap is the verification-budget
+# rule (issue #249): above it the adaptive gate and MILP certification cannot
+# stand behind a claim, so the board is a finite-length benchmark. Raise-only,
+# as the tooling improves. Two tiers (issue #1016): every code up to BASE_MAX_N
+# is admitted; between BASE_MAX_N and MAX_N a code is admitted only when its
+# check weight is at most EXT_MAX_CHECK_WEIGHT and its claimed distance at most
+# EXT_MAX_D. The weight bound keeps the per-trial search cost (which grows as
+# roughly n^2 and never depends on weight) at the sparse end and keeps the
+# BP+OSD cross-check meaningful; the distance bound is the depth the gate's
+# 8M-trial RIS pass actually reaches (information-set decoding hits a weight-d
+# logical with probability ~c^d, so reach is logarithmic in budget; measured
+# 2026-09-14: 50k trials reach every claim at d <= 28 and none at d >= 70, and
+# the gate's 160x deeper pass lands at d ~ 40). A claim above that would pass as
+# "inconclusive" rather than corroborated, which is the gap every over-stated
+# n ~ 684 entry lived in (issues #896, #907, #908, #942).
 MAX_SUBMISSION_BYTES = 5_000_000
-MAX_N = 700
+BASE_MAX_N = 700
+MAX_N = 1000
+EXT_MAX_CHECK_WEIGHT = 8
+EXT_MAX_D = 40
 MAX_CHECKS_PER_SIDE = 10_000
 MAX_CHECK_WEIGHT = 32
 MAX_TOTAL_SUPPORT = 200_000
@@ -93,10 +107,27 @@ def resource_errors(doc):
     X, Z = doc["checks"]["X"], doc["checks"]["Z"]
     supports = X + Z
     errs = []
+    max_weight = max((len(s) for s in supports), default=0)
     if n > MAX_N:
         errs.append(f"n={n} exceeds the blocklength cap {MAX_N} "
                     f"(verification-budget rule, issue #249; the pipeline "
                     f"cannot stand behind a distance claim above it)")
+    elif n > BASE_MAX_N:
+        # Extended tier (issue #1016): sparse checks and a reachable distance
+        # claim only. The claimed d is read here, before the dense pass, so an
+        # over-cap claim is rejected without spending the search budget.
+        claimed = (doc.get("distance") or {}).get("d")
+        if max_weight > EXT_MAX_CHECK_WEIGHT:
+            errs.append(f"n={n} is above {BASE_MAX_N}, where the cap admits only "
+                        f"check weight <= {EXT_MAX_CHECK_WEIGHT} (found {max_weight}); "
+                        f"the verification budget cannot stand behind heavier "
+                        f"codes at this size (issue #1016)")
+        if isinstance(claimed, int) and claimed > EXT_MAX_D:
+            errs.append(f"n={n} is above {BASE_MAX_N}, where the cap admits only "
+                        f"claimed distance <= {EXT_MAX_D} (claimed {claimed}); "
+                        f"the gate's search does not reach deeper claims at this "
+                        f"size, so they could pass unrefuted but uncorroborated "
+                        f"(issue #1016)")
     if len(X) > MAX_CHECKS_PER_SIDE:
         errs.append(f"checks.X has {len(X)} rows, limit is {MAX_CHECKS_PER_SIDE}")
     if len(Z) > MAX_CHECKS_PER_SIDE:
@@ -105,7 +136,6 @@ def resource_errors(doc):
     if total_support > MAX_TOTAL_SUPPORT:
         errs.append(f"total support entries {total_support} exceeds limit "
                     f"{MAX_TOTAL_SUPPORT}")
-    max_weight = max((len(s) for s in supports), default=0)
     if max_weight > MAX_CHECK_WEIGHT:
         errs.append(f"max check weight {max_weight} exceeds limit {MAX_CHECK_WEIGHT}")
     for label, rows in (("H_X", len(X)), ("H_Z", len(Z))):
