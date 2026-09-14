@@ -203,7 +203,7 @@ JSON cannot force unbounded dense-matrix allocation in CI. Current automatic
 limits are:
 
 - JSON file size: 5 MB.
-- `n <= 700`, or `n <= 1000` when max check weight is at most 8 and the claimed `d` at most 40 (the verification-budget cap, issues #249 and #1016; raise-only).
+- `n <= 700`, or `n <= 1000` with max check weight `w <= 8` and claimed `d <= 40` (the verification-budget cap; raise-only; `qldpc_verify.admissible(n, w, d)`).
 - At most 10000 X-checks and 10000 Z-checks.
 - Max check weight 32 (issue #249: beyond this, validating a claim is not practical, and weight 32 is already beyond near-term hardware).
 - At most 200000 total support entries across all checks.

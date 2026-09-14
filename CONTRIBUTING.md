@@ -110,30 +110,34 @@ by the weekly board sweep, in which case the code is removed. The seed is printe
 so any failure reproduces.
 
 Public CI also enforces resource limits before dense verifier matrices are
-allocated: 5 MB JSON files, `n <= 700` (or `n <= 1000` when max check weight is
-at most 8 and the claimed `d` at most 40), at most 10000 checks per side, max
-check weight 32, at most 200000 total support entries, and at most 1000 locality
-coordinates.
+allocated. A submission is admissible when all of these hold:
 
-The blocklength cap is the verification-budget rule (issue #249): the adaptive
-distance gate runs under a fixed wall-clock budget, so its trials-per-qubit thin
-out as `n` grows, and exact MILP certification scales worse still. Above the cap
-the pipeline cannot stand behind a distance claim, so the board is kept a
-finite-length benchmark. The cap is raise-only: it states what the verification
-machinery can vouch for today, and rises as the tooling improves.
+- `n <= 700`, or `n <= 1000` with max check weight `w <= 8` and claimed `d <= 40`
+- at most 10000 checks per side
+- max check weight `w <= 32`
+- at most 200000 total support entries
+- at most 1000 locality coordinates
+- JSON file at most 5 MB
 
-It has two tiers (issue #1016). Any code up to `n = 700` is admitted. Between
-700 and 1000 a code is admitted only when its max check weight is at most 8 and
-its claimed `d` is at most 40. The weight bound keeps the per-trial search cost,
-which grows as roughly `n^2` and never depends on weight, at the sparse end
-(measured: the gate's 8M-trial pass costs about 87 CI minutes for a weight-8
-code at `n = 1000` against 38 at `n = 700`) and keeps the BP+OSD cross-check
-meaningful. The distance bound is the depth that pass actually reaches:
-information-set decoding hits a weight-`d` logical with probability roughly
-`c^d`, so reach is logarithmic in the trial budget, and a claim beyond it passes
-the gate as "inconclusive" (never reached) rather than corroborated. That gap is
-where every over-stated `n ~ 684` entry lived (issues #896, #907, #908, #942),
-so above 700 the verifier rejects claims the search could not have tested.
+The blocklength line is available as one boolean, so a search can test a
+candidate's `(n, w, d)` before spending anything on it:
+
+```python
+from qldpc_verify import admissible   # verify/ on sys.path
+admissible(n, w, d)                   # True or False
+```
+
+`structure_errors(doc)` returns `[]` when a full document meets every line.
+
+The blocklength cap is a verification-budget rule: the distance gate runs under
+a fixed budget, its trials-per-qubit thin out as `n` grows, and exact
+certification scales worse still, so above the cap the pipeline cannot stand
+behind a distance claim. Between 700 and 1000 the weight bound keeps the search
+at the sparse end (per-trial cost grows as roughly `n^2` and never depends on
+weight, about 87 CI minutes for the gate's 8M-trial pass at `n = 1000` against
+38 at `n = 700`), and the distance bound is the depth that pass actually
+reaches: a deeper claim would pass unrefuted without ever being reached. The
+cap is raise-only and rises as the tooling improves.
 
 ## Contribute with an LLM
 

@@ -36,7 +36,7 @@
       "type": "integer",
       "minimum": 1,
       "maximum": 1000,
-      "description": "number of physical (data) qubits; capped by the verification-budget rule (issue #249): 700 for any code, 1000 when max check weight <= 8 and claimed d <= 40 (issue #1016; enforced by the verifier)"
+      "description": "number of physical (data) qubits; capped by the verification-budget rule: 700 for any code, 1000 when max check weight <= 8 and claimed d <= 40 (enforced by the verifier, see qldpc_verify.admissible)"
     },
     "k": {
       "type": "integer",
