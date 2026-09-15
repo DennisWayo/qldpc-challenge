@@ -1008,7 +1008,7 @@
   "construction": "Weight-8 BB code on Z_12 x Z_4, h=3 cover of [[32,8,4]] from Table 12 of arXiv:2511.13560. Polynomials: A = xy^3 + x^4 + x^2 + x^11y^2, B = x^6y + x^8y + x^11 + x^9y.",
   "origin": "submission",
   "date": "2026-09-15",
-  "model": "Claude Opus 4.8"
+  "model": "Mimo V2.5"
  },
  "family": "bivariate-bicycle"
 }
