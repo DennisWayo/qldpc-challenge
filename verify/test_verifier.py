@@ -81,6 +81,65 @@ def main():
                         if c["check"] == "tanner_connected")
     check("isolated qubit is counted as a component",
           tanner_check["detail"] == "Tanner graph has 3 connected component(s)")
+    check("connected stabilizer group passes",
+          "stabilizer_group_connected" not in failed_checks(rep(GOOD)))
+
+    # A direct sum whose Tanner graph is glued together by one linearly
+    # dependent check per side (row_A XOR row_B): the raw component count is 1,
+    # but the stabilizer group is still two independent blocks. Two copies of
+    # the [[4,2,2]] code, n=8; the bridging rows add nothing to the row space.
+    bridged = {
+        "schema_version": "0.1",
+        "name": "bridged direct sum of two [[4,2,2]] codes",
+        "code_type": "CSS",
+        "n": 8,
+        "k": 4,
+        "checks": {"X": [[0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]],
+                   "Z": [[0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]]},
+        "distance": {
+            "d": 2,
+            "X": {"value": 2, "confidence": "upper_bound", "witness": [0, 1]},
+            "Z": {"value": 2, "confidence": "upper_bound", "witness": [0, 1]},
+        },
+        "provenance": {"authors": ["@test"], "construction": "synthetic"},
+    }
+    r = rep(bridged)
+    check("bridged direct sum has a connected Tanner graph",
+          "tanner_connected" not in failed_checks(r))
+    check("bridged direct sum rejected on the stabilizer group",
+          not r["ok"] and "stabilizer_group_connected" in failed_checks(r))
+    block_check = next(c for c in r["checks"]
+                       if c["check"] == "stabilizer_group_connected")
+    check("block sizes reported",
+          block_check["detail"].endswith("(sizes 4, 4)"))
+
+    # A qubit frozen by a weight-1 stabilizer hiding in the row space: the two
+    # Z checks differ only in qubit 4, so Z_4 is a stabilizer and qubit 4 carries
+    # no X check. It is an unused qubit with a connected Tanner graph.
+    frozen = {
+        "schema_version": "0.1",
+        "name": "[[4,2,2]] plus one frozen qubit",
+        "code_type": "CSS",
+        "n": 5,
+        "k": 2,
+        "checks": {"X": [[0, 1, 2, 3]],
+                   "Z": [[0, 1, 2, 3], [0, 1, 2, 3, 4]]},
+        "distance": {
+            "d": 2,
+            "X": {"value": 2, "confidence": "upper_bound", "witness": [0, 1]},
+            "Z": {"value": 2, "confidence": "upper_bound", "witness": [0, 1]},
+        },
+        "provenance": {"authors": ["@test"], "construction": "synthetic"},
+    }
+    r = rep(frozen)
+    check("frozen qubit has a connected Tanner graph",
+          "tanner_connected" not in failed_checks(r))
+    check("frozen qubit rejected on the stabilizer group",
+          not r["ok"] and "stabilizer_group_connected" in failed_checks(r))
+    check("frozen qubit reported as a size-1 block",
+          qldpc_verify._stabilizer_block_count(
+              qldpc_verify._matrix(frozen["checks"]["X"], 5),
+              qldpc_verify._matrix(frozen["checks"]["Z"], 5), 5) == (2, [4, 1]))
 
     print("\nREJECT tampered submissions:")
 

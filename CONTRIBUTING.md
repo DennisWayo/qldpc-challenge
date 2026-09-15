@@ -285,7 +285,10 @@ accepted and recorded but will not sit on the frontier. See `TRACKS.md`.
   rounded value.
 - Do not repeat a qubit index within a single check.
 - Submit one connected code, not a direct sum: the combined X and Z Tanner
-  graph must be a single connected component.
+  graph must be a single connected component, and so must the stabilizer
+  group itself (the verifier re-checks connectivity on the reduced row echelon
+  form of each side, so a redundant check that bridges two blocks, or a qubit
+  frozen by a weight-1 stabilizer, does not pass).
 - Use `provenance.origin` only for provenance (`baseline` vs `submission`), not
   novelty. If the same `[[n,k,d]]` parameter set exists in the literature, set
   `provenance.novelty` to `known_parameters` and cite it in
