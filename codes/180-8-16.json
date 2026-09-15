@@ -1504,7 +1504,7 @@
   "construction": "Bivariate bicycle on Z_6 x Z_15, A={x^3, y, y^2}, B={y^6, x^4, x^5}. From arXiv:2408.10001v6 (Wang & Mueller, 2026).",
   "origin": "submission",
   "date": "2026-09-15",
-  "model": "arXiv:2408.10001v6"
+  "model": "MiMo V2.5"
  },
  "family": "bivariate-bicycle"
 }
