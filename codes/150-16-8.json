@@ -1248,7 +1248,7 @@
   "construction": "BB on Z_5xZ_15, A={x^0*y^0, x^0*y^6, x^0*y^8}, B={x^0*y^5, x^1*y^0, x^4*y^0}",
   "origin": "submission",
   "date": "2026-09-15",
-  "model": "arXiv:2408.10001v6"
+  "model": "MiMo V2.5"
  },
  "family": "bivariate-bicycle"
 }
