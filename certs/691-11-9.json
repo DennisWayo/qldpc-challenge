@@ -1,0 +1,25 @@
+{
+ "name": "[[691,11,9]] dense-packed surface code, m=6 rung",
+ "d": 9,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 9,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.2,
+   "note": "no logical < 9 exists"
+  },
+  "Z": {
+   "value": 9,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.2,
+   "note": "no logical < 9 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}

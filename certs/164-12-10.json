@@ -1,0 +1,25 @@
+{
+ "name": "[[164,12,10]] reduction of [[181,12,10]]",
+ "d": 10,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 10,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 33.9,
+   "note": "no logical < 10 exists"
+  },
+  "Z": {
+   "value": 10,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 30.1,
+   "note": "no logical < 10 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}

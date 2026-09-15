@@ -1,0 +1,25 @@
+{
+ "name": "[[90,20,7]] cyclic bicycle code (arXiv:2608.09115v1)",
+ "d": 7,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 7,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 6.9,
+   "note": "no logical < 7 exists"
+  },
+  "Z": {
+   "value": 7,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 8.5,
+   "note": "no logical < 7 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": true,
+ "d_exact": true
+}

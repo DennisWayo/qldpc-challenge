@@ -1,0 +1,25 @@
+{
+ "name": "[[62,12,7]] sparse generalized bicycle from a shared polynomial ideal",
+ "d": 7,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 7,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.4,
+   "note": "no logical < 7 exists"
+  },
+  "Z": {
+   "value": 7,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.3,
+   "note": "no logical < 7 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": true,
+ "d_exact": true
+}

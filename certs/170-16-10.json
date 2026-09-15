@@ -1,0 +1,25 @@
+{
+ "name": "[[170,16,10]] weight-6 two-block generalized bicycle on Z_85",
+ "d": 10,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 10,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 86.5,
+   "note": "no logical < 10 exists"
+  },
+  "Z": {
+   "value": 10,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 101.5,
+   "note": "no logical < 10 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": true,
+ "d_exact": true
+}

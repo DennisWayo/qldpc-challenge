@@ -1,0 +1,25 @@
+{
+ "name": "[[400,35,<=8]] SCE-LP R3EliteP01 at t=8",
+ "d": 8,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 8,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 12.3,
+   "note": "no logical < 8 exists"
+  },
+  "Z": {
+   "value": 8,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 23.5,
+   "note": "no logical < 8 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}

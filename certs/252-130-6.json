@@ -1,0 +1,25 @@
+{
+ "name": "Cornucopia [[252,130,6]]",
+ "d": 6,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 6,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 277.6,
+   "note": "no logical < 6 exists"
+  },
+  "Z": {
+   "value": 6,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 394.6,
+   "note": "no logical < 6 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}

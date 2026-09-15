@@ -1,0 +1,25 @@
+{
+ "name": "[[60,4,8]] weight-5 two-block group-algebra code on MC(3,10,2), two-layer 2D-local layout",
+ "d": 8,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 8,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.3,
+   "note": "no logical < 8 exists"
+  },
+  "Z": {
+   "value": 8,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.8,
+   "note": "no logical < 8 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}
