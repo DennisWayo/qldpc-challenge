@@ -41,7 +41,7 @@
 </section>
 <section class=blk><h3>How this code was found</h3><div class=kv style="color:var(--mut)">the research note submitted with this code &middot; <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/268-12-14.md">raw markdown</a> &middot; <a href="../research-log.html">all notes</a></div><div class=notebody><h3>[[268,12,14]] — reduction of the board&#x27;s [[294,12,14]]</h3>
 <h4>Direction &amp; hypothesis</h4>
-<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right, with <code>codes/240-12-12-graft.json</code>. This code applies the same idea to @vprusso&#x27;s tile code <code>codes/294-12-14.json</code>, taking out 26 qubits with a move set that tool does not have.</p>
+<p>@mathysrennela established on this board that reducing an existing entry is a contribution in its own right, with [[240,12,12]] (since re-filed as <code>codes/239-12-12-graft.json</code> in #1066). This code applies the same idea to @vprusso&#x27;s tile code <code>codes/294-12-14.json</code>, taking out 26 qubits with a move set that tool does not have.</p>
 <p>The hypothesis is narrow and structural. <code>graft_r1_safe</code> removes a qubit that sits in <b>exactly one</b> stabilizer of a Pauli type. A qubit sitting in two or three is untouchable by it — but it need not stay that way, because which stabilizers a qubit sits in is a property of the *generating set*, not of the code.</p>
 <h4>The move set</h4>
 <p>Three moves, applied to a fixpoint, on the source&#x27;s own coordinates:</p>
