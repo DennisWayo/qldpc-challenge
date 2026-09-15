@@ -440,7 +440,7 @@
   "construction": "Coprime BB on Z_4xZ_5, bivariate A=[(0, 0), (1, 1), (2, 1), (3, 0)], B=[(0, 0), (2, 2), (1, 0), (3, 2)]",
   "origin": "submission",
   "date": "2026-09-15",
-  "model": "arXiv:2408.10001v6"
+  "model": "MiMo V2.5"
  },
  "family": "bivariate-bicycle"
 }
