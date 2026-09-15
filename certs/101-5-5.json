@@ -1,0 +1,25 @@
+{
+ "name": "[[101,5,5]]",
+ "d": 5,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 5,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.0,
+   "note": "no logical < 5 exists"
+  },
+  "Z": {
+   "value": 5,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.0,
+   "note": "no logical < 5 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}

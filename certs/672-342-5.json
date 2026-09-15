@@ -1,0 +1,25 @@
+{
+ "name": "[[672,342,<=5]] check-deletion of the board's [[672,336,12]]",
+ "d": 5,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 5,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 326.1,
+   "note": "no logical < 5 exists"
+  },
+  "Z": {
+   "value": 5,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 508.8,
+   "note": "no logical < 5 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}
