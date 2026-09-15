@@ -1060,7 +1060,7 @@
   "construction": "Coprime bivariate bicycle on Z_7 x Z_9, pi=xy, a(pi)=1+pi+pi^58, b(pi)=1+pi^13+pi^41. From arXiv:2408.10001v6 (Wang & Mueller, 2026).",
   "origin": "submission",
   "date": "2026-09-15",
-  "model": "arXiv:2408.10001v6"
+  "model": "MiMo V2.5"
  },
  "family": "bivariate-bicycle"
 }
