@@ -1,0 +1,25 @@
+{
+ "name": "[[72,8,10]] 2BGA on SmallGroup(36,2)",
+ "d": 10,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 10,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 264.6,
+   "note": "no logical < 10 exists"
+  },
+  "Z": {
+   "value": 10,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 187.7,
+   "note": "no logical < 10 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}

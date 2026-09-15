@@ -1,0 +1,25 @@
+{
+ "name": "[[203,3,9]] multi-band dense-packed code",
+ "d": 9,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 9,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.0,
+   "note": "no logical < 9 exists"
+  },
+  "Z": {
+   "value": 9,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.0,
+   "note": "no logical < 9 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}
