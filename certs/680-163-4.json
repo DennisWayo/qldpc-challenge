@@ -1,0 +1,25 @@
+{
+ "name": "[[680,163,d<=4]] generic nonabelian group lifted product",
+ "d": 4,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 4,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.2,
+   "note": "no logical < 4 exists"
+  },
+  "Z": {
+   "value": 4,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1.0,
+   "note": "no logical < 4 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}
