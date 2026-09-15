@@ -251,6 +251,41 @@ def _tanner_component_count(checks, n):
     return components
 
 
+def _stabilizer_block_count(HX, HZ, n):
+    """Count the disjoint qubit blocks the stabilizer GROUP splits into.
+
+    ``_tanner_component_count`` looks at the submitted rows, so one linearly
+    dependent check spanning two otherwise disjoint blocks (row_A XOR row_B)
+    joins the Tanner graph without changing the code. The reduced row echelon
+    form is canonical for the row space and block-diagonal whenever the row
+    space is a direct sum over disjoint qubit sets, so counting components of
+    the Tanner graph built from the RREF rows (both sides combined, isolated
+    qubits included) is exact: it equals the number of independent blocks of
+    the stabilizer group, whatever redundant rows the submission carries.
+    Returns (block_count, sorted block sizes, descending).
+    """
+    rows = []
+    for H in (HX, HZ):
+        R, _ = gf2.rref(H)
+        rows.extend([int(q) for q in np.nonzero(r)[0]] for r in np.asarray(R))
+    parent = list(range(n))
+
+    def find(a):
+        while parent[a] != a:
+            parent[a] = parent[parent[a]]
+            a = parent[a]
+        return a
+
+    for sup in rows:
+        for q in sup[1:]:
+            parent[find(q)] = find(sup[0])
+    sizes = {}
+    for q in range(n):
+        r = find(q)
+        sizes[r] = sizes.get(r, 0) + 1
+    return len(sizes), sorted(sizes.values(), reverse=True)
+
+
 def verify(doc, refute=False, seed=None):
     """Verify a submission. If ``refute`` is set, run the distance refutation with
     ``seed`` -- when ``seed is None`` a fresh RANDOM seed is drawn, so the gate is
@@ -319,6 +354,15 @@ def _verify_semantic(doc, report, record, refute=False, seed=None):
     ncomponents = _tanner_component_count(doc["checks"], n)
     record("tanner_connected", ncomponents == 1,
            f"Tanner graph has {ncomponents} connected component(s)")
+    # The same rule applied to the stabilizer group rather than the submitted
+    # rows: a direct sum padded with a redundant cross-block check, or a qubit
+    # frozen by a weight-1 stabilizer hiding in the row space, has a connected
+    # Tanner graph but is still not one code.
+    nblocks, block_sizes = _stabilizer_block_count(HX, HZ, n)
+    shown = ", ".join(map(str, block_sizes[:6])) + (", ..." if nblocks > 6 else "")
+    record("stabilizer_group_connected", nblocks == 1,
+           f"stabilizer group splits into {nblocks} independent block(s) on "
+           f"disjoint qubit sets (sizes {shown})")
 
     # 3. CSS commutation
     css = not bool(((HX @ HZ.T) % 2).any())
