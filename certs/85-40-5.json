@@ -1,0 +1,25 @@
+{
+ "name": "[[85,40,5]] check-deletion chain of codes/85-37-5.json",
+ "d": 5,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 5,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 5.3,
+   "note": "no logical < 5 exists"
+  },
+  "Z": {
+   "value": 5,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 5.4,
+   "note": "no logical < 5 exists"
+  }
+ },
+ "tlim_per_solve": 900,
+ "symmetry": false,
+ "d_exact": true
+}
