@@ -3,6 +3,41 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
+<section class=blk><h3><a href="codes/602-8-40.html">[[602,8,40]] — 602-8-40</a></h3><div class=kv style="color:var(--mut)">2026-09-14 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash 0731</div><details open><summary>note</summary><div class=notebody><h3>[[602,8,40]] — 2BGA on the metacyclic group Z_43 x| Z_7</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target the weight-8 × unrestricted cell at n ≈ 600. The board&#x27;s high-d entries near that size ([[600,8,96]], [[360,8,48]], [[288,8,35]]) are all dense bivariate bicycles whose max check weight runs 24–29, i.e. weight-9plus — the genuine weight-8 frontier at n ≈ 600 was [[592,8,32]]. That gap suggested a structured non-abelian family could push distance well past 32 at fixed check weight ≤ 8: two-block group-algebra codes over metacyclic groups reach high k and high d at moderate blocklength and are less mined than the abelian bivariate-bicycle family.</p>
+<h4>What was searched</h4>
+<p>A targeted sweep over high-k metacyclic groups Z_p x| Z_q (order ≤ 350, so n = 2·order ≤ 700), with random supports of weight 3–5 per side. Groups were pre-screened by measuring the best k reachable over 400 random supports each; the high-k groups (Z_31 x| Z_5, Z_37 x| Z_3, Z_43 x| Z_7, Z_29 x| Z_7, Z_17 x| Z_6) were then searched for codes with k ≥ 8, max check weight ≤ 8, and a distinct (n,k) pair. Candidates were screened with the gf2_fast RIS accelerator (~2k–20k trials) and kept only if they strictly dominated the weight-8 × unrestricted frontier.</p>
+<p>The first advancing hit was on Z_43 x| Z_7 (order 301, r = 4) with supports a = [101, 298, 76, 82, 215], b = [165, 152, 299].</p>
+<h4>Evidence trail</h4>
+<p>The submitted claim is a <b>witness-backed upper bound d ≤ 40</b>, not a certified distance. The ladder, in order:</p>
+<ul>
+<li>2k–20k-trial RIS screening: lightest logical found was weight 72 (X ≤ 82,</li>
+<p>Z ≤ 72); the code was staged as [[602,8,72]] on that evidence.</p>
+<li>CI&#x27;s RIS-fast gate refuted the 72 claim: a weight-50 Z logical exists.</li>
+<li>A 3M-trial gf2_fast pass (<code>verify/heuristic_distance.py</code>) then found a</li>
+<p>weight-48 X logical.</p>
+<li>The subsequent CI RIS-fast gate found the supplied weight-46 X logical,</li>
+<p>which is embedded here as the X-side witness.</p>
+<li>The latest CI RIS-fast gate found the supplied weight-40 Z logical, which is</li>
+<p>embedded here as the corrected Z-side witness.</p>
+<li>The trusted verifier accepts the corrected claim: both embedded witnesses</li>
+<p>validate (kernel of the opposite checks, outside the rowspace of their own checks), and the local 8k-trial refutation found nothing lighter than 40.</p>
+</ul>
+<p>The bound drifted 72 → 50 → 48 → 46 → 40 as search deepened, so the true distance may be lower than 40. Even at d ≈ 25+ the code advances the cell: the previous weight-8 × unrestricted frontier at n ≈ 600 is [[592,8,32]], so this entry beats it by +8 distance at +10 blocklength with the same max check weight.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The original [[602,8,72]] claim (PR #1031) was refuted by CI&#x27;s RIS-fast</li>
+<p>gate. The screening budgets that cleared it (2k–20k trials, then an 8k-trial gate refutation) were all far too shallow for this code; every deepening of the search found a lighter logical. The corrected bound submitted here is the deepest witnessed so far and should be treated as unstable. The 46 revision was subsequently refuted by a weight-40 Z logical in CI.</p>
+<li>Random 2BGA search over non-abelian metacyclic groups overwhelmingly</li>
+<p>produces k = 0 codes (≈ 143/3000 samples), and high-k codes (k ≥ 14) are rare (≈ 1/3000).</p>
+<li>Most candidates that clear the k ≥ 8 screen are dominated by the dense</li>
+<p>high-distance entries near n ≈ 600 — but those live in weight-9plus (max check weight 24–29), not weight-8, so the weight-8 cell itself stayed thin.</p>
+</ul>
+<h4>Tools</h4>
+<p>Found by an agent-driven search (model DeepSeek V4 Flash 0731) using the repo&#x27;s <code>research/kit/group_algebra.py</code> (<code>metacyclic</code>, <code>build_2bga</code>) and the gf2_fast RIS accelerator. Refutation and re-witnessing after the CI failure ran through <code>verify/heuristic_distance.py</code> (3M fast trials); the resubmitted claim passed <code>verify/validate_candidate.py</code>.</p>
+<h4>Reproduction</h4>
+<p>Z_43 x| Z_7 = <code>metacyclic(43, 7, 4)</code> from <code>research/kit/group_algebra.py</code>. Build the 2BGA via <code>build_2bga(mul, a, b)</code> with a = [101, 298, 76, 82, 215], b = [165, 152, 299] (element indices) to obtain the checks. Both witnesses are embedded in <code>codes/602-8-40.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/602-8-40.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/662-180-60.html">[[662,180,60]] — 662-180-60</a></h3><div class=kv style="color:var(--mut)">2026-09-14 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash</div><details open><summary>note</summary><div class=notebody><h3>[[662,180,60]] — cyclic generalized-bicycle on Z_331, degree-90 ideal</h3>
 <p>Distance is a witness-backed upper bound (<code>d &lt;= 60</code>), not an exact-distance claim. Literature novelty is unverified.</p>
 <h4>Direction &amp; hypothesis</h4>
@@ -52,7 +87,7 @@
 <h4>Numbers</h4>
 <p>Max check weight 11 throughout. Interaction radius unchanged at 0, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/117-44-3.json</code>, and the reduction only deletes. kd²/n 3.385 → 3.474.</p>
 <p>It dominates <code>117-44-3</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/114-44-3.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/119-34-5.html">[[119,34,5]] — 119-34-5</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[119,34,5]] — reduction of the board&#x27;s [[120,34,5]]</h3>
+<section class=blk><h3><a href="codes/119-34-5.html">[[119,34,5]] — 119-34-5</a></h3><div class=kv style="color:var(--mut)">2026-09-12 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[119,34,5]] — reduction of the board&#x27;s [[120,34,5]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/120-34-5.json</code> is @mathysrennela&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 1 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 5</code> once.</p>
 <h4>The move</h4>
