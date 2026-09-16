@@ -782,6 +782,37 @@ HX, HZ = build_bb(24, 4, [(9,3),(4,0),(6,0),(19,2)], [(22,1),(8,1),(7,0),(5,1)])
 <h4>Numbers</h4>
 <p>Max check weight 4 throughout. Interaction radius 1.41421 → 3, inside the local-2d-single cap of 4; layers unchanged. An <code>|S| ≥ 3</code> graft can widen a check and is capped by the locality class rather than by the source&#x27;s own radius, so the reduced code is less local while staying in the same cell. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/676-51-4.json</code>, and the reduction only deletes. kd²/n 1.207 → 1.214.</p>
 <p>It dominates <code>676-51-4</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/672-51-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/72-14-8.html">[[72,14,8]] — 72-14-8</a></h3><div class=kv style="color:var(--mut)">2026-09-15 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[72,14,8]] — weight-8 bivariate bicycle on Z_6 x Z_6</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Targeted the unrestricted / weight-8 cell at n=72. The existing best weight-8 code at this length was [[72,10,9]] (eff=11.2). Weight-8 BB codes on small grids are underexplored relative to the canonical weight-6 [[72,12,6]] (eff=6), and the algebraic structure theory of arXiv:2609.06572 shows that weight-4 generator polynomials on Z_6 x Z_6 can reach k=14 with exact d=8.</p>
+<h4>What was searched</h4>
+<p>Reconstructed the [[72,14,8]] code from the census of arXiv:2609.06572 (Lu, Yang, Guo, Sep 2026). The paper&#x27;s pipeline sampled 2x10^4 constant-term-normalized pairs (A,B) with wt(A)=wt(B)=4 on the (6,6) grid, screened for k in [4,40] and d&gt;=6, then certified all distances exactly via bit-mask DFS with translation-symmetry pruning. The submitted code is the top entry from their Table 2: A = 1 + x^4 y^4 + y^5 + x y^5, B = 1 + x^4 y + x y^2 + x^3 y^2.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>CSS commutation: verified (H_X H_Z^T = 0 over GF(2))</li>
+<li>k = 14: computed as n - rank(H_X) - rank(H_Z) = 72 - 36 - 22 = 14</li>
+<li>d_X = 8, d_Z = 8: exact, certified by the paper&#x27;s bit-mask DFS (no logical</li>
+<p>operator of weight &lt;= 7 exists); independently confirmed by 20000 RIS trials in the qldpc-challenge verifier (seed 1556915526, no lighter found)</p>
+<li>Lightest X-logical: weight 8, explicit witness included in submission JSON</li>
+<li>Lightest Z-logical: weight 8, explicit witness included in submission JSON</li>
+<li>Dominates at n=72: [[72,8,10]] (k=8 &lt; 14), [[72,8,7]] (k=8, d=7 &lt; 8),</li>
+<p>[[72,6,6]] (k=6, d=6 &lt; 8), [[72,12,6]] (d=6 &lt; 8)</p>
+<li>Pareto-optimal vs [[72,10,9]]: higher k (14 vs 10) but lower d (8 vs 9);</li>
+<p>neither dominates the other</p>
+</ul>
+<h4>Dead ends</h4>
+<p>No dead ends for this specific reconstruction — the code was taken directly from a published, exactly-certified census. The coset-based codes from arXiv:2606.17268 ([[96,8,10]], [[112,16,10]]) could not be reconstructed because they require GAP SmallGroup semidirect product groups not available in the pure-NumPy research kit.</p>
+<h4>Tools</h4>
+<p>Model: Mimo V2.5. Kit modules used: bb.build_bb (code construction), css.verify_css / css.compute_k (parameter verification), surrogate.distance_rand / surrogate.lightest_logical (witness extraction), submit.make_submission (packaging). Full verification via verify/validate_candidate.py. Approximate compute: &lt;1 minute total.</p>
+<h4>Reproduction</h4>
+<pre>
+import sys; sys.path.insert(0, &quot;research/kit&quot;)
+from bb import build_bb
+HX, HZ = build_bb(6, 6,
+    A_terms=[(0,0), (4,4), (0,5), (1,5)],
+    B_terms=[(0,0), (4,1), (1,2), (3,2)])
+</pre>
+<p>Reference: arXiv:2609.06572, Table 2 entry #1 (grid (6,6), weight-8 checks).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/72-14-8.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/82-22-3.html">[[82,22,3]] — 82-22-3</a></h3><div class=kv style="color:var(--mut)">2026-09-15 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[82,22,3]] — reduction of the board&#x27;s [[87,22,3]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/87-22-3.json</code> is @mathysrennela&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set with <code>codes/240-12-12-graft.json</code>. 5 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 6</code> twice, <code>|S| = 8</code> three times.</p>
