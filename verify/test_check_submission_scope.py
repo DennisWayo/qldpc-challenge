@@ -1,6 +1,8 @@
-"""The scope check's notion of untrusted code data must match the workflow's:
-codes/*.json and anything under circuits/<slug>/, so a PR cannot pair a
-circuit-artifact change with a verifier edit any more than a codes/ change.
+"""Keep the scope check's notion of code data aligned with the workflow's.
+
+codes/*.json and anything under circuits/<slug>/ are code data, so a PR
+cannot pair a circuit-artifact change with a verifier edit any more than a
+codes/ change.
 """
 import check_submission_scope as S
 

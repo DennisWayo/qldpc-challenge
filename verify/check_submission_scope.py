@@ -58,8 +58,11 @@ def added_files(base, root):
 
 
 def is_code_submission(path):
-    """Untrusted code data: a board entry or its circuit-tier artifacts
-    (circuits/<slug>/..., the claim surface PR #1012 binds to the entry)."""
+    """Return whether path is untrusted code data.
+
+    A board entry, or its circuit-tier artifacts under circuits/<slug>/ (the
+    claim surface PR #1012 binds to the entry).
+    """
     return ((path.startswith("codes/") and path.endswith(".json"))
             or (path.startswith("circuits/") and path.count("/") >= 2))
 
