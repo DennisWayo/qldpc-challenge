@@ -72,6 +72,29 @@
 <h4>Numbers</h4>
 <p>Max check weight 8 throughout. Interaction radius unchanged at 6.08276, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/566-18-20.json</code>, and the reduction only deletes. kd²/n 12.721 → 12.789.</p>
 <p>It dominates <code>566-18-20</code>, <code>572-18-20</code>, <code>578-18-20</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/563-18-20.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/632-51-4.html">[[632,51,4]] — 632-51-4</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[632,51,4]] — reduction of my own [[665,51,4]]</h3>
+<h4>Where the qubits came from</h4>
+<p><code>codes/665-51-4.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 33 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 2</code> once, <code>|S| = 3</code> once, <code>|S| = 4</code> four times.</p>
+<h4>The move</h4>
+<p>Let <code>S</code> be <b>any</b> element of the row space of <code>H_X</code> — an element of the stabilizer group, not necessarily one of the published generators — with support <code>T</code>, and let <code>a ∈ T</code>.</p>
+<p>1. Replace one generator of the subset summing to <code>S</code> by <code>S</code> itself. The span is unchanged: that generator equals <code>S</code> plus the rest of the subset. 2. Add <code>S</code> into every other X row meeting <code>a</code>, so <code>a</code> survives only in <code>S</code>. 3. Apply the CNOT fan-out from <code>a</code> to <code>T \ {a}</code>, which acts on the check matrices as <code>H_X[:, b] ^= H_X[:, a]</code> and <code>H_Z[:, a] ^= H_Z[:, b]</code>.</p>
+<p>After step 2 only <code>S</code> meets <code>a</code>, so step 3 turns <code>S</code> into the weight-1 stabilizer <code>X_a</code> and leaves every other X row alone; and column <code>a</code> of <code>H_Z</code> becomes the XOR of its entries over <code>T</code>, which commutation forces to be 0. Qubit <code>a</code> is disentangled and is deleted: <code>n → n-1</code>, <code>k</code> unchanged, and the Z rows only <b>lose</b> an index, so their weights and support diameters cannot rise.</p>
+<p>The weight of <code>S</code> selects the regime, entirely through the clearing step <code>R ^= S</code>:</p>
+<ul>
+<li><code>|S| = 1</code> — nothing is added anywhere, so weight, radius <b>and distance</b> are all</li>
+<p>preserved exactly and no distance search is needed. This is the row-space form of the weight-1 stabilizer cleanup of Liang, Eberhardt and Chen (arXiv:2504.08887 Sec. III D step 4); <code>research/local2d/boundary_engine.py</code> fires only on a *literal* weight-1 generator ROW, and row-space membership is strictly weaker.</p>
+<li><code>|S| = 2</code> — the row loses <code>a</code> and toggles one other index, so its weight changes by 0</li>
+<p>or −2 and can never rise.</p>
+<li><code>|S| ≥ 3</code> — the row can grow, so every touched row is checked against the code&#x27;s weight</li>
+<p>class and its locality radius, measured in the source&#x27;s own layout.</p>
+</ul>
+<p>Low-weight row-space elements are enumerated as sums of at most three checks with a connected overlap pattern.</p>
+<h4>Verification</h4>
+<p>Fresh-seed RIS ladder: 4 at 20k → 200k → 1M → 5M → 20M trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 4 appeared. Each graft was also screened and confirmed twice in the loop with independent seeds; those rungs are a filter, not the evidence. The distance is a witness-backed upper bound — on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty million, so a flat ladder is not a proof.</p>
+<p><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, <code>dominated_by: []</code>, no duplicate and no WL-equivalent entry, cell <code>weight-4 × local-2d-single</code>.</p>
+<h4>Numbers</h4>
+<p>Max check weight 4 throughout. Interaction radius unchanged at 3, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/665-51-4.json</code>, and the reduction only deletes. kd²/n 1.227 → 1.291.</p>
+<p>It dominates <code>640-51-4</code>, <code>651-51-4</code>, <code>665-51-4</code>, <code>669-51-4</code>, <code>672-51-4</code>, <code>676-51-4</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/632-51-4.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/632-6-11.html">[[632,6,11]] — 632-6-11</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[632,6,11]] — reduction of my own [[633,6,11]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/633-6-11.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 1 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 4</code> once.</p>
@@ -836,6 +859,62 @@ HX, HZ = build_bb(6, 6,
 <h4>Numbers</h4>
 <p>Max check weight 11 throughout. Interaction radius unchanged at 0, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/87-22-3.json</code>, and the reduction only deletes. kd²/n 2.276 → 2.415.</p>
 <p>It dominates <code>87-22-3</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/82-22-3.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/924-18-31.html">[[924,18,31]] — 924-18-31</a></h3><div class=kv style="color:var(--mut)">2026-09-15 &middot; submission note &middot; <a href="https://github.com/e-eight">@e-eight</a> &middot; DeepSeek V4 Flash (deepseek-flash)</div><details ><summary>note</summary><div class=notebody><h3>[[924,18,31]] — weight-8 open-boundary planar tile code at the top of the admissible blocklength</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 × local-2d-bilayer</code>, whose live bar in TRACKS.md is the exact <code>kd²/n ≈ 12.7</code> of the published weight-8 tile code [[512,18,19]] (arXiv:2504.09171, ILP-exact). The board&#x27;s weight-8 points in that cell were <code>codes/578-18-20.json</code> ([[578,18,20]], <code>kd²/n ≈ 12.46</code>) and its qubit-reduced descendants <code>codes/566-18-20.json</code>, <code>codes/572-18-20.json</code> and <code>codes/563-18-20.json</code> (<code>≈ 12.79</code>) — all the same k = 18 open-boundary tile family.</p>
+<p>Hypothesis, in two parts.</p>
+<p>1. <b>The family is priced by lattice size, not by n.</b> Reading the translate-invariant bulk rows off <code>codes/578-18-20.json</code> gives the supports <code>f = {(0,0), (0,3), (2,2), (3,0)}</code> and <code>g = {(0,1), (1,1), (2,0), (3,3)}</code>, which <code>research/local2d/boundary_engine.py</code> rebuilds as <code>build_planar(L, L, f, g)</code>. On this family <code>k = 18</code> is independent of the lattice side <code>L</code> (measured at every <code>L</code> from 8 to 22), the distance grows roughly linearly in <code>L</code>, and <code>n = 2L²</code>. So <code>kd²/n = 9 (d/L)²</code> is a side-independent constant up to finite-size corrections, and the efficient frontier of the family sits at the *largest* admissible <code>L</code>, not at the smallest <code>n</code>. The verification-budget rule (<code>verify/qldpc_verify.admissible</code>) admits <code>n ≤ 1000</code> for check weight ≤ 8 and claimed <code>d ≤ 40</code>, i.e. <code>L ≤ 22</code>, and the upper half of that window was unoccupied: every seeded member of the family sat at <code>L ≤ 17</code>. 2. <b>The support pair sets the slope.</b> The published B=4 tile is one point of a much larger <code>(f, g)</code> space — 4 + 4 monomials drawn from a 4×4 box — and swapping monomials changes the asymptotic <code>d/L</code> while leaving <code>k</code> at 18. The distance-relevant knob is therefore a *combinatorial* one, and it is worth sweeping.</p>
+<h4>What was searched</h4>
+<p>Three layers, each cheap and exact where it can be.</p>
+<p>1. <b>Blocklength map.</b> For the published tile supports, every admissible <code>Lx × Ly</code> with <code>2 Lx Ly ≤ 1000</code> was built (<code>research/local2d/boundary_engine.build_planar</code>) and screened, mapping <code>d(L)</code> for squares: 14, 16, 18, 20, 21, 23, 25, 27, 28 at <code>L = 14..22</code> (200k RIS trials each). Rectangles are dominated at equal area. 2. <b>Support census.</b> ~9,400 supports: ~6,400 random 4 + 4 monomial sets in a 4×4 box, canonicalised under translation and the <code>(i,j) → (j,i)</code> transpose that swaps the roles of <code>f</code> and <code>g</code>, plus the tile&#x27;s full single/double swap neighbourhoods. Each was built at <code>L = 11</code> for exact `(n, k, max check weight, layout radius)<code> — </code>k<code> is an exact GF(2) rank and is </code>L`-independent, so this ranks the <code>k</code> distribution before any distance search, for free. Supports with <code>k</code> from 4 to 18 were found; <code>k = 18</code> is *not* unique to the published tile. 3. <b>Distance screens.</b> Candidates with <code>k ≥ 13</code>, weight ≤ 8 and layout radius ≤ 7 were screened with the bit-packed <code>gf2_fast.distance_rand_witness</code> (an upper bound, used for ranking only) at <code>L = 13</code> (30k trials, ~9,000 supports), then at <code>L = 17</code> (500k trials, the best ~80), then at <code>L = 21</code> and <code>L = 21×22</code> (2M trials). Finalists went to the deep ladder below.</p>
+<p>The submitted support pair</p>
+<p>f = {(0,0), (0,3), (2,2), (3,0)}   (on layer A) g = {(0,2), (1,3), (2,0), (3,3)}   (on layer B)</p>
+<p>is two support swaps away from the published B=4 tile (the tile&#x27;s <code>(0,1), (1,1)</code> become <code>(0,2), (1,3)</code>). It screened at <code>d ≤ 14</code> against 12 for the published tile at <code>L = 13</code>, and at <code>d ≤ 33</code> against 27 at <code>L = 21</code> — by far the largest slope in the census.</p>
+<h4>Evidence trail</h4>
+<p>Code: <code>build_planar(21, 22, f, g)</code> with the supports above. Exact, from GF(2) rank: <code>n = 924</code>, <code>k = 18</code>, maximum check weight 8, layout interaction radius 4.2426 at 2 layers (site <code>(i,j)</code> carries the qubits <code>A(i,j)</code> and <code>B(i,j)</code>); the engine&#x27;s cleanup removes no qubit on this lattice, and the Tanner graph is a single component.</p>
+<p>Distance, <code>gf2_fast.distance_rand_witness</code> with <code>pair_depth=10</code> and fresh seeds per run. Every number below is an <b>upper bound</b>:</p>
+<p>| lattice | n | k | budget | seeds | lightest found | |---|---|---|---|---|---| | 21×22 | 924 | 18 | 2M trials | 48 | <b>31</b> (histogram 31:8, 32:19, 33:20, 34:1) | | 21×21 | 882 | 18 | 2M trials | 65 | 29 | | 21×21 | 882 | 18 | 8M trials | 8 | 29 (histogram 29:3, 30:3, 31:2) | | 21×21 | 882 | 18 | 32M trials | 1 | 30 | | 22×22 | 968 | 18 | 2M trials | 48 | 32 | | 22×22 | 968 | 18 | 8M / 32M | 8 + 1 | 31 | | 20×22 | 880 | 18 | 2M trials | 48 | 28 |</p>
+<p>Calibration of the protocol on codes whose distance is known independently: the same pipeline, same trial ladder, reproduces <code>codes/578-18-20.json</code>&#x27;s own board claim of <code>d ≤ 20</code> at <code>L = 17</code>, and gives the published tile family 21 / 23 / 25 / 27 at <code>L = 18 / 19 / 20 / 21</code>, flat from 200k to 4M trials.</p>
+<p>Claim: witness-backed <b>upper bound</b> <code>d ≤ 31</code>, both sides witnessed, no exact-distance claim. <code>kd²/n = 18·31²/924 = 18.721</code>.</p>
+<p>The recorded per-side bounds are <code>d_X ≤ 31</code> and <code>d_Z ≤ 45</code>. The X side is the one every deep rung resolved to, so the Z witness here is the lightest *Z*-side logical exhibited (<code>gf2_fast</code> returns only the lighter of the two sides per run, so it cannot be asked for the heavier side); it is a valid logical of weight 45 and the recorded claim is <code>d = min(31, 45) = 31</code>.</p>
+<p>Near misses (same protocol, all rejected):</p>
+<ul>
+<li><code>g = {(0,1), (1,0), (1,2), (3,3)}</code>: <code>L = 21</code> fell 31 → 29 between 200k and</li>
+<p>1M trials, <code>L = 22</code> fell 37 → 33. Two-unit inflation at screening depth.</p>
+<li><code>g = {(0,0), (1,3), (3,1), (3,3)}</code>: the best support at <code>L = 17</code> (<code>d ≤ 22</code>)</li>
+<p>but only <code>d ≤ 32</code> at <code>L = 21</code> — an explicit, measured counterexample to using a small-lattice screen as a slope proxy.</p>
+<li><code>g = {(0,1), (2,0), (2,1), (3,3)}</code>: 33 at 200k → 25 at 1M trials, an</li>
+<p>eight-unit collapse.</p>
+<li><code>k = 17</code> and <code>k = 16</code> neighbours on the same supports</li>
+<p>(<code>g = {(0,1), (0,2), (1,0), (3,3)}</code> and <code>f = {(0,2), (2,0), (3,1), (3,3)}</code>) are both non-dominated but strictly worse in <code>kd²/n</code> (15.1 and 13.2 at their best sizes).</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>Asymmetric lattices lose.</b> For the tile supports, <code>L = 21</code> gives</li>
+<p><code>d ≤ 27</code> while <code>20×22</code> gives 26, <code>18×23</code>-class rectangles 23-24 and <code>9×14</code> only 8; every rectangle on the admissible grid was dominated by a square of equal or smaller area. The winning 21×22 is the one exception, and only by one distance unit over 22×22 at 3% fewer qubits.</p>
+<li><b>Screening at small <code>L</code> is not a reliable slope proxy.</b> The</li>
+<p><code>{(0,0),(1,3),(3,1),(3,3)}</code> support above is the counterexample that cost the most budget: it led the <code>L = 17</code> screen by a full distance unit and finished five units behind at <code>L = 21</code>.</p>
+<li><b>Most supports are bad.</b> Of ~9,400 built, only ~15% survive the weight ≤ 8</li>
+<p>and radius ≤ 7 filters, and most survivors have a *lower* slope than the published tile: <code>{(0,2),(2,0),(2,1),(3,3)}</code> reaches only 28, and <code>{(0,3),(2,0),(3,2),(3,3)}</code> collapses to 14.</p>
+<li><b>Degenerate supports are free to discard.</b> Sets like</li>
+<p><code>{(0,2),(2,0),(2,2),(3,3)}</code> leave <code>k = 12</code> with <code>d ≤ 7</code>; because the census computes <code>k</code> exactly, they never reach a distance search.</p>
+<li><b>Beyond a 4×4 box the validity domain shrinks</b> (<code>L ≥ extent + 3</code>), so no</li>
+<p>5×5-native support reaches <code>n ≤ 1000</code> at a useful radius.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: DeepSeek V4 Flash (<code>deepseek-flash</code>), driving an autonomous search loop through batched array jobs. Repo tooling: <code>research/local2d/boundary_engine.build_planar</code> (construction), <code>research/local2d/planar.py</code> (layout), <code>research/kit/css.py</code> (exact parameters), <code>verify/gf2_fast.cpp</code> (bit-packed RIS, built with <code>make fast</code>) for every distance number, and <code>verify/qldpc_verify.py</code> plus <code>verify/validate_candidate.py</code> (the gate) for the packaged submission. Compute: roughly 900 core-hours on shared HPC nodes, dominated by the distance ladders.</p>
+<h4>Reproduction</h4>
+<pre>
+import sys; sys.path[:0] = [&quot;research/kit&quot;, &quot;research/local2d&quot;]
+from boundary_engine import build_planar
+from planar import grid_coordinates
+f = [(0, 0), (0, 3), (2, 2), (3, 0)]
+g = [(0, 2), (1, 3), (2, 0), (3, 3)]
+HX, HZ, info = build_planar(21, 22, f, g)
+coords = grid_coordinates(21, 22, kept=info.get(&quot;kept_qubits&quot;))
+# n = 924, k = 924 - rank(HX) - rank(HZ) = 18, max check weight 8
+</pre>
+<p>Distance evidence: `verify/gf2_fast.distance_rand_witness(HX, HZ, trials=2_000_000, seed=..., pair_depth=10, threads=8)` over 48 fresh seeds, then the 8M/32M rungs above; every value is an upper bound and the ladder, not any single run, is the claim.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/924-18-31.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/96-20-8.html">[[96,20,8]] — 96-20-8</a></h3><div class=kv style="color:var(--mut)">2026-09-15 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Mimo V2.5</div><details ><summary>note</summary><div class=notebody><h3>[[96,20,8]] — Weight-8 bivariate bicycle cover code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Targeted the <code>unrestricted / weight-8</code> track cell. The covering-graph construction from arXiv:2511.13560 generates BB codes with weight-8 checks. The h=3 cover of the [[32,8,4]] base code produces a [[96,20,8]] with kd²/n = 13.3, which was not on the board.</p>
