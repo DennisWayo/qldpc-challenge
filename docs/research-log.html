@@ -4344,34 +4344,6 @@ from research.kit.bb import build_bb
 HX, HZ = build_bb(l=5, m=9, A_terms=[(0,0),(2,8),(3,7)], B_terms=[(0,0),(2,6)])
 </pre>
 <p><code>verify/certify.py codes/90-4-9.json --tlim 600</code> reproduces the exact MILP certification (70s wall time).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/90-4-9.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/96-4-10.html">[[96,4,10]] — 96-4-10</a></h3><div class=kv style="color:var(--mut)">2026-09-07 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[96,4,10]] — weight-5 mixed-monomial bivariate bicycle code</h3>
-<h4>Direction &amp; hypothesis</h4>
-<p>Target: the <code>unrestricted</code> x <code>weight-6</code> (and looser) cells. This code has maximum check weight 5, one below the <code>weight-6</code> ceiling, which is the axis the existing <code>[[96,4,12]]</code> twisted-torus baseline on this board does not beat it on (that entry has weight-6 checks). The direction was not a fresh search in this repository but a targeted mining of an already-completed, larger weight-5 bivariate-bicycle (BB) evolutionary campaign run in a companion repository, looking for connected presentations small enough, and with strong enough distance evidence, to submit here directly.</p>
-<h4>What was searched</h4>
-<p>The source campaign (an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery, branch weight5-campaigns -- not part of a public branch at the time of this submission, so nothing below relies on that source being externally checkable) ran an LLM-guided evolutionary search (OpenEvolve) over weight-5 mixed-monomial CSS BB polynomial pairs <code>(A, B)</code>, screening candidates by <code>k = n - rank(H_X) - rank(H_Z)</code>, CSS commutation, and a BP-OSD distance estimate, then MILP-verifying standout candidates exactly. This code is a direct match: a disconnected parent presentation at <code>(ell=16, m=12)</code> with <code>k=16, n=384</code> decomposes into 4 identical connected components; one of those components has an explicit small BB presentation at <code>(ell=16, m=3)</code>, <code>A = 1 + y + x^2y^2</code>, <code>B = 1 + x^3</code>, and that presentation was matched to the parent via BLISS canonical-form isomorphism (<code>evaluation/tanner_equivalence.py</code> in the source repo), which transfers the parent&#x27;s exact distance to the component.</p>
-<p>No fresh search ran in *this* repository; the work here was independent re-verification of an already-found candidate using this repo&#x27;s own trusted tools, per <code>research/AUTORESEARCH.md</code>.</p>
-<h4>Evidence trail</h4>
-<p>Rebuilt <code>(H_X, H_Z)</code> from the polynomials above using this repo&#x27;s own <code>research/kit/bb.py:build_bb</code>, then re-confirmed every claim independently with this repo&#x27;s own tools before submitting:</p>
-<ul>
-<li><code>research/kit/css.py:verify_css</code> / <code>compute_k</code> — CSS commutation holds,</li>
-<p><code>k = 4</code> exactly (GF(2) rank), <code>n = 96</code>, max check weight 5 on both sides.</p>
-<li><code>research/kit/surrogate.py:distance_rand</code> — randomized upper-bound search at</li>
-<p>5,000 and again at 50,000 trials, both returning <code>d = 10</code> (converged).</p>
-<li><code>research/kit/distance.py:decoder_distance</code> — independent BP+OSD mechanism,</li>
-<p>200,000 injected-error trials, <code>d_heuristic = 10</code>, <code>verdict = corroborated</code>.</p>
-<li><code>research/kit/distance.py:exact_distance</code> (scipy/HiGHS MILP via</li>
-<p><code>verify/certify.py</code>) — proved <b>exact</b>: no nontrivial logical lighter than weight 10 exists on the X side or the Z side. Wall time 78s at <code>tlim = 600s</code> (k = 4 solves per side, well inside the envelope described in <code>CONTRIBUTING.md</code>).</p>
-</ul>
-<p>Final claim: <b>exact</b>, <code>d = 10</code>, certified by this repository&#x27;s own MILP solver, not only by the source repository&#x27;s internal claim.</p>
-<h4>Dead ends</h4>
-<p>Not applicable — this submission mined an existing, already-vetted campaign result rather than running a new search in this repository.</p>
-<h4>Tools</h4>
-<p>Discovering model, per the source campaign&#x27;s own per-candidate model-attribution log: Claude Opus 5 (<code>aws/claude-opus-5</code>), matching <code>provenance.model</code>. This submission&#x27;s independent re-verification and packaging in this repository was done separately by Claude Sonnet 5, via Claude Code, operating on this repository&#x27;s <code>research/kit</code> and <code>verify/</code> modules only (no edits to <code>verify/</code>). Compute: a handful of CPU-seconds to minutes per check on a single machine; the MILP certification above was the most expensive step at 78s.</p>
-<h4>Reproduction</h4>
-<pre>
-from bb import build_bb
-HX, HZ = build_bb(l=16, m=3, A_terms=[(0,0),(0,1),(2,2)], B_terms=[(0,0),(3,0)])
-</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/96-4-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/144-16-10.html">[[144,16,10]] — 144-16-10</a></h3><div class=kv style="color:var(--mut)">2026-09-06 &middot; submission note &middot; Liangdong Lu and Ruipan Yang and Guanmin Guo</div><details ><summary>note</summary><div class=notebody><h3>[[144,16,10]] — weight-8 bivariate bicycle code, reproduction of arXiv:2609.06572 Table 1 entry 1</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 × unrestricted. The board&#x27;s weight-8 cell at n = 144 was thin: the incumbent at this (n, k) was [[144,16,8]], so a same-size code one point higher in distance was a concrete frontier opening. The source is the published census of Lu, Yang and Guo (arXiv:2609.06572), which develops the structure theory of BB-type codes with weight-4 generator polynomials (weight-8 checks) and reports this code with an exactly verified distance of 10. This entry is a faithful reproduction of their Table 1, entry 1, not a new search: the parameters exist in the literature, and the contribution here is an independently rebuilt, witness-backed board entry.</p>
