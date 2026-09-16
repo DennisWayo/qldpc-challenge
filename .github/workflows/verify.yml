@@ -89,16 +89,20 @@ jobs:
         working-directory: submitted
         run: |
           base=origin/${{ github.base_ref }}
-          if git diff --quiet --diff-filter=AM "$base"...HEAD -- codes; then
+          # circuits/<slug>/ is part of an entry's claim surface (PR #1012): the
+          # authorship check and the gate map it back to codes/<slug>.json, so a
+          # circuits-only PR must take the same trusted path as a codes PR.
+          if git diff --quiet --diff-filter=AM "$base"...HEAD -- codes circuits; then
             codes_changed=false
           else
             codes_changed=true
           fi
-          # A PR whose every changed file lives under codes/ cannot have touched
-          # the stack the self-tests exercise (the scope check forbids combining
-          # code data with verify/, workflows, schema, or run_tests.py), so the
-          # self-tests are skipped for it. Anything else changed -> they run.
-          if [ "$codes_changed" = true ] && git diff --quiet "$base"...HEAD -- ':(exclude)codes'; then
+          # A PR whose every changed file lives under codes/ or circuits/ cannot
+          # have touched the stack the self-tests exercise (the scope check
+          # forbids combining code data with verify/, workflows, schema, or
+          # run_tests.py), so the self-tests are skipped for it. Anything else
+          # changed -> they run.
+          if [ "$codes_changed" = true ] && git diff --quiet "$base"...HEAD -- ':(exclude)codes' ':(exclude)circuits'; then
             only_codes=true
           else
             only_codes=false

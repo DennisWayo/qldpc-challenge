@@ -17,7 +17,16 @@ the PR job's minutes -- for claims nothing in the PR had touched. With
 circuits/<slug>/ changed since REF (the same diff principle gate_changed prices
 by); every other claim was admitted when it merged and is re-measured in full
 on every push to main, which runs without the flag. A diff that cannot be
-computed falls back to re-measuring everything."""
+computed falls back to re-measuring everything.
+
+Two things make the skip safe, and one is a cost. Safe: an unchanged claim
+can only go stale through the verifier stack (a stim bump in uv.lock, a
+ler_tools edit), and check_submission_scope.py rejects any PR that mixes those
+critical files with codes/ -- so such a change arrives without code data and
+CI routes it to the unflagged, full re-measure. Cost: for entries a PR does
+not touch, LER regression detection moves from pre-merge to the post-merge
+push run, and a failing push run reverts nothing on its own; it is a signal
+to a maintainer, not a gate."""
 
 import argparse
 import glob
