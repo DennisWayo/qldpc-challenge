@@ -1,0 +1,25 @@
+{
+ "name": "[[140,6,14]] twisted-torus BB code (arXiv:2503.03827)",
+ "d": 14,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 14,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1367.6,
+   "note": "no logical < 14 exists"
+  },
+  "Z": {
+   "value": 14,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1615.3,
+   "note": "no logical < 14 exists"
+  }
+ },
+ "tlim_per_solve": 1800,
+ "symmetry": false,
+ "d_exact": true
+}

@@ -1,0 +1,22 @@
+{
+ "name": "[[242,12,12]]",
+ "d": 12,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "sides": {
+  "X": {
+   "value": 12,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 73.7,
+   "note": "no logical < 12 exists"
+  },
+  "Z": {
+   "value": 13,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 523.2,
+   "note": "no logical < 13 exists"
+  }
+ },
+ "d_exact": true
+}

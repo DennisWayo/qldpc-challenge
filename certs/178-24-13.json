@@ -1,0 +1,25 @@
+{
+ "name": "[[178,24,13]] univariate bicycle UB(a,l=5)",
+ "d": 13,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 13,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 604.7,
+   "note": "no logical < 13 exists"
+  },
+  "Z": {
+   "value": 13,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1241.9,
+   "note": "no logical < 13 exists"
+  }
+ },
+ "tlim_per_solve": 1800,
+ "symmetry": true,
+ "d_exact": true
+}

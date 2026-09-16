@@ -1,0 +1,25 @@
+{
+ "name": "[[182,6,12]] weight-5 cyclic generalized bicycle code on Z_91, two-layer 2D-local layout",
+ "d": 12,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 12,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 49.4,
+   "note": "no logical < 12 exists"
+  },
+  "Z": {
+   "value": 12,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 33.7,
+   "note": "no logical < 12 exists"
+  }
+ },
+ "tlim_per_solve": 1800,
+ "symmetry": true,
+ "d_exact": true
+}
