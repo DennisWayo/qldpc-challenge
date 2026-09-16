@@ -3,7 +3,7 @@
   "files": {
     ".github/workflows/prose.yml": "371b8311ddc77dfb836e02ee0ef483eb08231a12258f4a187313f09d366a7f41",
     ".github/workflows/refute-weekly.yml": "5a3d9b6d6b0563f3b0259eb918ccfcf4f0a419d6b3fc74cdd321ce5dc3e95ff6",
-    ".github/workflows/verify.yml": "b8294de4a8c1ccf38533dfe7c632812b91493f4b81d7c0f41434e28207483834",
+    ".github/workflows/verify.yml": "6a13bdb936f2680ba82c1c8537bf4566f7139ae925a4f04b02b723ac4969184d",
     "Makefile": "30f2d73d7fc62cb05171a603d899bc27cd4f1b4bbdc3bf59bfdf98b8d8b4bc56",
     "pyproject.toml": "80042e2387ce95973d1abdc12435f09c0ebf27faff489195ed19c89f383b3a65",
     "uv.lock": "61ecdbd6e185ccb5a6a06a7cb589c5d144002a3eb281fbbf99c2659b6593bffb",
@@ -14,7 +14,7 @@
     "verify/build_receipt.py": "e748231cd0bd9a9a96023a1349763ed214b7ea894336834e76afb0c065a80afd",
     "verify/check_authorship.py": "55cd8402b0bc45cf253aba4e81491ee6716fa92ee828bef195e7b761e6e814cb",
     "verify/check_prose.py": "59d0188146f81285b06016d9a942f67349e72e72bfe06085eb8831f3d49d8fbc",
-    "verify/check_submission_scope.py": "04945a2ef6b0cabd7b8c3998aa33aa8c66cac158dd4955272742dbaa8c850bf1",
+    "verify/check_submission_scope.py": "5a74d5cf9c47f36e423455eae2e1e42f2e573dbb6ce406d562e091c16bac91e2",
     "verify/check_validator_integrity.py": "d739db6680bd4c4b481e811234ed6abf470cbf09449825e1dbdb08261234ebd3",
     "verify/circuit_tools.py": "37a3082aabc26d908bcf2612a6a2f5fb35788a5aa7e93249692f976aaa148106",
     "verify/circuit_verify.py": "b55f03ebbc82c83b19abcbad2798b789c4aa1b9543cea47d6dba5199d124bbca",
@@ -27,6 +27,6 @@
     "verify/qldpc_verify.py": "8196d1548914ac3f26e0fe938dad86ec53e64bce365b09987b463ef4a6081a4b",
     "verify/refute_board.py": "d45c3d4475acd77dac0e6da7854c8d9dd142d1d077b75a166d6d3e5f729ef20d",
     "verify/validate_candidate.py": "e85d28612a9b798e4693c86bbaacc3fd84a674890fe6af4d8253cf07018183b1",
-    "verify/verify_all.py": "baf1ef0b93214bc725d191393eeab9dffd33c589c176464b62ec23c4951ea5b2"
+    "verify/verify_all.py": "ef397f384495353fd230ed1e0b7fdf5f378d6496078d99aed5cdbc88b383c648"
   }
 }
