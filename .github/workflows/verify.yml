@@ -48,7 +48,11 @@ jobs:
 
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # 90 min fast-pass cap (gate_changed.FAST_SECONDS) + ~30 min of fixed steps
+    # + margin. Hitting this means a hang or a bug, not a large code.
+    timeout-minutes: 130
+    env:
+      PYTHONUNBUFFERED: "1"   # a killed step still leaves its log
     steps:
       - name: check out submitted tree
         uses: actions/checkout@v4
@@ -131,7 +135,7 @@ jobs:
         if: github.event_name != 'pull_request' || steps.changes.outputs.codes_changed != 'true'
         working-directory: submitted
         run: uv run --frozen --extra research python verify/verify_all.py
-      # Cheap metadata checks run BEFORE the ~15-minute refutation gate: a PR that
+      # Cheap metadata checks run BEFORE the (up to ~95-minute) refutation gate: a PR that
       # fails one of them should not first burn a full gate run (PR #278 spent the
       # whole gate on 18 valid layouts and then died on one authorship mismatch).
       - name: authorship check (PR author must be a listed @handle author)

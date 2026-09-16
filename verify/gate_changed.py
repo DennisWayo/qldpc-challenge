@@ -3,7 +3,9 @@
 Runs independent bounded, fixed-seed refutation searches -- python RIS
 (heuristic_distance), the syndrome decoder (decode/distance, needs ldpc), and,
 for frontier-advancing claims, a ~150x-deeper accelerated RIS pass (gf2_fast,
-built via `make fast`) whose finds only count after the pinned python stack
+built via `make fast`; capped at FAST_SECONDS wall-clock or its trial target,
+whichever binds first, with the completed count in the receipt) whose finds
+only count after the pinned python stack
 validates the witness -- only on the code/example submissions changed in this
 PR, and exits non-zero if ANY finds a logical lighter than the claimed distance
 (an over-claim). With the extension built, deep claims get 1 python RIS seed
@@ -59,6 +61,7 @@ import os
 import secrets
 import subprocess
 import sys
+import time
 
 import numpy as np
 
@@ -81,6 +84,28 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Fixed thread count for the fast pass so its verdict is reproducible from the
 # printed seed alone (the per-thread RNG streams depend on the split).
 FAST_THREADS = 4
+
+# Wall-clock cap on the fast pass alone: it stops at its trial target or after
+# this long, whichever comes first, and the receipt records the trials it
+# completed. Per-trial cost grows with n, so an uncapped 8M-trial target
+# outgrows the CI job at n~900+. 90 min matches the blocklength cap: the hosted
+# runner reaches ~8M trials at n=1000 in about that long (CONTRIBUTING.md).
+FAST_SECONDS = 90 * 60.0
+# Slices let the deadline be checked between accelerator calls. Sizes depend on
+# the target only (10k doubling to 200k, then flat), so the same seed replays
+# the same slices on any machine and a trimmed run is a prefix of the full one.
+# Overshoot past the deadline is at most one slice.
+FAST_SLICE_MIN, FAST_SLICE_MAX = 10_000, 200_000
+FAST_PROGRESS_SECONDS = 300.0
+
+
+def fast_slices(trials):
+    """Deterministic slice sizes summing to `trials` (see FAST_SLICE_MIN)."""
+    out, size = [], FAST_SLICE_MIN
+    while sum(out) < trials:
+        out.append(min(size, trials - sum(out)))
+        size = min(size * 2, FAST_SLICE_MAX)
+    return out
 
 # Structural (circulant generalized-bicycle) pass, issue #942. Trials are cheap
 # here because the search space is one circulant block rather than the whole
@@ -467,31 +492,75 @@ def _circuit_refute(doc, circuits_dir, seed, trials_override=None):
     return hits, notes
 
 
-def _fast_refute(doc, seed, trials):
-    """Deep RIS via the optional C++ accelerator, kept SOUND the same way the
-    python passes are: the accelerator only proposes (weight, side, support);
-    the find counts as a refutation only after the pinned python stack confirms
-    the support is a genuine nontrivial logical of that weight, lighter than
-    the claim. An invalid or non-improving find is reported as a miss, never
-    trusted. Returns the refute_check tuple shape: (refuted, d, witness, trials)."""
-    n = doc["n"]
-    HX = H._matrix(doc["checks"]["X"], n)
-    HZ = H._matrix(doc["checks"]["Z"], n)
-    w, side, support = GF.distance_rand_witness(
-        HX, HZ, trials=trials, seed=seed, pair_depth=8, threads=FAST_THREADS)
-    claimed = int(doc["distance"]["d"])
-    if not side or w >= claimed:
-        return False, (w if side else None), None, trials
+def _validated_logical(HX, HZ, n, w, side, support):
+    """Confirm an accelerator proposal under the pinned python stack.
+
+    True iff (weight w, side, support) is a genuine nontrivial logical of
+    exactly that weight; anything else is never trusted.
+    """
     v = np.zeros(n, dtype=np.int8)
     v[list(support)] = 1
     Hcheck = HZ if side == "X" else HX
     L = gf2.logical_basis(HX, HZ) if side == "X" else gf2.logical_basis(HZ, HX)
-    valid = (int(v.sum()) == w
-             and not ((Hcheck @ v) % 2).any()
-             and bool(((L @ v) % 2).any()))
-    if not valid:
-        return False, None, None, trials
-    return True, w, sorted(int(q) for q in support), trials
+    return (int(v.sum()) == w
+            and not ((Hcheck @ v) % 2).any()
+            and bool(((L @ v) % 2).any()))
+
+
+def _fast_refute(doc, seed, trials, max_seconds=None):
+    """Deep RIS via the optional C++ accelerator, kept SOUND the same way the
+    python passes are: the accelerator only proposes (weight, side, support);
+    a find counts as a refutation only after the pinned python stack confirms
+    the support is a genuine nontrivial logical of that weight, lighter than
+    the claim. Invalid proposals are never trusted -- and never allowed to
+    hide a valid one: every proposal below the claim is kept and validated in
+    ascending weight until one holds, so a bogus lighter proposal from a later
+    slice cannot mask a genuine refutation from an earlier one.
+
+    Stops after `trials` permutations or `max_seconds` wall-clock, whichever
+    comes first. The accelerator is driven in slices whose sizes depend only on
+    `trials` (fast_slices), each with its own derived seed, and the deadline is
+    checked between slices; a re-run with the same seed replays the same slices
+    in the same order on any machine, so a time-trimmed run is a prefix of the
+    full one. Returns the refute_check tuple shape
+    (refuted, d, witness, trials_completed) -- the LAST field is the count
+    actually searched, which is what the receipt must record."""
+    n = doc["n"]
+    HX = H._matrix(doc["checks"]["X"], n)
+    HZ = H._matrix(doc["checks"]["Z"], n)
+    claimed = int(doc["distance"]["d"])
+    t0 = time.monotonic()
+    deadline = (t0 + max_seconds) if max_seconds else None
+    done, proposals = 0, []                     # proposals: (w, side, support)
+    last_report = t0
+    for i, t in enumerate(fast_slices(trials)):
+        w, side, support = GF.distance_rand_witness(
+            HX, HZ, trials=t, seed=seed + i * 1_000_003, pair_depth=8,
+            threads=FAST_THREADS)
+        done += t
+        if side:
+            proposals.append((int(w), side, tuple(sorted(int(q) for q in support))))
+        now = time.monotonic()
+        if deadline and now >= deadline:
+            break
+        if now - last_report >= FAST_PROGRESS_SECONDS:
+            best = min(proposals, default=None)
+            print(f"  RIS-fast: {done:,}/{trials:,} trials, {now - t0:.0f}s, "
+                  f"best w={best[0] if best else None}", flush=True)
+            last_report = now
+    if done < trials:
+        best = min(proposals, default=None)
+        print(f"  RIS-fast: wall-clock cap reached after {done:,}/{trials:,} "
+              f"trials ({time.monotonic() - t0:.0f}s); best proposal "
+              f"w={best[0] if best else None}", flush=True)
+    # Lightest first; the first proposal the python stack validates wins.
+    for w, side, support in sorted(set(p for p in proposals if p[0] < claimed)):
+        if _validated_logical(HX, HZ, n, w, side, support):
+            return True, w, list(support), done
+    # No validated refutation. Report the lightest non-improving proposal as
+    # the found weight (as before); an invalid sub-claim proposal reports None.
+    above = min((p[0] for p in proposals if p[0] >= claimed), default=None)
+    return False, above, None, done
 
 
 def _structural_refute(doc, seed, trials):
@@ -598,7 +667,9 @@ def main(argv):
     if seed is None:
         seed = secrets.randbelow(2**31)
     print(f"refutation seed = {seed}  "
-          f"(reproduce: python verify/gate_changed.py --seed {seed} <files>)\n")
+          f"(reproduce: python verify/gate_changed.py --seed {seed} <files>; "
+          f"the fast pass is also wall-clock capped, see fast_trials in the "
+          f"receipt)\n")
 
     SD = _load_syndrome()
     if SD is None:
@@ -768,7 +839,7 @@ def main(argv):
         # logicals (86+96 of 427 kernel dimensions on the [[682,172]] entry).
         # 52 of the board's 56 circulant GB entries have a mixed-support
         # witness, so a code that survives stage 1 still owes the full battery.
-        ftrials = 0
+        ftrials = ftarget = 0
         if not struct_refuted:
             # two independent mechanisms; a hit from EITHER (any seed) refutes.
             for si, s in enumerate(seeds):
@@ -787,8 +858,10 @@ def main(argv):
             # would surface a false-negative extension bug by finding what the
             # fast pass missed.
             if GF is not None and deep:
-                ftrials = min(8_000_000, 150 * trials)
-                results["RIS-fast"] = _fast_refute(doc, seed + 7, ftrials)
+                ftarget = min(8_000_000, 150 * trials)
+                results["RIS-fast"] = _fast_refute(doc, seed + 7, ftarget,
+                                                   max_seconds=FAST_SECONDS)
+                ftrials = results["RIS-fast"][3]     # trials actually searched
         hits = {m: (dh, wit) for m, (ref, dh, wit, _) in results.items() if ref}
         # Circuit tier (RFC 0001 step 6): entries shipping syndrome circuits
         # additionally face a bounded RIS search on each memory DEM when the
@@ -802,7 +875,12 @@ def main(argv):
                    f"general battery cannot change a validated refutation and "
                    f"was skipped)")
         else:
-            fast_tag = (f" + fast x {ftrials}" if ftrials else "")
+            fast_tag = ""
+            if ftrials:
+                fast_tag = f" + fast x {ftrials}"
+                if ftrials < ftarget:
+                    fast_tag += (f" of {ftarget} (wall-clock cap "
+                                 f"{FAST_SECONDS / 60:g} min reached)")
             tag = (f"deep, {len(seeds)} RIS seeds x {trials} trials "
                    f"(<={budget:.0f}s each){fast_tag}" if deep else
                    f"standard, {trials} trials (<={budget:.0f}s)")
@@ -819,7 +897,11 @@ def main(argv):
             "trials": 0 if struct_refuted else trials,
             "budget_seconds": 0.0 if struct_refuted else budget,
             "deep": deep,
+            # Trials the fast pass actually completed; equal to fast_target
+            # unless the wall-clock cap (fast_seconds) ended it first.
             "fast_trials": ftrials,
+            "fast_target": ftarget,
+            "fast_seconds": FAST_SECONDS if ftrials else 0.0,
             "structural_trials": struct_trials,
             # Names the mechanism that ended the run early, so a receipt with a
             # short method list is self-explaining rather than looking truncated.

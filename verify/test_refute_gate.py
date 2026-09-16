@@ -338,3 +338,90 @@ def test_main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def test_fast_pass_wall_clock_cap(monkeypatch):
+    """The fast pass stops at its trial target or wall-clock cap, whichever first.
+
+    It reports the trials it actually completed, its slice schedule depends on
+    the target alone (so a trimmed run is a prefix of the full one under the
+    same seed, on any machine), and a bogus lighter proposal can never hide a
+    genuine one. Uses a fake accelerator so the test needs neither gf2_fast
+    nor real wall-clock.
+    """
+    import time as _time
+
+    import gate_changed as gc
+
+    doc = json.load(open(os.path.join(ROOT, "verify", "fixtures", "72-6-6.json")))
+    n = doc["n"]
+    HX = gc.H._matrix(doc["checks"]["X"], n)
+    HZ = gc.H._matrix(doc["checks"]["Z"], n)
+
+    class FakeGF:
+        def __init__(self, sleep=0.0, hits=None):
+            self.calls, self.sleep, self.hits = [], sleep, hits or {}
+
+        def distance_rand_witness(self, HX, HZ, trials, seed, pair_depth, threads):
+            self.calls.append((trials, seed))
+            if self.sleep:
+                _time.sleep(self.sleep)
+            return self.hits.get(len(self.calls), (n + 1, None, ()))
+
+    # Schedule: a function of the target only, summing to it exactly.
+    assert gc.fast_slices(45_000) == [10_000, 20_000, 15_000]
+    assert sum(gc.fast_slices(8_000_000)) == 8_000_000
+    assert max(gc.fast_slices(8_000_000)) == gc.FAST_SLICE_MAX
+
+    # Ample time: the full target is searched, in slices that sum exactly to it.
+    fake = FakeGF()
+    monkeypatch.setattr(gc, "GF", fake)
+    ref, w, wit, done = gc._fast_refute(doc, 7, 45_000, max_seconds=None)
+    assert (ref, w, wit) == (False, None, None)
+    assert done == 45_000 and [t for t, _ in fake.calls] == [10_000, 20_000, 15_000]
+    assert len({sd for _, sd in fake.calls}) == len(fake.calls), "slice seeds must differ"
+
+    # Tight cap: stops early with the count it actually ran, and the slices it
+    # ran are a PREFIX of the untrimmed schedule -- same sizes, same seeds --
+    # even though this run is slower per trial (the fake sleeps).
+    slow = FakeGF(sleep=0.02)
+    monkeypatch.setattr(gc, "GF", slow)
+    ref, w, wit, done = gc._fast_refute(doc, 7, 10_000_000, max_seconds=0.05)
+    assert not ref and 0 < done < 10_000_000 == sum(gc.fast_slices(10_000_000))
+    assert done == sum(t for t, _ in slow.calls) and 1 <= len(slow.calls) <= 5
+    full = FakeGF()
+    monkeypatch.setattr(gc, "GF", full)
+    gc._fast_refute(doc, 7, sum(t for t, _ in slow.calls) + 10_000, max_seconds=None)
+    assert full.calls[:len(slow.calls)] == slow.calls
+
+    # A genuine lighter logical proposed in a LATER slice is validated and
+    # counted, with the completed trials still reported truthfully.
+    L = gf2.logical_basis(HX, HZ)                 # Z-type logicals (in ker H_X)
+    sup = [int(q) for q in np.flatnonzero(L[0])]
+    claim = copy.deepcopy(doc)
+    claim["distance"]["d"] = len(sup) + 1
+    fake = FakeGF(hits={3: (len(sup), "Z", sup)})
+    monkeypatch.setattr(gc, "GF", fake)
+    ref, w, wit, done = gc._fast_refute(claim, 7, 45_000, max_seconds=None)
+    assert ref and w == len(sup) and wit == sorted(sup) and done == 45_000
+
+    # A proposed support that is NOT a logical is rejected, never trusted.
+    bogus = sorted(sup)[:-1]
+    fake = FakeGF(hits={1: (len(bogus), "Z", bogus)})
+    monkeypatch.setattr(gc, "GF", fake)
+    ref, w, wit, done = gc._fast_refute(claim, 7, 30_000, max_seconds=None)
+    assert (ref, w, wit, done) == (False, None, None, 30_000)
+
+    # A genuine weight-w find in slice 2 followed by a BOGUS lighter proposal
+    # in slice 3: the bogus one must not become "best" and mask the real one.
+    fake = FakeGF(hits={2: (len(sup), "Z", sup), 3: (len(bogus), "Z", bogus)})
+    monkeypatch.setattr(gc, "GF", fake)
+    ref, w, wit, done = gc._fast_refute(claim, 7, 45_000, max_seconds=None)
+    assert ref and w == len(sup) and wit == sorted(sup)
+
+    # A valid but non-improving proposal is reported as the found weight.
+    heavy = copy.deepcopy(doc)
+    heavy["distance"]["d"] = len(sup)             # claim equals the find: not lighter
+    fake = FakeGF(hits={1: (len(sup), "Z", sup)})
+    monkeypatch.setattr(gc, "GF", fake)
+    assert gc._fast_refute(heavy, 7, 10_000, max_seconds=None) == (False, len(sup), None, 10_000)
