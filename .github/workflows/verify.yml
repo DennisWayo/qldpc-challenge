@@ -119,7 +119,10 @@ jobs:
       - name: verify all submissions (trusted verifier for code changes)
         if: github.event_name == 'pull_request' && steps.changes.outputs.codes_changed == 'true'
         working-directory: trusted
-        run: uv run --frozen --extra research python verify/verify_all.py --root ../submitted
+        # --ler-base: the sampled LER replica (~4 min/entry on the runner) runs only
+        # for entries this PR changed; unchanged claims are re-measured on every
+        # push to main (the step below, without the flag).
+        run: uv run --frozen --extra research python verify/verify_all.py --root ../submitted --ler-base origin/${{ github.base_ref }}
       - name: verify all submissions
         if: github.event_name != 'pull_request' || steps.changes.outputs.codes_changed != 'true'
         working-directory: submitted
