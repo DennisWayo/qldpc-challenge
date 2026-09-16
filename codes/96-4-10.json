@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "name": "[[96,4,10]] weight-5 mixed-monomial BB code (LLM-guided evolutionary search)",
+  "name": "[[96,4,10]] two-block group algebra CSS (arXiv:2306.16400)",
   "code_type": "CSS",
   "n": 96,
   "k": 4,
@@ -719,17 +719,18 @@
   },
   "provenance": {
     "authors": [
-      "@cbjuan"
+      "Lin, Hsiang-Ku",
+      "Pryadko, Leonid P."
     ],
-    "construction": "Bivariate bicycle code over F_2[x,y]/(x^16-1, y^3-1), weight-5 mixed-monomial polynomials A = 1 + y + x^2 y^2, B = 1 + x^3, found by an LLM-guided evolutionary search (OpenEvolve, weight-5 mixed-monomial campaign) over CSS BB polynomial pairs. This connected (ell=16, m=3) presentation is BLISS-isomorphic to one of 4 identical connected components of a disconnected parent BB code (ell=16, m=12, k=16, n=384, A = 1 + y^4 + x^2 y^8, B = 1 + x^3 y^6) whose exact distance d=10 was established by MILP in the source repository; the component presentation used here was independently re-verified exact (d_X=d_Z=10, no lighter logical on either side) with this repository's own verify/certify.py (scipy/HiGHS MILP, tlim=600s, 78s wall time).",
+    "construction": "Two-block group-algebra (2BGA) code over SmallGroup(48,2), archive row \"48 2 4 10 [2] [3,39]\" (Lin & Pryadko, arXiv:2306.16400; 2BGA-codes archive). Reconstructed here via an equivalent bivariate-bicycle presentation over F_2[x,y]/(x^16-1, y^3-1): A = 1 + y + x^2 y^2, B = 1 + x^3, H_X = [A|B], H_Z = [B^T|A^T]. An explicit CRT relabeling of the 48 group coordinates in each qubit block, plus an exchange of the two 48-qubit blocks, maps this presentation onto the archived row exactly -- the same CSS code up to qubit/check permutation.",
     "references": [
-      "an internal weight-5 bivariate-bicycle evolutionary campaign in github.com/qiskit-community/qcode-discovery (branch weight5-campaigns, not part of a public branch at the time of this submission -- this submission's own distance/CSS claims are independently re-derived and re-verified using only this repository's tools and do not rely on that source being externally checkable)"
+      "arXiv:2306.16400",
+      "https://github.com/QEC-pages/2BGA-codes"
     ],
-    "date": "2026-09-07",
-    "notes": "Independently corroborated with this repo's own tools before submission: research/kit/surrogate.py distance_rand at 5,000 and 50,000 trials both returned d=10; research/kit/distance.py decoder_distance (BP+OSD, 200,000 injected-error trials) returned d_heuristic=10, verdict=corroborated; research/kit/distance.py exact_distance (scipy/HiGHS MILP) proved d_X=d_Z=10 exact. Discovered by Claude Opus 5 (per the source campaign's own per-candidate model-attribution log); this submission's re-verification and packaging was done by Claude Sonnet 5.",
-    "model": "Claude Opus 5",
-    "origin": "submission",
-    "novelty": "unknown"
+    "date": "2023",
+    "novelty": "known_parameters",
+    "notes": "Literature baseline (arXiv:2306.16400, Lin & Pryadko, 28 Jun 2023). This [[96,4,10]] instance is not in the paper's own Table 1 (which stops at smaller cases) but in the paper's companion enumeration archive, github.com/QEC-pages/2BGA-codes, abelian row \"SmallGroup(48,2), 48 2 4 10 [2] [3,39]\". Reconstructed via an equivalent bivariate-bicycle presentation and independently re-verified with this repository's own tools: CSS commutation and k=4 confirmed by direct rank computation; distance re-derived by randomized search (5,000 and 50,000 trials, d=10) and BP+OSD (200,000 trials, d_heuristic=10), then certified exact by MILP (d_X=d_Z=10, no lighter logical on either side; scipy/HiGHS, tlim=600s, 78s wall time). The archive's own reported d<=10 for this row is a QDistRnd probabilistic upper bound; the MILP result above independently certifies it exact. The verifier's 'literature novelty UNVERIFIED' label is by-design (validate_candidate.py performs no literature lookup) and is intentionally not overridden.",
+    "origin": "baseline"
   },
-  "family": "bivariate-bicycle"
+  "family": "2bga-coset"
 }
