@@ -1,0 +1,25 @@
+{
+ "name": "[[259,12,14]] reduction of [[268,12,14]]",
+ "d": 14,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 14,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 474.3,
+   "note": "no logical < 14 exists"
+  },
+  "Z": {
+   "value": 14,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 1558.6,
+   "note": "no logical < 14 exists"
+  }
+ },
+ "tlim_per_solve": 1800,
+ "symmetry": false,
+ "d_exact": true
+}

@@ -1,0 +1,25 @@
+{
+ "name": "[[239,12,12]] graft of [[242,12,12]]",
+ "d": 12,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 12,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 81.7,
+   "note": "no logical < 12 exists"
+  },
+  "Z": {
+   "value": 12,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 236.2,
+   "note": "no logical < 12 exists"
+  }
+ },
+ "tlim_per_solve": 1800,
+ "symmetry": false,
+ "d_exact": true
+}

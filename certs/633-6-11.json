@@ -1,0 +1,25 @@
+{
+ "name": "[[633,6,11]] reduction of [[634,6,11]]",
+ "d": 11,
+ "solver": "CryptoMiniSat 5.14.7 SAT",
+ "encoding": "selector",
+ "sides": {
+  "X": {
+   "value": 11,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.1,
+   "note": "no logical < 11 exists"
+  },
+  "Z": {
+   "value": 11,
+   "exact": true,
+   "status": "UNSAT",
+   "secs": 0.5,
+   "note": "no logical < 11 exists"
+  }
+ },
+ "tlim_per_solve": 1800,
+ "symmetry": false,
+ "d_exact": true
+}
