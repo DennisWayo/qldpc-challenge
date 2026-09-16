@@ -27,6 +27,7 @@ What "verified" means per field:
               diagnostics (radius, qubits/site, spacing, density, bbox).
 """
 
+import glob
 import json
 import re
 import math
@@ -610,6 +611,69 @@ def _verify_semantic(doc, report, record, refute=False, seed=None):
     }
 
     return report
+
+
+
+def _board_entry(path, data):
+    """Verify one board file from the bytes already read (None = oversize)."""
+    entry = {"path": path, "slug": os.path.splitext(os.path.basename(path))[0],
+             "doc": None, "report": None,
+             "size_error": file_size_error(path) or None, "load_error": None}
+    if entry["size_error"] is None and data is not None:
+        try:
+            entry["doc"] = json.loads(data)
+            entry["report"] = verify(entry["doc"])
+        except Exception as e:                  # noqa: BLE001 -- recorded, caller decides
+            entry["load_error"] = f"{type(e).__name__}: {e}"
+    return entry
+
+
+# One snapshot per process: {"dir", "key", "reports"}. The board only moves
+# forward within a process, so more slots would only retain memory (a
+# 619-entry snapshot measured ~62 MB; see issue #966).
+_BOARD_CACHE = {}
+
+
+def board_reports(code_dir):
+    """Verify every <code_dir>/*.json structurally, memoized on the bytes read.
+
+    One process pays for the pass once, whoever asks: the site builder, the
+    candidate validator and several tests each used to rescan and re-verify
+    the whole board (~15-20 s per pass locally, two to three passes per pytest
+    session, all producing identical reports).
+
+    The memo key is a digest of the file names and the exact bytes the pass
+    verifies, so a changed file re-verifies the board however it was written
+    -- an edit that preserves size and mtime (cp -p, rsync -t, touch -r)
+    cannot serve a stale report, and the key describes the content that was
+    read rather than metadata sampled beside it. Hashing the board costs
+    milliseconds against the tens of seconds the pass takes. Structural
+    verification (refute=False) is deterministic, so the cached report is
+    exactly what a fresh call would compute.
+
+    Returns a tuple of dicts {path, slug, doc, report, size_error,
+    load_error}: doc/report are None when size_error (file_size_error) or
+    load_error (a parse or verify exception, recorded as text) is set. The
+    entries are SHARED between callers: treat doc and report as read-only.
+    """
+    import hashlib
+    code_dir = os.path.abspath(code_dir)
+    raw, h = [], hashlib.sha256()
+    for p in sorted(glob.glob(os.path.join(code_dir, "*.json"))):
+        data = None
+        if not file_size_error(p):              # never read an oversize file
+            with open(p, "rb") as f:
+                data = f.read()
+        h.update(os.path.basename(p).encode())
+        h.update(b"\0" + (data if data is not None else b"<oversize>") + b"\0")
+        raw.append((p, data))
+    key = h.hexdigest()
+    if _BOARD_CACHE.get("dir") == code_dir and _BOARD_CACHE.get("key") == key:
+        return _BOARD_CACHE["reports"]
+    reports = tuple(_board_entry(p, data) for p, data in raw)
+    _BOARD_CACHE.clear()
+    _BOARD_CACHE.update(dir=code_dir, key=key, reports=reports)
+    return reports
 
 
 def main(path):
