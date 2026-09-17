@@ -472,11 +472,11 @@ def main():
     with tempfile.TemporaryDirectory() as td:
         make_repo(td, base_doc=HAS_CIRCUIT, extra=STIM)
         git(td, "rm", "-q", "codes/60-8-6.json",
-            "circuits/60-8-6/memory_x.stim")
-        git(td, "commit", "-q", "-m", "delete code and one circuit")
+            *[path for path, _ in STIM])
+        git(td, "commit", "-q", "-m", "delete code and all circuits")
         rc = check_authorship.main(
             ["--author", "bob", "--root", td, "--base", "main"])
-        check("deleting a code and its circuits together fails closed", rc == 1)
+        check("deleting a code and all its circuits together passes", rc == 0)
 
     OTHER = copy.deepcopy(BASE_DOC)
     OTHER["n"], OTHER["k"] = 70, 4

@@ -99,7 +99,9 @@ def test_circuits_change_triggers_gate():
 
 
 def test_orphaned_circuits_fail_closed(tmp_path, capsys, monkeypatch):
-    monkeypatch.setattr(gc, "_circuits_diffed", lambda *args: True)
+    circuit_dir = tmp_path / "circuits" / "orphaned"
+    circuit_dir.mkdir(parents=True)
+    (circuit_dir / "memory_x.stim").write_text("# orphan\n")
     assert gc.main([
         "--code-root", str(tmp_path), "--seed", "1",
         "codes/orphaned.json",
