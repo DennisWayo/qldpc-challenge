@@ -464,6 +464,19 @@ def main():
              None, True, author="alice", base_files=STIM,
              files=[("circuits/60-8-6/memory_x.stim", "# rescheduled\n")],
              base_doc=HAS_CIRCUIT)
+    run_case("orphaned circuits fail closed when no code entry exists",
+             None, False,
+             base_files=[("circuits/70-4-8/memory_x.stim", "# orphan\n")],
+             files=[("circuits/70-4-8/memory_x.stim", "# changed\n")],
+             base_doc=HAS_CIRCUIT)
+    with tempfile.TemporaryDirectory() as td:
+        make_repo(td, base_doc=HAS_CIRCUIT, extra=STIM)
+        git(td, "rm", "-q", "codes/60-8-6.json",
+            *[path for path, _ in STIM])
+        git(td, "commit", "-q", "-m", "delete code and all circuits")
+        rc = check_authorship.main(
+            ["--author", "bob", "--root", td, "--base", "main"])
+        check("deleting a code and all its circuits together passes", rc == 0)
 
     OTHER = copy.deepcopy(BASE_DOC)
     OTHER["n"], OTHER["k"] = 70, 4

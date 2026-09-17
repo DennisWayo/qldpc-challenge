@@ -98,6 +98,25 @@ def test_circuits_change_triggers_gate():
     assert gc.map_changed(paths) == ["codes/25-1-5.json", "codes/72-6-6.json"]
 
 
+def test_orphaned_circuits_fail_closed(tmp_path, capsys):
+    circuit_dir = tmp_path / "circuits" / "orphaned"
+    circuit_dir.mkdir(parents=True)
+    (circuit_dir / "memory_x.stim").write_text("# orphan\n")
+    assert gc.main([
+        "--code-root", str(tmp_path), "--seed", "1",
+        "codes/orphaned.json",
+    ]) == 1
+    assert "no corresponding code entry" in capsys.readouterr().out
+
+
+def test_missing_code_with_empty_circuit_directory_is_skipped(tmp_path):
+    (tmp_path / "circuits" / "deleted").mkdir(parents=True)
+    assert gc.main([
+        "--code-root", str(tmp_path), "--seed", "1",
+        "codes/deleted.json",
+    ]) == 0
+
+
 def test_missing_artifacts_fail_closed(greedy, tmp_path):
     doc, _ = greedy
     with pytest.raises(Exception):

@@ -335,15 +335,27 @@ def main(argv):
             # gate_changed.py).
             print("failing closed: authorship cannot be checked without the diff")
             return 1
-        files = [p for p, s in changes.items() if s in ("A", "M")]
+        # Include deletions: removing only the JSON must not leave circuits
+        # behind. changed_codes already maps circuit diffs with --no-renames.
+        files = list(changes)
     if not files:
         print("no added/changed code submissions to check")
         return 0
 
     violations = []
+    orphaned = False
     for f in files:
         p = f if os.path.isabs(f) else os.path.join(root, f)
         if not os.path.exists(p):
+            slug = os.path.splitext(os.path.basename(f))[0]
+            circuit_dir = os.path.join(root, "circuits", slug)
+            # A complete removal (including a rename's old directory) leaves
+            # no claim to check. Remaining files are still orphaned, even if
+            # this PR deleted the JSON itself.
+            if any(files for _, _, files in os.walk(circuit_dir)):
+                print(f"FAIL  {f}: remaining circuits/ artifacts have no "
+                      "corresponding code entry")
+                orphaned = True
             continue
         try:
             doc = json.load(open(p))
@@ -419,7 +431,7 @@ def main(argv):
         print("If you are submitting on someone's behalf, add yourself as a "
               "co-author, or have them open the PR.")
         return 1
-    return 0
+    return 1 if orphaned else 0
 
 
 if __name__ == "__main__":

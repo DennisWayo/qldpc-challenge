@@ -144,7 +144,7 @@ def map_changed(paths):
 def changed_codes(base, code_root=ROOT):
     try:
         out = subprocess.check_output(
-            ["git", "diff", "--name-only", f"{base}...HEAD", "--",
+            ["git", "diff", "--name-only", "--no-renames", f"{base}...HEAD", "--",
              "codes", "verify/fixtures", "circuits"],
             cwd=code_root, text=True)
     except Exception as e:
@@ -448,7 +448,7 @@ def _circuits_diffed(base, code_root, slug):
     when the diff cannot be computed."""
     try:
         out = subprocess.check_output(
-            ["git", "diff", "--name-only", f"{base}...HEAD", "--",
+            ["git", "diff", "--name-only", "--no-renames", f"{base}...HEAD", "--",
              f"circuits/{slug}"], cwd=code_root, text=True)
         return bool(out.strip())
     except Exception:
@@ -681,7 +681,16 @@ def main(argv):
     records = board_record_slugs(code_root)
     for f in files:
         p = f if os.path.isabs(f) else os.path.join(code_root, f)
-        if not os.path.exists(p):                 # deleted/renamed away
+        if not os.path.exists(p):
+            # Complete removal or a rename's old path leaves no claim.
+            # Reject only artifacts that remain without a matching code,
+            # including when this PR deletes only the JSON.
+            slug = os.path.splitext(os.path.basename(f))[0]
+            circuit_dir = os.path.join(code_root, "circuits", slug)
+            if any(files for _, _, files in os.walk(circuit_dir)):
+                failed += 1
+                print(f"FAIL     {f}: remaining circuits/ artifacts have no "
+                      "corresponding code entry")
             continue
         ferr = file_size_error(p)
         if ferr:
