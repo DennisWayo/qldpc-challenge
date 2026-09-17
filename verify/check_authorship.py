@@ -115,6 +115,18 @@ def code_for_circuit_path(path):
     return None
 
 
+def changed_circuit_codes(base, root=ROOT):
+    """Return code paths whose circuits/<slug>/ claim surface changed."""
+    try:
+        out = subprocess.check_output(
+            ["git", "diff", "--name-only", f"{base}...HEAD", "--", "circuits"],
+            cwd=root, text=True)
+    except Exception as e:
+        print(f"(could not diff circuits vs {base}: {e}); skipping authorship check")
+        return None
+    return {p for p in map(code_for_circuit_path, out.split()) if p}
+
+
 def handles(doc):
     auth = (doc.get("provenance") or {}).get("authors") or []
     out = []
@@ -336,6 +348,14 @@ def main(argv):
             print("failing closed: authorship cannot be checked without the diff")
             return 1
         files = [p for p, s in changes.items() if s in ("A", "M")]
+        circuit_files = changed_circuit_codes(base, root)
+        if circuit_files is None:
+            print("failing closed: authorship cannot be checked without the circuits diff")
+            return 1
+        # Include a code deleted in the same PR as its circuit artifacts.  Its
+        # explicit D status wins in changed_codes(), but the circuit deletion
+        # still changes the entry's protected claim surface.
+        files.extend(sorted(circuit_files - set(files)))
     if not files:
         print("no added/changed code submissions to check")
         return 0
@@ -344,6 +364,14 @@ def main(argv):
     for f in files:
         p = f if os.path.isabs(f) else os.path.join(root, f)
         if not os.path.exists(p):
+            # A circuits/<slug>/ diff maps to codes/<slug>.json above.  If
+            # that entry no longer exists, silently skipping here would leave
+            # the orphaned circuit artifacts outside the authorship boundary.
+            # Fail closed instead; maintainers can then decide whether the
+            # artifacts should be removed or restored to a real entry.
+            violations.append(
+                (f, [], "no corresponding code entry exists for the changed "
+                 "circuits/ artifacts"))
             continue
         try:
             doc = json.load(open(p))

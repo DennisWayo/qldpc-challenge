@@ -681,7 +681,16 @@ def main(argv):
     records = board_record_slugs(code_root)
     for f in files:
         p = f if os.path.isabs(f) else os.path.join(code_root, f)
-        if not os.path.exists(p):                 # deleted/renamed away
+        if not os.path.exists(p):
+            # Deleted/renamed code JSONs have no claim left to refute and are
+            # still skipped.  But circuits/<slug>/ changes map to the same
+            # missing path; those are orphaned claim artifacts and must fail
+            # closed instead of bypassing the gate.
+            slug = os.path.splitext(os.path.basename(f))[0]
+            if _circuits_diffed(base, code_root, slug):
+                failed += 1
+                print(f"FAIL     {f}: changed circuits/ artifacts have no "
+                      "corresponding code entry")
             continue
         ferr = file_size_error(p)
         if ferr:
