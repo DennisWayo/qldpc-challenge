@@ -907,5 +907,49 @@
    "date": "2026-08-20",
    "method": "Tier-0/1 pipeline: spectral (Laplacian eigenvector) initialization snapped to an integer grid, then simulated annealing over site assignments (single-qubit relocations + pair swaps, max-diameter objective, 2 seeds per layer option). Search driven by Claude Fable 5."
   }
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 9,
+    "confidence": "upper_bound",
+    "witness": [
+     27,
+     29,
+     47,
+     50,
+     63,
+     65,
+     117,
+     126,
+     166
+    ]
+   },
+   "Z": {
+    "value": 9,
+    "confidence": "upper_bound",
+    "witness": [
+     56,
+     71,
+     397,
+     405,
+     428,
+     458,
+     698,
+     745,
+     753
+    ]
+   }
+  },
+  "rounds": 9,
+  "stim_version": "1.16.0",
+  "notes": "Generic sequential two-block extraction: one ancilla per check, X checks then Z checks each round with joint reset/measure layers; CX layers are a proper edge coloring of each Tanner graph (4 X + 4 Z CX layers per round, schedule seed 0; hook-aware orders: every CNOT order suffix needs >= d-1 further data errors to complete a logical, layered by min-conflicts search). Screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search; witnesses validated in GF(2).",
+  "contributed_by": {
+   "by": [
+    "@vprusso"
+   ],
+   "date": "2026-09-18",
+   "method": "generic CSS memory schedule: one ancilla per check, CX layers from a bipartite edge coloring, CNOT orders filtered by a hook-error criterion; screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search"
+  }
  }
 }
