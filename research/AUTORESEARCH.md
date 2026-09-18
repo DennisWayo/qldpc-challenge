@@ -91,6 +91,7 @@ family typically lands in.
 | `bb.py` | `bivariate-bicycle` (torus Z_l × Z_m, the "gross code" family) | `weight-6` | abelian circulants commute |
 | `group_algebra.py` | `generalized-bicycle` (2BGA on **any** finite group) | `weight-6` | left/right multiplication commute |
 | `coset.py` | `2bga-coset` (G/H cosets, record efficiencies; non-normal H) | `weight-8` | left action commutes with right action by the normalizer |
+| `nonabelian_lp.py` | `lifted-product` (LP of two base matrices over F_2[G], G non-abelian; the mitten / ZSZ-LP shape of arXiv:2607.28795, arXiv:2607.27644) | `weight-8` (entry weights set it: 6 to 9) | entries of A act by the left regular representation, entries of B by the right one, and the two commute |
 
 `bb.py` is the place to start — the simplest, and any choice of monomials is a valid code.
 `group_algebra.py` generalizes it to non-abelian groups (which can reach odd `k`); `coset.py`
