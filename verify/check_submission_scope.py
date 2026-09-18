@@ -67,6 +67,17 @@ def is_code_submission(path):
             or (path.startswith("circuits/") and path.count("/") >= 2))
 
 
+def submission_slug(path):
+    """Return the board entry a code-data path belongs to.
+
+    codes/<slug>.json and every file under circuits/<slug>/ are one submission,
+    so a first circuit tier (four artifacts) counts as one new code, not four.
+    """
+    if path.startswith("codes/"):
+        return os.path.splitext(os.path.basename(path))[0]
+    return path.split("/")[1]
+
+
 def is_critical(path):
     return path in CRITICAL_FILES or any(path.startswith(p) for p in CRITICAL_PREFIXES)
 
@@ -88,11 +99,12 @@ def main(argv):
         return 1
     codes = [f for f in files if is_code_submission(f)]
     new_codes = [f for f in added if is_code_submission(f)]
+    new_slugs = sorted({submission_slug(f) for f in new_codes})
     critical = [f for f in files if is_critical(f)]
     # One new code per PR: the deep refutation gate budgets ~10 min per code, so
     # a PR that batches submissions would either blow the CI budget or dilute the
     # per-code scrutiny. Corrections to existing entries are not capped.
-    if len(new_codes) > 1:
+    if len(new_slugs) > 1:
         print("Submission PR adds more than one new code; submit one code per PR "
               "so each gets the full refutation budget.")
         print("\nNew code submissions:")
