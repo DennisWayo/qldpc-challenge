@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[63,3,5]] multi-band dense-packed code",
  "code_type": "CSS",
  "n": 63,
@@ -634,5 +634,41 @@
   ],
   "interaction_radius": 1.4142135623730951,
   "layers": 1
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 5,
+    "confidence": "upper_bound",
+    "witness": [
+     0,
+     1,
+     15,
+     29,
+     50
+    ]
+   },
+   "Z": {
+    "value": 5,
+    "confidence": "upper_bound",
+    "witness": [
+     10,
+     19,
+     20,
+     21,
+     46
+    ]
+   }
+  },
+  "rounds": 5,
+  "stim_version": "1.16.0",
+  "notes": "Generic sequential two-block extraction: one ancilla per check, X checks then Z checks each round with joint reset/measure layers; CX layers are a proper edge coloring of each Tanner graph (4 X + 4 Z CX layers per round, schedule seed 0; hook-aware orders: every CNOT order suffix needs >= d-1 further data errors to complete a logical, layered by min-conflicts search). Screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search; witnesses validated in GF(2).",
+  "contributed_by": {
+   "by": [
+    "@vprusso"
+   ],
+   "date": "2026-09-16",
+   "method": "generic CSS memory schedule: one ancilla per check, CX layers from a bipartite edge coloring, CNOT orders filtered by a hook-error criterion; screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search"
+  }
  }
 }
