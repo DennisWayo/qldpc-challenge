@@ -1,6 +1,6 @@
 {
   "schema_version": "0.2",
-  "name": "[[396,10,39]]",
+  "name": "[[396,10,37]]",
   "code_type": "CSS",
   "n": 396,
   "k": 10,
@@ -5555,60 +5555,58 @@
     ]
   },
   "distance": {
-    "d": 39,
+    "d": 37,
     "X": {
-      "value": 39,
+      "value": 37,
       "confidence": "upper_bound",
       "witness": [
-        8,
-        14,
-        45,
-        69,
-        75,
-        81,
-        87,
-        92,
-        93,
-        99,
-        104,
-        105,
-        111,
+        1,
+        7,
+        12,
+        13,
+        19,
+        25,
+        31,
+        37,
+        43,
+        49,
+        55,
+        61,
+        90,
+        113,
         115,
-        123,
-        129,
-        139,
-        141,
-        153,
-        206,
-        208,
-        214,
-        220,
-        226,
-        232,
-        244,
-        248,
-        250,
-        256,
+        151,
+        180,
+        246,
+        266,
         272,
-        304,
-        334,
-        340,
-        352,
-        358,
-        364,
+        278,
+        284,
+        290,
+        296,
+        308,
+        314,
+        320,
+        326,
+        332,
+        338,
+        350,
+        356,
+        362,
+        378,
         380,
-        382,
-        388
+        386,
+        392
       ],
       "witness_provenance": {
         "found_by": [
-          "@MathysRennela"
+          "@vprusso"
         ],
-        "date": "2026-08-23",
+        "date": "2026-09-05",
         "found_at_samples": 8000000,
-        "tool": "verify/gate_changed.py RIS-fast (gf2_fast)",
+        "tool": "verify/heuristic_distance.py RIS (--fast-trials 8000000)",
         "seeds": [
-          1882473206
+          1
         ]
       }
     },
@@ -5686,7 +5684,7 @@
     "origin": "submission",
     "date": "2026-08-23",
     "model": "Ox Alpha 1.0",
-    "notes": " Distance tightened 60 -> 39 on the X side (2026-08-23 CI refutation seed 1882473206): the gate's independent deep search found a weight-39 X-logical; it is embedded as the witness. Upper bound only."
+    "notes": " Distance tightened 60 -> 39 on the X side (2026-08-23 CI refutation seed 1882473206): the gate's independent deep search found a weight-39 X-logical; it is embedded as the witness. Upper bound only. Distance tightened 39 -> 37 on the X side (issue #899, 2026-09-05): a weight-37 X-type logical found by verify/heuristic_distance.py at 8,000,000 RIS trials (seed 1) is embedded as the X witness. Upper bound only."
   },
   "family": "generalized-bicycle"
 }
