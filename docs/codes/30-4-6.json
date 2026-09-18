@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[30,4,6]] twisted-torus BB code (arXiv:2503.03827)",
  "code_type": "CSS",
  "n": 30,
@@ -418,5 +418,43 @@
    ]
   ],
   "layers": 2
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 6,
+    "confidence": "upper_bound",
+    "witness": [
+     0,
+     10,
+     37,
+     155,
+     181,
+     185
+    ]
+   },
+   "Z": {
+    "value": 6,
+    "confidence": "upper_bound",
+    "witness": [
+     245,
+     263,
+     365,
+     407,
+     763,
+     932
+    ]
+   }
+  },
+  "rounds": 6,
+  "stim_version": "1.16.0",
+  "notes": "Flag-qubit sequential two-block extraction: one ancilla and one flag qubit per check, X checks then Z checks each round with joint reset/measure layers. Each check's 6 CNOTs occupy 6 slot layers (a proper edge coloring of its Tanner graph); the flag (|0> for X checks, |+> for Z checks) is coupled to the ancilla after the check's CNOT 1 and again after CNOT 5, and measured every round as a single-record detector, so an ancilla hook in that window also fires the flag. 8 X + 8 Z CX layers per round, schedule seed 0. Hook-aware orders: every proper suffix S_j of a check's CNOT order needs >= d-1 further data errors if unflagged and >= d-2 if flagged, and every same-ancilla pair of hooks needs >= d-2 (or d-3 when exactly one is flagged) further errors to complete a logical; layered by min-conflicts search. Screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search; witnesses validated in GF(2).",
+  "contributed_by": {
+   "by": [
+    "@vprusso"
+   ],
+   "date": "2026-09-18",
+   "method": "generic CSS memory schedule with one flag qubit per check: CX layers from a bipartite edge coloring, the flag coupled to the ancilla after the first and the fifth CNOT and measured every round, CNOT orders filtered by a single- and pair-hook cost criterion; screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search"
+  }
  }
 }

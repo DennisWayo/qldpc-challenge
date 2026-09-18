@@ -42,6 +42,19 @@
 <p>Union Alpha (maker currently anonymous), Zed coding agent; NumPy, networkx, repository submission builder and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Load <code>4_7/4_7_896.mtx</code> (HX) and <code>4_7/7_4_896.mtx</code> (HZ) from Hyperbolic_Codes_Planar.zip (Matrix Market coordinate format). Verify CSS commutation H_X H_Z^T = 0 over GF(2); k = 896 - rank(HX) - rank(HZ) = 194. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/896-194-6.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/900-182-8.html">[[900,182,8]] — 900-182-8</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[900,182,8]] — planar hyperbolic {5,5} code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reproduce a published planar hyperbolic CSS code absent from the local board. The trusted validator reports board advancement relative to the live board (upstream main f6d87255). Efficiency kd²/n = 182·64/900 = 12.94.</p>
+<h4>What was searched</h4>
+<p>Scraped GitHub for downloadable parity-check matrix artifacts. From github.com/QEC-pages/Quantum_LDPC_Codes @ 1c95489383564e4dc2cce517de00d64d6f2c4f56, <code>Hyperbolic_Codes_Planar.zip</code>, this code is the {5,5} planar hyperbolic code with 900 qubits. Parity-check matrices are <code>5_5/5_5_900_X.mtx</code> (HX, 360×900, weight 5) and <code>5_5/5_5_900_Z.mtx</code> (HZ, 360×900, weight 5). These are incidence matrices of a finite quotient of the regular {5,5} hyperbolic tiling (edge model).</p>
+<h4>Evidence trail</h4>
+<p>The trusted candidate gate returned passed: true, structural verification passed (CSS, connectivity, k=182), and no lighter logical was found in the refutation search. Distance is a witness-backed upper bound d ≤ 8, not an exact certificate. The published distance (d=8) is consistent with this run.</p>
+<h4>Dead ends</h4>
+<p>Attempted to derive a 2D-local layout (interaction radius ≤ 4.0 single-layer, ≤ 7.0 bilayer) via fold_layout annealing and networkx spectral/spring embeddings. None met the caps. Hyperbolic negative curvature prevents a low-radius Euclidean embedding, so this code stays in the unrestricted cell.</p>
+<h4>Tools</h4>
+<p>Union Alpha (maker currently anonymous), Zed coding agent; NumPy, networkx, repository submission builder and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
+<h4>Reproduction</h4>
+<p>Load <code>5_5/5_5_900_X.mtx</code> (HX) and <code>5_5/5_5_900_Z.mtx</code> (HZ) from Hyperbolic_Codes_Planar.zip (Matrix Market coordinate format). Verify CSS commutation H_X H_Z^T = 0 over GF(2); k = 900 - rank(HX) - rank(HZ) = 182. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/900-182-8.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/151-6-8.html">[[151,6,8]] — 151-6-8</a></h3><div class=kv style="color:var(--mut)">2026-09-17 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[151,6,8]] — check-deletion + three r=1 grafts of the [[154,6,11]] generalized-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Issue #1155 hackathon, 2D-local priority. Composition hypothesis: deleting a check (raising k) can create degree-one qubits that subsequent r=1 grafts remove, producing (n−r, k+Δk, d&#x27;) points neither move reaches alone.</p>
@@ -645,6 +658,48 @@ HX, HZ = build_bb(l=6, m=24, A_terms=[(0,0), (1,2), (2,8), (3,10)], B_terms=[(0,
 from bb import build_bb
 HX, HZ = build_bb(l=11, m=15, A_terms=[(0,0), (0,11), (7,2), (7,8)], B_terms=[(0,0), (0,1)])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/330-22-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/350-70-9.html">[[350,70,9]] — 350-70-9</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Fable 5.1 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[350,70,9]] non-abelian lifted product over ZSZ(35,2,29) at check weight 8</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the unrestricted x weight-8 cell at rate 1/5, between [[232,62,12]] and [[392,102,14]], where the board had no code with k &gt;= 70 and d &gt;= 9 below n = 392. The construction is the lifted product of two one-row base matrices with entries in F_2[G] for a non-abelian group G, the weight-9 mitten / ZSZ-LP shape of arXiv:2607.28795 and arXiv:2607.27644, with one entry per row lowered from weight 3 to weight 2. That drops the check weight from 9 to 8 at the cost of distance; the hypothesis was that at rate 1/5 the weight-8 cell forgives the loss, since its high-k region was empty.</p>
+<h4>What was searched</h4>
+<p>Sampler: random supports of a prescribed entry-weight profile over a random group from the pool; entries of weight &gt;= 2 contain the identity (no loss of generality for one-row bases). Groups: every non-abelian metacyclic presentation ZSZ(l1, l2, q) = Z_l1 x|_q Z_l2 (relation y x = x^q y, q^l2 = 1 mod l1, q != 1) with l2 &lt;= 8, plus A4, S4, A5, C_m x A4, C_m x S4 and C_m x D_k.</p>
+<p>Profile (3, 2) / (3, 2): A = [a_1, a_2] with weights 3 and 2, B likewise, check weight 8, n = 5|G|, k &gt;= |G|.</p>
+<ul>
+<li>12000 random codes on 117 ZSZ groups with 12 &lt;= |G| &lt;= 60, screened at</li>
+<p>500 fast RIS trials: 6405 distinct codes with k &gt;= 4 and d &gt;= 4; d = 9 reached only at n = 300 (3 of 1140 codes there), d = 8 at n = 160 to 300. Every point with k &lt;= 62 and d &lt;= 12 is dominated by [[232,62,12]].</p>
+<li>6000 random codes on 291 ZSZ presentations with 61 &lt;= |G| &lt;= 140,</li>
+<p>screened at 300 trials: 4095 distinct, 602 passing the board pre-check at screen depth, best screen d by n: 350:9, 390:9, 480:10, 525:11, 600:11, 625:12, 700:11. Points from n = 480 up are dominated by [[472,122,16]] and [[488,126,16]].</p>
+<li>6000 random codes on 138 small non-abelian groups (A4, S4, A5 and the</li>
+<p>direct products), 300 trials: 3079 distinct, best 300:9, 420:10, 480:10, 600:11, 660:10, all dominated or not better than the ZSZ points.</p>
+<li>Seed-pipeline variant (rank 800 classical seed rows per group, product</li>
+<p>the top 12 x 12): stopped after 7 groups with |G| in 20..60, best 100:5 and 120:7, nothing beyond the random sweep.</p>
+</ul>
+<p>Screening used the kit&#x27;s <code>research/kit/search.py</code> screen with the fast RIS backend (<code>verify/gf2_fast</code>), dedup by rref fingerprint, then the board&#x27;s (n, k, d, w) Pareto rule against <code>codes/*.json</code> (equality on all four axes counted as dominated). Ladder: 10k then 100k fast trials on the best d per (n, k) among pre-check survivors, at most 15 per sweep.</p>
+<h4>Evidence trail</h4>
+<p>Submitted code (ZSZ(35,2,29), 61 &lt;= |G| &lt;= 140 sweep):</p>
+<p>| stage | trials per side | lightest logical | |---|---|---| | screen | 300 | 9 | | ladder | 10k | 9 | | ladder | 100k | 9 | | packaging, round 1 (seed 7919) | 1,000,000 | 9 (X) | | packaging, round 2 (seed 15838) | 1,000,000 | 9 (X) | | gate refutation (seed 1065517832) | 8000 numpy RIS | nothing lighter |</p>
+<p>Both witnesses in the JSON have weight 9 (X: 9, Z: 9). The claim is a witness-backed upper bound d &lt;= 9; no exact certification was attempted (k = 70 puts a MILP certificate far outside the envelope described in CONTRIBUTING.md).</p>
+<p>The other 14 ladder candidates from the same sweep that still advanced a cell after the ladder all read flat from screen through 100k trials ([[390,78,9]], submitted separately; [[360,74,8]], [[360,72,8]], [[320,64,8]], [[330,66,8]], [[330,68,7]], [[390,80,7]] and seven d = 5 points). The d = 5 points are non-dominated only because no w &lt;= 8 board code has k that large at d = 5 and were not packaged.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Any profile with an all-weight-2 side ((3,3)/(2,2), (3,2)/(2,2),</li>
+<p>(4,2)/(2,2), (2,2)/(2,2)): the quantum distance never exceeded the classical distance of the binomial seed row (150 of 150 random codes), and that distance is the Cayley-graph girth of the row, which is &lt;= 6 for every non-abelian ZSZ group with |G| &lt; 105 and &lt;= 8 up to |G| = 140. Capped at d &lt;= 6 for n &lt; 525.</p>
+<li>The published group ZSZ(15,2,11) has no usable weight-2 product: all 24</li>
+<p>girth-6 generator pairs are conjugate-shifted-inverse related, which forces a weight-3 logical.</p>
+<li>Rate 2/5 with entry weights (2,2,2)/(2,2,2) at check weight 8: 6000</li>
+<p>codes on 144 groups, all d &lt;= 5.</p>
+<li>2x3 monomial A with a (3,3) row B (check weight 8, rate about 1/8):</li>
+<p>6000 codes on 201 groups, best d 10 to 12 at n &gt;= 320, all dominated.</p>
+<li>Weight 9 itself was not pushed; the rate-1/5 weight-9 cell is populated</li>
+<p>by the two papers&#x27; codes.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Claude Fable 5.1 (Claude Code), matching <code>provenance.model</code>. Repo tooling: <code>research/kit/search.py</code> (screen, fast backend), <code>verify/gf2_fast</code> for the 1M-trial two-sided RIS searches, <code>research/kit/submit.py</code> (<code>make_submission</code>, <code>save_submission</code>) for packaging with the numpy witness search, <code>verify/validate_candidate.py</code> as the gate. The lifted-product constructor and sampler were written for this run and are submitted to the research kit in a separate PR. The whole campaign (17 sweeps, about 67000 screened codes) ran in about five hours of wall clock on a 16-core machine; each 1M-trial round takes a few minutes per side with 16 threads.</p>
+<h4>Reproduction</h4>
+<p>Group G = ZSZ(35, 2, 29): generators x, y with x^35 = y^2 = 1 and y x = x^29 y; element x^a y^b at index 2a + b (|G| = 70, identity at 0).</p>
+<p>Base rows (entries in F_2[G]):</p>
+<p>A = [ 1 + x^14 + x^15 y ,  1 + x^2  ] B = [ 1 + x^12 + x^28 y ,  1 + x^32 ]</p>
+<p>Entries of A act by the left regular representation L(g)[gh, h] = 1, entries of B by the right regular representation R(g)[h, hg] = 1. Sector 1 holds blocks (i, j), i in cols(A), j in cols(B), at block index 2i + j; sector 2 holds the single block (0, 0) after them; every block has 70 qubits, n = 5 x 70 = 350. X-check block row j: L(A[0][i]) on block (i, j) for i = 0, 1 and R(B[0][j]) on the sector-2 block. Z-check block row i: R(B[0][j])^T on block (i, j) for j = 0, 1 and L(A[0][i])^T on the sector-2 block. In group-element indices, A = [[0, 28, 31], [0, 4]] and B = [[0, 24, 57], [0, 64]]. The same convention rebuilds <code>codes/150-30-10.json</code> from the trinomials in <code>notes/150-30-10.md</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-70-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/384-96-4.html">[[384,96,4]] — 384-96-4</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a></div><details ><summary>note</summary><div class=notebody><h3>[[384,96,4]] — periodic bivariate-bicycle on Z_8 x Z_24</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the <code>unrestricted</code> x <code>weight ≤ 8</code> board cell, via a periodic bivariate-bicycle (BB) code on Z_8 x Z_24, found by an automated continuous evolutionary/mutation search over BB exponent sets <code>(l, m, A, B)</code> (lane <code>w8-gap</code>, proposal kernel <code>shared-binomial-factor</code>). This submission independently rebuilds and re-verifies the resulting <code>[[384,96,4]]</code> candidate using only this repository&#x27;s own trusted tools before submitting.</p>
@@ -691,6 +746,47 @@ HX, HZ = build_bb(l=8, m=24, A_terms=[(0,0), (1,15), (5,16), (6,6), (7,10), (7,2
 from bb import build_bb
 HX, HZ = build_bb(l=13, m=15, A_terms=[(0,0), (0,11), (7,2), (7,8)], B_terms=[(0,0), (0,1)])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/390-26-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/390-78-9.html">[[390,78,9]] — 390-78-9</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Fable 5.1 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[390,78,9]] non-abelian lifted product over ZSZ(39,2,14) at check weight 8</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the unrestricted x weight-8 cell at rate 1/5. Before this submission the cell had no code with k &gt;= 70 and d &gt;= 9 below n = 392; the nearest points are [[232,62,12]] and [[392,102,14]]. The construction is the lifted product of two one-row base matrices with entries in F_2[G] for a non-abelian group G, the weight-9 mitten / ZSZ-LP shape of arXiv:2607.28795 and arXiv:2607.27644, with one entry per row lowered from weight 3 to weight 2, which brings the check weight to 8. The bet was that the high-k region of the weight-8 cell was empty enough that a d = 9 rate-1/5 code lands on its frontier.</p>
+<h4>What was searched</h4>
+<p>Sampler: random supports of a prescribed entry-weight profile over a random group from the pool; entries of weight &gt;= 2 contain the identity (no loss of generality for one-row bases). Groups: every non-abelian metacyclic presentation ZSZ(l1, l2, q) = Z_l1 x|_q Z_l2 (relation y x = x^q y, q^l2 = 1 mod l1, q != 1) with l2 &lt;= 8, plus A4, S4, A5, C_m x A4, C_m x S4 and C_m x D_k.</p>
+<p>Profile (3, 2) / (3, 2): A = [a_1, a_2] with weights 3 and 2, B likewise, check weight 8, n = 5|G|, k &gt;= |G|.</p>
+<ul>
+<li>12000 random codes on 117 ZSZ groups with 12 &lt;= |G| &lt;= 60 at 500 fast</li>
+<p>RIS trials: 6405 distinct with k &gt;= 4, d &gt;= 4; d = 9 only at n = 300 (3 of 1140 codes there), d = 8 at n = 160 to 300; every point with k &lt;= 62 and d &lt;= 12 is dominated by [[232,62,12]].</p>
+<li>6000 random codes on 291 ZSZ presentations with 61 &lt;= |G| &lt;= 140 at 300</li>
+<p>trials: 4095 distinct, 602 passing the board pre-check at screen depth, best screen d by n: 350:9, 390:9, 480:10, 525:11, 600:11, 625:12, 700:11. From n = 480 up the points are dominated by [[472,122,16]] and [[488,126,16]].</p>
+<li>6000 random codes on 138 small non-abelian groups at 300 trials: 3079</li>
+<p>distinct, best 300:9, 420:10, 480:10, 600:11, 660:10, none better than the ZSZ points.</p>
+<li>Seed-pipeline variant (800 classical seed rows per group ranked by RIS</li>
+<p>distance, top 12 x 12 products), 7 groups with |G| in 20..60 before it was stopped: best 100:5, 120:7.</p>
+</ul>
+<p>Screening used <code>research/kit/search.py</code> with the fast RIS backend (<code>verify/gf2_fast</code>), dedup by rref fingerprint, then the board&#x27;s (n, k, d, w) Pareto rule against <code>codes/*.json</code> with equality on all four axes counted as dominated. Ladder: 10k then 100k fast trials on the best d per (n, k) among pre-check survivors, at most 15 per sweep.</p>
+<h4>Evidence trail</h4>
+<p>Submitted code (ZSZ(39,2,14), from the 61 &lt;= |G| &lt;= 140 sweep):</p>
+<p>| stage | trials per side | lightest logical | |---|---|---| | screen | 300 | 9 | | ladder | 10k | 9 | | ladder | 100k | 9 | | packaging, round 1 (seed 7919) | 1,000,000 | 9 (X) | | packaging, round 2 (seed 15838) | 1,000,000 | 9 (X) | | gate refutation (seed 559191786) | 8000 numpy RIS | nothing lighter |</p>
+<p>Both witnesses in the JSON have weight 9. The claim is a witness-backed upper bound d &lt;= 9; no exact certification was attempted (k = 78 is far outside the MILP envelope in CONTRIBUTING.md).</p>
+<p>Frontier caveat, stated plainly: [[392,102,14]] (check weight 8) has more logical qubits and a larger distance at two more physical qubits. [[390,78,9]] is on the weight-8 Pareto frontier by n alone against that entry; against everything at n &lt;= 390 it is the first weight-8 code with k &gt;= 70 and d &gt;= 9.</p>
+<p>The same sweep&#x27;s other ladder candidates that still advanced after the ladder all read flat from screen through 100k trials: [[350,70,9]] (submitted separately), [[360,74,8]], [[360,72,8]], [[320,64,8]], [[330,66,8]], [[330,68,7]], [[390,80,7]] and seven rate-1/5 points at d = 5 that are non-dominated only for lack of high-k weight-8 board codes; those were not packaged. On this group, ZSZ(39,2,14), the sweep also produced [[390,80,7]] and [[390,84,5]], whose extra logical qubits come from rank-deficient base rows and whose distance is lower.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Profiles with an all-weight-2 side ((3,3)/(2,2), (3,2)/(2,2),</li>
+<p>(4,2)/(2,2), (2,2)/(2,2)): the quantum RIS bound never exceeded the classical distance of the binomial seed row (150 of 150 random codes); that distance is the Cayley-graph girth of the row&#x27;s two generators, &lt;= 6 for every non-abelian ZSZ group with |G| &lt; 105 and &lt;= 8 up to |G| = 140. Capped at d &lt;= 6 for n &lt; 525.</p>
+<li>ZSZ(15,2,11), the group of the published [[150,30,10]], has no usable</li>
+<p>weight-2 product: all 24 girth-6 generator pairs are related by a conjugate-shifted-inverse map that forces a weight-3 logical.</p>
+<li>Rate 2/5 with entry weights (2,2,2)/(2,2,2) at check weight 8: 6000</li>
+<p>codes on 144 groups, all d &lt;= 5.</p>
+<li>2x3 monomial A with a (3,3) row B at check weight 8: 6000 codes on 201</li>
+<p>groups, d 10 to 12 only at n &gt;= 320, all dominated.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Claude Fable 5.1 (Claude Code), matching <code>provenance.model</code>. Repo tooling: <code>research/kit/search.py</code> (screen, fast backend), <code>verify/gf2_fast</code> for the 1M-trial two-sided RIS searches, <code>research/kit/submit.py</code> (<code>make_submission</code>, <code>save_submission</code>) for packaging with the numpy witness search, <code>verify/validate_candidate.py</code> as the gate. The lifted-product constructor and sampler were written for this run and are submitted to the research kit in a separate PR. The whole campaign (17 sweeps, about 67000 screened codes) ran in about five hours of wall clock on a 16-core machine.</p>
+<h4>Reproduction</h4>
+<p>Group G = ZSZ(39, 2, 14): generators x, y with x^39 = y^2 = 1 and y x = x^14 y; element x^a y^b at index 2a + b (|G| = 78, identity at 0).</p>
+<p>Base rows (entries in F_2[G]):</p>
+<p>A = [ 1 + x^11 y + x^36 ,  1 + x^25 ] B = [ 1 + x^27 y + x^34 ,  1 + x^14 ]</p>
+<p>Entries of A act by the left regular representation L(g)[gh, h] = 1, entries of B by the right regular representation R(g)[h, hg] = 1. Sector 1 holds blocks (i, j), i in cols(A), j in cols(B), at block index 2i + j; sector 2 holds the single block (0, 0) after them; every block has 78 qubits, n = 5 x 78 = 390. X-check block row j: L(A[0][i]) on block (i, j) for i = 0, 1 and R(B[0][j]) on the sector-2 block. Z-check block row i: R(B[0][j])^T on block (i, j) for j = 0, 1 and L(A[0][i])^T on the sector-2 block. In group-element indices, A = [[0, 23, 72], [0, 50]] and B = [[0, 55, 68], [0, 28]]. The same convention rebuilds <code>codes/150-30-10.json</code> from the trinomials in <code>notes/150-30-10.md</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/390-78-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/396-136-3.html">[[396,136,3]] — 396-136-3</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a></div><details ><summary>note</summary><div class=notebody><h3>[[396,136,3]] — periodic bivariate-bicycle on Z_6 x Z_33</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the <code>unrestricted</code> x <code>weight ≤ 8</code> board cell, via a periodic bivariate-bicycle (BB) code on Z_6 x Z_33, found by an automated continuous evolutionary/mutation search over BB exponent sets <code>(l, m, A, B)</code> (lane <code>w8-gap</code>, proposal kernel <code>shared-binomial-factor</code>). This submission independently rebuilds and re-verifies the resulting <code>[[396,136,3]]</code> candidate using only this repository&#x27;s own trusted tools before submitting.</p>
@@ -898,6 +994,47 @@ HX, HZ = build_bb(l=17, m=15, A_terms=[(0,0), (0,11), (7,2), (7,8)], B_terms=[(0
 from bb import build_bb
 HX, HZ = build_bb(l=19, m=14, A_terms=[(0,0), (0,11), (7,2), (7,8)], B_terms=[(0,0), (0,1)])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/532-38-8.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/540-112-8.html">[[540,112,8]] — 540-112-8</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Fable 5.1 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[540,112,8]] non-abelian lifted product over ZSZ(18,6,7) at check weight 6</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the unrestricted x weight-6 cell at high rate. Before this submission no board code with check weight &lt;= 6 had k &gt;= 52 at d &gt;= 5; the weight-6 codes at d = 8 top out at k = 50 ([[700,50,8]]). The construction is the lifted product of two one-row base matrices with entries in F_2[G] for a non-abelian group G, the weight-9 mitten / ZSZ-LP shape of arXiv:2607.28795 and arXiv:2607.27644, with all four entries lowered from weight 3 to weight 2 (binomials 1 + g). That gives check weight 6, n = 5|G| and k &gt;= |G| (rate at least 1/5). The hypothesis was that a rate-1/5 weight-6 code would land on the cell&#x27;s frontier at any distance the board had not reached at that k, provided the binomial rows could be chosen with large enough classical distance.</p>
+<h4>What was searched</h4>
+<p>For a one-row base the classical seed code ker[L(a_1) L(a_2)] upper-bounds the quantum distance (150 of 150 random codes in a weight-(3,3)/(2,2) check obeyed it). For binomial entries 1 + g_1, 1 + g_2 that seed is the cycle code of the Cayley graph Cay(G, {g_1, g_2}), whose distance is its girth, computed exactly by BFS. So the search was a seed pipeline: rank seed rows by girth, product the best, quantum-screen the products.</p>
+<ul>
+<li>Girth survey: 1500 random generator pairs per group over all non-abelian</li>
+<p>ZSZ(l1, l2, q) presentations (l2 &lt;= 8) with |G| &lt;= 140. Girth &lt;= 6 for every |G| &lt; 105; 7 at |G| in {105, 125}; 8 at |G| in {108, 110, 120, 128, 135, 140}. This restricted the weight-6 push to the girth-7 and girth-8 orders (n = 525 to 700).</p>
+<li>Seed pipeline on those orders: 155 presentations, 4000 seed rows per</li>
+<p>group ranked by exact girth, top 25 per side, 25 x 25 products with conjugate-shifted-inverse pairs skipped (they force a weight-3 logical), screened at 300 fast RIS trials: 17500 products, 12965 distinct codes, all passing the board pre-check at screen depth because the cell was empty at that k. Best screen d by n: 525:7, 540:8, 600:6, 625:7, 640:7, 675:8, 700:7; the four ZSZ(22,5,q) presentations at |G| = 110 had no admissible product (all 625 pairs conjugate-related).</p>
+<li>On ZSZ(18,6,7) itself: best seed girth 8 on both sides, 589 products (36</li>
+<p>conjugate pairs skipped), best quantum d &lt;= 8, so the product meets the seed bound here. ZSZ(18,6,13), the other presentation of order 108, also reached 8.</p>
+<li>Mid-range control (36 &lt;= |G| &lt;= 104, 2000 seed rows per group, 16 x 16</li>
+<p>products, about 24000 products over 98 groups): d = 6 on 85 groups, 5 on 9, no admissible product on 4. Consistent with the girth cap.</p>
+<li>Random (2,2)/(2,2) smoke run, 3000 codes on 43 groups with |G| &lt;= 60:</li>
+<p>best d = 6 at n = 240, 270, 280.</p>
+</ul>
+<p>Ladder: 10k then 100k fast trials on the best d per (n, k) among the survivors, at most 15 per sweep.</p>
+<h4>Evidence trail</h4>
+<p>Submitted code (ZSZ(18,6,7), girth-8 seed run):</p>
+<p>| stage | trials per side | lightest logical | |---|---|---| | screen | 300 | 8 | | ladder | 10k | 8 | | ladder | 100k | 8 | | packaging (seed 7919) | 300,000 | 8 (X) | | deep confirmation (seed 20260916) | 1,000,000 | X 8, Z 8 | | gate refutation (seed 612045197) | 8000 numpy RIS | nothing lighter |</p>
+<p>Packaging ran at 300k trials per side rather than the 1M floor the fieldnotes recommend, so a separate 1M-per-side two-sided search was run afterwards; it found lightest logicals of weight 8 on both sides and nothing lighter (verdict corroborated). Both seed rows have girth 8, so d &lt;= 8 is also forced structurally; the RIS results say the product loses nothing against that bound. The claim is a witness-backed upper bound d &lt;= 8. No exact certification was attempted (k = 112).</p>
+<p>Sibling from the same run: [[675,139,8]] on ZSZ(45,3,16), submitted separately, ladder 8, 8, 8 and 2 x 1M trials per side flat at 8. The girth-8 groups at |G| = 120, 128 and 140 fell short of their seed bound (best product d = 6 or 7); the products there were not packaged.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Every group with |G| &lt; 105 is capped at d &lt;= 6 for binomial rows by the</li>
+<p>girth survey, so weight 6 at n &lt; 525 cannot beat d = 6 in this family.</p>
+<li>ZSZ(15,2,11) (the group of the published [[150,30,10]]) has no usable</li>
+<p>binomial product: all 24 girth-6 generator pairs are conjugate-related.</p>
+<li>At |G| = 120 (four ZSZ(15,8,q) presentations) the girth-8 seeds gave</li>
+<p>products with d &lt;= 5 or 6, the largest shortfall against the seed bound seen in the run. A typical weight-5 X-logical puts two qubits in one off-diagonal sector-1 block, one in each of two other sector-1 blocks and one in sector 2.</p>
+<li>The rate-2/5 shape with entry weights (2,2,2)/(2,2,2) (check weight 8)</li>
+<p>gave d &lt;= 5 on 6000 codes over 144 groups.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Claude Fable 5.1 (Claude Code), matching <code>provenance.model</code>. Repo tooling: <code>research/kit/search.py</code> (screen, fast backend), <code>verify/gf2_fast</code> for the 300k and 1M-trial two-sided RIS searches, <code>research/kit/submit.py</code> (<code>make_submission</code>, <code>save_submission</code>) for packaging with the numpy witness search, <code>verify/validate_candidate.py</code> as the gate. The lifted-product constructor, the girth ranking and the seed pipeline were written for this run; the constructor and sampler are submitted to the research kit in a separate PR, and the girth ranking is a BFS on the Cayley graph as described above. The campaign ran in about five hours of wall clock on a 16-core machine.</p>
+<h4>Reproduction</h4>
+<p>Group G = ZSZ(18, 6, 7): generators x, y with x^18 = y^6 = 1 and y x = x^7 y; element x^a y^b at index 6a + b (|G| = 108, identity at 0).</p>
+<p>Base rows (entries in F_2[G]):</p>
+<p>A = [ 1 + x^10 y^5 ,  1 + x^11 y^2 ] B = [ 1 + x^13 y^3 ,  1 + x^2 y^5  ]</p>
+<p>Entries of A act by the left regular representation L(g)[gh, h] = 1, entries of B by the right regular representation R(g)[h, hg] = 1. Sector 1 holds blocks (i, j), i in cols(A), j in cols(B), at block index 2i + j; sector 2 holds the single block (0, 0) after them; every block has 108 qubits, n = 5 x 108 = 540. X-check block row j: L(A[0][i]) on block (i, j) for i = 0, 1 and R(B[0][j]) on the sector-2 block. Z-check block row i: R(B[0][j])^T on block (i, j) for j = 0, 1 and L(A[0][i])^T on the sector-2 block. In group-element indices, A = [[0, 65], [0, 68]] and B = [[0, 81], [0, 17]]. The same convention rebuilds <code>codes/150-30-10.json</code> from the trinomials in <code>notes/150-30-10.md</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/540-112-8.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/540-36-9.html">[[540,36,9]] — 540-36-9</a></h3><div class=kv style="color:var(--mut)">2026-09-16 &middot; submission note &middot; <a href="https://github.com/cbjuan">@cbjuan</a></div><details ><summary>note</summary><div class=notebody><h3>[[540,36,9]] — periodic bivariate-bicycle on Z_18 x Z_15</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the <code>unrestricted</code> x <code>weight ≤ 6</code> board cell, via a periodic bivariate-bicycle (BB) code on Z_18 x Z_15, found by an automated continuous evolutionary/mutation search over BB exponent sets <code>(l, m, A, B)</code> (lane <code>high-distance-transfer</code>, proposal kernel <code>exact-geometry-grid</code>). This submission independently rebuilds and re-verifies the resulting <code>[[540,36,9]]</code> candidate using only this repository&#x27;s own trusted tools before submitting.</p>
