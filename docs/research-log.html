@@ -320,6 +320,56 @@ gen = enumerate_local_sat_codes(4, 5, 6, 2, 2.0, seed=7, max_codes=100,
 <h4>Reproduction</h4>
 <p>In GAP, construct G=SmallGroup(96,4) and e=Elements(G). Using one-based positions in this exact ordering, set a=[1, 3] and b=[1, 8, 46]; identity is explicitly included. Export the zero-based multiplication table with List(e, x -&gt; List(e, y -&gt; Position(e,x*y)-1)). Pass this table and the supports minus one to build_2bga. It forms H_X=[L(a)|R(b)] and H_Z=[R(b)^T|L(a)^T]. The reconstructed matrices have 192 columns, CSS commutation, k=4, and maximum row weight 5.</p>
 <p>Package with make_submission, confidence upper_bound, trials=128 and seed=1155000; immediately save the returned document with save_submission. Run the repository&#x27;s existing heuristic estimator with the budgets and seeds above, save each returned evidence record, and incorporate any lighter witness before the next operation. Apply the trusted candidate gate with refutation enabled. No layout is claimed.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/192-4-16.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/196-2-14.html">[[196,2,14]] — 196-2-14</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/pandey-tushar">@pandey-tushar</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[196,2,14]] weight-4 bicycle (generalized toric code) on a twisted torus</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: unrestricted / weight-4. The cell is unglamorous and its distance range stops early, so it looked thinner than the weight-6 cell where the well-known codes already sit.</p>
+<p>The opening came from reading the board rather than from a search. The existing weight-4 entries [[16,2,4]], [[36,2,6]], [[64,2,8]] and [[144,2,12]] all satisfy n = d^2 exactly. That is not a coincidence of four points: it is one family evaluated at r = 2, 3, 4, 6. The hypothesis was that the same family generates the missing members, and that the board simply has gaps at r = 5, 7, 8, 9.</p>
+<h4>What was searched</h4>
+<p>Three stages, in order.</p>
+<p>1. Lifted products over F_2[D_m]. Base matrix shapes (1,2), (2,3) and (3,3), element weights 1 and 2, densities 0.5 to 1.0, m in {5, 7}, about 40 samples per configuration. Every candidate was dominated by existing board entries. Abandoned.</p>
+<p>2. Random weight-4 bicycle sweep. 50 draws of (l, m, A, B) with l, m in [4, 14] and n in [40, 320], screened with the kit&#x27;s screen_adaptive at stages 300 / 6,000 / 60,000 RIS trials. This produced [[110,2,10]], which validated as board-advancing and was later superseded (see Evidence trail).</p>
+<p>3. Exhaustive enumeration at fixed n. Every weight-4 bicycle is a unit times (1 + x^a y^b), because a weight-2 polynomial x^i y^j + x^k y^l factors as a monomial times (1 + x^(k-i) y^(l-j)) and monomials are units. So at fixed (l, m) the whole family is just a pair of exponent vectors, which is small enough to enumerate rather than sample. Enumerated all pairs at n = d^2 for d = 10, 14, 16, 18, balanced tori first, filtered to k = 2, screened at 300 then 2,000 trials.</p>
+<h4>The family, and why d is exact</h4>
+<p>f = 1 + y, g = 1 + xy on Z_r x Z_2r gives [[4r^2, 2, 2r]], so n = d^2.</p>
+<p>The distance is a shortest-vector computation, not an estimate. The two check polynomials give step vectors (0,1) and (1,1), and the torus identifications are (r,0) and (0,2r). A logical operator is a closed path of p steps (0,1) and q steps (1,1), so</p>
+<p>q       = 0 mod r p + q   = 0 mod 2r</p>
+<p>with weight |p| + |q|. Minimising over nonzero (p, q): q = 0 forces p = 2r, and q = r forces p = r. Both give weight 2r, and nothing smaller satisfies both congruences. Hence d = 2r.</p>
+<p>This is a prediction, not a fit. It reproduces the board&#x27;s own weight-4 entries at r = 2, 3, 4 and 6, and the submitted code is r = 7.</p>
+<p>The construction is standard. This is the toric code on a twisted torus, and the same reduction appears in notes/144-2-12.md, where a trivariate bicycle is shown to collapse to a periodic bivariate one under z^i = x^i y^i. The contribution here is board placement and the closed form for the sequence, not a new code construction. Literature novelty is unverified.</p>
+<h4>Evidence trail</h4>
+<p>Submitted code, r = 7, [[196,2,14]]. Trials are per side; both X and Z were run at every rung and the table reports the lightest logical found.</p>
+<p>300 trials        14 2,000 trials      14 8,000 trials      14   (verify/validate_candidate.py refutation gate) 60,000 trials     14 250,000 trials    14</p>
+<p>Flat across the ladder, and equal to the exact lattice value 2r = 14. The claim is a witness-backed upper bound of 14 that coincides with a provable minimum, so there is no lighter logical for a deeper search to find.</p>
+<p>Superseded and collapsed candidates:</p>
+<ul>
+<li>[[110,2,10]], from stage 2. Validated, board-advancing, then dominated by</li>
+<p>[[100,2,10]] from the same family found in stage 3. Same k, d and weight, ten fewer qubits. Dropped.</p>
+<li>[[180,8,8]] and [[252,8,12]], from stage 1. Both dominated by existing board</li>
+<p>entries [[180,8,16]] and [[252,12,16]]. Their distances were also inflated (see Dead ends).</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>Lifted products over F_2[D_m] are barren inside this eligibility box. Note the</li>
+<p>correctness trap: over a non-abelian group ring, (A tensor I)(I tensor B) has entries A[i,k] B[j,l] while (I tensor B)(A tensor I) has B[j,l] A[i,k], so H_X H_Z^T = 0 fails unless A is lifted with the left regular representation and B with the right. Once that was fixed the family still produced nothing competitive: best observed was [[180,12,4]].</p>
+</ul>
+<ul>
+<li>A hand-rolled RIS distance estimator inflated by a factor of 2. It reported</li>
+<p>d &lt;= 8 on a code where research/kit/surrogate.py found a weight-4 logical at its lowest rung. Flat readings from 25 to 800 trials were mistaken for convergence. This is the failure mode recorded in fieldnotes/2026-07-01-trial-depth-floors.md, and it cost a full parameter study that had to be discarded. Every distance in this note comes from the kit surrogate, never from the hand-rolled estimator.</p>
+</ul>
+<ul>
+<li>Base-matrix sparsity is the wrong knob for controlling check weight. Zeroing</li>
+<p>entries at density 0.6 while capping weight at 8 forced rows down to about two nonzeros each and collapsed the distance to 2. Element weight, not density, controls the tradeoff.</p>
+</ul>
+<ul>
+<li>Well-known codes are not an opening. The gross code [[144,12,12]] and</li>
+<p>[[288,12,24]] were already on the board on day one, and the weight-6 cell holds 349 entries. The weight-4 cell was winnable precisely because it is less fashionable.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5, in the claude.ai chat interface, driving a Linux container. Repo tooling: research/kit (bb.py, css.py, surrogate.py, submit.py), verify/validate_candidate.py, and the gf2_fast accelerator built with `make fast`. The pure-Python backend was too slow to be usable here; switching to gf2_fast took a 20-candidate screen from minutes to 3 seconds. Compute was a single CPU core for roughly three hours, most of it spent on distance ladders.</p>
+<h4>Reproduction</h4>
+<p>import sys; sys.path.insert(0, &quot;research/kit&quot;) from bb import build_bb</p>
+<p># f = 1 + y, g = 1 + xy on Z_7 x Z_14 HX, HZ = build_bb(7, 14, [(0, 0), (0, 1)], [(0, 0), (1, 1)])</p>
+<p>For the general member, build_bb(r, 2*r, [(0,0),(0,1)], [(0,0),(1,1)]) gives [[4r^2, 2, 2r]]. Within the eligibility box r runs from 2 to 15. The board already holds r = 2, 3, 4 and 6.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/196-2-14.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/196-28-6.html">[[196,28,6]] — 196-28-6</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[196,28,6]] — two-block group-algebra code on SmallGroup(98,3)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 5.14.</p>
