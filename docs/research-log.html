@@ -795,6 +795,25 @@ HX, HZ = lifted_product_base(mul, A, B)   # [[360,74,8]], check weight 8
 <p>Union Alpha (maker currently anonymous), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(24,2), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[4] and b=[4, 6, 15] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 48 - rank(HX) - rank(HZ) = 12. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/48-12-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/49-17-3.html">[[49,17,3]] — 49-17-3</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[49,17,3]] — SAT t=2 weight-6 2D-local code on a 7×7 grid</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Hackathon (#1155) SAT-search. The 2026-09-18 t=2 session placed <code>[[16,6,3]]</code>, <code>[[25,9,3]]</code>, <code>[[36,12,3]]</code> on the weight-6 × local-2d-single frontier. The 7×7 (n=49) grid was budget-walled in-session; this code is the night campaign&#x27;s T3 result: a t=2 weight-6 code at n=49 with k=17, d=3, filling the frontier gap between n=36 and n=40 in the weight-6 × local-2d-single cell.</p>
+<h4>What was searched</h4>
+<p><code>local_sat.py</code> `enumerate_local_sat_codes(n_side=7, G=16, w=6, t=2, radius=2.0, shared_t3=True, solver=&quot;cadical&quot;)`, run overnight with per-solve conf/time budgets. G=15 was UNSAT; G=16 produced <code>[[49,17,3]]</code> codes. Screened at 800-trial RIS d≥3, dominance-checked against the current single-layer w≤6 board, and gate-packaged.</p>
+<h4>Evidence trail</h4>
+<p>Witness-backed <code>upper_bound</code> d=3 (weight-3 logicals on both sides). <code>validate_candidate</code>: <code>passed=true</code>, <code>verify.ok=true</code>, <code>refute.refuted=false</code> (no lighter logical in the gate&#x27;s RIS trials), <code>dedup</code> clean, <code>board_advancing=true</code>. Independent deep confirmation at 100,000 RIS trials found no logical lighter than weight 3 on either side (lightest X-logical weight 3, lightest Z-logical weight 3). Interaction radius 4.00 (hackathon-eligible).</p>
+<h4>Dead ends</h4>
+<p>7×7 t=2 at G=15 is UNSAT (too few checks to satisfy t=2 detection). The t=4 (d≥5) stages at 5×5/6×6 produced no codes within budget.</p>
+<h4>Tools</h4>
+<p><code>local_sat.py</code> (shared_t3, cadical, per-solve budgets), kit <code>{css,surrogate,submit}</code>, <code>verify/validate_candidate.py</code> (untouched). Model: DeepSeek V4 Flash 0731.</p>
+<h4>Reproduction</h4>
+<pre>
+from local_sat import enumerate_local_sat_codes
+gen = enumerate_local_sat_codes(7, 16, 6, 2, 2.0, seed=0, max_codes=80,
+    solver=&quot;cadical&quot;, conf_budget=2_000_000, time_budget=600.0,
+    stream=True, shared_t3=True)
+# pick a k=17, d&gt;=3 code, package with make_submission(coordinates=..., layers=1)
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/49-17-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/56-12-8.html">[[56,12,8]] — 56-12-8</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[56,12,8]] — two-block group-algebra code on SmallGroup(28,4)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-8 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board (upstream main 72d7db93). Efficiency kd²/n = 12·64/56 = 13.71.</p>
@@ -808,6 +827,19 @@ HX, HZ = lifted_product_base(mul, A, B)   # [[360,74,8]], check weight 8
 <p>Union Alpha (maker currently anonymous), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(28,4), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[6,15] and b=[2,4,22,27] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 56 - rank(HX) - rank(HZ) = 12. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/56-12-8.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/56-2-10.html">[[56,2,10]] — 56-2-10</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[56,2,10]] — two-block group-algebra code on SmallGroup(28,2)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 2·100/56 = 3.57.</p>
+<h4>What was searched</h4>
+<p>Scraped GitHub for downloadable parity-check matrix artifacts and parameter tables. From github.com/QEC-pages/2BGA-codes @ 403d194c3f98f0cadc236aecbc4a8b6139ccf23c, <code>abelian.zip</code>, <code>diswtabelian_wt6wtL2_order28_k2.txt</code>, line 1. This row is SmallGroup(28,2) with nonidentity GAP supports a=[5], b=[3,12,17]. Reconstructed via GAP (Cayley table) and the repository&#x27;s group-algebra constructor.</p>
+<h4>Evidence trail</h4>
+<p>The trusted candidate gate returned passed: true, structural verification passed (CSS, connectivity, k=2), and no lighter logical was found in the refutation search. Distance is a witness-backed upper bound d ≤ 10, not an exact certificate. The published distance (d=10) is consistent with this run.</p>
+<h4>Dead ends</h4>
+<p>None for this candidate. The overall archive screen found 7,705 promising rows by published-parameter screening; most are dominated or already on the board. This row survived the screen and the gate.</p>
+<h4>Tools</h4>
+<p>Union Alpha (maker currently anonymous), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
+<h4>Reproduction</h4>
+<p>Use GAP g := SmallGroup(28,2), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[5] and b=[3,12,17] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 56 - rank(HX) - rank(HZ) = 2. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/56-2-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/56-6-8.html">[[56,6,8]] — 56-6-8</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[56,6,8]] — two-block group-algebra code on SmallGroup(28,2)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 6.86.</p>
