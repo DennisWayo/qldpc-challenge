@@ -17,6 +17,16 @@
 <details><summary>witness operator (support, 3 qubits)</summary><div class=wit>[6, 8, 9]</div></details>
 <div class=kv><b>certificate</b> <span class=cert-ok>exact, d = 3</span> &middot; CryptoMiniSat 5.14.7 SAT</div><div class=kv style="color:var(--mut)">X: no logical &lt; 3 exists; Z: no logical &lt; 3 exists</div>
 </section>
+<section class=blk><h3>Circuit tier</h3>
+<div class=kv style="color:var(--mut)">syndrome-extraction memory circuits committed under <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/circuits/18-4-3">circuits/18-4-3/</a> &middot; canonical noise recipe, 3 rounds, stim 1.16.0</div>
+<div class=kv><b>d_circ</b> &le; 3 <span class=claimed>(min over bases; penalty-only, clamped to &le; d)</span></div>
+<div class=kv><b>d_circ^X</b> 3 &middot; fault-set witness of 3 mechanisms (claimed upper_bound)</div>
+<details><summary>witness fault set (mechanism indices in the committed .dem, 3)</summary><div class=wit>[2, 7, 13]</div></details>
+<div class=kv><b>d_circ^Z</b> 3 &middot; fault-set witness of 3 mechanisms (claimed upper_bound)</div>
+<details><summary>witness fault set (mechanism indices in the committed .dem, 3)</summary><div class=wit>[195, 196, 274]</div></details>
+<div class=kv><b>ler/round (X)</b> 0.00519 <span class=claimed>95% CI [0.00443, 0.00608] &middot; 154/10<sup>4</sup> shots &middot; decoder bposd-cs-10 at p=0.001</span></div>
+<div class=kv><b>ler/round (Z)</b> 0.00413 <span class=claimed>95% CI [0.00346, 0.00493] &middot; 123/10<sup>4</sup> shots &middot; decoder bposd-cs-10 at p=0.001</span></div>
+</section>
 <section class=blk><h3>Construction &amp; provenance</h3>
 <div class=kv><b>authors</b> <a href="https://github.com/vprusso">@vprusso</a></div>
 <div class=kv><b>provenance</b> submitted through the challenge</div>
