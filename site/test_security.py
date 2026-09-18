@@ -9,7 +9,6 @@ import re
 
 import pytest
 
-
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_SCRIPT = re.compile(
     r'<script id="([A-Za-z][A-Za-z0-9_-]*)" '
@@ -53,6 +52,9 @@ def test_free_form_schema_fields_are_deliberately_covered():
         "properties/provenance/properties/model/oneOf/1/items",
         "properties/provenance/properties/notes",
         "properties/provenance/properties/references/items",
+        # search_budget (schema 0.3): free text about how a code was found.
+        "properties/provenance/properties/search_budget/properties/notes",
+        "properties/provenance/properties/search_budget/properties/tool",
         # Deprecated and ignored by the site, but intentionally classified.
         "properties/tracks/items",
         "$defs/sideDistance/properties/witness_provenance/properties/tool",
@@ -138,8 +140,14 @@ def test_free_text_submission_payloads_render_inert(tmp_path, model_as_list):
             "method": f"schedule method {attr_breakout}",
         },
     }
+    doc["provenance"]["search_budget"] = {
+        "candidates_screened": 1,
+        "llm_tokens": {f"Model {attr_breakout}": 1},
+        "tool": f"budget tool {attr_breakout}",
+        "notes": f"budget notes {close_script}",
+    }
     doc["tracks"] = [close_script]
-    doc["schema_version"] = "0.2"
+    doc["schema_version"] = "0.3"
 
     codes = tmp_path / "codes"
     codes.mkdir()
