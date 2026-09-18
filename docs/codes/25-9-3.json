@@ -1,0 +1,275 @@
+{
+ "schema_version": "0.1",
+ "name": "[[25,9,3]]",
+ "code_type": "CSS",
+ "n": 25,
+ "k": 9,
+ "checks": {
+  "X": [
+   [
+    2,
+    10,
+    12,
+    14,
+    18,
+    22
+   ],
+   [
+    7,
+    11,
+    12,
+    17,
+    21,
+    23
+   ],
+   [
+    16,
+    17,
+    19,
+    22,
+    23,
+    24
+   ],
+   [
+    2,
+    3,
+    4,
+    9,
+    14
+   ],
+   [
+    8,
+    9,
+    12,
+    13,
+    19,
+    23
+   ],
+   [
+    0,
+    1,
+    2,
+    3,
+    6,
+    8
+   ],
+   [
+    5,
+    6,
+    10,
+    11,
+    15,
+    21
+   ],
+   [
+    0,
+    5,
+    10,
+    11,
+    16,
+    20
+   ]
+  ],
+  "Z": [
+   [
+    4,
+    13,
+    14,
+    18,
+    19,
+    24
+   ],
+   [
+    3,
+    7,
+    8,
+    9,
+    19,
+    23
+   ],
+   [
+    2,
+    6,
+    11,
+    14,
+    16,
+    17
+   ],
+   [
+    15,
+    17,
+    18,
+    21,
+    22
+   ],
+   [
+    1,
+    2,
+    5,
+    9,
+    11,
+    12
+   ],
+   [
+    12,
+    16,
+    20,
+    22,
+    23,
+    24
+   ],
+   [
+    0,
+    1,
+    7,
+    11,
+    15
+   ],
+   [
+    6,
+    8,
+    10,
+    13,
+    16,
+    22
+   ]
+  ]
+ },
+ "distance": {
+  "d": 3,
+  "X": {
+   "value": 3,
+   "confidence": "upper_bound",
+   "witness": [
+    1,
+    7,
+    9
+   ]
+  },
+  "Z": {
+   "value": 3,
+   "confidence": "upper_bound",
+   "witness": [
+    3,
+    8,
+    9
+   ]
+  }
+ },
+ "provenance": {
+  "authors": [
+   "@mathysrennela"
+  ],
+  "construction": "SAT search (local_sat, n_side=5, G=8, max_weight=6, t=2 detection, radius 2.0, shared_t3) over 2D-local CSS codes on a 5x5 grid; found a weight-6 code with k=9, d>=3.",
+  "origin": "submission",
+  "date": "2026-09-18",
+  "model": "DeepSeek V4 Flash 0731",
+  "notes": "Checked against the current board: the trusted gate's dedup found no exact duplicate and no WL-equivalent existing entry; this is a new SAT-found code, not equivalent to a prior submission."
+ },
+ "family": "other",
+ "locality": {
+  "coordinates": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    1.0,
+    0.0
+   ],
+   [
+    2.0,
+    0.0
+   ],
+   [
+    3.0,
+    0.0
+   ],
+   [
+    4.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    1.0,
+    1.0
+   ],
+   [
+    2.0,
+    1.0
+   ],
+   [
+    3.0,
+    1.0
+   ],
+   [
+    4.0,
+    1.0
+   ],
+   [
+    0.0,
+    2.0
+   ],
+   [
+    1.0,
+    2.0
+   ],
+   [
+    2.0,
+    2.0
+   ],
+   [
+    3.0,
+    2.0
+   ],
+   [
+    4.0,
+    2.0
+   ],
+   [
+    0.0,
+    3.0
+   ],
+   [
+    1.0,
+    3.0
+   ],
+   [
+    2.0,
+    3.0
+   ],
+   [
+    3.0,
+    3.0
+   ],
+   [
+    4.0,
+    3.0
+   ],
+   [
+    0.0,
+    4.0
+   ],
+   [
+    1.0,
+    4.0
+   ],
+   [
+    2.0,
+    4.0
+   ],
+   [
+    3.0,
+    4.0
+   ],
+   [
+    4.0,
+    4.0
+   ]
+  ],
+  "layers": 1
+ }
+}
