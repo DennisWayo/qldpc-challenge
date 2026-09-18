@@ -669,32 +669,6 @@
       ],
       "date": "2026-09-16",
       "method": "generic CSS memory schedule: one ancilla per check, CX layers from a bipartite edge coloring, CNOT orders filtered by a hook-error criterion; screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search"
-    },
-    "ler": {
-      "X": {
-        "p": 0.001,
-        "shots": 120000,
-        "failures": 262,
-        "seed": 7,
-        "decoder": "bposd-cs-10",
-        "ler_per_round": 0.000437431,
-        "ci95": [
-          0.000387542,
-          0.00049374
-        ]
-      },
-      "Z": {
-        "p": 0.001,
-        "shots": 120000,
-        "failures": 288,
-        "seed": 7,
-        "decoder": "bposd-cs-10",
-        "ler_per_round": 0.000480924,
-        "ci95": [
-          0.000428459,
-          0.00053981
-        ]
-      }
     }
   }
 }
