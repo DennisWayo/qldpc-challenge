@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[64,8,3]] multi-band dense-packed code",
  "code_type": "CSS",
  "n": 64,
@@ -600,5 +600,63 @@
   ],
   "interaction_radius": 1.4142135623730951,
   "layers": 1
+ },
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 3,
+    "confidence": "upper_bound",
+    "witness": [
+     54,
+     56,
+     72
+    ]
+   },
+   "Z": {
+    "value": 3,
+    "confidence": "upper_bound",
+    "witness": [
+     304,
+     322,
+     355
+    ]
+   }
+  },
+  "rounds": 3,
+  "stim_version": "1.16.0",
+  "notes": "Generic sequential two-block extraction: one ancilla per check, X checks then Z checks each round with joint reset/measure layers; CX layers are a proper edge coloring of each Tanner graph (4 X + 4 Z CX layers per round, schedule seed 0; hook-aware orders: every CNOT order suffix needs >= d-1 further data errors to complete a logical, layered by min-conflicts search). Screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search; witnesses validated in GF(2).",
+  "contributed_by": {
+   "by": [
+    "@vprusso"
+   ],
+   "date": "2026-09-16",
+   "method": "generic CSS memory schedule: one ancilla per check, CX layers from a bipartite edge coloring, CNOT orders filtered by a hook-error criterion; screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search"
+  },
+  "ler": {
+   "X": {
+    "p": 0.001,
+    "shots": 10000,
+    "failures": 248,
+    "seed": 7,
+    "decoder": "bposd-cs-10",
+    "ler_per_round": 0.008407238,
+    "ci95": [
+     0.007419405,
+     0.009525446
+    ]
+   },
+   "Z": {
+    "p": 0.001,
+    "shots": 10000,
+    "failures": 210,
+    "seed": 7,
+    "decoder": "bposd-cs-10",
+    "ler_per_round": 0.007100353,
+    "ci95": [
+     0.006199272,
+     0.008131419
+    ]
+   }
+  }
  }
 }
