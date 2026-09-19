@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[18,8,2]] 2BGA",
  "code_type": "CSS",
  "n": 18,
@@ -202,5 +202,89 @@
   "model": "DeepSeek V4 Flash 0731",
   "origin": "submission"
  },
- "family": "generalized-bicycle"
+ "family": "generalized-bicycle",
+ "locality": {
+  "coordinates": [
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "layers": 2,
+  "contributed_by": {
+   "by": [
+    "@mathysrennela"
+   ],
+   "date": "2026-09-19",
+   "method": "simulated annealing over integer grid sites (research/local2d/fold_layout.py)"
+  }
+ }
 }
