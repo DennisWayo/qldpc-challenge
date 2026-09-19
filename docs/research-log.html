@@ -3619,6 +3619,51 @@ HZ = np.hstack([B.T, A.T]) % 2  # H_Z = [B^T | A^T]
 <p>DeepSeek V4 Flash 0731 (provenance.model), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(33,1), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[3], b=[2, 3, 11, 16, 33] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 66 - rank(HX) - rank(HZ) = 6. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/66-6-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/660-68-8.html">[[660,68,8]] — 660-68-8</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[660,68,8]] — planar hyperbolic {4,5} code</h3>
+<h4>Credit</h4>
+<p>Literature reproduction, not an original construction: matrices come unmodified from <code>github.com/QEC-pages/Quantum_LDPC_Codes</code> @ <code>1c95489383564e4dc2cce517de00d64d6f2c4f56</code> (<code>Hyperbolic_Codes_Planar.zip</code>), the same pinned source <b>@MathysRennela</b> (using DeepSeek V4 Flash 0731) already used for the five <code>topological</code>-family &quot;Seam D&quot; codes in <code>fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md</code>. This pulls a different <code>(p,q,N)</code> entry from that same catalog, and is a sibling submission to <code>160-18-6.json</code> and <code>360-38-8.json</code> — both also <code>{4,5}</code> tessellations at different N.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>Same direction as <code>80-18-5.note.md</code>: filtering the source repo&#x27;s own <code>Hyperbolic_Codes.tsv</code> index to <code>N&lt;=1000</code> gives 21 entries; only 5 (Seam D) were on the board. This is one of the 6 that checked out as still open, and the largest of the six (N=660, near the top of this family&#x27;s range within the eligibility box).</p>
+<h4>What was searched</h4>
+<p>Same sweep as <code>80-18-5.note.md</code>. Independently computed k matched the file&#x27;s own header-comment <code>[[n,k,d]]</code> (<code>[[660,68,8]]</code> here).</p>
+<h4>Evidence trail</h4>
+<ul>
+<li><code>css.verify_css</code>: CSS commutation confirmed.</li>
+<li><code>css.compute_k</code>: k=68, matching the file&#x27;s own header.</li>
+<li><code>submit.make_submission</code> witness search (3,000 RIS trials/side, numpy,</li>
+<p>seed 0 — reduced from the 8,000 used on the smaller siblings, purely for wall-clock budget on this larger code): found a weight-8 witness on both sides, matching the paper&#x27;s claimed distance despite the lower trial count.</p>
+<li>Gate: <code>verify/validate_candidate.py</code> returned <code>passed: true</code>,</li>
+<p><code>refute.refuted: false</code>, <code>novelty.board_advancing: true</code> for (weight-6, unrestricted), <code>dominated_by: []</code>.</p>
+<li>Claim: witness-backed <b>upper bound</b>, not exact. Given the reduced</li>
+<p>witness-search trial count relative to the other five in this batch, this is the one submission here where a deeper independent confirmation pass (matching the ~8,000+ trials used elsewhere) would be worth running before treating the distance claim with full confidence, even though the witness found already matches the literature value.</p>
+</ul>
+<h4>Dead ends</h4>
+<p>See <code>80-18-5.note.md</code> — same sweep, same 10 dominated entries not submitted.</p>
+<h4>Tools</h4>
+<p>Same as <code>80-18-5.note.md</code>.</p>
+<h4>Reproduction</h4>
+<pre>
+git clone https://github.com/QEC-pages/Quantum_LDPC_Codes.git
+cd Quantum_LDPC_Codes
+unzip Hyperbolic_Codes_Planar.zip -d hyp
+# HX, HZ: hyp/4_5/4_5_660.mtx and hyp/4_5/5_4_660.mtx
+</pre>
+<pre>
+import sys
+sys.path.insert(0, &quot;research/kit&quot;)
+from submit import make_submission, save_submission
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[660,68,8]] planar hyperbolic {4,5} code&quot;,
+    construction=&quot;Planar hyperbolic {4,5} code, literature reproduction from &quot;
+                 &quot;github.com/QEC-pages/Quantum_LDPC_Codes @ &quot;
+                 &quot;1c95489383564e4dc2cce517de00d64d6f2c4f56, N=660.&quot;,
+    authors=[&quot;@msilve160&quot;], family=&quot;topological&quot;,
+    references=[&quot;github.com/QEC-pages/Quantum_LDPC_Codes&quot;],
+    confidence=&quot;upper_bound&quot;, trials=8000, seed=0,
+)
+save_submission(doc, &quot;codes/660-68-8.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/660-68-8.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/68-2-11.html">[[68,2,11]] — 68-2-11</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[68,2,11]] — two-block group-algebra code on SmallGroup(34,2)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published weight-6 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 3.56.</p>
