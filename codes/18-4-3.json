@@ -194,5 +194,89 @@
     ]
    }
   }
+ },
+ "locality": {
+  "coordinates": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    5
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    5
+   ]
+  ],
+  "layers": 1,
+  "contributed_by": {
+   "by": [
+    "@mathysrennela"
+   ],
+   "date": "2026-09-19",
+   "method": "simulated annealing over integer grid sites (research/local2d/fold_layout.py)"
+  }
  }
 }
