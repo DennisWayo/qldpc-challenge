@@ -1703,7 +1703,7 @@
   },
   "provenance": {
     "authors": [
-      "msilve160"
+      "@msilve160"
     ],
     "construction": "Open-boundary directional-condensation planar bivariate-bicycle code (Liang-Eberhardt-Chen arXiv:2504.08887, flagship f=x+x^2+y^2, g=1+x^2y+x^2y^2) on an 11x11 grid; built with research/local2d/planar.build_open_directional (validated construction, greedy footnote-6 corner resolution). Distance is a Monte-Carlo upper bound from research/kit/surrogate.distance_rand, confirmed stable at 15k trials (no drop from the 3k-trial screening value).",
     "references": [
