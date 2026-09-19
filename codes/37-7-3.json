@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "name": "[[37,7,3]] punctured triangular colour-code complex",
   "code_type": "CSS",
   "n": 37,
@@ -50,5 +50,63 @@
     ],
     "interaction_radius": 1.9318709710946886,
     "layers": 1
+  },
+  "circuit": {
+    "d_circ": {
+      "X": {
+        "value": 3,
+        "confidence": "upper_bound",
+        "witness": [
+          16,
+          25,
+          53
+        ]
+      },
+      "Z": {
+        "value": 3,
+        "confidence": "upper_bound",
+        "witness": [
+          706,
+          756,
+          768
+        ]
+      }
+    },
+    "rounds": 3,
+    "stim_version": "1.16.0",
+    "notes": "Flag-qubit sequential two-block extraction: one ancilla and one flag qubit per check, X checks then Z checks each round with joint reset/measure layers. Each block has 6 data CNOT slot layers (a proper edge coloring of the check type's Tanner graph); the flag (|0> for X checks, |+> for Z checks) is coupled to the ancilla after slot 1 and again after slot 5, and measured every round as a single-record detector, so an ancilla hook in that window also fires the flag. 8 X + 8 Z CX layers per round, schedule seed 0. Hook-aware orders: every reachable suffix S of a check's CNOT order needs 1 + [flagged] + cost(S) >= d faults and every same-ancilla pair of hooks 2 + [statuses differ] + cost >= d, where cost is the exact fewest further data errors completing the set to a logical; layered by min-conflicts search. Pairs of hooks on different ancillas of the same type are also constrained: an assignment pair is admitted only if every such hook pair needs >= d faults in total (2 + flags + completion cost). Screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search; witnesses validated in GF(2).",
+    "contributed_by": {
+      "by": [
+        "@vprusso"
+      ],
+      "date": "2026-09-19",
+      "method": "generic CSS memory schedule with one flag qubit per check: CX layers from a bipartite edge coloring, the flag coupled to the ancilla after the first and the second-to-last CX slot and measured every round, slot assignments filtered by an exact hook-cost criterion over single, same-ancilla and cross-ancilla hook pairs; screened by RIS and a seeded BP+OSD search"
+    },
+    "ler": {
+      "X": {
+        "p": 0.001,
+        "shots": 10000,
+        "failures": 601,
+        "seed": 7,
+        "decoder": "bposd-cs-10",
+        "ler_per_round": 0.020894316,
+        "ci95": [
+          0.019269222,
+          0.022654034
+        ]
+      },
+      "Z": {
+        "p": 0.001,
+        "shots": 10000,
+        "failures": 566,
+        "seed": 7,
+        "decoder": "bposd-cs-10",
+        "ler_per_round": 0.019627026,
+        "ci95": [
+          0.01805725,
+          0.02133095
+        ]
+      }
+    }
   }
 }
