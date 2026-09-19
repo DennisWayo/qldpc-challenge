@@ -1,248 +1,128 @@
 {
- "schema_version": "0.2",
- "name": "[[12,4,2]] twisted-torus BB code (arXiv:2503.03827)",
- "code_type": "CSS",
- "n": 12,
- "k": 4,
- "checks": {
-  "X": [
-   [
-    0,
-    1,
-    4,
-    6,
-    8,
-    10
-   ],
-   [
-    0,
-    1,
-    3,
-    6,
-    7,
-    10
-   ],
-   [
-    2,
-    4,
-    5,
-    8,
-    9,
-    11
-   ],
-   [
-    1,
-    3,
-    5,
-    6,
-    7,
-    9
-   ],
-   [
-    0,
-    2,
-    4,
-    8,
-    10,
-    11
-   ],
-   [
-    2,
-    3,
-    5,
-    7,
-    9,
-    11
-   ]
-  ],
-  "Z": [
-   [
-    0,
-    1,
-    3,
-    6,
-    7,
-    10
-   ],
-   [
-    1,
-    3,
-    5,
-    6,
-    7,
-    9
-   ],
-   [
-    0,
-    2,
-    4,
-    8,
-    10,
-    11
-   ],
-   [
-    2,
-    3,
-    5,
-    7,
-    9,
-    11
-   ],
-   [
-    0,
-    1,
-    4,
-    6,
-    8,
-    10
-   ],
-   [
-    2,
-    4,
-    5,
-    8,
-    9,
-    11
-   ]
-  ]
- },
- "distance": {
-  "d": 2,
-  "X": {
-   "value": 2,
-   "confidence": "upper_bound",
-   "witness": [
-    4,
-    8
-   ]
+  "schema_version": "0.1",
+  "name": "[[12,4,2]] 2BGA",
+  "code_type": "CSS",
+  "n": 12,
+  "k": 4,
+  "checks": {
+    "X": [
+      [
+        0,
+        1,
+        6,
+        8,
+        10
+      ],
+      [
+        0,
+        1,
+        7,
+        9,
+        11
+      ],
+      [
+        2,
+        3,
+        6,
+        8,
+        10
+      ],
+      [
+        2,
+        3,
+        7,
+        9,
+        11
+      ],
+      [
+        4,
+        5,
+        6,
+        8,
+        10
+      ],
+      [
+        4,
+        5,
+        7,
+        9,
+        11
+      ]
+    ],
+    "Z": [
+      [
+        0,
+        2,
+        4,
+        6,
+        7
+      ],
+      [
+        1,
+        3,
+        5,
+        6,
+        7
+      ],
+      [
+        0,
+        2,
+        4,
+        8,
+        9
+      ],
+      [
+        1,
+        3,
+        5,
+        8,
+        9
+      ],
+      [
+        0,
+        2,
+        4,
+        10,
+        11
+      ],
+      [
+        1,
+        3,
+        5,
+        10,
+        11
+      ]
+    ]
   },
-  "Z": {
-   "value": 2,
-   "confidence": "upper_bound",
-   "witness": [
-    5,
-    9
-   ]
-  }
- },
- "provenance": {
-  "authors": [
-   "Zijian Liang",
-   "Ke Liu",
-   "Hao Song",
-   "Yu-An Chen"
-  ],
-  "construction": "Twisted-torus bivariate-bicycle code from Generalized toric codes on twisted tori for quantum error correction (PRX Quantum 6, 020357, 2025). Stabilizers f(x,y)=1+x+xy, g(x,y)=1+y+xy on the abelian quotient group Z^2/L with twist basis a_1=[0, 3], a_2=[2, 1] (n=2|det[a_1,a_2]|=2*6). Reconstructed from the published polynomials and twist; CSS form H_X=[f|g], H_Z=[gbar|fbar].",
-  "references": [
-   "arXiv:2503.03827"
-  ],
-  "date": "2025",
-  "notes": "Reconstructed baseline from Liang, Liu, Song, Chen, Generalized toric codes on twisted tori for quantum error correction (PRX Quantum 6, 020357, 2025), arXiv:2503.03827. The [[n,k,d]] parameter set and stabilizer polynomials are published in that paper; this entry reproduces them. Distance is an upper bound per the paper (probabilistic for d>20); the witness is the surrogate logical of that weight. Seeded to fill a board coverage gap at this block size, not a discovery. 2D-local layout added 2026-07-27: simulated annealing over qubit-to-site assignments on a unit-spaced triangular grid (1 layer, capacity 1 per site per layer); measured interaction radius 2.645751 (single-layer); same code, same check matrices.",
-  "origin": "baseline",
-  "novelty": "known_parameters"
- },
- "family": "bivariate-bicycle",
- "locality": {
-  "coordinates": [
-   [
-    0.5,
-    0.8660254037844386
-   ],
-   [
-    -0.5,
-    -0.8660254037844386
-   ],
-   [
-    1.5,
-    0.8660254037844386
-   ],
-   [
-    1.0,
-    -1.7320508075688772
-   ],
-   [
-    0.0,
-    1.7320508075688772
-   ],
-   [
-    2.0,
-    0.0
-   ],
-   [
-    0.5,
-    -0.8660254037844386
-   ],
-   [
-    1.5,
-    -0.8660254037844386
-   ],
-   [
-    -0.5,
-    0.8660254037844386
-   ],
-   [
-    0.0,
-    0.0
-   ],
-   [
-    -1.0,
-    0.0
-   ],
-   [
-    1.0,
-    0.0
-   ]
-  ],
-  "interaction_radius": 2.6457513110645907,
-  "layers": 1
- },
- "circuit": {
-  "d_circ": {
-   "X": {
-    "value": 2,
-    "confidence": "upper_bound",
-    "witness": [
-     355,
-     356
-    ]
-   },
-   "Z": {
-    "value": 2,
-    "confidence": "upper_bound",
-    "witness": [
-     607,
-     608
-    ]
-   }
+  "distance": {
+    "d": 2,
+    "X": {
+      "value": 2,
+      "confidence": "upper_bound",
+      "witness": [
+        10,
+        11
+      ]
+    },
+    "Z": {
+      "value": 2,
+      "confidence": "upper_bound",
+      "witness": [
+        6,
+        10
+      ]
+    }
   },
-  "rounds": 2,
-  "stim_version": "1.16.0",
-  "notes": "Interleaved two-block extraction (Bravyi et al. arXiv:2308.07915 Table 5 style): joint reset and measurement layers, 7 data CX layers per round; X-check term slots [3, 4, 2, 5, 6, 1], Z-check term slots [4, 3, 2, 0, 1, 5] over terms A_0..A_2, B_0..B_2; terms recovered from H alone by a commuting permutation decomposition. Order screened by RIS among the 1968 slot assignments satisfying the overlap-parity criterion (second one tried); the claim then survived 3 seeds x 1500 RIS trials per basis and an observable-constrained seeded BP+OSD search over symmetric seeds, whose lightest undetected logical fault set is weight 2 in both bases.",
-  "ler": {
-   "X": {
-    "p": 0.001,
-    "shots": 10000,
-    "failures": 493,
-    "seed": 7,
-    "decoder": "bposd-cs-10",
-    "ler_per_round": 0.025289562,
-    "ci95": [
-     0.023149476,
-     0.027622492
-    ]
-   },
-   "Z": {
-    "p": 0.001,
-    "shots": 10000,
-    "failures": 501,
-    "seed": 7,
-    "decoder": "bposd-cs-10",
-    "ler_per_round": 0.025711059,
-    "ci95": [
-     0.023551894,
-     0.028063095
-    ]
-   }
-  }
- }
+  "provenance": {
+    "authors": [
+      "@MathysRennela"
+    ],
+    "construction": "2BGA (arXiv:2306.16400) on SmallGroup(6,2), from github.com/QEC-pages/2BGA-codes @ 403d194c3f98f0cadc236aecbc4a8b6139ccf23c, abelian.zip, diswtabelian_wt5wtL2_order6_k4.txt, line 1. nonidentity supports a=[2], b=[3, 5].",
+    "references": [],
+    "date": "2026-09-19",
+    "notes": "Literature reproduction of a published 2BGA code (arXiv:2306.16400; github.com/QEC-pages/2BGA-codes @ 403d194c3f98f0cadc236aecbc4a8b6139ccf23c). Checked against the live board: not equivalent to any existing entry.",
+    "model": "DeepSeek V4 Flash 0731",
+    "origin": "submission"
+  },
+  "family": "generalized-bicycle"
 }
