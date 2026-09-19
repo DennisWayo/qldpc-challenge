@@ -861,10 +861,19 @@ font-size:11.5px;color:var(--mut)}}
 /* kd2/n, g, w: a horizontal stat trio — big value, small label beneath
    (column-reverse puts the ::before label under the number) */
 .board td.m3{{display:inline-flex;flex-direction:column-reverse;
-align-items:center;justify-content:flex-start;gap:3px;width:32.8%;
-padding:9px 0 5px;font-size:19px;font-weight:700;
+align-items:center;justify-content:flex-start;gap:2px;width:32.8%;
+padding:5px 0 3px;font-size:17px;font-weight:700;
 font-variant-numeric:tabular-nums;text-align:center}}
 .board td.m3::before{{font-size:10.5px}}
+/* an entry with no verified layout has no g: the cell is a bare middot, so it
+   is a third of the stat band carrying nothing. Drop it and let the two real
+   stats split the width. */
+.board td.m3.m3empty{{display:none}}
+.board tr:has(td.m3empty) td.m3{{width:49.4%}}
+/* the family chip rides on the title line instead of claiming its own row */
+.board td.typecell{{position:absolute;top:34px;left:14px;width:auto;
+padding:0;margin:0}}
+.board td.codecell{{padding-bottom:30px}}
 /* unlabeled rows: chips and byline speak for themselves */
 .board td.typecell::before,.board td.auth::before,
 .board td.model::before{{content:none}}
@@ -3772,7 +3781,7 @@ def board_table(entries, records):
                f'{"; inherits the upper-bound distance tier" if e["tier"] != "exact" else ""}">'
                f'{e["geo"]:.3g}</td>'
                if e["geo"] is not None else
-               '<td class="num m3" data-label="g" title="no verified layout; geometric '
+               '<td class="num m3 m3empty" data-label="g" title="no verified layout; geometric '
                'efficiency undefined (not necessarily an expander code)">&middot;</td>')
             + f'<td class="num m3" data-label="w">{e["w"]}</td>'
             f'<td class="auth col-auth" data-label="authors" '
