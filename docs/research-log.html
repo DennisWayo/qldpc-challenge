@@ -969,6 +969,50 @@
 <p>DeepSeek V4 Flash 0731 (provenance.model), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(74,1), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[2, 3, 10], b=[7, 21, 53] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 148 - rank(HX) - rank(HZ) = 4. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/148-4-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/150-32-6.html">[[150,32,6]] — 150-32-6</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[150,32,6]] — planar hyperbolic {5,5} code</h3>
+<h4>Credit</h4>
+<p>Literature reproduction, not an original construction: matrices come unmodified from <code>github.com/QEC-pages/Quantum_LDPC_Codes</code> @ <code>1c95489383564e4dc2cce517de00d64d6f2c4f56</code> (<code>Hyperbolic_Codes_Planar.zip</code>), the same pinned source <b>@MathysRennela</b> (using DeepSeek V4 Flash 0731) already used for the five <code>topological</code>-family &quot;Seam D&quot; codes in <code>fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md</code> (<code>codes/720-122-8.json</code>, <code>codes/864-146-8.json</code>, <code>codes/896-194-6.json</code>, <code>codes/900-182-8.json</code>, <code>codes/960-258-6.json</code>). This pulls a different <code>(p,q,N)</code> entry from that same catalog.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>Same direction as <code>80-18-5.note.md</code>: the source repo&#x27;s own index, <code>Hyperbolic_Codes.tsv</code>, lists every <code>(p,q,N)</code> it provides matrices for. Filtering to <code>N&lt;=1000</code> gives 21 entries; only 5 (Seam D) were on the board. This is one of the 6 that checked out as still open.</p>
+<h4>What was searched</h4>
+<p>Same sweep as <code>80-18-5.note.md</code>: cloned the source repo at the pinned commit, read the full catalog, unzipped the matrix archive, loaded all 15 untouched candidates. Independently computed k matched the file&#x27;s own header-comment <code>[[n,k,d]]</code> on every one (<code>[[150,32,6]]</code> here). All 15 were checked against the live board; 6 were open.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li><code>css.verify_css</code>: CSS commutation confirmed.</li>
+<li><code>css.compute_k</code>: k=32, matching the file&#x27;s own header.</li>
+<li><code>submit.make_submission</code> witness search (8,000 RIS trials/side, numpy,</li>
+<p>seed 0): found a weight-6 witness on both sides, matching the paper&#x27;s claimed distance.</p>
+<li>Gate: <code>verify/validate_candidate.py</code> returned <code>passed: true</code>,</li>
+<p><code>refute.refuted: false</code>, <code>novelty.board_advancing: true</code> for (weight-6, unrestricted), <code>dominated_by: []</code>.</p>
+<li>Claim: witness-backed <b>upper bound</b>, not exact.</li>
+</ul>
+<h4>Dead ends</h4>
+<p>See <code>80-18-5.note.md</code> — same sweep, same 10 dominated entries not submitted.</p>
+<h4>Tools</h4>
+<p>Same as <code>80-18-5.note.md</code>: Claude Sonnet 5, <code>git clone</code> of the pinned source, a from-scratch <code>.mtx</code> reader cross-checked against <code>research/kit/css.py</code>, <code>research/kit/submit.py</code>, <code>verify/validate_candidate.py</code>.</p>
+<h4>Reproduction</h4>
+<pre>
+git clone https://github.com/QEC-pages/Quantum_LDPC_Codes.git
+cd Quantum_LDPC_Codes
+unzip Hyperbolic_Codes_Planar.zip -d hyp
+# HX, HZ: hyp/5_5/5_5_150_X.mtx and hyp/5_5/5_5_150_Z.mtx
+</pre>
+<pre>
+import sys
+sys.path.insert(0, &quot;research/kit&quot;)
+from submit import make_submission, save_submission
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[150,32,6]] planar hyperbolic {5,5} code&quot;,
+    construction=&quot;Planar hyperbolic {5,5} code, literature reproduction from &quot;
+                 &quot;github.com/QEC-pages/Quantum_LDPC_Codes @ &quot;
+                 &quot;1c95489383564e4dc2cce517de00d64d6f2c4f56, N=150.&quot;,
+    authors=[&quot;@msilve160&quot;], family=&quot;topological&quot;,
+    references=[&quot;github.com/QEC-pages/Quantum_LDPC_Codes&quot;],
+    confidence=&quot;upper_bound&quot;, trials=8000, seed=0,
+)
+save_submission(doc, &quot;codes/150-32-6.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/150-32-6.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/152-4-18.html">[[152,4,18]] — 152-4-18</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[152,4,18]] — two-block group-algebra code on SmallGroup(76,1)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-8 frontier for hackathon issue #1155. Reconstruct a published weight-8 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 8.53.</p>
@@ -1112,6 +1156,50 @@
 <p>DeepSeek V4 Flash 0731 (provenance.model), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(8,3), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[2, 3, 5], b=[2, 4, 6] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 16 - rank(HX) - rank(HZ) = 9. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/16-9-2.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/160-18-6.html">[[160,18,6]] — 160-18-6</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[160,18,6]] — planar hyperbolic {4,5} code</h3>
+<h4>Credit</h4>
+<p>Literature reproduction, not an original construction: matrices come unmodified from <code>github.com/QEC-pages/Quantum_LDPC_Codes</code> @ <code>1c95489383564e4dc2cce517de00d64d6f2c4f56</code> (<code>Hyperbolic_Codes_Planar.zip</code>), the same pinned source <b>@MathysRennela</b> (using DeepSeek V4 Flash 0731) already used for the five <code>topological</code>-family &quot;Seam D&quot; codes in <code>fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md</code> (<code>codes/720-122-8.json</code>, <code>codes/864-146-8.json</code>, <code>codes/896-194-6.json</code>, <code>codes/900-182-8.json</code>, <code>codes/960-258-6.json</code>). This pulls a different <code>(p,q,N)</code> entry from that same catalog.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>Same direction as <code>80-18-5.note.md</code>: filtering the source repo&#x27;s own <code>Hyperbolic_Codes.tsv</code> index to <code>N&lt;=1000</code> gives 21 entries; only 5 (Seam D) were on the board. This is one of the 6 that checked out as still open.</p>
+<h4>What was searched</h4>
+<p>Same sweep as <code>80-18-5.note.md</code>. Independently computed k matched the file&#x27;s own header-comment <code>[[n,k,d]]</code> (<code>[[160,18,6]]</code> here).</p>
+<h4>Evidence trail</h4>
+<ul>
+<li><code>css.verify_css</code>: CSS commutation confirmed.</li>
+<li><code>css.compute_k</code>: k=18, matching the file&#x27;s own header.</li>
+<li><code>submit.make_submission</code> witness search (8,000 RIS trials/side, numpy,</li>
+<p>seed 0): found a weight-6 witness on both sides, matching the paper&#x27;s claimed distance.</p>
+<li>Gate: <code>verify/validate_candidate.py</code> returned <code>passed: true</code>,</li>
+<p><code>refute.refuted: false</code>, <code>novelty.board_advancing: true</code> for (weight-6, unrestricted), <code>dominated_by: []</code>.</p>
+<li>Claim: witness-backed <b>upper bound</b>, not exact.</li>
+</ul>
+<h4>Dead ends</h4>
+<p>See <code>80-18-5.note.md</code> — same sweep, same 10 dominated entries not submitted.</p>
+<h4>Tools</h4>
+<p>Same as <code>80-18-5.note.md</code>.</p>
+<h4>Reproduction</h4>
+<pre>
+git clone https://github.com/QEC-pages/Quantum_LDPC_Codes.git
+cd Quantum_LDPC_Codes
+unzip Hyperbolic_Codes_Planar.zip -d hyp
+# HX, HZ: hyp/4_5/4_5_160.mtx and hyp/4_5/5_4_160.mtx
+</pre>
+<pre>
+import sys
+sys.path.insert(0, &quot;research/kit&quot;)
+from submit import make_submission, save_submission
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[160,18,6]] planar hyperbolic {4,5} code&quot;,
+    construction=&quot;Planar hyperbolic {4,5} code, literature reproduction from &quot;
+                 &quot;github.com/QEC-pages/Quantum_LDPC_Codes @ &quot;
+                 &quot;1c95489383564e4dc2cce517de00d64d6f2c4f56, N=160.&quot;,
+    authors=[&quot;@msilve160&quot;], family=&quot;topological&quot;,
+    references=[&quot;github.com/QEC-pages/Quantum_LDPC_Codes&quot;],
+    confidence=&quot;upper_bound&quot;, trials=8000, seed=0,
+)
+save_submission(doc, &quot;codes/160-18-6.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/160-18-6.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/160-4-19.html">[[160,4,19]] — 160-4-19</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[160,4,19]] — two-block group-algebra code on SmallGroup(80,8)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-8 frontier for hackathon issue #1155. Reconstruct a published weight-8 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 9.03.</p>
@@ -3703,6 +3791,68 @@ HZ = np.hstack([B.T, A.T]) % 2  # H_Z = [B^T | A^T]
 <p>DeepSeek V4 Flash 0731 (provenance.model), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(4,1), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[2, 3, 4], b=[2, 3, 4] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 8 - rank(HX) - rank(HZ) = 6. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/8-6-2.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/80-18-5.html">[[80,18,5]] — 80-18-5</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[80,18,5]] — planar hyperbolic {5,5} code</h3>
+<h4>Credit</h4>
+<p>This is a literature reproduction, not an original construction. The <code>{p,q}</code> planar hyperbolic code family and its parity-check matrices come entirely from <code>github.com/QEC-pages/Quantum_LDPC_Codes</code> (pinned at commit <code>1c95489383564e4dc2cce517de00d64d6f2c4f56</code>, <code>Hyperbolic_Codes_Planar.zip</code> and its index <code>Hyperbolic_Codes.tsv</code>). The same source, and the practice of pulling untouched <code>(p,q,N)</code> entries from its catalog into the board (rather than claiming discovery), was established by <b>@MathysRennela</b> (using DeepSeek V4 Flash 0731), whose five submissions (<code>codes/720-122-8.json</code>, <code>codes/864-146-8.json</code>, <code>codes/896-194-6.json</code>, <code>codes/900-182-8.json</code>, <code>codes/960-258-6.json</code> — Seam D in <code>fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md</code>) first identified this repository as a board-advancing source and are the direct precedent this submission follows. This entry pulls a different <code>(p,q,N)</code> row from the same pinned catalog that those five did not use.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>The playbook fieldnote&#x27;s Seam D describes five hyperbolic-code entries as filling &quot;high-k cells that the bicycle families cannot reach,&quot; pulled from one repository. <code>Hyperbolic_Codes.tsv</code> catalogs 55 <code>(p,q,N,distance)</code> rows; only 21 have <code>N &lt;= 1000</code> (the eligibility box), and only 5 of those 21 were on the board at the time of this session. This submission is one of the 6 remaining open rows (of the other 15, 9 were already dominated by the board&#x27;s lifted-product and pair-partition-CPM families; this and 5 siblings were not).</p>
+<h4>What was searched</h4>
+<p>Loaded the full <code>Hyperbolic_Codes.tsv</code> catalog, filtered to <code>N &lt;= 1000</code> (21 rows), and checked each against the live board&#x27;s Pareto frontier for its check-weight class. <code>{p,q}</code> fixes the check weights (<code>wX</code>, <code>wZ</code> equal to <code>p</code> and <code>q</code> in some order); <code>{5,5}</code> gives weight 5, qualifying for both the weight-6 and weight-8 prize tiers. This row (<code>N=80</code>) was one of six found non-dominated.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Loaded <code>5_5_80_X.mtx</code> / <code>5_5_80_Z.mtx</code> (Matrix Market coordinate</li>
+<p>format) from the pinned zip.</p>
+<li><code>research/kit/css.verify_css</code>: <code>H_X H_Z^T = 0</code> over GF(2), confirmed.</li>
+<li>Independently computed <code>k = n - rank(HX) - rank(HZ) = 18</code>, matching the</li>
+<p>paper&#x27;s own header comment (<code>[[80,18,5]]</code>) embedded in the <code>.mtx</code> file exactly — cross-checked before trusting the file.</p>
+<li><code>research/kit/submit.make_submission</code> witness search (8,000 trials,</li>
+<p>seed 0) found a weight-5 witness on both sides, matching the paper&#x27;s stated distance exactly. Per the precedent note&#x27;s own rule (&quot;do not replace the returned distance with the paper&#x27;s number&quot;), the distance claimed here is what this search earned, which happens to equal the paper&#x27;s value, not an assumption of it.</p>
+<li>Gate: <code>verify/validate_candidate.py</code> returned <code>passed: true</code>,</li>
+<p><code>refute.refuted: false</code>, <code>novelty.board_advancing: true</code> for (weight-6, unrestricted), <code>dominated_by: []</code>.</p>
+<li>Claim: witness-backed <b>upper bound</b>, not exact.</li>
+</ul>
+<h4>Dead ends</h4>
+<p>Of the 21 catalog rows with <code>N &lt;= 1000</code>, 9 were checked and found already dominated:</p>
+<p>| Row <code>(p,q,N)</code> | <code>[[n,k,d]]</code>, w | Dominated by | |---|---|---| | (3,7,84) | [[84,6,4]], w7 | [[48,12,4]] w6, [[72,8,8]] w6 | | (3,7,252) | [[252,14,6]], w7 | [[120,16,8]] w7, [[168,24,6]] w6 | | (3,7,546) | [[546,28,7]], w7 | [[270,30,7]] w6, [[546,46,8]] w5 | | (3,7,672) | [[672,34,8]], w7 | [[546,46,8]] w5, [[520,44,8]] w5 | | (3,8,96) | [[96,10,4]], w8 | [[48,12,4]] w6, [[80,20,5]] w8 | | (3,8,216) | [[216,20,5]], w8 | [[80,20,5]] w8, [[210,26,14]] w8 | | (3,8,504) | [[504,44,6]], w8 | [[360,72,8]] w8, [[288,46,8]] w8 | | (3,8,768) | [[768,66,6]], w8 | [[632,162,18]] w8, [[360,72,8]] w8 | | (4,6,660) | [[660,112,6]], w6 | [[540,112,8]] w6 |</p>
+<p>The <code>{3,7}</code> and <code>{3,8}</code> rows (check weight 7-8) all lose to the non-abelian lifted-product family at similar or smaller n; the one <code>{4,6}</code> dead end loses to a board entry with the same k but higher d. This and five sibling submissions ([[150,32,6]], [[160,18,6]], [[336,58,6]], [[360,38,8]], [[660,68,8]]) are the 6 rows that survived.</p>
+<h4>Tools</h4>
+<p>Claude Sonnet 5 (claude.ai chat, computer-use/bash sandbox). Fetched <code>Hyperbolic_Codes.tsv</code> and <code>Hyperbolic_Codes_Planar.zip</code> directly via <code>git clone</code> of the pinned commit (network egress to <code>github.com</code> is allowlisted in this sandbox). <code>research/kit/css.py</code> (<code>compute_k</code>, <code>verify_css</code>), <code>research/kit/submit.py</code> (<code>make_submission</code>, <code>save_submission</code>), <code>verify/validate_candidate.py</code>. No new constructor code was written; only a Matrix-Market-format loader (a few lines) to parse the external <code>.mtx</code> files.</p>
+<h4>Reproduction</h4>
+<pre>
+import numpy as np
+
+def load_mtx(path):
+    lines = [l for l in open(path) if not l.startswith(&quot;%&quot;) and l.strip()]
+    nrows, ncols = map(int, lines[0].split()[:2])
+    M = np.zeros((nrows, ncols), dtype=np.int8)
+    for l in lines[1:]:
+        r, c = (int(x) - 1 for x in l.split()[:2])
+        M[r, c] = 1
+    return M
+
+# From github.com/QEC-pages/Quantum_LDPC_Codes
+# @ 1c95489383564e4dc2cce517de00d64d6f2c4f56, Hyperbolic_Codes_Planar.zip,
+# path 5_5/5_5_80_X.mtx and 5_5/5_5_80_Z.mtx
+HX = load_mtx(&quot;5_5_80_X.mtx&quot;)
+HZ = load_mtx(&quot;5_5_80_Z.mtx&quot;)   # n=80, k=18
+
+import sys
+sys.path.insert(0, &quot;research/kit&quot;)
+from submit import make_submission, save_submission
+
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[80,18,5]] planar hyperbolic {5,5} code&quot;,
+    construction=&quot;Planar hyperbolic {5,5} code, literature reproduction from &quot;
+                 &quot;github.com/QEC-pages/Quantum_LDPC_Codes @ &quot;
+                 &quot;1c95489383564e4dc2cce517de00d64d6f2c4f56, &quot;
+                 &quot;Hyperbolic_Codes_Planar.zip.&quot;,
+    authors=[&quot;@your-handle&quot;], family=&quot;topological&quot;,
+    references=[&quot;github.com/QEC-pages/Quantum_LDPC_Codes&quot;],
+    confidence=&quot;upper_bound&quot;, trials=8000, seed=0,
+)
+save_submission(doc, &quot;codes/80-18-5.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/80-18-5.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/80-20-5.html">[[80,20,5]] — 80-20-5</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[80,20,5]] — two-block group-algebra code on SmallGroup(40,1)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-8 frontier for hackathon issue #1155. Reconstruct a published weight-8 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 6.25.</p>

@@ -1,0 +1,163 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>[[80,18,5]] · QEC Challenge</title><link rel=icon type="image/svg+xml" href="../favicon.svg"><link rel=preconnect href="https://fonts.googleapis.com"><link rel=preconnect href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel=stylesheet><link rel=stylesheet href="../style.css"><!-- Privacy-friendly analytics by Plausible --><script async src="https://plausible.io/js/pa-BZqEmTRv5VBwv3HYwVpoB.js"></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init({"customProperties":{"code_family":"topological","code_origin":"submission","code_tier":"ub","locality_class":"unrestricted","page_type":"code_detail","weight_class":"weight-6"},"fileDownloads":true,"outboundLinks":true})</script></head><body>
+<div class=wrap>
+<a class=back href="../index.html">&larr; back to the board</a>
+<div class=codehead><span class="mono big">[[80,18,5]]</span> <span class="b ub" title="verified upper bound: an explicit logical of this weight, and independent refutation searches found nothing lighter">d &le;</span></div>
+<div class=params>
+<div class=cell title="physical qubits"><div class=l>n</div><div class=v>80</div></div>
+<div class=cell title="logical qubits"><div class=l>k</div><div class=v>18</div></div>
+<div class=cell title="distance (smallest undetectable error)"><div class=l>d</div><div class=v>5</div></div>
+<div class=cell title="operational efficiency (BPT ratio), compared within a track at comparable n"><div class=l>kd&sup2;/n</div><div class=v>5.625</div></div>
+<div class=cell title="max check weight"><div class=l>w</div><div class=v>5</div></div>
+</div>
+<section class=blk><h3>Share this result</h3><div class=share><button class=sharebtn type=button data-copy="https://unitaryfoundation.github.io/qldpc-challenge/codes/80-18-5.html" aria-label="Copy link" title="Copy link"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></button><a class=sharebtn href="https://twitter.com/intent/tweet?text=%5B%5B80%2C18%2C5%5D%5D%20quantum%20LDPC%20code%20on%20the%20QEC%20Challenge&amp;url=https%3A//unitaryfoundation.github.io/qldpc-challenge/codes/80-18-5.html" target=_blank rel=noopener aria-label="Post on X" title="Post on X"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class=sharebtn href="https://bsky.app/intent/compose?text=%5B%5B80%2C18%2C5%5D%5D%20quantum%20LDPC%20code%20on%20the%20QEC%20Challenge%20https%3A//unitaryfoundation.github.io/qldpc-challenge/codes/80-18-5.html" target=_blank rel=noopener aria-label="Share on Bluesky" title="Bluesky"><svg viewBox="0 0 568 501" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.193 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"/></svg></a><a class=sharebtn href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//unitaryfoundation.github.io/qldpc-challenge/codes/80-18-5.html" target=_blank rel=noopener aria-label="Share on LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a></div></section>
+<section class=blk><h3>Distance</h3>
+<div class=kv><b>d_X</b> 5 &middot; witness weight 5 (claimed upper_bound)</div>
+<details><summary>witness operator (support, 5 qubits)</summary><div class=wit>[5, 14, 29, 32, 59]</div></details>
+<div class=kv><b>d_Z</b> 5 &middot; witness weight 5 (claimed upper_bound)</div>
+<details><summary>witness operator (support, 5 qubits)</summary><div class=wit>[10, 42, 46, 55, 69]</div></details>
+<div class=kv><b>certificate</b> <span class=cert-no>none yet &middot; distance stands as a self-certified upper bound (d &le;)</span></div>
+</section>
+<section class=blk><h3>Construction &amp; provenance</h3>
+<div class=kv><b>authors</b> <a href="https://github.com/msilve160">@msilve160</a></div>
+<div class=kv><b>provenance</b> submitted through the challenge</div>
+<div class=kv><b>novelty</b> novelty not audited</div>
+<div class=kv><b>construction</b> Planar hyperbolic {5,5} code, literature reproduction from github.com/QEC-pages/Quantum_LDPC_Codes @ 1c95489383564e4dc2cce517de00d64d6f2c4f56, Hyperbolic_Codes_Planar.zip, parity-check matrices for N=80. Same source repository already used for codes/720-122-8.json, codes/864-146-8.json, codes/896-194-6.json, codes/900-182-8.json, codes/960-258-6.json (Seam D, fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md); this pulls a different (p,q,N) entry from the same pinned catalog (Hyperbolic_Codes.tsv) that those five did not use. CSS code, edge model.</div>
+<div class=kv><b>model</b> <span class=modelmark><svg class=modelicon viewBox="0 0 24 24" width="15" height="15" role="img" aria-label="Claude"><title>Claude</title><path fill="#D97757" d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg> </span>Claude Sonnet 5 <span class=claimed>(claimed, not verified)</span></div>
+<div class=kv><b>builds on</b> github.com/QEC-pages/Quantum_LDPC_Codes</div>
+<div class=kv><b>date</b> 2026-09-19</div>
+<div class=kv><b>family</b> topological <span class=claimed>(a tag, not a ranking)</span></div>
+<div class=kv><b>locality</b> unrestricted <span class=claimed>(computed from the layout)</span></div>
+<div class=kv><b>weight class</b> weight ≤ 6 <span class=claimed>(computed)</span></div>
+</section>
+<section class=blk><h3>How this code was found</h3><div class=kv style="color:var(--mut)">the research note submitted with this code &middot; <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/80-18-5.md">raw markdown</a> &middot; <a href="../research-log.html">all notes</a></div><div class=notebody><h3>[[80,18,5]] — planar hyperbolic {5,5} code</h3>
+<h4>Credit</h4>
+<p>This is a literature reproduction, not an original construction. The <code>{p,q}</code> planar hyperbolic code family and its parity-check matrices come entirely from <code>github.com/QEC-pages/Quantum_LDPC_Codes</code> (pinned at commit <code>1c95489383564e4dc2cce517de00d64d6f2c4f56</code>, <code>Hyperbolic_Codes_Planar.zip</code> and its index <code>Hyperbolic_Codes.tsv</code>). The same source, and the practice of pulling untouched <code>(p,q,N)</code> entries from its catalog into the board (rather than claiming discovery), was established by <b>@MathysRennela</b> (using DeepSeek V4 Flash 0731), whose five submissions (<code>codes/720-122-8.json</code>, <code>codes/864-146-8.json</code>, <code>codes/896-194-6.json</code>, <code>codes/900-182-8.json</code>, <code>codes/960-258-6.json</code> — Seam D in <code>fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md</code>) first identified this repository as a board-advancing source and are the direct precedent this submission follows. This entry pulls a different <code>(p,q,N)</code> row from the same pinned catalog that those five did not use.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>The playbook fieldnote&#x27;s Seam D describes five hyperbolic-code entries as filling &quot;high-k cells that the bicycle families cannot reach,&quot; pulled from one repository. <code>Hyperbolic_Codes.tsv</code> catalogs 55 <code>(p,q,N,distance)</code> rows; only 21 have <code>N &lt;= 1000</code> (the eligibility box), and only 5 of those 21 were on the board at the time of this session. This submission is one of the 6 remaining open rows (of the other 15, 9 were already dominated by the board&#x27;s lifted-product and pair-partition-CPM families; this and 5 siblings were not).</p>
+<h4>What was searched</h4>
+<p>Loaded the full <code>Hyperbolic_Codes.tsv</code> catalog, filtered to <code>N &lt;= 1000</code> (21 rows), and checked each against the live board&#x27;s Pareto frontier for its check-weight class. <code>{p,q}</code> fixes the check weights (<code>wX</code>, <code>wZ</code> equal to <code>p</code> and <code>q</code> in some order); <code>{5,5}</code> gives weight 5, qualifying for both the weight-6 and weight-8 prize tiers. This row (<code>N=80</code>) was one of six found non-dominated.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Loaded <code>5_5_80_X.mtx</code> / <code>5_5_80_Z.mtx</code> (Matrix Market coordinate</li>
+<p>format) from the pinned zip.</p>
+<li><code>research/kit/css.verify_css</code>: <code>H_X H_Z^T = 0</code> over GF(2), confirmed.</li>
+<li>Independently computed <code>k = n - rank(HX) - rank(HZ) = 18</code>, matching the</li>
+<p>paper&#x27;s own header comment (<code>[[80,18,5]]</code>) embedded in the <code>.mtx</code> file exactly — cross-checked before trusting the file.</p>
+<li><code>research/kit/submit.make_submission</code> witness search (8,000 trials,</li>
+<p>seed 0) found a weight-5 witness on both sides, matching the paper&#x27;s stated distance exactly. Per the precedent note&#x27;s own rule (&quot;do not replace the returned distance with the paper&#x27;s number&quot;), the distance claimed here is what this search earned, which happens to equal the paper&#x27;s value, not an assumption of it.</p>
+<li>Gate: <code>verify/validate_candidate.py</code> returned <code>passed: true</code>,</li>
+<p><code>refute.refuted: false</code>, <code>novelty.board_advancing: true</code> for (weight-6, unrestricted), <code>dominated_by: []</code>.</p>
+<li>Claim: witness-backed <b>upper bound</b>, not exact.</li>
+</ul>
+<h4>Dead ends</h4>
+<p>Of the 21 catalog rows with <code>N &lt;= 1000</code>, 9 were checked and found already dominated:</p>
+<p>| Row <code>(p,q,N)</code> | <code>[[n,k,d]]</code>, w | Dominated by | |---|---|---| | (3,7,84) | [[84,6,4]], w7 | [[48,12,4]] w6, [[72,8,8]] w6 | | (3,7,252) | [[252,14,6]], w7 | [[120,16,8]] w7, [[168,24,6]] w6 | | (3,7,546) | [[546,28,7]], w7 | [[270,30,7]] w6, [[546,46,8]] w5 | | (3,7,672) | [[672,34,8]], w7 | [[546,46,8]] w5, [[520,44,8]] w5 | | (3,8,96) | [[96,10,4]], w8 | [[48,12,4]] w6, [[80,20,5]] w8 | | (3,8,216) | [[216,20,5]], w8 | [[80,20,5]] w8, [[210,26,14]] w8 | | (3,8,504) | [[504,44,6]], w8 | [[360,72,8]] w8, [[288,46,8]] w8 | | (3,8,768) | [[768,66,6]], w8 | [[632,162,18]] w8, [[360,72,8]] w8 | | (4,6,660) | [[660,112,6]], w6 | [[540,112,8]] w6 |</p>
+<p>The <code>{3,7}</code> and <code>{3,8}</code> rows (check weight 7-8) all lose to the non-abelian lifted-product family at similar or smaller n; the one <code>{4,6}</code> dead end loses to a board entry with the same k but higher d. This and five sibling submissions ([[150,32,6]], [[160,18,6]], [[336,58,6]], [[360,38,8]], [[660,68,8]]) are the 6 rows that survived.</p>
+<h4>Tools</h4>
+<p>Claude Sonnet 5 (claude.ai chat, computer-use/bash sandbox). Fetched <code>Hyperbolic_Codes.tsv</code> and <code>Hyperbolic_Codes_Planar.zip</code> directly via <code>git clone</code> of the pinned commit (network egress to <code>github.com</code> is allowlisted in this sandbox). <code>research/kit/css.py</code> (<code>compute_k</code>, <code>verify_css</code>), <code>research/kit/submit.py</code> (<code>make_submission</code>, <code>save_submission</code>), <code>verify/validate_candidate.py</code>. No new constructor code was written; only a Matrix-Market-format loader (a few lines) to parse the external <code>.mtx</code> files.</p>
+<h4>Reproduction</h4>
+<pre>
+import numpy as np
+
+def load_mtx(path):
+    lines = [l for l in open(path) if not l.startswith(&quot;%&quot;) and l.strip()]
+    nrows, ncols = map(int, lines[0].split()[:2])
+    M = np.zeros((nrows, ncols), dtype=np.int8)
+    for l in lines[1:]:
+        r, c = (int(x) - 1 for x in l.split()[:2])
+        M[r, c] = 1
+    return M
+
+# From github.com/QEC-pages/Quantum_LDPC_Codes
+# @ 1c95489383564e4dc2cce517de00d64d6f2c4f56, Hyperbolic_Codes_Planar.zip,
+# path 5_5/5_5_80_X.mtx and 5_5/5_5_80_Z.mtx
+HX = load_mtx(&quot;5_5_80_X.mtx&quot;)
+HZ = load_mtx(&quot;5_5_80_Z.mtx&quot;)   # n=80, k=18
+
+import sys
+sys.path.insert(0, &quot;research/kit&quot;)
+from submit import make_submission, save_submission
+
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[80,18,5]] planar hyperbolic {5,5} code&quot;,
+    construction=&quot;Planar hyperbolic {5,5} code, literature reproduction from &quot;
+                 &quot;github.com/QEC-pages/Quantum_LDPC_Codes @ &quot;
+                 &quot;1c95489383564e4dc2cce517de00d64d6f2c4f56, &quot;
+                 &quot;Hyperbolic_Codes_Planar.zip.&quot;,
+    authors=[&quot;@your-handle&quot;], family=&quot;topological&quot;,
+    references=[&quot;github.com/QEC-pages/Quantum_LDPC_Codes&quot;],
+    confidence=&quot;upper_bound&quot;, trials=8000, seed=0,
+)
+save_submission(doc, &quot;codes/80-18-5.json&quot;)   # only after human review + PR
+</pre></div></section>
+<section class=blk><h3>Parity checks</h3>
+<div class=kv><b>X-checks</b> 32 &middot; <b style="min-width:auto">Z-checks</b> 32</div>
+<details><summary>H_X (32 checks, sparse supports)</summary><div class=wit>[0, 1, 2, 4, 6]
+[2, 7, 8, 17, 19]
+[0, 3, 9, 12, 21]
+[1, 5, 13, 24, 28]
+[6, 15, 16, 32, 34]
+[8, 10, 20, 40, 42]
+[3, 10, 23, 44, 46]
+[4, 11, 25, 31, 48]
+[12, 14, 27, 52, 54]
+[5, 14, 30, 40, 56]
+[16, 18, 35, 46, 55]
+[7, 18, 37, 63, 65]
+[19, 38, 39, 61, 62]
+[9, 22, 29, 57, 60]
+[24, 26, 38, 47, 70]
+[11, 26, 50, 52, 71]
+[21, 39, 41, 43, 51]
+[13, 29, 37, 49, 66]
+[31, 33, 43, 58, 65]
+[15, 33, 60, 70, 76]
+[34, 54, 61, 73, 75]
+[17, 22, 36, 45, 50]
+[20, 41, 66, 71, 78]
+[42, 48, 67, 69, 75]
+[44, 45, 58, 68, 73]
+[23, 25, 49, 59, 72]
+[28, 51, 53, 55, 69]
+[27, 53, 72, 76, 79]
+[35, 56, 57, 62, 74]
+[30, 32, 36, 59, 64]
+[47, 63, 64, 67, 77]
+[68, 74, 77, 78, 79]</div></details>
+<details><summary>H_Z (32 checks, sparse supports)</summary><div class=wit>[0, 2, 3, 8, 10]
+[0, 1, 5, 12, 14]
+[2, 6, 7, 16, 18]
+[1, 4, 11, 24, 26]
+[4, 6, 15, 31, 33]
+[8, 19, 20, 39, 41]
+[3, 9, 22, 44, 45]
+[12, 21, 27, 51, 53]
+[5, 13, 29, 56, 57]
+[16, 34, 35, 61, 62]
+[7, 17, 36, 63, 64]
+[17, 19, 26, 38, 50]
+[10, 23, 25, 42, 48]
+[9, 21, 33, 43, 60]
+[24, 28, 47, 67, 69]
+[11, 25, 49, 66, 71]
+[14, 30, 32, 34, 54]
+[13, 18, 28, 37, 55]
+[31, 48, 58, 73, 75]
+[15, 32, 59, 72, 76]
+[39, 51, 61, 69, 75]
+[20, 40, 56, 74, 78]
+[30, 40, 42, 64, 67]
+[35, 44, 46, 68, 74]
+[22, 29, 36, 49, 59]
+[23, 46, 53, 55, 72]
+[27, 52, 71, 78, 79]
+[45, 50, 52, 54, 73]
+[58, 63, 65, 68, 77]
+[37, 41, 43, 65, 66]
+[38, 57, 60, 62, 70]
+[47, 70, 76, 77, 79]</div></details>
+<div class=kv style="margin-top:10px"><b>Code ID</b> <code>80-18-5</code> &middot; <a href="80-18-5.json" download title="the verified submission, served by this site">download JSON</a> &middot; <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/codes/80-18-5.json">raw on GitHub</a></div>
+</section>
+<script>document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{navigator.clipboard.writeText(b.dataset.copy);const o=b.innerHTML;plausible('Result Link Copied');b.innerHTML='\u2713';b.title='link copied';setTimeout(()=>{b.innerHTML=o;b.title='Copy link';},1400);}));document.querySelectorAll('.lofig').forEach(svg=>{const dots={};svg.querySelectorAll('[data-s]').forEach(d=>{(dots[d.dataset.s]=dots[d.dataset.s]||[]).push(d);});let pin=null;const clear=()=>{svg.classList.remove('lo-hover');svg.querySelectorAll('.lo-cur,.lo-mem').forEach(e=>e.classList.remove('lo-cur','lo-mem'));};const show=el=>{clear();svg.classList.add('lo-hover');el.classList.add('lo-cur');el.dataset.sites.split(' ').forEach(s=>(dots[s]||[]).forEach(d=>d.classList.add('lo-mem')));};svg.querySelectorAll('.lo-chk').forEach(el=>{el.addEventListener('mouseenter',()=>{if(!pin)show(el);});el.addEventListener('mouseleave',()=>{if(!pin)clear();});el.addEventListener('click',e=>{e.stopPropagation();const stack=document.elementsFromPoint(e.clientX,e.clientY).filter(x=>x.classList&&x.classList.contains('lo-chk')&&svg.contains(x));if(!stack.length)return;const i=pin?stack.indexOf(pin):-1;pin=stack[(i+1)%stack.length];show(pin);});});svg.addEventListener('click',()=>{if(pin){pin=null;clear();}});});</script>
+</div></body></html>
