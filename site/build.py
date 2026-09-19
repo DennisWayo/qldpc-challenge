@@ -535,8 +535,13 @@ a.lbm:not([href]){{cursor:default}}
    scores; the mode on the section picks which one is on show, and the crown
    follows whoever is rank 1 in the active ranking. */
 .lb[data-mode=eff] .lbmgeo,.lb[data-mode=eff] .lbhgeo,
-.lb[data-mode=eff] .lbsgeo,.lb[data-mode=geo] .lbmeff,
-.lb[data-mode=geo] .lbheff,.lb[data-mode=geo] .lbseff{{display:none}}
+.lb[data-mode=eff] .lbsgeo,.lb[data-mode=eff] .lbhfront,
+.lb[data-mode=eff] .lbsfront,.lb[data-mode=geo] .lbmeff,
+.lb[data-mode=geo] .lbheff,.lb[data-mode=geo] .lbseff,
+.lb[data-mode=geo] .lbhfront,.lb[data-mode=geo] .lbsfront,
+.lb[data-mode=front] .lbmgeo,.lb[data-mode=front] .lbheff,
+.lb[data-mode=front] .lbseff,.lb[data-mode=front] .lbhgeo,
+.lb[data-mode=front] .lbsgeo{{display:none}}
 .lbmnone b{{color:var(--mut);font-weight:400}}
 .lbcrown{{display:none}}
 .lbrow.lbtop .lbcrown{{display:inline}}
@@ -2421,8 +2426,11 @@ def contributors_panel(entries):
     excluded.
 
     A toggle re-ranks the same contributors by best geometric efficiency g
-    (issue #356). Both orderings are computed here and carried on each row as
-    data-erank / data-grank, so the client only has to reorder -- the two
+    (issue #356), or by how many of their codes currently sit on a track
+    frontier (issue #1145: advancing a Pareto frontier is the work the two
+    efficiency headlines rest on, so it gets its own board). All three
+    orderings are computed here and carried on each row as data-erank /
+    data-grank / data-frank, so the client only has to reorder -- the
     comparators cannot drift apart. g eligibility matches the headline card
     (verified layout, d >= GEO_MIN_D); contributors without an eligible code
     show a dot and sort last, which is the honest reading: no layout shipped,
@@ -2446,7 +2454,7 @@ def contributors_panel(entries):
     def collect(cap):
         """Per-contributor stats over the codes with check weight <= cap
         (cap None = no cap, the whole board). Returns
-        (stats, eff_order, geo_order, n_codes, n_geo)."""
+        (stats, eff_order, geo_order, front_order, n_codes, n_geo, n_front)."""
         stats = {}
         for e in entries:
             if cap is not None and (e["w"] is None or e["w"] > cap):
@@ -2524,19 +2532,27 @@ def contributors_panel(entries):
                                            -(kv[1]["geo"] or 0.0),
                                            -kv[1]["front"], -kv[1]["codes"],
                                            kv[1]["handle"]))
+        # the frontier ordering (issue #1145): most codes currently on a
+        # track frontier first; ties by board count, then best kd^2/n
+        front_order = sorted(stats.items(),
+                             key=lambda kv: (-kv[1]["front"], -kv[1]["codes"],
+                                             -kv[1]["eff"], kv[1]["handle"]))
         n_geo = sum(1 for s in stats.values() if s["geo"] is not None)
-        n_codes = sum(1 for e in entries
-                      if e["origin"] != "baseline"
-                      and (cap is None
-                           or (e["w"] is not None and e["w"] <= cap)))
-        return stats, eff_order, geo_order, n_codes, n_geo
+        contributed = [e for e in entries
+                       if e["origin"] != "baseline"
+                       and (cap is None
+                            or (e["w"] is not None and e["w"] <= cap))]
+        n_codes = len(contributed)
+        n_front = sum(1 for e in contributed if e["slug"] in front_slugs)
+        return stats, eff_order, geo_order, front_order, n_codes, n_geo, n_front
 
     # The uncapped board is what the rows are rendered from, so every
     # contributor has a DOM row for the slider to show or hide.
-    stats, order, geo_order, n_codes, n_geo = collect(None)
+    stats, order, geo_order, front_order, n_codes, n_geo, n_front = collect(None)
     if not stats:
         return ""
     grank = {k: i for i, (k, _) in enumerate(geo_order, 1)}
+    frank = {k: i for i, (k, _) in enumerate(front_order, 1)}
 
     def metric(v, lab, href=None, tip="", cls=""):
         # Always an anchor, with href only when there is a target: the weight
@@ -2560,7 +2576,8 @@ def contributors_panel(entries):
         rows.append(
             f'<div class="lbrow{" lbtop" if r == 1 else ""}" '
             f'data-h="{html.escape(h)}" '
-            f'data-erank="{r}" data-grank="{grank[key]}">'
+            f'data-erank="{r}" data-grank="{grank[key]}" '
+            f'data-frank="{frank[key]}">'
             f'<span class=lbrank>{r}</span>'
             f'<img class=lbav loading=lazy alt="" '
             f'src="https://github.com/{h[1:]}.png?size=64">'
@@ -2634,8 +2651,24 @@ def contributors_panel(entries):
                 f'{dmark}{be["d"]} &middot; {extra} &middot; '
                 f'{html.escape(holder)}</div></div>')
 
-    def heroes(od, gd):
-        """The two headline cards for a ranking: best kd^2/n and best g."""
+    def front_card(fd):
+        """Headline card for the frontier board: the contributor with the most
+        codes currently on a track frontier, linking to that filtered board."""
+        if not fd or fd[0][1]["front"] == 0:
+            return ""
+        b = fd[0][1]
+        h = b["handle"]
+        return (f'<div class="lbscore lbhfront">'
+                f'<div class=lbsl>most codes on a frontier</div>'
+                f'<div class=lbsv>{b["front"]}</div>'
+                f'<div class=lbsd><a href="{html.escape(f"?q={h} record")}">'
+                f'{b["front"]} of {b["codes"]} code'
+                f'{"" if b["codes"] == 1 else "s"}</a> &middot; '
+                f'{html.escape(h)}</div></div>')
+
+    def heroes(od, gd, fd):
+        """The headline cards for a ranking: best kd^2/n, best g, and most
+        codes on a frontier; the toggle shows the one matching the mode."""
         h = ""
         if od:
             b = od[0][1]
@@ -2651,18 +2684,22 @@ def contributors_panel(entries):
                 geo_disp(gb["geo"], gb["geo_tier"]),
                 f'r={ge["geo_r"]:g} &middot; &rho;={ge["geo_rho"]}' if ge else "",
                 "best g", "lbhgeo")
+        h += front_card(fd)
         return h
 
-    def subs_html(nk, nc, ng):
+    def subs_html(nk, nc, ng, nf):
         return (f'<span class=lbseff>{nk} contributor'
                 f'{"" if nk == 1 else "s"} &middot; {nc} code'
                 f'{"" if nc == 1 else "s"} submitted through the challenge</span>'
                 f'<span class=lbsgeo>{ng} of {nk} contributor'
                 f'{"" if nk == 1 else "s"} have a verified layout and d &ge; '
                 f'{GEO_MIN_D} (their own code, or a layout they '
-                'contributed)</span>')
+                'contributed)</span>'
+                f'<span class=lbsfront>{nf} of {nc} code'
+                f'{"" if nc == 1 else "s"} submitted through the challenge '
+                'currently sit on a track frontier</span>')
 
-    hero = heroes(order, geo_order)
+    hero = heroes(order, geo_order, front_order)
     # One ranking per integer check weight W. Position W ranks each contributor
     # using only their codes of weight <= W, so the nesting the track cells use
     # holds here too: a weight-4 code still competes at every W above it.
@@ -2683,21 +2720,22 @@ def contributors_panel(entries):
     wmin, wmax = (min(cw), max(cw)) if cw else (0, 0)
     lbw, lbidx, seen = {}, [], {}
     for cap in range(wmin, wmax + 1):
-        st, od, gd, nc, ng = (
-            (stats, order, geo_order, n_codes, n_geo) if cap >= wmax
-            else collect(cap))
+        st, od, gd, fd, nc, ng, nf = (
+            (stats, order, geo_order, front_order, n_codes, n_geo, n_front)
+            if cap >= wmax else collect(cap))
         er = {k: i for i, (k, _) in enumerate(od, 1)}
         gr = {k: i for i, (k, _) in enumerate(gd, 1)}
+        fr = {k: i for i, (k, _) in enumerate(fd, 1)}
         payload = {
             "m": {s["handle"]: {
                 "codes": s["codes"], "front": s["front"], "exact": s["exact"],
                 "eff": f'{s["eff"]:g}', "effSlug": s["slug"],
                 "geo": geo_disp(s["geo"], s["geo_tier"]),
                 "geoSlug": s["geo_slug"],
-                "erank": er[key2], "grank": gr[key2]}
+                "erank": er[key2], "grank": gr[key2], "frank": fr[key2]}
                 for key2, s in st.items()},
-            "hero": heroes(od, gd),
-            "subs": subs_html(len(od), nc, ng),
+            "hero": heroes(od, gd, fd),
+            "subs": subs_html(len(od), nc, ng, nf),
         }
         sig = json.dumps(payload, sort_keys=True)
         if sig not in seen:
@@ -2755,7 +2793,12 @@ def contributors_panel(entries):
               '<button type=button class=lbbtn data-lb=geo '
               'title="rank contributors by their best geometric efficiency g. '
               'Needs a code with a verifier-accepted layout and d &ge; '
-              f'{GEO_MIN_D}">g</button></span>')
+              f'{GEO_MIN_D}">g</button>'
+              '<button type=button class=lbbtn data-lb=front '
+              'title="rank contributors by how many of their codes currently '
+              'sit on a track frontier (a Pareto frontier over n, k, d, w '
+              'of a locality x weight cell, or the global one)">'
+              'on frontier</button></span>')
     # Single-handle weight slider over the raw check weight, one step per
     # integer W from the board's lightest code to its heaviest.
     wslider = (
@@ -2770,7 +2813,8 @@ def contributors_panel(entries):
         '</span>'
         f'<span class=wfval id=lbwval>{wmax}</span>'
         '</span>')
-    subs = f'<p class=lbsub id=lbsub>{subs_html(len(order), n_codes, n_geo)}</p>'
+    subs = (f'<p class=lbsub id=lbsub>'
+            f'{subs_html(len(order), n_codes, n_geo, n_front)}</p>')
     # Reordering only: both rankings are server-computed (data-erank /
     # data-grank), so this cannot disagree with the Python comparators.
     # Reordering and value swapping only: every (weight cap x metric) ranking is
@@ -2802,7 +2846,7 @@ def contributors_panel(entries):
             'el.classList.toggle("lbmnone",!slug);}'
             'function apply(){'
             'var w=wcap(),b=D.b[D.idx[w-WMIN]],m=b.m,'
-            'key=mode==="geo"?"grank":"erank";'
+            'key=mode==="geo"?"grank":mode==="front"?"frank":"erank";'
             'var vis=[];'
             'rows.forEach(function(r){var s=m[r.dataset.h];'
             'if(!s){r.style.display="none";r.classList.remove("lbtop");return;}'
@@ -2811,7 +2855,8 @@ def contributors_panel(entries):
             'put(r,".lbmexact",s.exact);'
             'put(r,".lbmeff",s.eff,s.effSlug);'
             'put(r,".lbmgeo",s.geo,s.geoSlug);'
-            'r.dataset.erank=s.erank;r.dataset.grank=s.grank;vis.push(r);});'
+            'r.dataset.erank=s.erank;r.dataset.grank=s.grank;'
+            'r.dataset.frank=s.frank;vis.push(r);});'
             'vis.sort(function(a,c){'
             'return (+a.dataset[key])-(+c.dataset[key]);})'
             '.forEach(function(r,i){'
