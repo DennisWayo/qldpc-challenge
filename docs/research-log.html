@@ -485,6 +485,54 @@ doc = make_submission(
 )
 save_submission(doc, &quot;codes/546-46-8.json&quot;)   # only after human review + PR
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/546-46-8.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/624-54-8.html">[[624,54,8]] — 624-54-8</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[624,54,8]] — non-abelian lifted product over C6xD4</h3>
+<h4>Credit</h4>
+<p>The construction and search tooling are not original to this submission: both were written by <b>@vprusso</b> (using Claude Fable 5.1) in the campaign documented at <code>fieldnotes/2026-09-16-lifted-product-girth-cap.md</code>, including <code>research/kit/nonabelian_lp.py</code> (the lifted-product constructor and sampler this submission reuses unmodified) and the neighboring <code>codes/624-52-9.json</code>, submitted from the same sweep at the same n. Unlike the three sibling submissions in this batch, this specific (n,k,d) point was not itself named in that fieldnote — it turned up when this submission reran @vprusso&#x27;s already-merged tooling over the same group range, as a bonus alongside reproducing the three points the fieldnote did flag. The credit for the construction and the search method is still entirely @vprusso&#x27;s; only the particular (54,8) reading at n=624 is new here.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>Same sweep and direction as <code>416-36-8.note.md</code>, but this point was <b>not</b> flagged in <code>fieldnotes/2026-09-16-lifted-product-girth-cap.md</code>. That fieldnote&#x27;s own campaign already submitted <code>[[624,52,9]]</code> (ZSZ(24,2,13)) from the same n=624 neighborhood; this run&#x27;s staged screen turned up two higher-k, lower-d codes at the same n — [[624,54,8]] and [[624,53,8]] — that neither dominate nor are dominated by [[624,52,9]] (k=54 or 53 beats k=52, but d=8 loses to d=9), so they are independent, additional frontier points at the same blocklength rather than a replacement. Only the better of the two (k=54) is submitted here.</p>
+<h4>What was searched</h4>
+<p>Same sweep as <code>416-36-8.note.md</code>: 1,500 random codes, 76 groups with 31 &lt;= |G| &lt;= 53, A_w = B_w = [[1,1,1],[1,1,1]] (2x3 monomial, check weight 5), staged screening at 400 fast RIS trials, keeping anything at efficiency &gt;= 4.7 or on the running Pareto frontier. This point appeared at |G|=48 under two presentations (C6xD4 at k=54; ZSZ(6,8,5) and ZSZ(8,6,3) at k=53) — the higher-k C6xD4 code is the one submitted.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Screening: d&lt;=8 at 400 fast RIS trials.</li>
+<li>Deep confirmation: d&lt;=8 held at 500,000 fast RIS trials (seed 1234).</li>
+<li>Packaging: <code>submit.make_submission</code> witness search (3,000 trials/side,</li>
+<p>numpy) independently confirmed weight-8 witnesses on both sides.</p>
+<li>Gate: <code>verify/validate_candidate.py</code> returned <code>passed: true</code>,</li>
+<p><code>refute.refuted: false</code>, <code>novelty.board_advancing: true</code> for (weight-6, unrestricted), <code>dominated_by: []</code> — confirmed non-dominated even against the board&#x27;s own <code>[[624,52,9]]</code> at the same n.</p>
+<li>Claim: witness-backed <b>upper bound</b>, not exact.</li>
+</ul>
+<h4>Dead ends</h4>
+<p>The k=53 variants at the same n (ZSZ(6,8,5), ZSZ(8,6,3)) were found but not packaged, since C6xD4&#x27;s k=54 strictly beats them at the same n, d and w — a genuine case of the sweep finding a still-better point among near duplicates rather than a distinct dead end.</p>
+<h4>Tools</h4>
+<p>Same as <code>416-36-8.note.md</code>: Claude Sonnet 5, single CPU core, <code>gf2_fast</code> backend, <code>research/kit/nonabelian_lp.py</code> + <code>search.py</code> + <code>submit.py</code> + <code>verify/validate_candidate.py</code>. No new constructor code written.</p>
+<h4>Reproduction</h4>
+<p>Group C6xD4 = C_6 x D_4, direct product of the cyclic group of order 6 and the dihedral group of order 8, via <code>nonabelian_lp.small_nonabelian_groups</code>; |G|=48.</p>
+<pre>
+import sys
+sys.path.insert(0, &quot;research/kit&quot;)
+from nonabelian_lp import small_nonabelian_groups, lifted_product_base
+from submit import make_submission, save_submission
+
+mul = dict(small_nonabelian_groups(48, 48))[&quot;C6xD4&quot;]
+A = [[[21], [31], [30]], [[7], [18], [30]]]
+B = [[[17], [39], [30]], [[18], [1], [38]]]
+HX, HZ = lifted_product_base(mul, A, B)   # n=624, k=54
+
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[624,54,8]] non-abelian lifted product, C6xD4&quot;,
+    construction=&quot;Lifted product of two 2x3 monomial base matrices A, B over &quot;
+                 &quot;F_2[G], G = C_6 x D_4 (direct product, order 48), entries &quot;
+                 &quot;acting by the left (A) and right (B) regular representation. &quot;
+                 &quot;Not dominated by the board&#x27;s [[624,52,9]] at the same n: &quot;
+                 &quot;higher k, lower d.&quot;,
+    authors=[&quot;@msilve160&quot;], family=&quot;lifted-product&quot;,
+    references=[&quot;arXiv:2607.28795&quot;, &quot;arXiv:2607.27644&quot;],
+    confidence=&quot;upper_bound&quot;, trials=20000, seed=0,
+)
+save_submission(doc, &quot;codes/624-54-8.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/624-54-8.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/70-6-9.html">[[70,6,9]] — 70-6-9</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[70,6,9]] — two-block group-algebra code on SmallGroup(35,1)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-8 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 6.94.</p>
