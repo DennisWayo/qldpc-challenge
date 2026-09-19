@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[90,4,9]] weight-5 mixed-monomial BB code (LLM-guided evolutionary search)",
  "code_type": "CSS",
  "n": 90,
@@ -688,5 +688,49 @@
    "Claude Opus 5"
   ]
  },
- "family": "bivariate-bicycle"
+ "family": "bivariate-bicycle",
+ "circuit": {
+  "d_circ": {
+   "X": {
+    "value": 9,
+    "confidence": "upper_bound",
+    "witness": [
+     11,
+     15,
+     54,
+     58,
+     63,
+     67,
+     91,
+     114,
+     116
+    ]
+   },
+   "Z": {
+    "value": 9,
+    "confidence": "upper_bound",
+    "witness": [
+     60,
+     72,
+     174,
+     188,
+     567,
+     571,
+     1231,
+     1245,
+     1646
+    ]
+   }
+  },
+  "rounds": 9,
+  "stim_version": "1.16.0",
+  "notes": "Generic sequential two-block extraction: one ancilla per check, X checks then Z checks each round with joint reset/measure layers; CX layers are a proper edge coloring of each Tanner graph (5 X + 5 Z CX layers per round, schedule seed 0; hook-aware orders: every CNOT order suffix needs >= d-1 further data errors to complete a logical, with the exact completion cost, layered by min-conflicts search). Pairs of hooks on different ancillas of the same type are also constrained: an assignment pair is admitted only if every such hook pair needs >= d faults in total (2 + flags + completion cost). Screened by RIS on ker(H_dem) and an observable-constrained seeded BP+OSD search; witnesses validated in GF(2).",
+  "contributed_by": {
+   "by": [
+    "@vprusso"
+   ],
+   "date": "2026-09-19",
+   "method": "generic CSS memory schedule with one flag qubit per check: CX layers from a bipartite edge coloring, the flag coupled to the ancilla after the first and the second-to-last CX slot and measured every round, slot assignments filtered by an exact hook-cost criterion over single, same-ancilla and cross-ancilla hook pairs; screened by RIS and a seeded BP+OSD search"
+  }
+ }
 }
