@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "name": "[[684,20,48]] non-cyclic group-algebra candidate",
   "code_type": "CSS",
   "n": 684,
@@ -6984,7 +6984,18 @@
         661,
         666,
         670
-      ]
+      ],
+      "witness_provenance": {
+        "found_by": [
+          "@e-eight"
+        ],
+        "date": "2026-09-18",
+        "found_at_samples": 8000000,
+        "tool": "verify/gf2_fast distance_rand_witness",
+        "seeds": [
+          71
+        ]
+      }
     }
   },
   "provenance": {
