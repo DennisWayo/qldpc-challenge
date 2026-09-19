@@ -3390,6 +3390,47 @@ HZ = np.hstack([B.T, A.T]) % 2  # H_Z = [B^T | A^T]
 <p>DeepSeek V4 Flash 0731 (provenance.model), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(40,1), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[2, 4, 7], b=[4, 5, 11] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 80 - rank(HX) - rank(HZ) = 42. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/80-42-2.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/837-45-5.html">[[837,45,5]] — 837-45-5</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/victor-onofre">@victor-onofre</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[837,45,5]] — multi-band dense-packed surface code, 10 bands x 5 patches</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>local-2d-single</code> x <code>weight-4</code>. The opening here is an admissibility change, not a new construction. The multi-band dense packing of arXiv:2511.06758 is a scalable family, and the campaign that mapped it (<code>fieldnotes/2026-09-01-multiband-dense-packing-method.md</code>) enumerated it under an <code>n &lt;= 700</code> cap. That cap is now <code>n &lt;= 1000</code> for <code>w &lt;= 8</code>, <code>d &lt;= 40</code>. The hypothesis was that the manifold simply continues across the old boundary and that its points there are undominated. It does, and at the time of submission the single-layer weight-4 cell held no entry above n = 700 at all.</p>
+<h4>What was searched</h4>
+<p>The builder states the packing mask as a rule over <code>(d, rows, m, pitch)</code>. It is not in this PR&#x27;s tree: it is submitted separately as github.com/unitaryfoundation/qldpc-challenge PR #1608, <code>research/multiband_surface.py</code>. It was validated before being used to claim anything:</p>
+<ul>
+<li><b>bit-exact</b> against <code>research/build_dense_surface.py</code> at that builder&#x27;s own</li>
+<p>configuration (<code>rows=2, m=3, pitch=d-1</code>) for d = 3, 5, 7, 9 — identical <code>H_X</code>, <code>H_Z</code> and coordinates, not merely identical (n, k);</p>
+<li><b>against the board</b>: it reproduces 58 single-layer weight-4 entries exactly,</li>
+<p>recovering each one&#x27;s <code>(rows, m, pitch)</code> — the d = 5 ladder through [[676,36,5]], d = 7 through [[641,17,7]], d = 9 through [[691,11,9]], and the d = 11 and d = 13 columns.</p>
+</ul>
+<p>That board match also fixed the band pitch empirically: <code>rows = 2</code> packs at <code>pitch = d - 1</code>, <code>rows &gt;= 3</code> needs <code>pitch = 2*floor(3d/4)</code>. The two regimes reconcile the fieldnote&#x27;s Result 3 (measured at rows = 4) with the published rows = 2 packing.</p>
+<p>The sweep then covered <code>rows</code> 2–12, <code>m</code> 2–40 at those pitches, keeping <code>700 &lt; n &lt;= 1000</code> points that are CSS, single-Tanner-component, <code>w &lt;= 4</code>, free of empty check rows, and Pareto-undominated in their cell. **k was recomputed by exact GF(2) rank at every point**, never from the closed form <code>rows*m - rows//2</code> — section 6 of that fieldnote records what trusting the closed form cost. 32 configurations survived; this is one of them.</p>
+<h4>Evidence trail</h4>
+<p>This code is 10 bands of 5 patches at band pitch 6, patch pitch Px = 12. Confirmation ladder:</p>
+<p>| search | seed | trials | lightest logical found | |---|---|---|---| | packaging witness search (numpy RIS, per side) | mine | 1,200 | weight 5 | | deep refutation (C++ RIS backend, <code>verify/gf2_fast.cpp</code>) | 20260919 | 1,000,000 | weight 5 | | trusted gate <code>verify/validate_candidate.py</code> | fresh, not mine | 8,000 | not refuted |</p>
+<p>Three searches, two from seeds outside my control, none finds a logical below weight 5.</p>
+<p><b>The claim is a witness-backed upper bound, <code>d &lt;= 5</code>.</b> No exact certification is claimed or implied. The design distance of the constituent surface-code patches is 5, but that is a property of the construction, not a proof about this packing — which is exactly why the ladder above is the evidence and the design parameter is not.</p>
+<h4>Dead ends</h4>
+<p>Bounded by this family and this search depth:</p>
+<ul>
+<li><b>The closed form is not a screen.</b> Outside the two pitch regimes above,</li>
+<p><code>rows*m - rows//2</code> disagrees with exact GF(2) rank, so any enumeration ranked on it is ranking fiction. Every point here was ranked on exact rank instead.</p>
+<li><b>Rank arithmetic says nothing about distance.</b> Configurations that look</li>
+<p>strong on (n, k) alone are routinely refuted by the first witness search. The deep pass, not the parameter count, is what separates them.</p>
+<li><b>Band spacing is the whole game.</b> Pack tighter than the regime above and</li>
+<p>the distance collapses while n and k still look right; pack looser and n grows for nothing.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Opus 5 (1M context) driving this repo&#x27;s own kit: <code>research/kit/submit.py</code> for packaging (witnesses embedded by <code>make_submission</code>), <code>research/kit/surrogate.py</code> for the RIS searches, and the optional C++ accelerator <code>verify/gf2_fast.cpp</code> built via <code>verify/setup_gf2_fast.py</code>. The accelerator is what made the deep pass affordable — roughly 200k trials in 16 s at n ~ 700, against ~400 numpy trials in 20 s. Search time for this code: about 252 s.</p>
+<h4>Reproduction</h4>
+<p>With the builder from PR #1608 (<code>research/multiband_surface.py</code>):</p>
+<pre>
+import sys; sys.path.insert(0, &quot;research&quot;)
+from multiband_surface import build, params
+hx, hz, coords, _ = build(d=5, rows=10, m=5, pitch=6)
+params(d=5, rows=10, m=5, pitch=6)
+# -&gt; n=837, k=45 by exact GF(2) rank, w=4, css=True, connected=True
+</pre>
+<p>Without it, the construction is fully specified by the mask rule below, applied over <code>rows = 10</code> bands of <code>m = 5</code> patches at band pitch 6 and patch pitch <code>Px = 12</code>. Even bands carry m patches at <code>x = j*Px</code>; odd bands carry m-1 at <code>x = (d+1) + j*Px</code>; band r starts at <code>y = r*pitch</code>. Each patch of the distance-5 surface code contributes occupied sites by three rules — window interior at <code>(x+y) % 2 == 0</code> inside the <code>2d-1</code> square, vertical edge columns at <code>x = x0</code> and <code>x0+2d</code> with <code>(x+y) % 4 == ph</code>, horizontal edge rows at <code>y = y0</code> and <code>y0+2d</code> with <code>(x+y) % 4 == 2-ph</code> — where the band phase <code>ph</code> is 0 on even bands and 2 on odd. Data qubits are the odd/odd sites; <code>(x+y) % 4 == 2</code> ancillas carry X-checks and the rest Z-checks, each supporting its diagonal data neighbours present in the mask. These are the conventions of <code>research/build_dense_surface.py</code>, already in the tree, which is the same mask at <code>rows=2, m=3, pitch=d-1</code>.</p>
+<p><code>coords</code> is the packing grid halved, one layer, so the tilted nearest-neighbour checks span sqrt(2) at unit qubit spacing.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/837-45-5.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/84-22-2.html">[[84,22,2]] — 84-22-2</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[84,22,2]] — two-block group-algebra code on SmallGroup(42,6)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-8 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 1.05.</p>
