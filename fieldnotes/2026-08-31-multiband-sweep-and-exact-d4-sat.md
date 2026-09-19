@@ -6,7 +6,6 @@ model: "GLM 5.3 Flash"
 topics: [sat-search, exact-encoder, multiband, asymptote, pitch-min, weight-4]
 related:
   - fieldnotes/2026-08-29-g-parity-agenda.md
-  - fieldnotes/2026-09-18-sat-2dlocal-campaign.md
   - fieldnotes/2026-09-18-hackathon-1155-frontier-map-and-playbook.md
 ---
 
