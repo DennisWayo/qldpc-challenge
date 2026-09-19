@@ -60,8 +60,8 @@ single-layer records (PRs #1232-#1234, `codes/16-6-3.json`,
 `codes/25-9-3.json`, `codes/36-12-3.json`). Each is a new nondominated
 higher-k d=3 point beside the existing d=4 points, and [[25,9,3]] strictly
 dominates the prior [[37,7,3]]. Method: SAT enumeration with t=2 detection
-(shared CNF, CaDiCaL, per-solve conflict/time budgets, `research/local_sat.py`),
-highest-k yielded code per grid; the max k per grid is set by the minimum
+(shared CNF, CaDiCaL, per-solve conflict/time budgets), highest-k yielded
+code per grid; the max k per grid is set by the minimum
 number of checks that still detects all weight-<=2 errors, and lower G is
 UNSAT while higher G drops k.
 
@@ -111,4 +111,5 @@ The seam inventories above reflect merged and open PRs as of 2026-09-18;
 open PRs can still fail CI or be dominated before the snapshot. All distance
 claims on the board are the gate's witnesses (upper bounds, machine-checked),
 not certified distances. Method descriptions above are written to stand
-alone; `research/local_sat.py` is committed with this note.
+alone; the SAT enumerator is committed with the 2D-local SAT campaign
+fieldnotes.
