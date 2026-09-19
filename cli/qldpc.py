@@ -46,13 +46,14 @@ _ROOT = os.path.dirname(_HERE)
 sys.path.insert(0, os.path.join(_ROOT, "verify"))
 sys.path.insert(0, os.path.join(_ROOT, "site"))
 
-import gf2                       # noqa: E402
+import gf2  # noqa: E402
 import heuristic_distance as hd  # noqa: E402
-from check_authorship import HANDLE  # noqa: E402
-from qldpc_verify import verify  # noqa: E402
+
 # Reuse the site's computed-cell + Pareto-frontier helpers so the PR body
 # states exactly what the board will show (no drift between the two).
-from build import cells, pareto, LOCALITY_LABEL, WEIGHT_LABEL  # noqa: E402
+from build import LOCALITY_LABEL, WEIGHT_LABEL, cells, pareto  # noqa: E402
+from check_authorship import HANDLE  # noqa: E402
+from qldpc_verify import verify  # noqa: E402
 
 
 # ----------------------------------------------------------------------------
@@ -74,7 +75,8 @@ def _pick(d, names):
 
 def load_checks(path):
     """Return (HX, HZ, coords_or_None). Accepts .npz (matrices) or .json
-    (a draft with a checks block)."""
+    (a draft with a checks block).
+    """
     if path.endswith(".json"):
         try:
             with open(path) as f:
@@ -312,7 +314,8 @@ def body_has_scaffolding(body):
 
 def _repo_path(path):
     """Repo-relative path when the file is inside the repo, else absolute.
-    Keeps the body readable when --out points somewhere else entirely."""
+    Keeps the body readable when --out points somewhere else entirely.
+    """
     rel = os.path.relpath(path, _ROOT)
     return os.path.abspath(path) if rel.startswith(os.pardir) else rel
 
@@ -405,7 +408,8 @@ def write_pr_body(slug, body):
 def _load_board_entries():
     """The board's current entries as the site sees them (verified, earned
     distance). Returns [] if the site builder cannot be imported or the board
-    is empty, so the frontier section degrades gracefully to a TODO."""
+    is empty, so the frontier section degrades gracefully to a TODO.
+    """
     try:
         from build import load_entries
         return load_entries()
@@ -418,7 +422,8 @@ def _load_board_entries():
 def _entry_for(doc, report):
     """A board-shaped entry for the candidate, mirroring site/build.load_entries
     (n, k, d, w, locality/weight class, eff). The site's pareto()/cells() only
-    read these keys, so this is enough to compare against the board."""
+    read these keys, so this is enough to compare against the board.
+    """
     comp = report.get("computed", {})
     n, k = doc["n"], doc["k"]
     earned = report.get("earned_distance", {}).get("d")
@@ -438,7 +443,8 @@ def frontier_summary(doc, report):
     which track cells it belongs to, whether it sits on each cell's Pareto
     frontier, and which existing entries it strictly dominates (and on which
     axis). Returns a list of markdown lines (may be empty if the board is
-    unavailable)."""
+    unavailable).
+    """
     entries = _load_board_entries()
     if not entries:
         return []
@@ -756,7 +762,8 @@ def cmd_recent(args):
     """What moved on the board recently: codes merged, research notes, and
     fieldnotes, from git history. The 'stay current' step — read this (and
     the linked notes) before spending compute, so a new search starts from
-    the community's frontier of knowledge, not just the frontier of scores."""
+    the community's frontier of knowledge, not just the frontier of scores.
+    """
     since = f"--since={args.days} days ago"
 
     def added(path):
