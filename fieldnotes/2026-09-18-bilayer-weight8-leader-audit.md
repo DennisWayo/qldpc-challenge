@@ -147,25 +147,28 @@ reading that looks most like a non-result is the one worth deepening.**
 
 ## Reproduction
 
-The harness is committed as `research/audits/leader_audit.py` (see
-`research/audits/README.md`); it loads a board entry, recomputes `k` and CSS
-commutation, ladders RIS on fresh seeds, and re-validates every witness in pure
-Python against the raw sparse matrices.
+The audit uses tools already in the tree. `verify/heuristic_distance.py` runs a
+random-information-set search on both Pauli sides and exits 2 when it refutes a
+claim; `decode/distance.py` is the independent decoder mechanism. Every witness
+quoted here was re-checked against the raw sparse matrices before being recorded
+(support size equals the weight, `H_opp v = 0` over GF(2), and `v` outside
+`rowspace(H_own)`), and the weight-48 witness was additionally confirmed by a
+from-scratch GF(2) rank.
 
 ```
-# the audit ladder above (bit-packed RIS, fresh seeds each rung)
-uv run --frozen python research/audits/leader_audit.py ladder \
-    codes/360-12-24.json \
-    --ladder 1000000:101,102,103,104 5000000:201,202,203 20000000:301,302,303
+# the ladder above, one budget and seed per rung (the tool takes one at a time)
+uv run --frozen python verify/heuristic_distance.py codes/360-12-24.json \
+    --fast-trials 1000000 --seed 101
+uv run --frozen python verify/heuristic_distance.py codes/360-12-24.json \
+    --fast-trials 20000000 --seed 301
 
 # the independent decoder mechanism
 uv run --frozen --with ldpc python decode/distance.py codes/360-12-24.json \
     --trials 200000 --seed 1
 
-# the leader triage
-uv run --frozen python research/audits/leader_audit.py screen \
-    --trials 2000000 --seeds 51 codes/672-20-32.json codes/682-182-76.json \
-    codes/584-150-18.json codes/922-18-31.json codes/684-20-72.json
+# the leader triage repeats the first command against each cell leader, e.g.
+uv run --frozen python verify/heuristic_distance.py codes/672-20-32.json \
+    --fast-trials 2000000 --seed 51
 ```
 
 Approximate cost: 80M RIS trials plus the decoder sweep, about 90 minutes of
