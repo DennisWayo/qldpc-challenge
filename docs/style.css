@@ -168,8 +168,13 @@ a.lbm:not([href]){cursor:default}
    scores; the mode on the section picks which one is on show, and the crown
    follows whoever is rank 1 in the active ranking. */
 .lb[data-mode=eff] .lbmgeo,.lb[data-mode=eff] .lbhgeo,
-.lb[data-mode=eff] .lbsgeo,.lb[data-mode=geo] .lbmeff,
-.lb[data-mode=geo] .lbheff,.lb[data-mode=geo] .lbseff{display:none}
+.lb[data-mode=eff] .lbsgeo,.lb[data-mode=eff] .lbhfront,
+.lb[data-mode=eff] .lbsfront,.lb[data-mode=geo] .lbmeff,
+.lb[data-mode=geo] .lbheff,.lb[data-mode=geo] .lbseff,
+.lb[data-mode=geo] .lbhfront,.lb[data-mode=geo] .lbsfront,
+.lb[data-mode=front] .lbmgeo,.lb[data-mode=front] .lbheff,
+.lb[data-mode=front] .lbseff,.lb[data-mode=front] .lbhgeo,
+.lb[data-mode=front] .lbsgeo{display:none}
 .lbmnone b{color:var(--mut);font-weight:400}
 .lbcrown{display:none}
 .lbrow.lbtop .lbcrown{display:inline}
