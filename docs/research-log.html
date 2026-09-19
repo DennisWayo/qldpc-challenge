@@ -249,6 +249,55 @@ gen = enumerate_local_sat_codes(4, 5, 6, 2, 2.0, seed=7, max_codes=100,
 <p>Union Alpha (maker currently anonymous), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(80,22), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[3] and b=[3, 8, 22] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 160 - rank(HX) - rank(HZ) = 40. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/160-40-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/162-8-7.html">[[162,8,7]] — 162-8-7</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[162,8,7]] — open-boundary planar BB code, bilayer, 9x9 grid</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p><code>fieldnotes/2026-07-01-open-directions-snapshot.md</code> flags &quot;2D-local grafts&quot; as still open: codes already dominated on the unrestricted board can still set locality records, because the <code>2d-local-*</code> cells are far less populated (141-175 nondominated vs. 247-444 for <code>unrestricted</code> at the same weight, per <code>./qldpc targets</code>). Rather than a blind random search in the already-heavily-mined BB/2BGA families, this direction re-scans the *validated* open-boundary planar family from <code>research/local2d/planar.py</code> (Liang-Eberhardt-Chen arXiv:2504.08887, the [[288,8,12]] flagship) across grid sizes the board&#x27;s existing planar entries (n=88 to n=924) skip over, specifically to catch a gap at <code>weight-6 x local-2d-bilayer</code>.</p>
+<h4>What was searched</h4>
+<p>Enumerated <code>build_open_directional(Lx, Ly)</code> for the flagship polynomials (f = x+x^2+y^2, g = 1+x^2y+x^2y^2) over square grids Lx=Ly in 4..12 and rectangles with |Lx-Ly|&lt;=3, Lx,Ly in 4..13 (34 configurations total). Screened each with <code>surrogate.distance_rand</code> at 3,000 trials, then checked every resulting (n,k,d,w) against the current board&#x27;s computed locality classes (a local re-implementation of the verifier&#x27;s Section-9 locality-class logic, cross-checked against <code>codes/288-8-12.json</code>&#x27;s stored <code>interaction_radius: 4.0</code> to confirm agreement). <code>k=8</code> held across every config tried; distance scaled with min(Lx,Ly) as expected for this family.</p>
+<p>Two configurations, 9x9 (n=162) and 11x11 (n=242), showed <b>zero</b> existing board codes — in either <code>local-2d-single</code> or <code>local-2d-bilayer</code> — with n&lt;=candidate n, k&gt;=8, d&gt;=candidate d, w&lt;=6. Both were promoted for confirmation; this note covers the 9x9 point.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Screening: d&lt;=7 at 3,000 RIS trials (seed 1).</li>
+<li>Confirmation: d&lt;=7 held at both 10,000 trials (seed 1) and 40,000 trials</li>
+<p>(seed 2) — no drop, unlike the large-n inflation cases in <code>fieldnotes/2026-08-15-dead-ends-and-leads.md</code>.</p>
+<li>Packaging: <code>submit.make_submission</code> re-searched the witness at 20,000</li>
+<p>trials and confirms d=7 (min of dX=dZ=7).</p>
+<li>Gate: <code>verify/validate_candidate.py</code> on the packaged doc returned</li>
+<p><code>passed: true</code>, <code>refute.refuted: false</code> (no lighter logical in a further 8,000 independent RIS trials), and <code>novelty.board_advancing: true</code> for cell <code>(weight-6, local-2d-bilayer)</code> with <code>dominated_by: []</code>.</p>
+<li>Claim: <b>witness-backed upper bound</b>, not exact. `confidence:</li>
+<p>&quot;upper_bound&quot;` in the packaged doc; no MILP/exact certification attempted.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>A direct planar/torus-style flat embedding of already-submitted periodic</li>
+<p>bivariate-bicycle codes was considered first (reusing an existing BB code&#x27;s (l,m) monomials with literal (i,j) coordinates) but abandoned: periodic wraparound means a &quot;small&quot; cyclic shift can map to a geometrically long edge near the boundary of a naive flat embedding, so it does not give an honest short-radius layout without the kind of special re-coordinatizing the board&#x27;s own [[288,8,12]] entry used (&quot;de-stacked ... by the map (i+j, j-i+c)&quot;). The open-boundary planar family sidesteps this because it has no periodic boundary to begin with.</p>
+<li>A first pass mistakenly reported *every* enumerated size (including</li>
+<p>[[288,8,12]], which is already on the board) as a &quot;new&quot; frontier point; this was a bug in the comparison script (relative <code>codes/*.json</code> glob resolving against the wrong working directory, silently comparing against an empty set), not a real result. Caught by sanity-checking that the already-known [[288,8,12]] point showed up as self-dominated once the path was fixed.</p>
+</ul>
+<h4>Tools</h4>
+<p>Claude Sonnet 5 (claude.ai chat, computer-use/bash sandbox), single CPU core, no GPU. Repo tooling: <code>research/local2d/planar.py</code> (<code>build_open_directional</code>, <code>grid_coordinates</code>), <code>research/kit/css.py</code>, <code>research/kit/surrogate.py</code> (<code>distance_rand</code>), <code>research/kit/submit.py</code> (<code>make_submission</code>, <code>save_submission</code>, <code>_interaction_radius</code>), <code>verify/validate_candidate.py</code>. No <code>gf2_fast</code>/GPU backend built (numpy path only). Total compute: a few CPU-minutes for the enumeration sweep plus ~85s for final packaging of this candidate.</p>
+<h4>Reproduction</h4>
+<pre>
+import sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+sys.path.insert(0, &quot;research/kit&quot;)
+from planar import build_open_directional, grid_coordinates
+from submit import make_submission, save_submission
+
+HX, HZ = build_open_directional(9, 9)          # flagship f, g (module defaults)
+coords = grid_coordinates(9, 9)                 # bilayer: A(i,j), B(i,j) share site (i,j)
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[162,8,7]] open-boundary planar BB (bilayer), 9x9&quot;,
+    construction=&quot;Open-boundary directional-condensation planar bivariate-bicycle &quot;
+                 &quot;code (arXiv:2504.08887 flagship f=x+x^2+y^2, g=1+x^2y+x^2y^2) on &quot;
+                 &quot;a 9x9 grid; built with research/local2d/planar.build_open_directional.&quot;,
+    authors=[&quot;@msilve160&quot;], family=&quot;bivariate-bicycle&quot;,
+    references=[&quot;arXiv:2504.08887&quot;], confidence=&quot;upper_bound&quot;,
+    coordinates=coords, layers=2, trials=20000, seed=0,
+)
+save_submission(doc, &quot;codes/162-8-7.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/162-8-7.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/168-14-10.html">[[168,14,10]] — 168-14-10</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[168,14,10]] — two-block group-algebra code on SmallGroup(84,3)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 8.33.</p>
@@ -538,6 +587,50 @@ gen = enumerate_local_sat_codes(4, 5, 6, 2, 2.0, seed=7, max_codes=100,
 <p>Union Alpha (maker currently anonymous), Zed coding agent; installed GAP Small Groups library, NumPy, repository group-algebra constructor and trusted validator. Public artifacts fetched by immutable commit URL and treated as data. Bounded local CPU run, no paid compute.</p>
 <h4>Reproduction</h4>
 <p>Use GAP g := SmallGroup(100,1), e := Elements(g). Construct the zero-based Cayley table mul[i,j] = Position(e,e[i+1]*e[j+1])-1. The published nonidentity supports are a=[9] and b=[2, 5, 40] in GAP&#x27;s one-based indexing. Add identity and convert to zero-based. Build HX=[L(a)|R(b)], HZ=[R(b)^T|L(a)^T] with left/right regular representations. Verify CSS; k = 200 - rank(HX) - rank(HZ) = 2. Pass to the repository submission builder with confidence upper_bound; save the returned witnesses immediately and run the default trusted candidate gate. Do not replace the returned distance with the paper&#x27;s number.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/200-2-20.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/242-8-10.html">[[242,8,10]] — 242-8-10</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/msilve160">@msilve160</a> &middot; Claude Sonnet 5</div><details ><summary>note</summary><div class=notebody><h3>[[242,8,10]] — open-boundary planar BB code, bilayer, 11x11 grid</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Same direction as <code>162-8-7.note.md</code>: the still-open &quot;2D-local grafts&quot; lead from <code>fieldnotes/2026-07-01-open-directions-snapshot.md</code>, re-scanning the validated open-boundary planar family (<code>research/local2d/planar.py</code>, Liang-Eberhardt-Chen arXiv:2504.08887 flagship) at grid sizes the board&#x27;s existing planar entries (n=88..924) don&#x27;t cover, targeting the thinner <code>weight-6 x local-2d-bilayer</code> cell rather than the heavily-mined periodic BB/2BGA families.</p>
+<h4>What was searched</h4>
+<p>Same 34-configuration sweep described in <code>162-8-7.note.md</code> (square grids Lx=Ly in 4..12 and rectangles with |Lx-Ly|&lt;=3 in 4..13). The 11x11 (n=242) configuration was the second of two points (alongside 9x9/n=162) with zero existing board codes dominating it in either <code>local-2d-single</code> or <code>local-2d-bilayer</code> at weight&lt;=8.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Screening: d&lt;=10 at 3,000 RIS trials (seed 1).</li>
+<li>Confirmation: d&lt;=10 held at 15,000 trials (seed 3) — no drop from the</li>
+<p>screening value.</p>
+<li>Packaging: <code>submit.make_submission</code> re-searched the witness at 20,000</li>
+<p>trials and confirms d=10 (min of dX=dZ=10).</p>
+<li>Gate: <code>verify/validate_candidate.py</code> on the packaged doc returned</li>
+<p><code>passed: true</code>, <code>refute.refuted: false</code> (no lighter logical in a further 8,000 independent RIS trials), and <code>novelty.board_advancing: true</code> for cell <code>(weight-6, local-2d-bilayer)</code> with <code>dominated_by: []</code>.</p>
+<li>Claim: <b>witness-backed upper bound</b>, not exact.</li>
+<p><code>confidence: &quot;upper_bound&quot;</code> in the packaged doc.</p>
+</ul>
+<h4>Dead ends</h4>
+<p>See <code>162-8-7.note.md</code> — same sweep, same script-path bug caught and fixed before either candidate was trusted.</p>
+<p>One additional note specific to this size: confirmation at deeper trial counts (e.g. the ~40k used for the 9x9 point) was not run here due to the single-core sandbox&#x27;s time budget — n=242 costs roughly 4x the per-trial time of n=162, so only a 15k-trial re-check was affordable in this session. A human continuing this should push to at least 40k-60k trials/side before treating d=10 as well-supported, per the trial-depth floor in <code>fieldnotes/2026-07-01-trial-depth-floors.md</code>.</p>
+<h4>Tools</h4>
+<p>Claude Sonnet 5 (claude.ai chat, computer-use/bash sandbox), single CPU core, no GPU. Same tool chain as <code>162-8-7.note.md</code>. Total compute: shared enumeration sweep plus ~165s for final packaging of this candidate.</p>
+<h4>Reproduction</h4>
+<pre>
+import sys
+sys.path.insert(0, &quot;research/local2d&quot;)
+sys.path.insert(0, &quot;research/kit&quot;)
+from planar import build_open_directional, grid_coordinates
+from submit import make_submission, save_submission
+
+HX, HZ = build_open_directional(11, 11)
+coords = grid_coordinates(11, 11)
+doc = make_submission(
+    HX, HZ,
+    name=&quot;[[242,8,10]] open-boundary planar BB (bilayer), 11x11&quot;,
+    construction=&quot;Open-boundary directional-condensation planar bivariate-bicycle &quot;
+                 &quot;code (arXiv:2504.08887 flagship f=x+x^2+y^2, g=1+x^2y+x^2y^2) on &quot;
+                 &quot;an 11x11 grid; built with research/local2d/planar.build_open_directional.&quot;,
+    authors=[&quot;@msilve160&quot;], family=&quot;bivariate-bicycle&quot;,
+    references=[&quot;arXiv:2504.08887&quot;], confidence=&quot;upper_bound&quot;,
+    coordinates=coords, layers=2, trials=20000, seed=0,
+)
+save_submission(doc, &quot;codes/242-8-10.json&quot;)   # only after human review + PR
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/242-8-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/25-9-3.html">[[25,9,3]] — 25-9-3</a></h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[25,9,3]] — SAT t=2 weight-6 2D-local code on a 5×5 grid</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Hackathon (#1155) SAT-search. t=2 (d≥3) encoding is cheap and finds board-advancing codes in the weight-6 × local-2d-single cell. At n=25 the frontier was <code>[[25,5,4]]</code> (k=5, d=4) and <code>[[37,7,3]]</code> (k=7, d=3). A <code>[[25,9,3]]</code> would dominate <code>[[37,7,3]]</code> on n (25&lt;37) at the same k,d,w.</p>
