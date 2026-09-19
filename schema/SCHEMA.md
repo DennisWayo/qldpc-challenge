@@ -24,8 +24,9 @@ Two principles drive the format:
 
 ## Fields
 
-- `schema_version`: `"0.1"` or `"0.2"` (0.2 added the optional
-  `witness_provenance` block; 0.1 files remain valid unchanged).
+- `schema_version`: `"0.1"`, `"0.2"` or `"0.3"` (0.2 added the optional
+  `witness_provenance` block, 0.3 the optional `provenance.search_budget`
+  block; 0.1 and 0.2 files remain valid unchanged).
 - `name`: human-readable, e.g. `"[[72,6,6]] generalized weight-6 planar BB code"`.
 - `code_type`: `"CSS"` (the only type in v0.1).
 - `n`: physical qubit count. Must match the qubit indices used in `checks`.
@@ -179,6 +180,20 @@ Two principles drive the format:
     set exists in the literature, though this entry may improve weight, layout,
     or construction details), or `"new_parameters"` (claimed novel after review;
     not a verifier-proved fact).
+  - `search_budget` (optional; requires `schema_version: "0.3"`): what the
+    search that produced this code cost, self-reported and unchecked (there
+    is nothing trustless to check). All fields optional: `candidates_screened`
+    (codes built and screened before this one), `ris_trials_per_side` (the
+    deepest RIS budget spent per side on this code during the search),
+    `cpu_hours`, `gpu_hours`, `llm_tokens` (an object keyed by model name as
+    in `provenance.model`, value the integer token count, input and output
+    combined), `wall_clock_hours`, `tool` (the search harness) and `notes`
+    (what the numbers cover and leave out). It is about the code search, not
+    the witness search: `witness_provenance.found_at_samples` budgets one
+    operator, this budgets the discovery. `./qldpc submit` fills it from the
+    `--budget-*` flags or `--budget-json`. The site can show it on the detail
+    page and the research log can aggregate it, so the cost of a
+    frontier-advancing code becomes comparable across entries and over time.
 - `family` (optional): the construction family, a Layer-2 tag from a fixed
   vocabulary (`bivariate-bicycle`, `generalized-bicycle`, `2bga-coset`,
   `hypergraph-product`, `lifted-product`, `balanced-product`, `quantum-tanner`,
