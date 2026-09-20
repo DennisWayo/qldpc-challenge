@@ -73,21 +73,13 @@ and any useful inner code has D >= 3, delta_Z >= D >= 3, hence
 
 **w >= 3 * delta_Z >= 9 > 8.**
 
-This is a structural argument from arXiv:2609.16542 (Theorem 4.2, Prop
-4.4), not a presentation artifact: for the k=2 code (n=21) it was checked
-directly that any word spanning the Z quotient has weight exactly 9 (each
-of the three blocks carries a weight-3 z representative, and every
-internal simplex word overlaps z in exactly two positions, so no internal
-combination lowers a block below weight 3). The intrinsic Z-check weight
-is 9.
-
-**Not needed for the closure, however.** The result stands without this
-argument: every phantom candidate is dominated on (n, k, d) by a board
-entry (next section), and that domination closes the direction on its own.
-The weight bound is secondary: it additionally rules out the
-weight-bounded cells (w <= 8) that domination does not address, but a
-reader who questions the D >= 3 step sees that the conclusion survives
-without it.
+The obstruction is delta_Z — the Z-logical representative weight of the
+inner code — NOT the inner code's check weight. This is not a presentation
+artifact: for the k=2 code (n=21) it was checked directly that any word
+spanning the Z quotient has weight exactly 9 (each of the three blocks
+carries a weight-3 z representative, and every internal simplex word
+overlaps z in exactly two positions, so no internal combination lowers a
+block below weight 3). The intrinsic Z-check weight is 9.
 
 ## Even ignoring weight: dominated
 
