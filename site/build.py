@@ -3194,7 +3194,8 @@ function draw(){
  }else{fy=function(v){return H-pb-(v/(yceil*1.08))*(H-pt-pb);};}
  var ylab=st.y==='geo'?'Geometric Efficiency (g)':'Code Efficiency (kd&#178;/n)';
  var g='<text transform="translate(14 '+((pt+H-pb)/2)+') rotate(-90)" font-size="12.5" fill="#475569" text-anchor="middle">'+ylab+'</text>';
- var ticks=st.s==='log'?(st.y==='geo'?[0.001,0.002,0.005,0.01,0.02,0.05,0.1,0.2,0.5,1]:[1,2,5,10,20,50,100,200,500]):
+ var ticks=st.s==='log'?(function(){var lo=st.y==='geo'?Math.floor(Math.log10(Math.max(ymin,1e-6))):0,hi=Math.ceil(Math.log10(Math.max(yceil,1))),o=[];
+   for(var e=lo;e<=hi;e++)[1,2,5].forEach(function(m){o.push(m*Math.pow(10,e));});return o;})():
   (function(){var s=Math.pow(10,Math.floor(Math.log10(ymax)))/2,o=[];
    for(var v=0;v<=ymax*1.05;v+=s)if(v>0)o.push(Math.round(v*1000)/1000);return o.slice(0,8);})();
  ticks.forEach(function(t){if(t>yceil*1.15||(st.y==='geo'&&st.s==='log'&&t<ymin/1.15))return;var y=fy(t);
@@ -3292,7 +3293,10 @@ def record_chart(entries):
     grid.append(f'<text transform="translate(14 {ymid:.0f}) rotate(-90)" '
                 'font-size="12.5" fill="#475569" text-anchor="middle">'
                 'Code Efficiency (kd&#178;/n)</text>')
-    for tick in (1, 2, 5, 10, 20, 50, 100):
+    # 1-2-5 ticks per decade up to the data: a fixed list stopped at 100 and
+    # left the upper half of the axis unlabelled once records passed 1000.
+    top_decade = int(math.ceil(math.log10(max(ymax, 1.0))))
+    for tick in [m * 10 ** e for e in range(0, top_decade + 1) for m in (1, 2, 5)]:
         if tick > ymax * 1.15:
             break
         y = sy(tick)
