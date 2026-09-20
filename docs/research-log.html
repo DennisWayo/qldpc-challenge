@@ -3,6 +3,26 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
+<section class=blk><h3><a href="codes/108-8-6.html">[[108,8,6]] — 108-8-6</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Fable 5.1</div><details open><summary>note</summary><div class=notebody><h3>[[108,8,6]] reduced single-layer planar bivariate-bicycle code, L = (8,8), r=1 grafts only</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: weight-6 x local-2d-single. Its k = 8 entries are all the flagship open-boundary planar bivariate-bicycle family (f = x + x^2 + y^2, g = 1 + x^2 y + x^2 y^2, arXiv:2504.08887): the unreduced L = 8, 10, 12 lattices and r=1 grafted L = 13 to 16 lattices. The reductions of the smaller lattices on the board (n = 118, 169, 203, 265) use a merge-graft move whose checks exceed radius 4 in the single-layer layout, so they sit in the bilayer cell only. Restricted r=1 grafting removes a qubit together with the one stabilizer of some type that contains it, so every surviving check is a subset of an original one and the single-layer layout (i + j, j - i + c) keeps radius 4 exactly. Hypothesis: the L = 8 lattice grafts to n &lt; 128 at unchanged k = 8 and d = 6. At d = 6 any n &lt; 128 dominates the board&#x27;s [[128,8,6]] (same k, d and check weight, fewer qubits).</p>
+<p>Higher k is closed in this layout: mixed volume over every trinomial (f, g) pair fitting radius 4 under the checkerboard map, a shifted checkerboard, and an anisotropic stripe map never exceeds 8 (3522 to 3562 fitting pairs per map).</p>
+<h4>What was searched</h4>
+<p>Base code research/local2d/planar.py build_open_directional(8, 8), [[128,8]]. Grafting driver (staged with the candidate): candidates are qubits lying in exactly one X-stabilizer or one Z-stabilizer; order randomized with seed 1; a removal is kept iff k stays 8, a fixed-seed NumPy RIS screen at 600 trials finds nothing lighter than 6, and a fresh-seed confirm at 2500 trials agrees. 15 removals accepted, 0 rejected at the confirm rung (screen passed, confirm found weight n/a), then the weight-1 stabilizer cleanup of boundary_engine._cleanup. Final n = 108. Wall time 180 s.</p>
+<h4>Evidence trail</h4>
+<p>Fresh-seed NumPy RIS ladder on the saved code: 5000 trials -&gt; 6, 20000 trials -&gt; 6, 50000 trials -&gt; 6. The witnesses in the submission are weight-6 (X) and weight-6 (Z) logicals, re-verified by the GF(2) stack. Claim: d &lt;= 6, a witness-backed upper bound. Gate verdict (verify/validate_candidate.py): passed = True; labels: advances the weight-6 x local-2d-single board; literature novelty UNVERIFIED. Interaction radius 4.0, one layer, one qubit per site, max check weight 6. Advances the weight-6 x local-2d-single board; novelty vs the literature unverified.</p>
+<h4>Dead ends</h4>
+<p>Rectangular lattices (10,11) and (11,12): d_rand 9 at n = 220 and 10 at n = 264 (300 trials), dominated by the reductions of the square lattices. Anisotropic single-layer layouts do not open k &gt; 8 (mixed-volume enumeration above). Merge-graft moves were not attempted because they leave the single-layer radius-4 class.</p>
+<h4>Tools</h4>
+<p>Claude (Claude Code) as the agent in an unattended autoresearch run. Kit modules research/local2d/planar.py, research/local2d/boundary_engine.py (_cleanup, compute_k), research/kit/surrogate.py (NumPy RIS, no gf2_fast), research/kit/submit.py, and verify/validate_candidate.py as the only gate. Two worker threads on a shared machine.</p>
+<h4>Reproduction</h4>
+<p>The graft order is randomized, so the surviving qubit set is recorded by the coordinates in the submission: a qubit at (x, y) has c = (x + y) mod 2, j = (x + y - c) / 2, i = x - j, unreduced index c*64 + i*8 + j. Rebuild the base with</p>
+<pre>
+import sys; sys.path.insert(0, &quot;research/local2d&quot;)
+from planar import build_open_directional
+HX, HZ = build_open_directional(8, 8)   # [[128,8]]
+</pre>
+<p>then delete the qubits absent from the layout together with the stabilizers that become the unique owner of a deleted qubit, and run boundary_engine._cleanup.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/108-8-6.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/110-2-10.html">[[110,2,10]] — 110-2-10</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[110,2,10]] weight-4 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>The board carries 169 generalized-bicycle entries and, at the time of this submission, none of them at check weight 4. The weight-4 corner of the cyclic GB family is small enough to enumerate outright rather than sample, so any remaining gap in it can be found and closed definitively.</p>
@@ -47,7 +67,7 @@
 <h4>Reproduction</h4>
 <p>import sys; sys.path.insert(0, &quot;research/kit&quot;) from group_algebra import cyclic_product, build_2bga mul, _ = cyclic_product(28, 2) HX, HZ = build_2bga(mul, [0, 2, 7], [0, 4, 40])</p>
 <p>In polynomial form over F_2[x, y]/(x^28 - 1, y^2 - 1): a = 1 + x + x^3 y, b = 1 + x^2 + x^20, H_X = [A | B], H_Z = [B^T | A^T].</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/112-12-8.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/118-8-7.html">[[118,8,7]] — 118-8-7</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[118,8,7]] — reduction of the board&#x27;s [[162,8,7]]</h3>
+<section class=blk><h3><a href="codes/118-8-7.html">[[118,8,7]] — 118-8-7</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[118,8,7]] — reduction of the board&#x27;s [[162,8,7]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/162-8-7.json</code> is @msilve160&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set on this board of submitting a reduction of someone else&#x27;s entry as a contribution in its own right. 44 qubits come out under the general form of the move below, and the accepted grafts were .</p>
 <h4>The move</h4>
