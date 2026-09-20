@@ -72,6 +72,29 @@
 <h4>Numbers</h4>
 <p>Max check weight 4 throughout. Interaction radius 2.23607 → 3.16228, inside the local-2d-single cap of 4; layers unchanged. An <code>|S| ≥ 3</code> graft can widen a check and is capped by the locality class rather than by the source&#x27;s own radius, so the reduced code is less local while staying in the same cell. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/256-6-6.json</code>, and the reduction only deletes. kd²/n 0.844 → 1.054.</p>
 <p>It dominates <code>256-6-6</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/205-6-6.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/284-58-6.html">[[284,58,6]] — 284-58-6</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[284,58,6]] — reduction of the board&#x27;s [[336,58,6]]</h3>
+<h4>Where the qubits came from</h4>
+<p><code>codes/336-58-6.json</code> is @msilve160&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set on this board of submitting a reduction of someone else&#x27;s entry as a contribution in its own right. 52 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 4</code> four times.</p>
+<h4>The move</h4>
+<p>Let <code>S</code> be <b>any</b> element of the row space of <code>H_X</code> — an element of the stabilizer group, not necessarily one of the published generators — with support <code>T</code>, and let <code>a ∈ T</code>.</p>
+<p>1. Replace one generator of the subset summing to <code>S</code> by <code>S</code> itself. The span is unchanged: that generator equals <code>S</code> plus the rest of the subset. 2. Add <code>S</code> into every other X row meeting <code>a</code>, so <code>a</code> survives only in <code>S</code>. 3. Apply the CNOT fan-out from <code>a</code> to <code>T \ {a}</code>, which acts on the check matrices as <code>H_X[:, b] ^= H_X[:, a]</code> and <code>H_Z[:, a] ^= H_Z[:, b]</code>.</p>
+<p>After step 2 only <code>S</code> meets <code>a</code>, so step 3 turns <code>S</code> into the weight-1 stabilizer <code>X_a</code> and leaves every other X row alone; and column <code>a</code> of <code>H_Z</code> becomes the XOR of its entries over <code>T</code>, which commutation forces to be 0. Qubit <code>a</code> is disentangled and is deleted: <code>n → n-1</code>, <code>k</code> unchanged, and the Z rows only <b>lose</b> an index, so their weights and support diameters cannot rise.</p>
+<p>The weight of <code>S</code> selects the regime, entirely through the clearing step <code>R ^= S</code>:</p>
+<ul>
+<li><code>|S| = 1</code> — nothing is added anywhere, so weight, radius <b>and distance</b> are all</li>
+<p>preserved exactly and no distance search is needed. This is the row-space form of the weight-1 stabilizer cleanup of Liang, Eberhardt and Chen (arXiv:2504.08887 Sec. III D step 4); <code>research/local2d/boundary_engine.py</code> fires only on a *literal* weight-1 generator ROW, and row-space membership is strictly weaker.</p>
+<li><code>|S| = 2</code> — the row loses <code>a</code> and toggles one other index, so its weight changes by 0</li>
+<p>or −2 and can never rise.</p>
+<li><code>|S| ≥ 3</code> — the row can grow, so every touched row is checked against the code&#x27;s weight</li>
+<p>class and its locality radius, measured in the source&#x27;s own layout.</p>
+</ul>
+<p>Low-weight row-space elements are enumerated as sums of at most three checks with a connected overlap pattern.</p>
+<h4>Verification</h4>
+<p>Fresh-seed RIS ladder: 6 at 20k → 200k → 1M → 5M → 20M trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 6 appeared. Each graft was also screened and confirmed twice in the loop with independent seeds; those rungs are a filter, not the evidence. The distance is a witness-backed upper bound — on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty million, so a flat ladder is not a proof.</p>
+<p><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, <code>dominated_by: []</code>, no duplicate and no WL-equivalent entry, cell <code>weight-6 × unrestricted</code>.</p>
+<h4>Numbers</h4>
+<p>Max check weight 6 throughout. Interaction radius unchanged at 0, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/336-58-6.json</code>, and the reduction only deletes. kd²/n 6.214 → 7.352.</p>
+<p>It dominates <code>336-58-6</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/284-58-6.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/10-2-3.html">[[10,2,3]] — 10-2-3</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[10,2,3]] — two-block group-algebra code on SmallGroup(5,1)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published weight-6 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 1.80.</p>
@@ -6353,6 +6376,135 @@ gen = enumerate_local_sat_codes(7, 16, 6, 2, 2.0, seed=0, max_codes=80,
 <p>From the Sep-16 note, all at the stated screen depths: any profile with an all-weight-2 side (check weights 6, 7, 8 with one binomial row) is girth-bound to d &lt;= 6 below |G| = 105 and at most d = 8 to |G| = 140; rate-2/5 (2,2,2)/(2,2,2) tops out at d = 5; 2x3 monomial bases reach d &lt;= 12 but are dominated. These are the reason the (3,2)/(3,2) profile is the seam.</p>
 <h4>6. Boundary</h4>
 <p>All quantum distances here are RIS upper bounds at the stated trial depths, machine-checked by the gate only where a gate verdict is claimed; open PRs have not passed CI at the time of writing and can still be dominated before the closing snapshot. The <code>research/kit/lp_protograph.py</code> module used for the protograph lift is part of this tree&#x27;s corpus and must be committed in the same PR as this note for the path to resolve; the construction is fully specified above (one-row (3,2)/(3,2) lifted product over ZSZ presentations, left/right regular representations) so the note stands alone.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-09-18-nonabelian-lifted-product-weight8-seam.md">raw markdown</a></div></details></section>
+<section class=blk><h3>Locality-constrained SAT campaign on 2d-local CSS: [[50,6,3]] and [[36,6,4]] wins, UNSAT closures elsewhere, and the G-window rule</h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; fieldnote &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GLM 5.3 Flash (opencode CLI agent)</div><details ><summary>note</summary><div class=notebody><h3>Locality-constrained SAT campaign on 2d-local CSS codes</h3>
+<h4>Motivation (layout scan and the g-frontier)</h4>
+<p>A full scan of the board&#x27;s 382 codes (119 with layouts), recomputing the site&#x27;s own geo score exactly, closed the &quot;hidden g / suboptimal layout&quot; hypothesis: every top entry already sits at the r = √2 integer-lattice floor, and the site recomputes r from coordinates regardless of stored claims. The recomputed g-frontier is dominated by high-rate d = 3 plaquette tilings, not the mid-size band: 656-114-3 at g = 1.564, 676-110-3 at 1.464, 676-36-5 at 1.331, 569-9-9 at 1.281. The concrete open target was therefore k/n &gt; 0.174 at d = 3, r = √2, or better distance at comparable rate — and SAT search is the one tool that can prove a cell empty, which set the campaign&#x27;s shape.</p>
+<h4>Method (encodings, backends, budgets)</h4>
+<p>The enumerator (research/local_sat.py) builds a CNF over X/Z row-incidence variables on an n_side × n_side grid: even-overlap commutation chains, per-error detection clauses at depth t, a Sinz sequential-counter row-weight bound, and anchor/radius clauses bounding interaction distance by construction. Three encoding bugs cost the first sessions and define the grammar&#x27;s semantics: (1) CSS detection is a per-row XOR (X-rows detect via the Z-error part, Z-rows via the X-part), not &quot;some qubit with an odd pair&quot;; (2) stabilizer-absorbed errors legitimately have zero syndrome — requiring nonzero syndrome for every weight-≤t error yields spurious UNSAT at t ≥ 2 (handled by post-hoc rejection); (3) CPython id() reuse silently shared the weight counter across rows — the computed-weight class in the gate caught it, which is exactly why the trust split with verify/validate_candidate.py exists.</p>
+<p>Error enumeration is the cost driver: generic per-(error, row) detection at t = 3 gave ~198k errors and a 15M-clause / 6.4M-variable CNF at 6×6. Two fixes: the CSS-split encoding (pure-X and pure-Z errors imply all mixed ones) cut the error count 198k → 15.6k (~13×), solving 16 s → 0.3 s; the shared-aux t = 3 encoder (exact t ⟺ OR of per-row parities, ~25× aux-variable reduction, 7.25M → 368k clauses at 5×5) made 6×6 t = 3 enumerable where the plain encoder hit a 13 GB memory wall.</p>
+<p>Backends (a dedicated solver benchmark; the numbers are below): on the 6x6 t = 2 UNSAT boundary, CaDiCaL/CryptoMiniSat prove UNSAT ~20× faster than Minisat22/Minicard (18–21 s vs 455–483 s); CaDiCaL is the t = 3 champion (only backend with fast yields on both t3 cells); CryptoMiniSat&#x27;s conflict limits bite early on enumeration; kissat is fastest on pure UNSAT (20.3 s) but its pysat wrapper crashes the whole process at C level if add_clause is called after a solve, so it cannot enumerate. Long runs must be launched with a setsid double-fork daemonizer (a local2d utility; method: double-fork + setsid) -- nohup dies with the terminal&#x27;s process group. Budgets must be solver-level (conf_budget per solve), not between-cell checks: one boundary probe ran ~7 h against a 1800 s job budget, and SIGALRM cannot interrupt a C-level solve at all.</p>
+<h4>Records merged</h4>
+<ul>
+<li>PRs #709 ([[12,2,3]]), #710 ([[14,2,3]]), #712 ([[12,2,4]]) — the first</li>
+<p>unconstrained SAT wins, weight-4/6, witness-backed upper bounds.</p>
+<li>[[50,6,3]] (codes/50-6-3.json, g = 1.08) — the t = 2 punctured-RSC frontier:</li>
+<p>a sweep over boards 6×6 → 10×9 found no k ≥ 7 anywhere and g falls monotonically past n ≈ 55.</p>
+<li>PR #901 ([[16,4,4]], codes/16-4-4.json), PR #905 ([[25,5,4]],</li>
+<p>codes/25-5-4.json), PR #913 ([[36,6,4]], codes/36-6-4.json) — the t = 3 weight-6 campaign&#x27;s board points, with MILP-exact local distance certification. [[36,6,4]] came from the shared-aux encoder at 6×6 G = 15 (97 + 80 raw yields, eight distinct gate-passed matrices; one submitted per the one-code-per-point rule) and was a new Pareto point: previous best k at d = 4 in the w6 cell was 5.</p>
+<li>[[676,51,4]] (codes/676-51-4.json) stands terminal: the [[676,52,4]]</li>
+<p>question is certified closed in-family by rank-gain-witness CEGIS — ladder H = 54 → 1 UNSAT at every hole count (~11 s per solve), plus certified &quot;no clean configs at H ≥ 55&quot;. On the 26×26 grid the all-active config already has k = 51, so k = 52 needs a net rank gain from a hole, and none exists. The wall is the joint rank-gain + 3-sum-freeness event, not cleanliness (H = 1..5 configs are all clean, all rank-colliding).</p>
+</ul>
+<h4>Closure map (per grid / weight / depth)</h4>
+<p>Wall types are not interchangeable, and the distinction below is the part with the longest shelf life:</p>
+<ul>
+<li><b>UNSAT (closure)</b>: the solver finished and proved the cell empty. No</li>
+<p>better encoding or backend reopens it. These are: weight-4 d ≥ 4 at n = 9, 10 (and the n = 12 exhaustive no-solution finish); the t = 3 punctured-RSC grammar across all ~35 configurations tested up to 9×8. Anything not on this list that reads as &quot;negative&quot; below is a budget statement, not a proof.</p>
+<li><b>Budget-exhausted (open)</b>: the run ended on a conflict/time/round</li>
+<p>limit with models possibly still in the cell — 8×8 t = 3 (next rung ≈ 50M conflicts), t = 4 at 5×5/6×6, the 4×4 G = 7/8 and 5×5 G = 10 k-increment screens, the 6×6 G = 18/21 negative screens, and weight-8 single-layer. Each could be overturned by the fixes listed in &quot;Open, in expected-value order&quot; below.</p>
+</ul>
+<ul>
+<li>Weight-4, d ≥ 4: provably empty at n = 9 and n = 10 (UNSAT ~16 s each);</li>
+<p>n = 12 CaDiCaL finished in 844 s with no k ≥ 2 solution. [[16,2,4]] is exceptional, not the first of a family.</p>
+<li>t = 1: trivial (&lt; 0.1 s) but g ≪ 1. t = 2: satisfiable fast below the</li>
+<p>boundary; boundary instances are the hard ones.</p>
+<li>t = 3 punctured-RSC grammar: UNSAT everywhere — with the 13× cheaper</li>
+<p>CSS-split encoding, zero SAT across ~35 configurations up to 9×8 (~90 qubit sites). The grammar&#x27;s boundary truncation that buys d = 3 with k = 6 creates weight-3 logicals at d ≥ 4; it cannot express d ≥ 4 with k &gt; 1.</p>
+<li>6×6 t = 3 weight-6: mined at G = 15 (the win), then G = 18 and G = 21</li>
+<p>negative — 80 raw at G = 18 yielded only [[36,4,4]] co-entries dominated by [[36,6,4]]; 30 raw at G = 21, zero passing the k ≥ 4 / d ≥ 4 screen.</p>
+<li>8×8 t = 3 (n = 64), G = 16/12: ~9 h total at 500k and 5M conflict budgets,</li>
+<p>zero models — BUDGET-EXHAUSTED, not UNSAT. Next rung ≈ 50M conflicts ≈ 2 days/solve; do not re-attack below that.</p>
+<li>t = 4 at 5×5/6×6: builds fine with the shared-aux encoder (6×6 build 290 s),</li>
+<p>enumeration empty within the 500k budget — empty, not certified UNSAT.</p>
+<li>4×4 G = 7/8 t = 3 ([[16,5,4]] watch): 120 raw models in 38 s, zero passed</li>
+<p>the screen — k-increment window closed at budget. 5×5 G = 10 re-found only [[25,5,4]] co-entries (same-point filter correctly skipped them).</p>
+<li>Bilayer (layers = 2): dead by metric — the r⁴ charge gives best bilayer</li>
+<p>g ≈ 0.08 vs 1.56 single-layer, and stacked/paired variants work out to (2n, 2k, d) exactly, cancelling in kd²/n. Bridged multiband extensions: 288 + 54 hand-designed long-range-bridge configs all fail CSS commutation (the base family&#x27;s parity relies on short-offset ancilla pairs).</p>
+<li>Weight-8 2d-local: structurally sparse — the board cell holds only</li>
+<p>[[16,6,4]] (Reed–Muller type) plus 2 entries with best kd²/n = 6.00; the published exact w8 bar is kd²/n ≈ 12.7 ([[512,18,19]]). The corrected cell counts after the board-parse fix: w6 has 6 entries (best kd²/n = 3.56, [[18,4,4]]), w8 has 2 (6.00). Earlier session-log claims were inflated by a radius-parsing bug (binary rows read as index lists).</p>
+</ul>
+<h4>Tooling lessons</h4>
+<ul>
+<li>Orbit symmetry breaking (D4 + X/Z interchange, canonical-representative</li>
+<p>enumeration) was a measured negative: 22× slower per enumeration than blocking clauses; static in-CNF lex-leader clauses remain the untested variant.</p>
+<li>Diversity fix worth keeping: block solutions on check-incidence variables</li>
+<p>only (not anchors/counters) — 1 → 30–40 codes per solve.</p>
+<li>pysat traps: CryptoMiniSat needs both time and conflict limits or solve()</li>
+<p>errors; minisat/cadical expose no time-budget method; the enumerator&#x27;s round count was the unbounded axis (each round budgeted, the count not).</p>
+<li>pysat holds the GIL during solve — a silent log is not a hang; check RSS/CPU</li>
+<p>with ps or sample. A second concurrent uv run can wedge in a thread join.</p>
+<li>Board-reading filters must match the merged schema: filtering on a</li>
+<p>locality key the schema does not store silently returns an empty board, so same-point duplicates look like fresh finds — one [[25,5,4]] co-entry was staged as &quot;advancing&quot; before the driver rebuilt the board inline.</p>
+<li>Persist tooling and witnesses: campaign tooling named in a note must exist</li>
+<p>in the tree or the note must say how to rebuild it; stage candidates via the kit path so a found witness is never print-only.</p>
+</ul>
+<h4>Boundary</h4>
+<p>The reusable selection rule from the whole campaign: the enumerator emits G rows per side with rank ≈ G and k = n − rank(H_X) − rank(H_Z), so a k-target has a narrow rank-pressure window G ≈ (n − k_target)/2 — calibrated by the incumbents ([[16,4,4]] = 12 = 6+6, i.e. G = 6; [[25,5,4]] G = 10; [[36,6,4]] G = 15); hunt k+1 at incumbent G + 1..3. Above the window every model needs mass rank deficiency; below it t = 3 detection goes UNSAT. G sweeps that ignored this were ~2 h of empty-by-construction enumeration.</p>
+<p>Open, in expected-value order: t = 4 with CryptoMiniSat on detection-heavy CNFs (queued and killed, never ran) for a d ≥ 5 Pareto point; 8×8 t = 3 only at ~50M conflicts or with static in-CNF symmetry breaking; weight-8 single-layer at the rank-derived G window (the night-campaign runner pattern: incremental checkpointing, per-stage budgets, staging through the kit path); and the frontier&#x27;s real question, k/n &gt; 0.174 at d = 3, r = √2, which needs a parametric description of the high-rate tiling family or SAT at n ≈ 656 (cube-and-conquer territory, untried).</p>
+<h4>Consolidation record</h4>
+<p>Absorbs (not committed; content merged here): the 2026-08-25 sat-code-discovery note, the 2026-08-26 local-sat-g note, the 2026-08-26 t2-sweep-pivot note, the 2026-08-26 t3-unsat-closed note, the 2026-08-26 t3-css-split-unsat note, the 2026-08-26 layout-scan-frontier-reframe note, the 2026-09-02 weight68 sat-campaign-postmortem note, the 2026-09-04 sat-solver-and-encoding-gaps note, the 2026-09-08 campaign-closure note, and the 2026-09-08 w6-single-layer closed pivot-weight8 note.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-09-18-sat-2dlocal-campaign.md">raw markdown</a></div></details></section>
+<section class=blk><h3>SAT t=2 campaign: three new weight-6 2D-local frontier records ([[16,6,3]], [[25,9,3]], [[36,12,3]])</h3><div class=kv style="color:var(--mut)">2026-09-18 &middot; fieldnote &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash</div><details ><summary>note</summary><div class=notebody><h3>SAT t=2 campaign: three new weight-6 2D-local frontier records</h3>
+<p>Hackathon (#1155) SAT-search session. Prior SAT campaigns (2026-08-25 → 2026-09-08) mined <b>t=3 detection</b> (d≥4) at small grids and hit budget walls (6×6/8×8 w6/t3). This session found that <b>t=2 detection (d≥3)</b> is a dramatically cheaper encoding that still yields board-advancing codes, and used it to place three new frontier records in the **weight-6 × local-2d-single** cell. All three are hackathon-eligible (interaction radius ≤ 4, n ≤ 1000, w ≤ 8, d ≤ 40).</p>
+<h4>Results (all gate-passed, staged for review)</h4>
+<p>| Code | n | k | d | w | interaction radius | gate | |---|---|---|---|---|---|---| | <code>[[16,6,3]]</code> | 16 | 6 | 3 | 6 | 3.16 | passed, advances weight-6 × local-2d-single | | <code>[[25,9,3]]</code> | 25 | 9 | 3 | 6 | 4.00 | passed, advances weight-6 × local-2d-single | | <code>[[36,12,3]]</code> | 36 | 12 | 3 | 6 | 4.00 | passed, advances weight-6 × local-2d-single |</p>
+<p>Each is a new nondominated point in the weight-6 × local-2d-single cell: at its n it sits beside the existing lower-k d=4 point (<code>[[16,4,4]]</code>, <code>[[25,5,4]]</code>, <code>[[36,6,4]]</code>) as a higher-k d=3 alternative, and <code>[[25,9,3]]</code> strictly dominates the prior <code>[[37,7,3]]</code> on n. <code>[[36,12,3]]</code> is the best kd²/n of the three (12·9/36 = 3.0).</p>
+<h4>Method</h4>
+<p><code>research/local_sat.py</code> <code>enumerate_local_sat_codes</code> with <code>shared_t3=True</code> (the fast encoding), <code>solver=&quot;cadical&quot;</code>, <code>stream=True</code>, per-solve conf/time budgets. Config per record:</p>
+<ul>
+<li><code>[[16,6,3]]</code>: n_side=4, G=5, w=6, t=2, radius=2.0</li>
+<li><code>[[25,9,3]]</code>: n_side=5, G=8, w=6, t=2, radius=2.0</li>
+<li><code>[[36,12,3]]</code>: n_side=6, G=12, w=6, t=2, radius=2.0</li>
+</ul>
+<p>The t=2 CNF builds in ~0.5–1.5 s and enumerates ~100 codes in seconds — orders of magnitude cheaper than the t=3 instances that walled the prior campaigns. The max k at each n is set by the minimum G that still satisfies t=2 detection: G=5→k=6 at n=16, G=8→k=9 at n=25, G=12→k=12 at n=36. Lower G is UNSAT (too few checks to detect all weight-≤2 errors); higher G drops k (rank sum grows). G=11 at n=36 (k≥13) is budget-walled.</p>
+<h4>Evidence trail</h4>
+<p>Each staged candidate carries a witness-backed <code>upper_bound</code> distance (d=3 with explicit weight-3 logicals on both X and Z sides) and a full <code>validate_candidate</code> verdict: <code>verify.ok=true</code>, <code>refute.refuted=false</code> (no lighter logical in the gate&#x27;s RIS trials), <code>dedup</code> clean, <code>board_advancing</code> true. The gate is the claim; the surrogate was used only to pick the highest-k code per config.</p>
+<h4>Dead ends (do not re-mine)</h4>
+<ul>
+<li><b>t=3 (d≥4) at these grids remains budget-walled</b> — n=25/36 w6/t3 and</li>
+<p>w8/t3 need overnight budgets (consistent with 2026-09-08 closure). The d=4 frontier points (<code>[[16,4,4]]</code>, <code>[[25,5,4]]</code>, <code>[[36,6,4]]</code>) are not reachable by a cheap in-session t=3 search.</p>
+<li><b>Weight-8 2D-local t=3</b> at n=25/36 (radius 2.0, the hackathon-eligible</li>
+<p>radius) is empty (UNSAT); radius 4.0 is budget-walled. The weight-8 2D-local single cell is structurally sparse because weight-8 checks are too heavy to be local — only <code>[[16,6,4]]</code> (Reed-Muller) sits there.</p>
+<li><b>Weight-4 t=2</b> at n=16/25 is UNSAT (the k=2 frontier <code>[[16,2,4]]</code> is</li>
+<p>effectively optimal for t=2).</p>
+<li><b>n=49 (7×7) w6/t2</b> is budget-walled at every G tried (13–17).</li>
+</ul>
+<h4>Tools</h4>
+<p><code>research/local_sat.py</code> (5 backends, shared_t3, per-solve budgets, <code>calibrate_local_cnf</code> budget predictor) and the kit modules css/surrogate/submit/search, <code>verify/validate_candidate.py</code> (trusted gate, untouched). The weight-8 screen and the bounded campaign driver live in <code>research/sat_search.py</code>; the overnight runner pattern is described in the night-campaign section below. Compute: interactive MacBook session, no overnight runs.</p>
+<h4>Reproduction</h4>
+<pre>
+from local_sat import enumerate_local_sat_codes
+gen = enumerate_local_sat_codes(6, 12, 6, 2, 2.0, seed=7, max_codes=120,
+    solver=&quot;cadical&quot;, conf_budget=1_000_000, time_budget=90.0,
+    stream=True, shared_t3=True)
+# pick the highest-k yielded code, package with make_submission(coordinates=...,
+# layers=1), validate with validate_candidate.
+</pre>
+<h4>Next moves</h4>
+<p>1. <b>Human review + promotion</b> of the three staged candidates (local staging output; now promoted via PRs #1232–#1234, one code per board point). The <code>[[25,9,3]]</code> and <code>[[36,12,3]]</code> dominate the earlier staged <code>[[25,7,3]]</code>/<code>[[36,9,3]]</code> (removed). 2. <b>Night campaign for d=4</b>: t=3 at n=25/36 w6 with an overnight budget could add higher-k d=4 points beside the existing <code>[[25,5,4]]</code> / <code>[[36,6,4]]</code>. The t=2 result shows the encoding is sound; only the budget was missing. 3. <b>n=49 (7×7) w6/t2</b> with a longer budget (G=15–16) may yield a <code>[[49,k,3]]</code> frontier point; the 7×7 grid needs more conflicts than the interactive session allowed.</p>
+<h4>Follow-up (same day): submissions opened + night campaign prepared</h4>
+<p><b>Three PRs opened</b> (contributor-driven, explicit authorization), one code per PR, each built in a clean worktree, prose-checked against committed content (CI-equivalent), pushed from the fork, and opened against <code>unitaryfoundation/qldpc-challenge</code>:</p>
+<ul>
+<li>PR #1232 — <code>[[16,6,3]]</code> (branch <code>submit-16-6-3</code>)</li>
+<li>PR #1233 — <code>[[25,9,3]]</code> (branch <code>submit-25-9-3</code>)</li>
+<li>PR #1234 — <code>[[36,12,3]]</code> (branch <code>submit-36-12-3</code>)</li>
+</ul>
+<p>Each carries <code>notes/&lt;slug&gt;.md</code> (research note) and a <code>provenance.notes</code> entry confirming the gate&#x27;s dedup found no exact/WL-equivalent entry. The <code>verify</code> CI check (distance gate) was still running at handoff.</p>
+<p><b>Night campaign prepared</b> (a local2d runner script, staged locally; adapted from the 2026-09-08 find-codes runner). Targets the higher-distance rungs that were budget-walled in-session:</p>
+<ul>
+<li>T1: 5×5 (n=25) t=3 w6, G=10,11,12 → <code>[[25,k,4]]</code> w6, k≥6</li>
+<li>T2: 6×6 (n=36) t=3 w6, G=12,13,14 → <code>[[36,k,4]]</code> w6, k≥7</li>
+<li>T3: 7×7 (n=49) t=2 w6, G=15,16 → <code>[[49,k,3]]</code> w6, high k</li>
+<li>T4: 5×5/6×6 t=4 (d≥5) w6, cryptominisat → the d≥5 axis</li>
+</ul>
+<p>Incremental checkpointing (report.json + per-stage records written as found), stage caps, same-point + dominance filters, gate packaging. Smoke-tested (enumerates <code>[[25,5,4]]</code> at t=3, matching the board). Launch:</p>
+<pre>
+caffeinate -is uv run --with python-sat python &lt;night_runner.py&gt; --total 10
+</pre>
+<p>Run the night-campaign protocol (AC power, <code>pmset disablesleep 1</code>, smoke check, morning teardown <code>disablesleep 0</code>) per the night-campaign skill.</p>
+<h4>Night campaign results (completed 2026-09-18 ~16:54, ~3.1h)</h4>
+<p>All four stages finished (faster than the 10h cap — the search spaces exhausted early). Two new frontier records, both gate-passed and submitted:</p>
+<p>| Stage | Config | Result | Submission | |---|---|---|---| | T1 | 5×5 t=3 w6 G=10,11,12 | no new point (cell closed) | — | | T2 | 6×6 t=3 w6 G=14 | <b>[[36,8,4]]</b> (k=8, d=4) | PR #1272 | | T3 | 7×7 t=2 w6 G=16 | <b>[[49,17,3]]</b> (k=17, d=3) | PR #1276 | | T4 | 5×5/6×6 t=4 w6 crypto | empty (d≥5 not reached) | — |</p>
+<p>Both new codes are weight-6, 2D-local single-layer, interaction radius 4.0 (hackathon-eligible). Each was deep-confirmed at 100k RIS trials (no logical lighter than the claimed d on either side) before submission, and each passed the trusted gate (<code>passed=true</code>, <code>board_advancing=true</code>, <code>refuted=false</code>). <code>[[36,8,4]]</code> dominates <code>[[36,6,4]]</code>; <code>[[49,17,3]]</code> dominates <code>[[58,16,3]]</code>, <code>[[65,17,3]]</code>, <code>[[51,12,3]]</code>.</p>
+<p>Cumulative hackathon SAT haul (all in weight-6 × local-2d-single): <code>[[16,6,3]]</code> (#1232), <code>[[25,9,3]]</code> (#1233), <code>[[36,12,3]]</code> (#1234), <code>[[36,8,4]]</code> (#1272), <code>[[49,17,3]]</code> (#1276).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-09-18-sat-t2-weight6-2dlocal-records.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/151-6-8.html">[[151,6,8]] — 151-6-8</a></h3><div class=kv style="color:var(--mut)">2026-09-17 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[151,6,8]] — check-deletion + three r=1 grafts of the [[154,6,11]] generalized-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Issue #1155 hackathon, 2D-local priority. Composition hypothesis: deleting a check (raising k) can create degree-one qubits that subsequent r=1 grafts remove, producing (n−r, k+Δk, d&#x27;) points neither move reaches alone.</p>
@@ -11693,38 +11845,42 @@ HX, HZ = build_2bga(mul, [0, 1, 8], [0, 52, 229])  # f = 1 + x + x^8, g = 1 + x^
 <p>Index G by (i,j) with 0 &lt;= i &lt; B and 0 &lt;= j &lt; A, reducing a point (p,q) of Z^2 to i = p mod B and j = (q - ((p - i)/B) * C) mod A, and number it i*A + j.</p>
 <p>Take f = 1 + x + x^-2 and g = 1 + y + x^-2 y^2, i.e. exponent vectors f = [(0,0), (1,0), (-2,0)] and g = [(0,0), (0,1), (-2,2)].</p>
 <p>For each group element v, the X row at v has support {v + e : e in f} in the first block and {v + e : e in g} in the second; the Z row at v has support {v - e : e in g} in the first block and {v - e : e in f} in the second. This gives H_X = [f | g] and H_Z = [gbar | fbar] with 350 rows each, row weight 6, n = 700, k = 6 by rank, one connected component.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/700-6-32.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/684-14-78.html">[[684,14,78]] — 684-14-78</a></h3><div class=kv style="color:var(--mut)">2026-09-03 &middot; submission note &middot; <a href="https://github.com/edoaltamura">@edoaltamura</a> &middot; GPT 5.6 Luna</div><details ><summary>note</summary><div class=notebody><h3>[[684,14,78]] affine 2BGA weight-8 code</h3>
-<h4>Target and result</h4>
-<p>This campaign targeted the <code>weight-8 / unrestricted</code> cell after the previous <code>[[684,12,81]]</code> entry became part of the live board. The new candidate has the same block length and check-weight cap, but increases the logical-qubit count to 14 while retaining a deep-RIS distance upper bound of 78.</p>
-<p>The operational-efficiency value is</p>
+<section class=blk><h3><a href="codes/684-14-72.html">[[684,14,72]] — 684-14-72</a></h3><div class=kv style="color:var(--mut)">2026-09-03 &middot; submission note &middot; <a href="https://github.com/edoaltamura">@edoaltamura</a> &middot; GPT 5.6 Luna</div><details ><summary>note</summary><div class=notebody><h3>[[684,14,72]] affine 2BGA weight-8 code</h3>
+<h4>Revision history</h4>
+<p>[[684,14,72]] supersedes the board&#x27;s <code>[[684,14,78]]</code> entry. The code, its checks, its family tag and its construction provenance are unchanged; only the distance claim is corrected. The superseded entry was the leader of the <code>unrestricted x weight-8</code> cell at <code>kd^2/n = 124.53</code>.</p>
+<p>A deep fresh-seed random-information-set (RIS) ladder exhibits a **weight-72 X-logical**, so the previous witness-backed bound <code>d &lt;= 78</code> was overstated and the honest parameter set is <code>[[684,14,72]]</code>. The measured headline falls to <code>kd^2/n = 14 * 72^2 / 684 = 106.11</code>. The Z side is unchanged at 82 and is not refuted; <code>d</code> is the minimum over the two sides. Distance remains a witness-backed upper bound, not an exact claim.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>This was an audit, not a search. <code>[[684,14,78]]</code> sat at the top of the <code>unrestricted x weight-8</code> cell after the sibling revision that took <code>[[684,20,72]]</code> to <code>[[684,20,48]]</code>. It shares the construction family of two entries the board has already tightened by large margins (<code>[[684,12,81]] -&gt; [[684,12,66]]</code>, <code>[[684,20,72]] -&gt; [[684,20,48]]</code>), it is low-rate (<code>k/n = 14/684 = 0.0205</code>), and its own construction note records a ladder topping out at two million trials. Low rate is where a fixed trial budget under-searches, so the number was re-measured before spending budget against it.</p>
+<h4>What was searched</h4>
+<p>Not a family sweep: a fresh-seed re-measurement of the existing entry with the repository&#x27;s own bit-packed RIS, both Pauli sides searched jointly. No construction or support was changed.</p>
+<h4>Evidence trail</h4>
+<p>RIS ladder on <code>codes/684-14-72.json</code>, one fresh seed per rung. Every witness is re-validated against the raw sparse matrices before it is recorded: support size equals the reported weight, the opposite-check syndrome is zero over GF(2), and the vector is outside the row space of the same-side checks.</p>
+<p>| budget | seed | lightest logical | side | |---:|---:|---:|:---| | 2,000,000 | 51 | 84 | Z | | 8,000,000 | 71 | <b>72</b> | X | | 8,000,000 | 101 | 78 | X |</p>
+<p>The 2M triage rung reads 84, six units above the old claim of 78, and would have been taken as &quot;no evidence of a problem&quot;. A reading above the claim carries no information in either direction; a low-rate entry needs proportionally more trials, and the refuting witness is rare rather than merely deep -- fresh seed 101 at the same 8M budget returned only 78.</p>
+<p>The weight-72 X witness (seed 71, 8M trials) was checked a second way, by a from-scratch GF(2) rank sharing no code with the search backend:</p>
+<p>| check | result | |---|---| | weight | 72 (72 distinct indices in <code>[0, 684)</code>) | | <code>H_Z v = 0</code> | true, syndrome weight 0 | | <code>rank(H_X)</code> vs <code>rank(H_X + v)</code> | 335 vs 336, so <code>v</code> is outside the row space | | <code>k = n - rank(H_X) - rank(H_Z)</code> | 14, matching the entry |</p>
+<h4>Dead ends</h4>
+<ul>
+<li>A 2M-trial rung is not enough to refute an entry at this rate, as the table</li>
+<p>shows.</p>
+<li>Nothing under 72 was found on the rungs below, so the submitted number is</li>
+<p>still an upper bound. Exact certification is out of reach here: <code>k = 14</code> with a weight cap of 71 is past the <code>d &lt;= 13, k &lt;= 12</code> envelope the repository records for its exact IPA path.</p>
+<li>No novelty is claimed. This is a correction of an existing entry, not a new</li>
+<p>code.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model <code>DeepSeek V4 Flash 0731</code>. Harness: the repository&#x27;s own stacked code -- the bit-packed RIS accelerator in <code>verify/gf2_fast.cpp</code>, plus a from-scratch NumPy GF(2) rank as the independent second witness check. The construction is the original submitter&#x27;s; only the distance claim changes.</p>
+<h4>Reproduction</h4>
+<p>The code is unchanged, so the construction is the original one: the sparse supports are in <code>codes/684-14-72.json</code>, with checks identical to the superseded <code>[[684,14,78]]</code> entry.</p>
 <pre>
-k d^2 / n = 14 * 78^2 / 684 = 124.526
-</pre>
-<p>The current <code>[[684,12,81]]</code> leader has value <code>115.105</code>. The candidate is also not dominated in the Pareto comparison: it has more logical qubits than that entry, while the current <code>[[684,8,85]]</code> point has fewer logical qubits and a higher distance.</p>
-<h4>Construction</h4>
-<p>The code is a two-block group-algebra CSS construction over</p>
-<pre>
-Aff(F_19) = C_19 semidirect C_18,
-</pre>
-<p>with action <code>r = 2</code>. Elements are indexed as `(x exponent)*18 + (y exponent)`. For supports</p>
-<pre>
-a = [6, 289, 76, 217]
-b = [294, 337, 142, 284]
-</pre>
-<p>the checks use commuting left and right regular representations:</p>
-<pre>
-H_X = [L(a) | R(b)]
-H_Z = [R(b)^T | L(a)^T]
-</pre>
-<p>The construction gives CSS commutation. Independent verifier recomputation gives <code>rank(H_X) = rank(H_Z) = 335</code>, hence <code>k = 684 - 335 - 335 = 14</code>. Every check has weight 8.</p>
-<p>The construction family is described in Lin and Pryadko, <a href="https://arxiv.org/abs/2306.16400">arXiv:2306.16400</a>.</p>
-<h4>Search and distance evidence</h4>
-<p>The candidate was selected from an archive of affine support mutations. Its early screen reported <code>d &lt;= 109</code>; this was treated as a ranking signal only. The candidate was then rechecked with fresh compiled RIS searches at increasing budgets and pair depths:</p>
-<p>| trials | pair depth | lightest witnessed weight | side | | ---: | ---: | ---: | :--- | | 100,000 | 32 | 86 | X | | 500,000 | 48 | 82 | Z | | 1,000,000 | 64 | 84 | X | | 2,000,000 | 80 | 78 | X |</p>
-<p>The JSON records the X-side witness of weight 78 from the deepest run and a separate Z-side witness of weight 82 from the 500,000-trial run. Both witnesses were independently checked for membership in the kernel of the opposite checks and for non-membership in the corresponding stabilizer row space. The reported distance is therefore the honest upper bound <code>d &lt;= 78</code>, not an exact-distance claim.</p>
-<h4>Validation and equivalence review</h4>
-<p><code>verify/qldpc_verify.py</code> passes the schema, CSS commutation, <code>n/k</code>, check weight, and both witness checks. The clean-board candidate gate reports <code>board_advancing: true</code> for <code>weight-8 / unrestricted</code>, with no exact duplicate and no WL-equivalent board entry. The equivalence review is recorded in <code>provenance.notes</code> as checked against the current board entries and their published construction data, with no equivalent entry found.</p>
-<p>The LLM model used for the search and packaging is <code>GPT 5.6 Luna</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/684-14-78.md">raw markdown</a></div></details></section>
+# the refuting rung came from the repository&#x27;s own accelerator:
+#   distance_rand_witness(HX, HZ, trials=8_000_000, seed=71,
+#                         pair_depth=10, threads=15)
+# where HX, HZ are the sparse supports in codes/684-14-72.json.
+
+# the submission gate
+uv run --frozen python verify/qldpc_verify.py codes/684-14-72.json
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/684-14-72.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/154-6-11.html">[[154,6,11]] — 154-6-11</a></h3><div class=kv style="color:var(--mut)">2026-09-02 &middot; submission note &middot; <a href="https://github.com/willzeng">@willzeng</a> &middot; Claude Fable 5.1</div><details ><summary>note</summary><div class=notebody><h3>[[154,6,11]] — weight-5 cyclic generalized bicycle code on Z_77 with a two-layer 2D-local layout</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the check-weight-5 slice of the <code>weight-6</code> boards. The board has no weight-5 cell, so a weight-5 code competes on the weight-6 boards and earns its place on the Pareto frontier through its lower check weight. The best weight &lt;= 5 code before this campaign was <code>codes/40-10-4.json</code> at kd^2/n = 4.00. Hypothesis: two-block group-algebra codes with a 3-term and a 2-term generator (check weight 5) beat 4.00 when the group and supports are swept exhaustively.</p>
