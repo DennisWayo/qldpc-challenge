@@ -1228,6 +1228,44 @@ HX, HZ = build_quad((7, 4, 4, 3),
                     [(3, 2, 1, 0), (6, 0, 0, 1)])
 </pre>
 <p>Sanity anchor: with dims (l, m, 1, 1) this reproduces <code>build_bb</code> from <code>research/kit/bb.py</code> array-exactly on the [[112,2,10]] monomial set.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/672-2-24.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/676-2-26.html">[[676,2,26]] — 676-2-26</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[676,2,26]] rotated toric code (weight-4, 2D-local single-layer)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The board&#x27;s least populated primary-track cell is weight-4 x local-2d-single (175 of 1,126 entries at the time of writing): the surface-code-like regime that most qLDPC families (weight &gt;= 6 checks) cannot reach. The standard topological ladders are only seeded at a few sizes on the board (rotated surface [[L^2,1,L]] at L = 5,7,9,11; rotated toric [[L^2,2,L]] at L = 4,6,8), so the hypothesis was that the missing square sizes extend this cell&#x27;s Pareto frontier on d, at both k = 1 (surface) and k = 2 (toric).</p>
+<h4>What was searched</h4>
+<p>Full enumeration of both rotated ladders under the board&#x27;s admission caps (n &lt;= 700, or the extended tier n &lt;= 1000 with w &lt;= 8 and d &lt;= 40; w = 4 throughout): every square L with admissible(n, 4, L) true, plus every rectangular (L1, L2) configuration -- 1,270 configurations in total. Each was packaged with the kit&#x27;s own submit.make_submission (RIS witness search) and passed through the trusted gate verify/validate_candidate.py. The gate&#x27;s novelty verdict split the enumeration exactly along a structural line: squares advance, rectangles never (each [[L1*L2,1,L2]] is strictly dominated by its own square [[L2^2,1,L2]]: same k, same d, same weight, strictly fewer qubits). Only board-advancing survivors were kept; this PR is one of them.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Witness search (kit surrogate, RIS): &lt;= 3,000 trials/side scaled with n;</li>
+<p>the lightest logical found on each side has weight 26 (a row or column of plaquettes), matching the exact-by-construction distance.</p>
+<li>Trusted gate (verify/validate_candidate.py): verify ok, distance not</li>
+<p>refuted (independent fresh-seed RIS search found nothing lighter), not a board duplicate (fingerprint and WL signature checked against the whole board), and board-advancing in the weight-4 x local-2d-single cell.</p>
+<li>Claim carried: witness-backed upper bound, d &lt;= 26. The distance is exact</li>
+<p>by construction (no logical lighter than a minimum non-contractible chain exists on the torus), but it is submitted as an upper bound; a maintainer can run verify/certify.py to upgrade it.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>Rectangular rotated surface/toric codes: all dominated by their own square</li>
+<p>(see above) -- generated and gate-checked, then discarded.</p>
+<li>[[9,1,3]] (dominated by the seeded [[7,1,3]]) and [[8,2,2]] (dominated by</li>
+<p>[[4,2,2]]): gate-flagged as not board-advancing, discarded.</p>
+<li>Rotated toric L = 10,12,14: parameter sets already on the board</li>
+<p>([[100,2,10]] generalized-bicycle, [[144,2,12]] trivariate-bicycle, [[196,2,14]] bivariate-bicycle), skipped as parameter duplicates.</p>
+<li>An initial torus layout used a ring fold with a seam gap of 3 grid units,</li>
+<p>which pushed the measured interaction radius past the single-layer cap for L &gt;= 10 (demoting those codes to local-2d-bilayer). The seeded entries&#x27; fold convention (seam gap 1) keeps every plaquette diameter at 2*sqrt(2) for every L; that is what this submission uses.</p>
+<li>Unrotated surface [[2d^2-2d+1,1,d]] and 2D color codes were attempted for a</li>
+<p>companion fill but their from-scratch constructions failed self-checks; deferred until built from published constructions.</p>
+</ul>
+<h4>Tools</h4>
+<p>GLM 5.3 Flash (Zed coding agent); repo kit only (research/kit/submit.py, verify/validate_candidate.py, qldpc_verify), numpy-only constructions. Constructions were verified bit-for-bit (check-support set equality) against the board&#x27;s own seeded codes/25-1-5.json (L = 5,7,9) and codes/16-2-4.json (L = 4,6,8) before scaling to new sizes.</p>
+<h4>Reproduction</h4>
+<p>Rotated toric code [[L^2,2,L]], L = 26 (even):</p>
+<ul>
+<li>qubits q = (i, j) -&gt; q = i*L + j on an L x L torus (periodic in both axes);</li>
+<li>for each (i, j) in {0..L-1}^2 the periodic 2x2 plaquette</li>
+<p>{(i,j), (i,j+1 mod L), (i+1 mod L, j), (i+1 mod L, j+1 mod L)} is an X check when i+j is even and a Z check when i+j is odd;</p>
+<li>layout: ring fold per axis, i -&gt; 2i for i &lt; L/2 and i -&gt; 2(L-i)-1 for</li>
+<p>i &gt;= L/2 (the seeded entries&#x27; convention; seam gap 1, so every plaquette has diameter 2*sqrt(2)), single layer. Distance: a non-contractible row or column of plaquettes is a weight-L logical; none lighter exists (cycle lengths of the torus).</p>
+</ul></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/676-2-26.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/700-2-25.html">[[700,2,25]] — 700-2-25</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; GLM 5.3 Flash (Zed agent)</div><details ><summary>note</summary><div class=notebody><h3>[[700,2,25]] — quadricycle code on Z_5 × Z_7 × Z_5 × Z_2</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Track cell <code>weight-4 × unrestricted</code>. The cell record was d ≤ 21 (the [[630,2,21]] quadricycle and a [[454,2,21]] 2BGA). A quadricycle is a rank-4 generalized bicycle: two polynomials A, B over the group algebra F_2[Z_l1 × Z_l2 × Z_l3 × Z_l4] with H_X = [A | B], H_Z = [Bᵀ | Aᵀ]. The four shifts are independent, so (unlike the trivariate codes of arXiv:2406.19151, whose third variable is dependent and reduces to rank 2) no rank-2 torus reproduces these codes: strictly more monomial-support geometries per unit n at fixed check weight. CSS commutation is automatic (abelian group algebra). The hypothesis: random weight-2+2 quadricycles should beat the weight-4 cell record; the first find [[630,2,21]] suggested the mechanism but a completed sweep was needed.</p>
@@ -1590,6 +1628,47 @@ HX, HZ = build_quad((5, 7, 5, 2),
 <p>m = 41, a = 1 + x, b = 1 + x^9 H_X = [circ(a) | circ(b)], H_Z = [circ(b)^T | circ(a)^T]</p>
 <h4>Boundary</h4>
 <p>The distance is an upper bound from witness search, not a proof. Literature novelty is unverified: weight-4 cyclic GB codes are a classical family and these parameters may well appear in the 2BGA literature.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/82-2-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/841-1-29.html">[[841,1,29]] — 841-1-29</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[841,1,29]] rotated surface code (weight-4, 2D-local single-layer)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The board&#x27;s least populated primary-track cell is weight-4 x local-2d-single (175 of 1,126 entries at the time of writing): the surface-code-like regime that most qLDPC families (weight &gt;= 6 checks) cannot reach. The standard topological ladders are only seeded at a few sizes on the board (rotated surface [[L^2,1,L]] at L = 5,7,9,11; rotated toric [[L^2,2,L]] at L = 4,6,8), so the hypothesis was that the missing square sizes extend this cell&#x27;s Pareto frontier on d, at both k = 1 (surface) and k = 2 (toric).</p>
+<h4>What was searched</h4>
+<p>Full enumeration of both rotated ladders under the board&#x27;s admission caps (n &lt;= 700, or the extended tier n &lt;= 1000 with w &lt;= 8 and d &lt;= 40; w = 4 throughout): every square L with admissible(n, 4, L) true, plus every rectangular (L1, L2) configuration -- 1,270 configurations in total. Each was packaged with the kit&#x27;s own submit.make_submission (RIS witness search) and passed through the trusted gate verify/validate_candidate.py. The gate&#x27;s novelty verdict split the enumeration exactly along a structural line: squares advance, rectangles never (each [[L1*L2,1,L2]] is strictly dominated by its own square [[L2^2,1,L2]]: same k, same d, same weight, strictly fewer qubits). Only board-advancing survivors were kept; this PR is one of them.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Witness search (kit surrogate, RIS): &lt;= 3,000 trials/side scaled with n;</li>
+<p>the lightest logical found on each side has weight 29 (a row or column of plaquettes), matching the exact-by-construction distance.</p>
+<li>Trusted gate (verify/validate_candidate.py): verify ok, distance not</li>
+<p>refuted (independent fresh-seed RIS search found nothing lighter), not a board duplicate (fingerprint and WL signature checked against the whole board), and board-advancing in the weight-4 x local-2d-single cell.</p>
+<li>Claim carried: witness-backed upper bound, d &lt;= 29. The distance is exact</li>
+<p>by construction (no logical lighter than a minimum non-contractible chain exists on the open planar lattice), but it is submitted as an upper bound; a maintainer can run verify/certify.py to upgrade it.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>Rectangular rotated surface/toric codes: all dominated by their own square</li>
+<p>(see above) -- generated and gate-checked, then discarded.</p>
+<li>[[9,1,3]] (dominated by the seeded [[7,1,3]]) and [[8,2,2]] (dominated by</li>
+<p>[[4,2,2]]): gate-flagged as not board-advancing, discarded.</p>
+<li>Rotated toric L = 10,12,14: parameter sets already on the board</li>
+<p>([[100,2,10]] generalized-bicycle, [[144,2,12]] trivariate-bicycle, [[196,2,14]] bivariate-bicycle), skipped as parameter duplicates.</p>
+<li>An initial torus layout used a ring fold with a seam gap of 3 grid units,</li>
+<p>which pushed the measured interaction radius past the single-layer cap for L &gt;= 10 (demoting those codes to local-2d-bilayer). The seeded entries&#x27; fold convention (seam gap 1) keeps every plaquette diameter at 2*sqrt(2) for every L; that is what this submission uses.</p>
+<li>Unrotated surface [[2d^2-2d+1,1,d]] and 2D color codes were attempted for a</li>
+<p>companion fill but their from-scratch constructions failed self-checks; deferred until built from published constructions.</p>
+</ul>
+<h4>Tools</h4>
+<p>GLM 5.3 Flash (Zed coding agent); repo kit only (research/kit/submit.py, verify/validate_candidate.py, qldpc_verify), numpy-only constructions. Constructions were verified bit-for-bit (check-support set equality) against the board&#x27;s own seeded codes/25-1-5.json (L = 5,7,9) and codes/16-2-4.json (L = 4,6,8) before scaling to new sizes.</p>
+<h4>Reproduction</h4>
+<p>Rotated surface code [[L^2,1,L]], L = 29 (odd):</p>
+<ul>
+<li>qubits q = (i, j) -&gt; q = i*L + j on an open L x L grid, unit-spaced layout</li>
+<p>coordinates (i, j), single layer;</p>
+<li>for each (i, j) in {0..L-2}^2 the 2x2 plaquette</li>
+<p>{(i,j), (i,j+1), (i+1,j), (i+1,j+1)} (clipped to the grid) is an X check when i+j is even and a Z check when i+j is odd;</p>
+<li>boundary pairs: plaquettes at (i, -1) for odd i and (i, L-1) for even i are</li>
+<p>X checks; plaquettes at (-1, j) for even j and (L-1, j) for odd j are Z checks (each clips to a weight-2 pair);</p>
+<li>(i+j) parity swapped gives the X&lt;-&gt;Z-conjugated variant, an equivalent code.</li>
+<p>Distance: a full row or column of plaquettes is a weight-L logical; none lighter exists (standard surface-code result).</p>
+</ul></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/841-1-29.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/886-46-5.html">[[886,46,5]] — 886-46-5</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><p>#[[886,46,5]] — multi-band dense-packed surface code, pitch_min point (d=5, rows=4, m=12, pitch=6)</p>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>local-2d-single</code> × <code>weight-4</code>, the geometric-efficiency cell — at this family&#x27;s honest layout (tilted nearest-neighbour lattice, r = √2, single layer) the board&#x27;s g = 4kd²/(nρ²r⁴) reduces to kd²/n. The submission cap was raised to admit 700 &lt; n ≤ 1000 when w ≤ 8 and d ≤ 40; this family (w = 4, d ≤ 13) fits with room to spare, and the new band is exactly the strip where its boundary overhead thins: the 2026-09-01 campaign (<code>fieldnotes/2026-09-01-multiband-dense-packing-method.md</code>) measured kd²/n ≤ 1.328 under the old n ≤ 700 cap and an asymptote near 1.43 only at n ≥ 13,000. Hypothesis: fresh Pareto points at kd²/n ≈ 1.30–1.34 fill the band, on the d-columns and k-rungs the seeded packs leave open.</p>
@@ -1808,6 +1887,88 @@ HX, HZ = build_quad((5, 7, 5, 2),
 <p>GLM 5.3 Flash, driven interactively in the Zed agent. Repo tooling: the validated builder <code>research/multiband_surface.py</code>, the kit&#x27;s RIS surrogate with the gf2_fast backend, <code>research/kit/submit.make_submission</code> for packaging, <code>verify/validate_candidate.py</code> as the trusted gate. Compute: 14 gate runs (~90 min each, 7 in parallel) plus screening.</p>
 <h4>Reproduction</h4>
 <p><code>research/multiband_surface.py::build(d=5, rows=6, m=9, pitch=6)</code> rebuilds (H_X, H_Z, coords) exactly. The mask rule: bands r = 0..rows−1 at y₀ = pitch·r; even bands carry m patches at x-offsets j·(2d+2), odd bands m − 1 offset d + 1; occupied sites per patch are window interiors ((x+y)%2==0 inside the (2d−1)² window), vertical edge columns at band phase (x+y)%4 ∈ {0,2}, and horizontal edge rows at the reverse phase, unioned over all patches. Data qubits sit on odd/odd sites; of the rest, (x+y)%4==2 sites measure X-checks, the rest Z-checks; each check supports its diagonal data neighbours. Coordinates are grid/2 (unit spacing), single layer, so the tilted nearest-neighbour checks span √2.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/955-51-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/961-1-31.html">[[961,1,31]] — 961-1-31</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[961,1,31]] rotated surface code (weight-4, 2D-local single-layer)</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The board&#x27;s least populated primary-track cell is weight-4 x local-2d-single (175 of 1,126 entries at the time of writing): the surface-code-like regime that most qLDPC families (weight &gt;= 6 checks) cannot reach. The standard topological ladders are only seeded at a few sizes on the board (rotated surface [[L^2,1,L]] at L = 5,7,9,11; rotated toric [[L^2,2,L]] at L = 4,6,8), so the hypothesis was that the missing square sizes extend this cell&#x27;s Pareto frontier on d, at both k = 1 (surface) and k = 2 (toric).</p>
+<h4>What was searched</h4>
+<p>Full enumeration of both rotated ladders under the board&#x27;s admission caps (n &lt;= 700, or the extended tier n &lt;= 1000 with w &lt;= 8 and d &lt;= 40; w = 4 throughout): every square L with admissible(n, 4, L) true, plus every rectangular (L1, L2) configuration -- 1,270 configurations in total. Each was packaged with the kit&#x27;s own submit.make_submission (RIS witness search) and passed through the trusted gate verify/validate_candidate.py. The gate&#x27;s novelty verdict split the enumeration exactly along a structural line: squares advance, rectangles never (each [[L1*L2,1,L2]] is strictly dominated by its own square [[L2^2,1,L2]]: same k, same d, same weight, strictly fewer qubits). Only board-advancing survivors were kept; this PR is one of them.</p>
+<h4>Evidence trail</h4>
+<ul>
+<li>Witness search (kit surrogate, RIS): &lt;= 3,000 trials/side scaled with n;</li>
+<p>the lightest logical found on each side has weight 31 (a row or column of plaquettes), matching the exact-by-construction distance.</p>
+<li>Trusted gate (verify/validate_candidate.py): verify ok, distance not</li>
+<p>refuted (independent fresh-seed RIS search found nothing lighter), not a board duplicate (fingerprint and WL signature checked against the whole board), and board-advancing in the weight-4 x local-2d-single cell.</p>
+<li>Claim carried: witness-backed upper bound, d &lt;= 31. The distance is exact</li>
+<p>by construction (no logical lighter than a minimum non-contractible chain exists on the open planar lattice), but it is submitted as an upper bound; a maintainer can run verify/certify.py to upgrade it.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>Rectangular rotated surface/toric codes: all dominated by their own square</li>
+<p>(see above) -- generated and gate-checked, then discarded.</p>
+<li>[[9,1,3]] (dominated by the seeded [[7,1,3]]) and [[8,2,2]] (dominated by</li>
+<p>[[4,2,2]]): gate-flagged as not board-advancing, discarded.</p>
+<li>Rotated toric L = 10,12,14: parameter sets already on the board</li>
+<p>([[100,2,10]] generalized-bicycle, [[144,2,12]] trivariate-bicycle, [[196,2,14]] bivariate-bicycle), skipped as parameter duplicates.</p>
+<li>An initial torus layout used a ring fold with a seam gap of 3 grid units,</li>
+<p>which pushed the measured interaction radius past the single-layer cap for L &gt;= 10 (demoting those codes to local-2d-bilayer). The seeded entries&#x27; fold convention (seam gap 1) keeps every plaquette diameter at 2*sqrt(2) for every L; that is what this submission uses.</p>
+<li>Unrotated surface [[2d^2-2d+1,1,d]] and 2D color codes were attempted for a</li>
+<p>companion fill but their from-scratch constructions failed self-checks; deferred until built from published constructions.</p>
+</ul>
+<h4>Tools</h4>
+<p>GLM 5.3 Flash (Zed coding agent); repo kit only (research/kit/submit.py, verify/validate_candidate.py, qldpc_verify), numpy-only constructions. Constructions were verified bit-for-bit (check-support set equality) against the board&#x27;s own seeded codes/25-1-5.json (L = 5,7,9) and codes/16-2-4.json (L = 4,6,8) before scaling to new sizes.</p>
+<h4>Reproduction</h4>
+<p>Rotated surface code [[L^2,1,L]], L = 31 (odd):</p>
+<ul>
+<li>qubits q = (i, j) -&gt; q = i*L + j on an open L x L grid, unit-spaced layout</li>
+<p>coordinates (i, j), single layer;</p>
+<li>for each (i, j) in {0..L-2}^2 the 2x2 plaquette</li>
+<p>{(i,j), (i,j+1), (i+1,j), (i+1,j+1)} (clipped to the grid) is an X check when i+j is even and a Z check when i+j is odd;</p>
+<li>boundary pairs: plaquettes at (i, -1) for odd i and (i, L-1) for even i are</li>
+<p>X checks; plaquettes at (-1, j) for even j and (L-1, j) for odd j are Z checks (each clips to a weight-2 pair);</p>
+<li>(i+j) parity swapped gives the X&lt;-&gt;Z-conjugated variant, an equivalent code.</li>
+<p>Distance: a full row or column of plaquettes is a weight-L logical; none lighter exists (standard surface-code result).</p>
+</ul></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/961-1-31.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/961-169-3.html">[[961,169,3]] — 961-169-3</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[961,169,3]] — checkerboard plaquette code, mod-5 lattice phase sweep at W=31</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Targeting the geometric-efficiency frontier (<code>g = 9k/n</code> for d=3, r=√2, ρ=1) in the <code>local-2d-single × weight-4</code> track. The existing record was <code>[[656,114,3]]</code> (g = 1.564), a 26×26 checkerboard with two right-edge notches and 40 weight-2 boundary pins. The k-arithmetic of the scaled family is <code>k = (2W−1) + H − W2</code> where H = holes and W2 = pins; the full-density mod-5 lattice has asymptote k/n → 1/5 (g → 1.8), so larger W should eventually beat the record. The question was whether W = 31 (n = 961, admissible under the extended tier: n ≤ 1000, w ≤ 8, d ≤ 40) was large enough.</p>
+<h4>What was searched</h4>
+<p>Full 25-phase sweep over <code>(px, pz) ∈ {0,1,2,3,4}²</code> at W = 31 (n = 961). Each phase: clean W×W square, X-face holes on mod-5 lattice (u + 2v ≡ px mod 5), Z-face holes on mirror (u − 2v ≡ pz mod 5), batched conflict resolution (weight-1 fixes → weight-2 pins, culprit-hole drops for unpartnerable exposures). Corner-notched variants (corner notch size 2–4) were also evaluated at the winning phase; all were worse than the clean square.</p>
+<h4>Evidence trail</h4>
+<p><b>Submitted code:</b> phase (px=2, pz=0) at W=31.</p>
+<ul>
+<li>Census: 0 weight-≤2 logicals on both sides (exact rowspace-aware audit).</li>
+<li>RIS distance: dX = 3, dZ = 3 (200 trials per side).</li>
+<li>k = 169, n = 961, 170 holes + 62 weight-2 pins.</li>
+<li>g = 9 × 169 / 961 = <b>1.5827</b> &gt; 1.564 (record beaten).</li>
+</ul>
+<p><b>Full W=31 sweep results</b> (top 5 clean phases):</p>
+<p>| Phase | k | holes | pins | g | |-------|---|-------|------|-----| | (2,0) | 169 | 170 | 84 | 1.583 | | (0,4) | 163 | 169 | 93 | 1.527 | | (3,2) | 163 | 168 | 99 | 1.527 | | (4,1) | 163 | 168 | 100 | 1.527 | | (1,3) | 162 | 168 | 96 | 1.517 |</p>
+<p>Corner-notched variants at W=31, phase (2,0):</p>
+<ul>
+<li>corner=2: k=161, n=945, g=1.533 (clean)</li>
+<li>corner=3: k=160, n=925, g=1.557 (not clean)</li>
+<li>corner=4: k=149, n=897, g=1.495 (clean)</li>
+</ul>
+<p><b>Gate verdict:</b> <code>passed: true</code>. Weight class: weight-4. Locality class: local-2d-single. Board-advancing: yes. No exact duplicate or WL equivalent.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Default phase (3,2) at W=31 gives g = 1.527 — does not beat the record.</li>
+<p>The phase choice is load-bearing; (2,0) is the unique winner.</p>
+<li>W = 40 (n = 1600) sweep: best clean g = 1.547 — does not beat record</li>
+<p>(the asymptote hasn&#x27;t kicked in yet at these sizes; k/n is still below the 0.1738 threshold).</p>
+<li>Corner notches reduce k more than they reduce n, so g drops.</li>
+</ul>
+<h4>Tools</h4>
+<p>GLM 5.3 Flash (Zed coding agent), research kit (<code>geo656_scale2.py</code>, <code>geo656_phase_sweep.py</code>, <code>geo656_greedy.py</code>), <code>verify/validate_candidate.py</code>. ~2 minutes total compute on Apple M-series.</p>
+<h4>Reproduction</h4>
+<pre>
+# From the research kit:
+from geo656_scale2 import build, resolve
+from geo656_greedy import g_of
+b = build(31, px=2, pz=0)
+resolve(b)
+# b.HX, b.HZ are the parity checks; b.k == 169, g_of(b.n, b.k, 3) == 1.58273
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/961-169-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/10-2-3.html">[[10,2,3]] — 10-2-3</a></h3><div class=kv style="color:var(--mut)">2026-09-19 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[10,2,3]] — two-block group-algebra code on SmallGroup(5,1)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: unrestricted weight-6 frontier for hackathon issue #1155. Reconstruct a published weight-6 2BGA code absent from the local board. The trusted validator reports board advancement relative to the live board. Efficiency kd²/n = 1.80.</p>
