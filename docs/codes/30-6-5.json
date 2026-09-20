@@ -1,5 +1,5 @@
 {
- "schema_version": "0.1",
+ "schema_version": "0.2",
  "name": "[[30,6,5]]",
  "code_type": "CSS",
  "n": 30,
@@ -345,5 +345,137 @@
   "model": "Union Alpha 1.0",
   "notes": "Recovered literature-derived candidate, not a claim of original invention. Inherited reference: arXiv:2408.10001v6 (paper attribution not independently verified). Literature novelty unverified. No exact or WL duplicate detected; (30,6) absent from all 663 board documents at 6995fc4f72a33fcbea27a244da230fcfc370e108."
  },
- "family": "bivariate-bicycle"
+ "family": "bivariate-bicycle",
+ "locality": {
+  "coordinates": [
+   [
+    3,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    5
+   ]
+  ],
+  "layers": 1,
+  "contributed_by": {
+   "by": [
+    "@mathysrennela"
+   ],
+   "date": "2026-09-19",
+   "method": "simulated annealing over integer grid sites (research/local2d/fold_layout.py)"
+  }
+ }
 }

@@ -84,6 +84,22 @@ and SIGALRM cannot interrupt a C-level solve at all.
 
 ## Closure map (per grid / weight / depth)
 
+Wall types are not interchangeable, and the distinction below is the part
+with the longest shelf life:
+
+- **UNSAT (closure)**: the solver finished and proved the cell empty. No
+  better encoding or backend reopens it. These are: weight-4 d ≥ 4 at
+  n = 9, 10 (and the n = 12 exhaustive no-solution finish); the t = 3
+  punctured-RSC grammar across all ~35 configurations tested up to 9×8.
+  Anything not on this list that reads as "negative" below is a budget
+  statement, not a proof.
+- **Budget-exhausted (open)**: the run ended on a conflict/time/round
+  limit with models possibly still in the cell — 8×8 t = 3 (next rung
+  ≈ 50M conflicts), t = 4 at 5×5/6×6, the 4×4 G = 7/8 and 5×5 G = 10
+  k-increment screens, the 6×6 G = 18/21 negative screens, and
+  weight-8 single-layer. Each could be overturned by the fixes listed
+  in "Open, in expected-value order" below.
+
 - Weight-4, d ≥ 4: provably empty at n = 9 and n = 10 (UNSAT ~16 s each);
   n = 12 CaDiCaL finished in 844 s with no k ≥ 2 solution. [[16,2,4]] is
   exceptional, not the first of a family.
