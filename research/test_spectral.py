@@ -22,14 +22,6 @@ from css import compute_k
 from spectral import colon_lower_bound, spectral_k
 from surrogate import distance_rand
 
-_fail = []
-
-
-def check(name, cond):
-    print(f"  {'ok  ' if cond else 'FAIL'}  {name}")
-    if not cond:
-        _fail.append(name)
-
 
 def test_spectral_k_matches_matrix_rank():
     """Check (2): spectral_k must agree with matrix rank on random odd grids."""
@@ -45,7 +37,7 @@ def test_spectral_k_matches_matrix_rank():
         km = compute_k(*build_bb(l, m, A, B))
         if ks != km:
             bad += 1
-    check(f"spectral_k vs matrix rank: 60 random, {bad} mismatches", bad == 0)
+    assert bad == 0, f"spectral_k vs matrix rank: {bad}/60 mismatches on seeded grids (rng=7)"
 
 
 def test_floor_not_above_witnessed_upper_bound():
@@ -65,4 +57,4 @@ def test_floor_not_above_witnessed_upper_bound():
         du = distance_rand(*build_bb(l, m, A, B), trials=300, seed=t)
         if lb["d_lower"] > du:
             viol += 1
-    check(f"floor <= upper bound: 20 random, {viol} violations", viol == 0)
+    assert viol == 0, f"distance floor exceeded a witnessed upper bound in {viol}/20 random cases (rng=11)"
