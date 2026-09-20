@@ -173,3 +173,33 @@ uv run --frozen python verify/heuristic_distance.py codes/672-20-32.json \
 
 Approximate cost: 80M RIS trials plus the decoder sweep, about 90 minutes of
 wall clock on 16 cores.
+
+## Follow-up (2026-09-19): the next weight-8 leader is soft too
+
+With `[[684,20,72]]` revised to `[[684,20,48]]`, the top of
+`unrestricted x weight-8` passed to `[[684,14,78]]` (`kd^2/n = 124.53`), from
+the same affine `Aff(F_19)` two-block family, at `k/n = 0.0205`. It is the same
+shape of claim -- a low-rate entry whose own ladder stopped at two million
+trials -- so it was re-measured with the same fresh-seed ladder.
+
+| budget | seed | lightest logical | side |
+|---:|---:|---:|:---|
+| 2,000,000 | 51 | 84 | Z |
+| 8,000,000 | 71 | **72** | X |
+| 8,000,000 | 101 | 78 | X |
+
+It is soft as well: a weight-72 X-logical appears at 8,000,000 trials on seed
+71, six units below the claim, and the entry is revised to `[[684,14,72]]`
+(`kd^2/n = 106.11`), submitted as its own correction PR. As with the sibling,
+the triage rung reads *above* the claim (84 against 78) and the refuting seed
+is rare: a second 8M seed returns only 78. The from-scratch GF(2) re-check
+gives syndrome 0 against the opposite checks and `rank(H_X)` 335 -> 336 with
+the witness appended.
+
+The control runs the other way. `[[684,10,101]]` (`k=10`, `n=684`, `w=12`,
+`kd^2/n = 149.14`) was screened identically and did **not** refute: 2M seed 51
+and 8M seed 71 both read 106 against a claim of 101. That is *inconclusive*,
+not corroboration -- the search never even reached the claim -- but it is
+recorded so the next audit does not re-spend on it. Two of the four audited
+low-rate family leaders have now been soft, both by margins only a deep
+fresh-seed rung exposes.
