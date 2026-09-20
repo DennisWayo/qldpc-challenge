@@ -203,3 +203,116 @@ not corroboration -- the search never even reached the claim -- but it is
 recorded so the next audit does not re-spend on it. Two of the four audited
 low-rate family leaders have now been soft, both by margins only a deep
 fresh-seed rung exposes.
+
+## Follow-up (2026-09-20): the *instrument* was the soft thing
+
+The 2026-09-19 follow-up closed with two of four audited family leaders soft. The
+next pass over the same family returned **inconclusive on every entry it
+touched** -- and that turned out to be a property of the audit rather than of the
+codes.
+
+The harness had been driving the accelerator at its `pair_depth` default of 10 on
+every rung, while the ladders behind these entries used 24 to 80. Each trial
+combines the `pair_depth` lightest reduced rows pairwise, so a shallower depth is
+a strictly smaller candidate set. Measured at a fixed 200,000 trials on
+`[[684,12,77]]`:
+
+| seed | depth 10 | depth 24 | depth 64 |
+|---:|---:|---:|---:|
+| 71 | 89 | 85 | 85 |
+| 101 | 97 | -- | **87** |
+
+Depth 64 costs about 1.4x depth 10 -- the per-trial cost is dominated by the
+elimination, not the pair phase -- so the deeper search is nearly free, and a
+reading taken at a shallower depth than the claim's own ladder is an artifact of
+the instrument, not evidence about the code. `--pair-depth` is now exposed by the
+harness (tooling PR #1321) and the whole sweep was re-run at depth 64.
+
+### The corrected instrument collapses `[[684,8,85]]` by eighteen
+
+`[[684,8,85]]` was the softest claim in the family: its weight-81 Z-logical came
+from a 64,000-trial run with seed 23, and its own record notes that 8,000,000
+trials on a single seed return only 84.
+
+| budget | seed | pair depth | lightest logical | side |
+|---:|---:|---:|---:|:---|
+| 2,000,000 | 51 | 64 | 77 | X |
+| 8,000,000 | 71 | 64 | **63** | X |
+| 8,000,000 | 71 | 10 | 84 | X |
+
+The weight-63 witness was re-checked from scratch (syndrome 0 against all 342
+`H_Z` checks; `rank(H_X)` 338 -> 339 with the witness appended) and the entry is
+revised to `[[684,8,63]]`, `kd^2/n = 46.42`, as PR #1666. The Z side is unchanged
+at 81 and is not refuted.
+
+The first submission of that correction claimed 77, from the 2M rung -- a
+perfectly defensible revision that the deeper rung then beat by 14 units. That is
+the same lesson as the parent section, one level up: a witness-backed bound is
+only ever as good as the budget behind it.
+
+### ...and `[[684,12,77]]` by six
+
+`[[684,12,77]]` (`kd^2/n = 104.02`) is the family's best remaining low-rate
+entry. At the default depth it reads 78 to 79 at 8M trials -- at and above the
+claim, i.e. a clean-looking hold.
+
+| budget | seed | pair depth | lightest logical | side |
+|---:|---:|---:|---:|:---|
+| 20,000 | 51 | 64 | 95 | Z |
+| 2,000,000 | 51 | 64 | 82 | Z |
+| 8,000,000 | 71 | 64 | 78 | X |
+| 8,000,000 | 102 | 64 | **71** | X |
+| 8,000,000 | 103 | 64 | 74 | X |
+| 8,000,000 | 71 | 10 | 79 | Z |
+
+Revised to `[[684,12,71]]`, `kd^2/n = 88.44`, as PR #1667. Independent re-check:
+syndrome 0 over all 342 `H_Z` checks, `rank(H_X)` 336 -> 337 with the witness
+appended.
+
+### Where the family stands
+
+| entry | claim | best fresh-seed reading at depth 64 | verdict |
+|---|---:|---:|---|
+| 684-8-85 | 81 | **63** (8M, seed 71) | refuted -> [[684,8,63]] |
+| 684-12-77 | 77 | **71** (8M, seed 102) | refuted -> [[684,12,71]] |
+| 684-12-73 | 70 | 77 (2M, seed 51); 80 (8M, seed 71) | inconclusive |
+| 684-10-101 | 101 | 106 (2M, seed 51) | inconclusive |
+
+Five of this family's six entries have now been revised down. `[[684,12,73]]` is
+the next target -- its claim of 70 comes from an 8M-trial rung by another author,
+which is the deepest provenance in the family, so it needs fresh seeds at 20M
+rather than more of the same. `[[684,10-101]]` remains the expensive one: 106
+against 101 at every budget tried, and its own record already carries a 20M-trial
+ladder, so only 20M-plus at the corrected depth can decide it.
+
+### The gate that is meant to catch this is shallower still
+
+The CI refutation gate drives the same accelerator at `pair_depth=8`, and the
+standalone heuristic tool at 8 as well. A claim that survives CI has therefore
+only survived a candidate set *shallower* than the one that produced it, which is
+a plausible mechanism for the steady supply of soft claims this campaign keeps
+finding: the gate and the claim-generating ladders are not search-comparable. The
+gate is deliberately budgeted (a 90-minute fast pass) and raising the depth
+trades trials for candidates, so this is recorded as a measurement rather than a
+recommendation -- but it does mean a green CI badge is weaker evidence than it
+looks.
+
+### The structure-aware detector does fire here
+
+`circulant_gb_witness` (issue #942) does fire on all six `682-*` cyclic
+generalized-bicycle entries (`block_size = 341`), so that family is in scope for
+the single-block squeeze, contrary to the affine/twisted-torus codes where the
+group is non-cyclic and it does not fire. A 200,000-trial pass at depth 10
+refuted none of them, and the closest is `[[682,172,79]]`, which reads exactly
+its claim of 76 -- a genuine hold signal at that budget. This is a triage result,
+not a clearance: on the affine entries depth 10 was the configuration that lied,
+so the same caveat applies before believing a hold here.
+
+### Two board-metadata defects, filed rather than submitted
+
+`codes/640-16-104.json` carries `distance.d = 88` in a file still named for 104,
+and `codes/390-82-38.json` says `[[380,82,38]]` while its own `n` is 390. Both
+are metadata only and neither touches a witness. A `git mv` with byte-identical
+content is rejected for anyone but the entry's authors by the authorship gate,
+which misdiagnoses a rename as a change to the entry's circuit artifacts, so both
+are filed as issue #1657 instead of as PRs.
