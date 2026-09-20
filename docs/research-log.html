@@ -753,6 +753,66 @@ HX, HZ = build_quad((5, 7, 5, 2),
                     [(4, 1, 2, 0), (3, 4, 1, 0)])
 </pre>
 <p>Sanity anchor: with dims (l, m, 1, 1) this reproduces <code>build_bb</code> from <code>research/kit/bb.py</code> array-exactly on the [[112,2,10]] monomial set.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/700-2-25.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/726-38-5.html">[[726,38,5]] — 726-38-5</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><p>#[[726,38,5]] — multi-band dense-packed surface code, pitch_min point (d=5, rows=5, m=8, pitch=6)</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>local-2d-single</code> × <code>weight-4</code>, the geometric-efficiency cell — at this family&#x27;s honest layout (tilted nearest-neighbour lattice, r = √2, single layer) the board&#x27;s g = 4kd²/(nρ²r⁴) reduces to kd²/n. The submission cap was raised to admit 700 &lt; n ≤ 1000 when w ≤ 8 and d ≤ 40; this family (w = 4, d ≤ 13) fits with room to spare, and the new band is exactly the strip where its boundary overhead thins: the 2026-09-01 campaign (<code>fieldnotes/2026-09-01-multiband-dense-packing-method.md</code>) measured kd²/n ≤ 1.328 under the old n ≤ 700 cap and an asymptote near 1.43 only at n ≥ 13,000. Hypothesis: fresh Pareto points at kd²/n ≈ 1.30–1.34 fill the band, on the d-columns and k-rungs the seeded packs leave open.</p>
+<h4>What was searched</h4>
+<p>A manifold re-enumeration of the multi-band dense packing (arXiv:2511.06758 generalized to rows × m patches at a free vertical pitch; builder <code>research/multiband_surface.py</code>, validated bit-exact against <code>research/build_dense_surface.py</code> at d = 3, 5, 7, 9). 138 (d, rows, m, pitch) configurations with n in (700, 1000], d ∈ {5, 7, 9, 11, 13}, in three regimes: two-band (rows = 2, pitch = d − 1), rows ≥ 3 at pitch_min(d) = 2⌊3d/4⌋, and the pitch = d + 1 k-unlock regime (kept only as an expected refutation). k by exact GF(2) rank at every point — never the closed form the campaign&#x27;s section 6 caught breaking — plus CSS, single-Tanner-component, w ≤ 4 and no-empty-row filters. Board subtraction against the cell&#x27;s 179 entries (interaction radius computed from the coordinates where a stored field is absent), then intra-sweep Pareto: 25 fresh rank-level points, 14 in distance-preserving regimes. Witness screen at 4,000 RIS trials per side (fast backend): 14/14 held at design distance on both sides.</p>
+<h4>Evidence trail</h4>
+<p>This code: d = 5, rows = 5, m = 8, pitch = 6 (rows ≥ 3 at pitch_min(d) = 2⌊3d/4⌋, the distance-preserving multi-band regime); n = 726, k = 38 by exact rank, w = 4, single Tanner component, interaction radius √2.</p>
+<ul>
+<li>Screening ladder: 4,000 RIS trials/side → lightest logical weight 5 on</li>
+<p>both sides, nothing lighter.</p>
+<li>Packaged through the kit&#x27;s own path (<code>research/kit/submit.make_submission</code>,</li>
+<p>8,000-trial witnesses embedded per side), then the trusted gate <code>verify/validate_candidate.py</code>: passed, not refuted, no exact duplicate, no WL-signature equivalent, <code>board_advancing: true</code>, <code>dominated_by: []</code>.</p>
+<li>Claim, stated precisely: <b>witness-backed upper bound</b>, d ≤ 5 on both</li>
+<p>sides. No exact claim, no certificate.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>The 13 pitch = d + 1 k-unlock points (rank-level kd²/n up to 1.374) were</li>
+<p>excluded without screening: the campaign&#x27;s Result 3 measured distance collapse below pitch_min for rows ≥ 3 at every d ≥ 7, so their rank-only score is not evidence.</p>
+<li>[[757,7,11]] (pitch_min(11) = 16) passed the gate but is dominated by the</li>
+<p>board&#x27;s <code>codes/667-7-11.json</code> (same k, same d, lower n) — not submitted.</p>
+<li>d = 9 two-band produced no fresh in-band point; the d = 11 pitch_min</li>
+<p>point is the dominated [[757,7,11]] above.</p>
+<li>Sweep-infrastructure bug found and fixed en route: board entries storing</li>
+<p><code>interaction_radius: null</code> were silently dropped by the subtraction filter, understating the cell by 38 entries; the gate&#x27;s own novelty check was authoritative throughout.</p>
+</ul>
+<h4>Tools</h4>
+<p>GLM 5.3 Flash, driven interactively in the Zed agent. Repo tooling: the validated builder <code>research/multiband_surface.py</code>, the kit&#x27;s RIS surrogate with the gf2_fast backend, <code>research/kit/submit.make_submission</code> for packaging, <code>verify/validate_candidate.py</code> as the trusted gate. Compute: 14 gate runs (~90 min each, 7 in parallel) plus screening.</p>
+<h4>Reproduction</h4>
+<p><code>research/multiband_surface.py::build(d=5, rows=5, m=8, pitch=6)</code> rebuilds (H_X, H_Z, coords) exactly. The mask rule: bands r = 0..rows−1 at y₀ = pitch·r; even bands carry m patches at x-offsets j·(2d+2), odd bands m − 1 offset d + 1; occupied sites per patch are window interiors ((x+y)%2==0 inside the (2d−1)² window), vertical edge columns at band phase (x+y)%4 ∈ {0,2}, and horizontal edge rows at the reverse phase, unioned over all patches. Data qubits sit on odd/odd sites; of the rest, (x+y)%4==2 sites measure X-checks, the rest Z-checks; each check supports its diagonal data neighbours. Coordinates are grid/2 (unit spacing), single layer, so the tilted nearest-neighbour checks span √2.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/726-38-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/735-39-5.html">[[735,39,5]] — 735-39-5</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><p>#[[735,39,5]] — multi-band dense-packed surface code, pitch_min point (d=5, rows=6, m=7, pitch=6)</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>local-2d-single</code> × <code>weight-4</code>, the geometric-efficiency cell — at this family&#x27;s honest layout (tilted nearest-neighbour lattice, r = √2, single layer) the board&#x27;s g = 4kd²/(nρ²r⁴) reduces to kd²/n. The submission cap was raised to admit 700 &lt; n ≤ 1000 when w ≤ 8 and d ≤ 40; this family (w = 4, d ≤ 13) fits with room to spare, and the new band is exactly the strip where its boundary overhead thins: the 2026-09-01 campaign (<code>fieldnotes/2026-09-01-multiband-dense-packing-method.md</code>) measured kd²/n ≤ 1.328 under the old n ≤ 700 cap and an asymptote near 1.43 only at n ≥ 13,000. Hypothesis: fresh Pareto points at kd²/n ≈ 1.30–1.34 fill the band, on the d-columns and k-rungs the seeded packs leave open.</p>
+<h4>What was searched</h4>
+<p>A manifold re-enumeration of the multi-band dense packing (arXiv:2511.06758 generalized to rows × m patches at a free vertical pitch; builder <code>research/multiband_surface.py</code>, validated bit-exact against <code>research/build_dense_surface.py</code> at d = 3, 5, 7, 9). 138 (d, rows, m, pitch) configurations with n in (700, 1000], d ∈ {5, 7, 9, 11, 13}, in three regimes: two-band (rows = 2, pitch = d − 1), rows ≥ 3 at pitch_min(d) = 2⌊3d/4⌋, and the pitch = d + 1 k-unlock regime (kept only as an expected refutation). k by exact GF(2) rank at every point — never the closed form the campaign&#x27;s section 6 caught breaking — plus CSS, single-Tanner-component, w ≤ 4 and no-empty-row filters. Board subtraction against the cell&#x27;s 179 entries (interaction radius computed from the coordinates where a stored field is absent), then intra-sweep Pareto: 25 fresh rank-level points, 14 in distance-preserving regimes. Witness screen at 4,000 RIS trials per side (fast backend): 14/14 held at design distance on both sides.</p>
+<h4>Evidence trail</h4>
+<p>This code: d = 5, rows = 6, m = 7, pitch = 6 (rows ≥ 3 at pitch_min(d) = 2⌊3d/4⌋, the distance-preserving multi-band regime); n = 735, k = 39 by exact rank, w = 4, single Tanner component, interaction radius √2.</p>
+<ul>
+<li>Screening ladder: 4,000 RIS trials/side → lightest logical weight 5 on</li>
+<p>both sides, nothing lighter.</p>
+<li>Packaged through the kit&#x27;s own path (<code>research/kit/submit.make_submission</code>,</li>
+<p>8,000-trial witnesses embedded per side), then the trusted gate <code>verify/validate_candidate.py</code>: passed, not refuted, no exact duplicate, no WL-signature equivalent, <code>board_advancing: true</code>, <code>dominated_by: []</code>.</p>
+<li>Claim, stated precisely: <b>witness-backed upper bound</b>, d ≤ 5 on both</li>
+<p>sides. No exact claim, no certificate.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li>The 13 pitch = d + 1 k-unlock points (rank-level kd²/n up to 1.374) were</li>
+<p>excluded without screening: the campaign&#x27;s Result 3 measured distance collapse below pitch_min for rows ≥ 3 at every d ≥ 7, so their rank-only score is not evidence.</p>
+<li>[[757,7,11]] (pitch_min(11) = 16) passed the gate but is dominated by the</li>
+<p>board&#x27;s <code>codes/667-7-11.json</code> (same k, same d, lower n) — not submitted.</p>
+<li>d = 9 two-band produced no fresh in-band point; the d = 11 pitch_min</li>
+<p>point is the dominated [[757,7,11]] above.</p>
+<li>Sweep-infrastructure bug found and fixed en route: board entries storing</li>
+<p><code>interaction_radius: null</code> were silently dropped by the subtraction filter, understating the cell by 38 entries; the gate&#x27;s own novelty check was authoritative throughout.</p>
+</ul>
+<h4>Tools</h4>
+<p>GLM 5.3 Flash, driven interactively in the Zed agent. Repo tooling: the validated builder <code>research/multiband_surface.py</code>, the kit&#x27;s RIS surrogate with the gf2_fast backend, <code>research/kit/submit.make_submission</code> for packaging, <code>verify/validate_candidate.py</code> as the trusted gate. Compute: 14 gate runs (~90 min each, 7 in parallel) plus screening.</p>
+<h4>Reproduction</h4>
+<p><code>research/multiband_surface.py::build(d=5, rows=6, m=7, pitch=6)</code> rebuilds (H_X, H_Z, coords) exactly. The mask rule: bands r = 0..rows−1 at y₀ = pitch·r; even bands carry m patches at x-offsets j·(2d+2), odd bands m − 1 offset d + 1; occupied sites per patch are window interiors ((x+y)%2==0 inside the (2d−1)² window), vertical edge columns at band phase (x+y)%4 ∈ {0,2}, and horizontal edge rows at the reverse phase, unioned over all patches. Data qubits sit on odd/odd sites; of the rest, (x+y)%4==2 sites measure X-checks, the rest Z-checks; each check supports its diagonal data neighbours. Coordinates are grid/2 (unit spacing), single layer, so the tilted nearest-neighbour checks span √2.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/735-39-5.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/82-2-9.html">[[82,2,9]] — 82-2-9</a></h3><div class=kv style="color:var(--mut)">2026-09-20 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[82,2,9]] weight-4 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>The board carries 169 generalized-bicycle entries and, at the time of this submission, none of them at check weight 4. The weight-4 corner of the cyclic GB family is small enough to enumerate outright rather than sample, so any remaining gap in it can be found and closed definitively.</p>
