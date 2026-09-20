@@ -46,13 +46,14 @@ _ROOT = os.path.dirname(_HERE)
 sys.path.insert(0, os.path.join(_ROOT, "verify"))
 sys.path.insert(0, os.path.join(_ROOT, "site"))
 
-import gf2                       # noqa: E402
+import gf2  # noqa: E402
 import heuristic_distance as hd  # noqa: E402
-from check_authorship import HANDLE  # noqa: E402
-from qldpc_verify import verify  # noqa: E402
+
 # Reuse the site's computed-cell + Pareto-frontier helpers so the PR body
 # states exactly what the board will show (no drift between the two).
-from build import cells, pareto, LOCALITY_LABEL, WEIGHT_LABEL  # noqa: E402
+from build import LOCALITY_LABEL, WEIGHT_LABEL, cells, pareto  # noqa: E402
+from check_authorship import HANDLE  # noqa: E402
+from qldpc_verify import verify  # noqa: E402
 
 
 # ----------------------------------------------------------------------------
@@ -74,7 +75,8 @@ def _pick(d, names):
 
 def load_checks(path):
     """Return (HX, HZ, coords_or_None). Accepts .npz (matrices) or .json
-    (a draft with a checks block)."""
+    (a draft with a checks block).
+    """
     if path.endswith(".json"):
         try:
             with open(path) as f:
@@ -177,9 +179,14 @@ def build_submission(HX, HZ, args):
         prov["model"] = args.model
     if args.notes:
         prov["notes"] = args.notes
+    budget = search_budget_from_args(args)
+    if budget:
+        prov["search_budget"] = budget
 
     doc = {
-        "schema_version": "0.1",
+        # search_budget is a 0.3 feature; without it the document stays at
+        # the oldest version that describes it, so older readers accept it.
+        "schema_version": "0.3" if budget else "0.1",
         "name": args.name or f"[[{n},{k},{d}]]",
         "code_type": "CSS",
         "n": n, "k": int(k),
@@ -200,6 +207,73 @@ def build_submission(HX, HZ, args):
             "layers": int(args.layers),
         }
     return doc
+
+
+# ----------------------------------------------------------------------------
+# the search budget (provenance.search_budget, schema 0.3)
+# ----------------------------------------------------------------------------
+# What the search cost is not reconstructible after the fact, so the tool
+# records it at submission time from whatever the contributor measured. The
+# verifier checks none of it; the block exists so cost per discovery can be
+# compared across entries. Individual --budget-* flags override keys of a
+# --budget-json file, and an empty result leaves the document without the
+# block (and at schema 0.1).
+BUDGET_KEYS = ("candidates_screened", "ris_trials_per_side", "cpu_hours",
+               "gpu_hours", "llm_tokens", "wall_clock_hours", "tool", "notes")
+
+
+def _parse_llm_tokens(items):
+    """Parse 'MODEL=COUNT' strings into {model: int}.
+
+    The model name may itself contain '=': the count is whatever follows the
+    last one.
+    """
+    out = {}
+    for item in items or ():
+        model, sep, count = str(item).rpartition("=")
+        if not sep or not model.strip() or not count.strip().isdigit():
+            raise SystemExit(
+                f"--budget-llm-tokens expects MODEL=COUNT (e.g. "
+                f"'Claude Opus 4.8=1800000'), got {item!r}")
+        out[model.strip()] = int(count)
+    return out
+
+
+def search_budget_from_args(args):
+    """Assemble provenance.search_budget from the submit arguments.
+
+    Reads the --budget-* flags and/or a --budget-json value (a path, or an
+    inline JSON object starting with '{'). Returns {} when nothing was given.
+    """
+    budget = {}
+    raw = getattr(args, "budget_json", None)
+    if raw:
+        try:
+            if raw.lstrip().startswith("{"):
+                loaded = json.loads(raw)
+            else:
+                with open(raw) as f:
+                    loaded = json.load(f)
+        except (OSError, json.JSONDecodeError) as e:
+            raise SystemExit(f"--budget-json: cannot read {raw!r} ({e})")
+        if not isinstance(loaded, dict):
+            raise SystemExit("--budget-json must hold a JSON object")
+        unknown = sorted(set(loaded) - set(BUDGET_KEYS))
+        if unknown:
+            raise SystemExit(
+                f"--budget-json: unknown key(s) {unknown}; allowed: "
+                f"{list(BUDGET_KEYS)}")
+        budget.update(loaded)
+    for key in BUDGET_KEYS:
+        if key == "llm_tokens":
+            tokens = _parse_llm_tokens(getattr(args, "budget_llm_tokens", None))
+            if tokens:
+                budget["llm_tokens"] = {**budget.get("llm_tokens", {}), **tokens}
+            continue
+        value = getattr(args, f"budget_{key}", None)
+        if value is not None and value != "":
+            budget[key] = value
+    return budget
 
 
 # ----------------------------------------------------------------------------
@@ -240,7 +314,8 @@ def body_has_scaffolding(body):
 
 def _repo_path(path):
     """Repo-relative path when the file is inside the repo, else absolute.
-    Keeps the body readable when --out points somewhere else entirely."""
+    Keeps the body readable when --out points somewhere else entirely.
+    """
     rel = os.path.relpath(path, _ROOT)
     return os.path.abspath(path) if rel.startswith(os.pardir) else rel
 
@@ -333,7 +408,8 @@ def write_pr_body(slug, body):
 def _load_board_entries():
     """The board's current entries as the site sees them (verified, earned
     distance). Returns [] if the site builder cannot be imported or the board
-    is empty, so the frontier section degrades gracefully to a TODO."""
+    is empty, so the frontier section degrades gracefully to a TODO.
+    """
     try:
         from build import load_entries
         return load_entries()
@@ -346,7 +422,8 @@ def _load_board_entries():
 def _entry_for(doc, report):
     """A board-shaped entry for the candidate, mirroring site/build.load_entries
     (n, k, d, w, locality/weight class, eff). The site's pareto()/cells() only
-    read these keys, so this is enough to compare against the board."""
+    read these keys, so this is enough to compare against the board.
+    """
     comp = report.get("computed", {})
     n, k = doc["n"], doc["k"]
     earned = report.get("earned_distance", {}).get("d")
@@ -366,7 +443,8 @@ def frontier_summary(doc, report):
     which track cells it belongs to, whether it sits on each cell's Pareto
     frontier, and which existing entries it strictly dominates (and on which
     axis). Returns a list of markdown lines (may be empty if the board is
-    unavailable)."""
+    unavailable).
+    """
     entries = _load_board_entries()
     if not entries:
         return []
@@ -684,7 +762,8 @@ def cmd_recent(args):
     """What moved on the board recently: codes merged, research notes, and
     fieldnotes, from git history. The 'stay current' step — read this (and
     the linked notes) before spending compute, so a new search starts from
-    the community's frontier of knowledge, not just the frontier of scores."""
+    the community's frontier of knowledge, not just the frontier of scores.
+    """
     since = f"--since={args.days} days ago"
 
     def added(path):
@@ -767,6 +846,34 @@ def main(argv=None):
     s.add_argument("--layers", type=int, default=1,
                    help="physical layers for a 2d-local layout "
                         "(1 = single layer, 2 = bilayer); default 1")
+    b = s.add_argument_group(
+        "search budget",
+        "optional provenance.search_budget block (schema 0.3): what the search "
+        "that produced this code cost. Self-reported and unchecked; recorded so "
+        "cost per discovery is comparable across entries. Flags override keys "
+        "of --budget-json.")
+    b.add_argument("--budget-json", default="", metavar="FILE_OR_JSON",
+                   help="JSON object with any of: candidates_screened, "
+                        "ris_trials_per_side, cpu_hours, gpu_hours, llm_tokens "
+                        "(model -> tokens), wall_clock_hours, tool, notes; a "
+                        "file path or an inline '{...}'")
+    b.add_argument("--budget-candidates-screened", type=int, default=None,
+                   metavar="N", help="codes built and screened before this one")
+    b.add_argument("--budget-ris-trials-per-side", type=int, default=None,
+                   metavar="N", help="deepest RIS budget spent per side on this "
+                                     "code during the search")
+    b.add_argument("--budget-cpu-hours", type=float, default=None, metavar="H")
+    b.add_argument("--budget-gpu-hours", type=float, default=None, metavar="H")
+    b.add_argument("--budget-llm-tokens", action="append", default=None,
+                   metavar="MODEL=COUNT",
+                   help="tokens consumed per model, repeatable, e.g. "
+                        "'Claude Opus 4.8=1800000'")
+    b.add_argument("--budget-wall-clock-hours", type=float, default=None,
+                   metavar="H")
+    b.add_argument("--budget-tool", default="",
+                   help="the search harness, e.g. 'research/kit/search.py + gf2_fast'")
+    b.add_argument("--budget-notes", default="",
+                   help="what the numbers cover and what they leave out")
     s.add_argument("--trials", type=int, default=20000,
                    help="RIS trials for the distance witness search")
     s.add_argument("--fast-trials", type=int, default=2_000_000,

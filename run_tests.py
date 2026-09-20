@@ -2,7 +2,7 @@
 point so CI and the README command do not change.
 
 Discovery is still by convention -- pytest collects test_*.py under verify/,
-research/, and site/ -- so a new test joins the suite the moment it exists and
+research/, site/, and cli/ -- so a new test joins the suite the moment it exists and
 cannot be silently left out of CI the way a hand-listed step can (which is how
 two of five tests once went unrun).
 
@@ -34,7 +34,7 @@ def main(argv):
                     help="skip the tests listed in SLOW")
     args, extra = ap.parse_known_args(argv)
 
-    cmd = [sys.executable, "-m", "pytest", "verify", "research", "site"]
+    cmd = [sys.executable, "-m", "pytest", "verify", "research", "site", "cli"]
     if args.skip_slow and SLOW:
         cmd += ["--deselect" if "::" in s else "--ignore=" + s for s in SLOW]
     cmd += extra

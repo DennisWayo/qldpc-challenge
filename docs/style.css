@@ -168,8 +168,13 @@ a.lbm:not([href]){cursor:default}
    scores; the mode on the section picks which one is on show, and the crown
    follows whoever is rank 1 in the active ranking. */
 .lb[data-mode=eff] .lbmgeo,.lb[data-mode=eff] .lbhgeo,
-.lb[data-mode=eff] .lbsgeo,.lb[data-mode=geo] .lbmeff,
-.lb[data-mode=geo] .lbheff,.lb[data-mode=geo] .lbseff{display:none}
+.lb[data-mode=eff] .lbsgeo,.lb[data-mode=eff] .lbhfront,
+.lb[data-mode=eff] .lbsfront,.lb[data-mode=geo] .lbmeff,
+.lb[data-mode=geo] .lbheff,.lb[data-mode=geo] .lbseff,
+.lb[data-mode=geo] .lbhfront,.lb[data-mode=geo] .lbsfront,
+.lb[data-mode=front] .lbmgeo,.lb[data-mode=front] .lbheff,
+.lb[data-mode=front] .lbseff,.lb[data-mode=front] .lbhgeo,
+.lb[data-mode=front] .lbsgeo{display:none}
 .lbmnone b{color:var(--mut);font-weight:400}
 .lbcrown{display:none}
 .lbrow.lbtop .lbcrown{display:inline}
@@ -494,10 +499,19 @@ font-size:11.5px;color:var(--mut)}
 /* kd2/n, g, w: a horizontal stat trio — big value, small label beneath
    (column-reverse puts the ::before label under the number) */
 .board td.m3{display:inline-flex;flex-direction:column-reverse;
-align-items:center;justify-content:flex-start;gap:3px;width:32.8%;
-padding:9px 0 5px;font-size:19px;font-weight:700;
+align-items:center;justify-content:flex-start;gap:2px;width:32.8%;
+padding:5px 0 3px;font-size:17px;font-weight:700;
 font-variant-numeric:tabular-nums;text-align:center}
 .board td.m3::before{font-size:10.5px}
+/* an entry with no verified layout has no g: the cell is a bare middot, so it
+   is a third of the stat band carrying nothing. Drop it and let the two real
+   stats split the width. */
+.board td.m3.m3empty{display:none}
+.board tr:has(td.m3empty) td.m3{width:49.4%}
+/* the family chip rides on the title line instead of claiming its own row */
+.board td.typecell{position:absolute;top:34px;left:14px;width:auto;
+padding:0;margin:0}
+.board td.codecell{padding-bottom:30px}
 /* unlabeled rows: chips and byline speak for themselves */
 .board td.typecell::before,.board td.auth::before,
 .board td.model::before{content:none}

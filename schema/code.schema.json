@@ -19,7 +19,8 @@
     "schema_version": {
       "enum": [
         "0.1",
-        "0.2"
+        "0.2",
+        "0.3"
       ]
     },
     "name": {
@@ -373,6 +374,59 @@
         },
         "notes": {
           "type": "string"
+        },
+        "search_budget": {
+          "type": "object",
+          "description": "optional, self-reported (schema 0.3): what the search that produced this code cost. The verifier checks none of it (there is nothing trustless to check); it is recorded so the cost of a frontier-advancing code can be compared across entries and over time. Distinct from distance.X/Z.witness_provenance, which budgets the witness search for one operator, not the code search. All fields optional; report what you measured and leave the rest out.",
+          "additionalProperties": false,
+          "properties": {
+            "candidates_screened": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "codes built and screened (k, CSS, weight, cheap distance surrogate) before this one was chosen"
+            },
+            "ris_trials_per_side": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "deepest RIS budget spent per side on this code's distance during the search, in trials"
+            },
+            "cpu_hours": {
+              "type": "number",
+              "minimum": 0,
+              "description": "CPU core-hours over the whole search"
+            },
+            "gpu_hours": {
+              "type": "number",
+              "minimum": 0,
+              "description": "GPU-hours over the whole search (0 when none were used)"
+            },
+            "llm_tokens": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "maxLength": 80
+              },
+              "description": "tokens consumed per model, keyed by the model name as in provenance.model (e.g. {\"Claude Opus 4.8\": 1800000}); input and output combined"
+            },
+            "wall_clock_hours": {
+              "type": "number",
+              "minimum": 0,
+              "description": "elapsed time from the start of the search to this code"
+            },
+            "tool": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "the search harness (e.g. 'research/kit/search.py + gf2_fast')"
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 1000,
+              "description": "what the numbers cover and what they leave out"
+            }
+          }
         }
       }
     },
@@ -404,7 +458,7 @@
   },
   "allOf": [
     {
-      "$comment": "a document using witness_provenance (a 0.2 feature) must declare schema_version 0.2, so the version field stays meaningful rather than decorative",
+      "$comment": "a document using witness_provenance (a 0.2 feature) must declare schema_version 0.2 or later, so the version field stays meaningful rather than decorative",
       "if": {
         "properties": {
           "distance": {
@@ -437,13 +491,16 @@
       "then": {
         "properties": {
           "schema_version": {
-            "const": "0.2"
+            "enum": [
+              "0.2",
+              "0.3"
+            ]
           }
         }
       }
     },
     {
-      "$comment": "locality.contributed_by (a 0.2 feature) likewise requires schema_version 0.2",
+      "$comment": "locality.contributed_by (a 0.2 feature) likewise requires schema_version 0.2 or later",
       "if": {
         "properties": {
           "locality": {
@@ -459,7 +516,10 @@
       "then": {
         "properties": {
           "schema_version": {
-            "const": "0.2"
+            "enum": [
+              "0.2",
+              "0.3"
+            ]
           }
         }
       }
@@ -474,7 +534,32 @@
       "then": {
         "properties": {
           "schema_version": {
-            "const": "0.2"
+            "enum": [
+              "0.2",
+              "0.3"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "$comment": "provenance.search_budget (a 0.3 feature) requires schema_version 0.3",
+      "if": {
+        "properties": {
+          "provenance": {
+            "required": [
+              "search_budget"
+            ]
+          }
+        },
+        "required": [
+          "provenance"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "0.3"
           }
         }
       }
