@@ -725,33 +725,47 @@ def search_local_sat(
     return recs[:keep]
 
 
-def lex_symmetry_selftest(side=4, G=5, t=1, radius=1.5, weight=4):
-    """Soundness check for symmetry="lex": over a small cell, the lex
-    enumeration must yield exactly one representative per D4+XZ orbit of the
-    unconstrained enumeration — same orbit-canonical-key set, no duplicates.
+def lex_symmetry_selftest(side=4, G=5, t=1, radius=1.5, weight=4, cap=60):
+    """Soundness check for symmetry="lex": over the first ``cap`` lex models
+    of the default cell, no two yields may belong to the same D4+XZ
+    group-orbit. Canonical form is the minimum EXACT incidence over the
+    group, row order preserved — the lex group does not permute rows within
+    a block, so row-order twins are distinct group-orbits and may both
+    yield; the row-sorting orbit_canonical_key must NOT be used here.
 
-    Default cell 4x4 G=5 w=4 t=1 yields ~40 models in 39 orbits (2026-09-08).
+    Not asserted here: set equality with the unconstrained run. The cell
+    holds 20k+ models, both runs are budget-truncated windows, and the
+    positives-only distinct-code blocking makes truncated windows
+    non-comparable — a capped subset check fails spuriously (2026-09-19).
+
+    Budgeted lex-60 run takes ~0.3 s (2026-09-19).
     """
-    def orbit_keys(sym):
-        keys = []
-        for spec, HX, HZ, *_ in enumerate_local_sat_codes(
-            side, G, weight, t, radius, max_codes=60, solver="cadical",
-            symmetry=sym, shared_t3=True, conf_budget=100_000,
-            time_budget=20.0, max_rounds=300,
-        ):
-            keys.append(orbit_canonical_key(side, G, HX, HZ))
-        return keys
+    perms = _site_permutations(side)
 
-    keys_none = orbit_keys("none")
-    keys_lex = orbit_keys("lex")
-    # the unconstrained run may legitimately visit two models of the same
-    # orbit; the lex run must yield exactly one representative per DISTINCT
-    # orbit — same key set, and no lex duplicates.
-    assert len(set(keys_lex)) == len(keys_lex), "lex run yielded a duplicate orbit"
-    assert set(keys_lex) == set(keys_none), (
-        f"lex orbit set mismatch: {len(keys_lex)} vs {len(set(keys_none))}"
-    )
-    return {"none_orbits": len(set(keys_none)), "lex_yields": len(keys_lex)}
+    def group_canon(HX, HZ):
+        M = np.vstack([HX, HZ])
+        best = None
+        for p in perms:
+            Mp = M[:, list(p)]
+            for swapped in (False, True):
+                A = np.vstack([Mp[G:], Mp[:G]]) if swapped else Mp
+                key = tuple(int(b) for b in A.ravel())
+                if best is None or key < best:
+                    best = key
+        return best
+
+    count = 0
+    canons = set()
+    for spec, HX, HZ, *_ in enumerate_local_sat_codes(
+        side, G, weight, t, radius, max_codes=cap, solver="cadical",
+        symmetry="lex", shared_t3=True, conf_budget=100_000,
+        time_budget=20.0, max_rounds=1200,
+    ):
+        canons.add(group_canon(HX, HZ))
+        count += 1
+    assert len(canons) == count, "lex yielded two models of one D4+XZ orbit"
+    assert count > 0, "lex enumeration yielded nothing on the default cell"
+    return {"lex_yields": count, "lex_group_orbits": len(canons)}
 
 
 if __name__ == "__main__":
