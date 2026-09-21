@@ -3938,23 +3938,6 @@ def build():
         '</section>')
     P.append(record_chart(entries))
     P.append(primary_tracks_grid(entries, records))
-    P.append('<div class=how>'
-             f'<a class=card href="{REPO_ROOT}/blob/main/CONTRIBUTING.md">'
-             '<span class=n>1</span><h3>Build a code</h3>'
-             '<p>A CSS qLDPC code, written as one JSON file with its parity '
-             'checks and a distance witness. <span class=arrow>&rarr;</span></p>'
-             '</a>'
-             f'<a class=card href="{REPO_ROOT}/pulls">'
-             '<span class=n>2</span><h3>Open a PR</h3>'
-             '<p>Add it under <code>codes/</code>. CI runs the verifier on '
-             'every submission automatically. <span class=arrow>&rarr;</span></p>'
-             '</a>'
-             '<a class=card href="#board">'
-             '<span class=n>3</span><h3>Climb the board</h3>'
-             '<p>If it advances a track&rsquo;s frontier it is highlighted. '
-             'Click any row for the witness, certificate, and checks. '
-             '<span class=arrow>&rarr;</span></p>'
-             '</a></div>')
     P.append(latest_codes_panel(entries, records))
     P.append(board_controls(entries, records))
     P.append('<div class=explorer>')
@@ -3988,6 +3971,25 @@ def build():
     P.append(board_table(entries, records))
     P.append('</div>')  # close explorer (the viewport-fitted plots+table column)
     P.append(contributors_panel(entries))  # leaderboard sits below the table
+    # the three steps follow the leaderboard: 'climb the board' should be read
+    # after the board has been seen, not before
+    P.append('<div class=how>'
+             f'<a class=card href="{REPO_ROOT}/blob/main/CONTRIBUTING.md">'
+             '<span class=n>1</span><h3>Build a code</h3>'
+             '<p>A CSS qLDPC code, written as one JSON file with its parity '
+             'checks and a distance witness. <span class=arrow>&rarr;</span></p>'
+             '</a>'
+             f'<a class=card href="{REPO_ROOT}/pulls">'
+             '<span class=n>2</span><h3>Open a PR</h3>'
+             '<p>Add it under <code>codes/</code>. CI runs the verifier on '
+             'every submission automatically. <span class=arrow>&rarr;</span></p>'
+             '</a>'
+             '<a class=card href="#board">'
+             '<span class=n>3</span><h3>Climb the board</h3>'
+             '<p>If it advances a track&rsquo;s frontier it is highlighted. '
+             'Click any row for the witness, certificate, and checks. '
+             '<span class=arrow>&rarr;</span></p>'
+             '</a></div>')
     P.append('</div>')  # close the main content wrap; footer is full-width
     P.append(
         '<footer class=foot><div class=footmain>'
