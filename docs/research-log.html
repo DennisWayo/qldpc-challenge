@@ -8577,20 +8577,51 @@ caffeinate -is uv run --with python-sat python &lt;night_runner.py&gt; --total 1
 <p>Work over GF(2) with 15-by-15 circulant blocks. Define P by P[i,j] = 1 precisely when j = i+1 modulo 15. Set A = I + P + P^3 + P^4 and B = I + P + P^3 + P^7. Then H_X = [A | B] and H_Z = [B^T | A^T], with left-block qubits 0 through 14 and right-block qubits 15 through 29. Each side has 15 checks. This recipe was compared entry-for-entry against all submitted X and Z supports and matched.</p>
 <p>Equivalently, identify t in Z_15 with (t mod 3, t mod 5). The supports on Z_3 x Z_5 are A = [(0,0),(1,1),(0,3),(1,4)] and B = [(0,0),(1,1),(0,3),(1,2)].</p>
 <p>The durable matrices and logical witnesses are in <code>codes/30-6-5.json</code>. Re-run structural and witness validation with <code>uv run python verify/qldpc_verify.py codes/30-6-5.json</code>. Re-run the local exact-distance check with <code>uv run python verify/certify.py codes/30-6-5.json --tlim 10</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/30-6-5.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/562-18-20.html">[[562,18,20]] — 562-18-20</a></h3><div class=kv style="color:var(--mut)">2026-09-17 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[562,18,20]] — r=1 graft of the [[563,18,20]] tile code</h3>
-<h4>Direction &amp; hypothesis</h4>
-<p>Issue #1155 hackathon, 2D-local priority. A single degree-one r=1 graft removes one qubit at held (k, d), shaving n on a current local-frontier source.</p>
-<h4>What was searched</h4>
-<p>Source: [[563,18,20]] (weight-8 tile code, single-layer 2D-local layout, family tile). Move: one degree-one r=1 graft. Original column identities tracked so the source coordinates subset honestly; layers preserved.</p>
+<section class=blk><h3><a href="codes/562-18-19.html">[[562,18,19]] — 562-18-19</a></h3><div class=kv style="color:var(--mut)">2026-09-17 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[562,18,19]] - single-layer tile code, one qubit lighter than [[563,18,20]]</h3>
+<h4>Revision history</h4>
+<p>[[562,18,19]] supersedes the board&#x27;s <code>[[562,18,20]]</code>. The code, its checks, its family tag and its construction provenance are unchanged; only the distance claim is corrected, from <code>d &lt;= 20</code> to <code>d &lt;= 19</code>. The Z side is the side that falls; the X side stays at 20 and is not refuted, so <code>d = min(20, 19) = 19</code>. <code>kd^2/n</code> moves from <code>18 * 20^2 / 562 = 12.81</code> to <code>18 * 19^2 / 562 = 11.56</code>. Distance remains a witness-backed upper bound, not an exact claim.</p>
+<h4>Why the claim was loose</h4>
+<p>The entry is a degree-one <code>r = 1</code> graft of the [[563,18,20]] tile code: one qubit that sat in exactly one stabilizer was removed. That move preserves <code>k</code> and the local class, but there is no result saying it preserves the distance -- and removing a qubit cannot raise it. The parent&#x27;s value of 20 was carried over rather than measured, and the entry&#x27;s own note records that its bound came from a 20,000-trial search (which had already tightened an 8,000-trial bound of 21). A shallow search on a 562-qubit code is exactly where an inherited claim hides.</p>
 <h4>Evidence trail</h4>
-<p>Trusted gate (verify/validate_candidate, refute=True): passed=true, board-advancing=true in the weight-8 × local-2d-bilayer cell, no exact duplicate / WL-equivalent board entry, not refuted. Fresh witness search at submission: d ≤ 20, upper bound (the deeper 20k-trial search tightened the staged 8k-trial bound of 21). Not an exact certificate; literature novelty unverified.</p>
-<h4>Dead ends</h4>
-<p>Two high-k single-layer leads ([[453,8,18]], [[452,8,17]]) were refuted at the gate and excluded. Plain deletion-control and incident-deletion-control moves produced no board-advancing survivors on their own.</p>
+<p>The claim was reported over-stated in issue #1607, found by a board-wide re-audit at 2,000,000 RIS trials per entry (seed 101, pair depth 8). That pass exhibited a weight-19 Z-type logical:</p>
+<pre>
+[23, 71, 74, 89, 104, 125, 137, 155, 170, 173, 176, 191, 203, 227, 239, 285, 300, 317, 555]
+</pre>
+<p>This session reproduced the refutation independently, on a fresh seed and at the pair depth this family&#x27;s ladders use, with <code>verify/gf2_fast.distance_rand_witness</code> (both Pauli sides searched jointly):</p>
+<p>| trials | seed | pair depth | lightest logical | side | | ---: | ---: | ---: | ---: | :--- | | 2,000,000 | 401 | 64 | <b>19</b> | Z | | 8,000,000 | 402 | 64 | <b>19</b> | Z | | 20,000,000 | 403 | 64 | <b>19</b> | Z |</p>
+<p>Three fresh-seed rungs, 30,000,000 trials in total, all return exactly 19 and no rung ever reaches lower. The claim is <code>d &lt;= 19</code>, the tightest value any run has exhibited; it is not a lower bound, and no exact certificate is claimed.</p>
+<p>The witness this session stored is a *different* weight-19 Z-logical, shifted by two qubits from the one in the issue, which is itself a check that the two runs are not sharing a search artefact:</p>
+<pre>
+[23, 71, 74, 89, 104, 125, 137, 155, 170, 173, 176, 191, 203, 227, 239, 272, 285, 300, 317]
+</pre>
+<p>Both were re-validated from scratch, without the search stack: syndrome weight 0 against all 270 <code>H_X</code> rows, and <code>rank(H_Z)</code> grows 274 -&gt; 275 when the witness is appended, so each is a nontrivial logical in <code>ker H_X</code> outside the stabilizer row space of <code>H_Z</code>.</p>
+<h4>What was not claimed</h4>
+<p>This is an upper bound. No exact (<code>d =</code>) certificate was attempted: the <code>verify/certify.py</code> MILP envelope recorded in CONTRIBUTING.md is <code>d &lt;= 13</code>, well below 19, so no exact run can close at this size and none is claimed.</p>
 <h4>Tools</h4>
-<p>Model: DeepSeek V4 Flash 0731 (Zed agent). Repo tooling: research/kit (make_submission, css GF(2) exports), verify/validate_candidate (trusted gate), verify/qldpc_verify (structural screening + board reports). Local compute only.</p>
+<p>Model: <code>deepseek-flash</code>. Repo tooling: <code>verify/gf2_fast</code> (bit-packed RIS, both Pauli sides), <code>verify/gf2.py</code> (from-scratch GF(2) rank for the independent witness re-check), <code>verify/validate_candidate.py</code> (the trusted gate) and <code>verify/qldpc_verify.py</code> (the standalone verifier). Local compute only.</p>
 <h4>Reproduction</h4>
-<p>Rebuild (H_X, H_Z) from the source [[563,18,20]] tile-code matrix: 1. Graft a degree-one qubit: pick a column q that participates in exactly one stabilizer of some Pauli type, remove that column and its unique same-side row, and truncate opposite-type rows containing q (commutation is preserved by construction). 2. Subset the source&#x27;s 2D coordinates to the surviving columns (original identities, not guessed) and keep the single-layer layout.</p>
-<p>The method is the r=1 lattice grafting of arXiv:2504.08887 Sec. III E; the exact deleted row/column identities are deterministic from the source and the move order described above. The packaged JSON carries embedded witnesses and seed for the distance claim.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/562-18-20.md">raw markdown</a></div></details></section>
+<p>The code is unchanged from <code>[[562,18,20]]</code>; only the distance block differs. To re-find the witness:</p>
+<pre>
+import json, numpy as np, sys
+sys.path.insert(0, &quot;verify&quot;)
+import gf2_fast
+
+doc = json.load(open(&quot;codes/562-18-19.json&quot;))
+n = doc[&quot;n&quot;]
+
+def dense(rows):
+    M = np.zeros((len(rows), n), dtype=np.int8)
+    for i, row in enumerate(rows):
+        for q in row:
+            M[i, int(q)] ^= 1
+    return M
+
+HX, HZ = dense(doc[&quot;checks&quot;][&quot;X&quot;]), dense(doc[&quot;checks&quot;][&quot;Z&quot;])
+print(gf2_fast.distance_rand_witness(HX, HZ, trials=2_000_000, seed=401,
+                                     pair_depth=64, threads=16))
+</pre>
+<p>Equivalence review: the code is byte-identical to the superseded <code>[[562,18,20]]</code> apart from the distance block, so no new duplicate question arises.</p>
+<p>The revision witness is recorded in <code>distance.Z.witness_provenance</code> (2,000,000 samples, seed 401).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/562-18-19.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/565-51-4.html">[[565,51,4]] — 565-51-4</a></h3><div class=kv style="color:var(--mut)">2026-09-17 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[565,51,4]] — reduction of my own [[665,51,4]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/665-51-4.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 100 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 2</code> three times, <code>|S| = 4</code> 12 times.</p>
