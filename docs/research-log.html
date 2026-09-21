@@ -210,6 +210,18 @@
 <p>Score kd^2/n = 6.206 at check weight 8. Undominated in its cell against the board at submission time.</p>
 <h4>Boundary</h4>
 <p>The distance is an upper bound from witness search, not a proof. Literature novelty is unverified: cyclic GB codes are a classical family and these parameters may appear in the 2BGA literature.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/330-2-32.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/330-67-7.html">[[330,67,7]] — 330-67-7</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[330,67,7]] by check deletion from 330-66-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_Z returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
+<h4>Construction</h4>
+<p>Parent: the board entry <code>codes/330-66-9.json</code>. Row 0 of H_Z is removed and every other check is untouched.</p>
+<h4>What was swept</h4>
+<p>All 480 single-row deletions of the board entries small enough to re-derive the distance cheaply, each re-measured for k, distance and Tanner connectivity. Deletions that dropped the distance too far, or disconnected the Tanner graph, were discarded. The survivors were then screened against the live board; this is one of the few still undominated.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search first. That search returns the minimum over both sides, so when one side is much lighter the other never surfaces even though the schema needs a witness for it. The missing side is then searched on its own in the quotient ker(H_opposite) / rowspace(H_own), by randomly permuting and reducing a kernel basis and keeping the lightest row that stays outside the row space.</p>
+<p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/330-67-7.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/356-4-31.html">[[356,4,31]] — 356-4-31</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[356,4,31]] weight-8 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 8 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
