@@ -3,7 +3,51 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
-<section class=blk><h3><a href="codes/119-35-3.html">[[119,35,3]] — 119-35-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[119,35,3]] by check deletion from 119-34-5</h3>
+<section class=blk><h3><a href="codes/390-80-7.html">[[390,80,7]] — 390-80-7</a></h3><div class=kv style="color:var(--mut)">2026-09-22 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[390,80,7]] by two-row check deletion from 390-78-10</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/390-78-10.json</code>. Rows [43, 82] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/390-80-7.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/390-80-9.html">[[390,80,9]] — 390-80-9</a></h3><div class=kv style="color:var(--mut)">2026-09-22 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[390,80,9]] by two-row check deletion from 390-78-16</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/390-78-16.json</code>. Rows [17, 50] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/390-80-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/41-21-3.html">[[41,21,3]] — 41-21-3</a></h3><div class=kv style="color:var(--mut)">2026-09-22 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[41,21,3]] by two-row check deletion from 41-19-3</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/41-19-3.json</code>. Rows [4, 7] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/41-21-3.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/48-19-3.html">[[48,19,3]] — 48-19-3</a></h3><div class=kv style="color:var(--mut)">2026-09-22 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[48,19,3]] by two-row check deletion from 48-17-4</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/48-17-4.json</code>. Rows [8, 10] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/48-19-3.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/119-35-3.html">[[119,35,3]] — 119-35-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[119,35,3]] by check deletion from 119-34-5</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
 <h4>Construction</h4>
@@ -15,7 +59,7 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/119-35-3.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/119-36-3.html">[[119,36,3]] — 119-36-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[119,36,3]] by check deletion from 119-35-3</h3>
+<section class=blk><h3><a href="codes/119-36-3.html">[[119,36,3]] — 119-36-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[119,36,3]] by check deletion from 119-35-3</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
 <h4>Construction</h4>
@@ -27,7 +71,7 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/119-36-3.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/119-37-3.html">[[119,37,3]] — 119-37-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[119,37,3]] by two-row check deletion from 119-35-3</h3>
+<section class=blk><h3><a href="codes/119-37-3.html">[[119,37,3]] — 119-37-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[119,37,3]] by two-row check deletion from 119-35-3</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
 <h4>Whether the trade is worth taking</h4>
@@ -96,6 +140,18 @@
 <p>From the rules above (all arithmetic over the integer lattice, faces included only when every support site is a data site), with m=4:</p>
 <p>1. Data sites: rows y = 6+2j for j = 0..14; row j spans L_j ≤ x ≤ R with R = −17 and L_j = −16 − min(2j+3, 29−2j). Row widths: 3,5,7,9,11,13,15,15,13,11,9,7,5,3,1 (n=127). 2. Q-faces at data sites with x−y ≡ 3 (mod 4) (wholly present) and at (−18, 6+4h) for h = 0..6; O-faces at even x ≡ y (mod 4) (wholly present); U-faces at (−21, 6), (−25, 10), (−29, 14); V-faces at (−31, 20), (−27, 24), (−23, 28), (−19, 32). 3. H_X = H_Z = the face-incidence matrix (one row per face, both bases). 4. Verify: k = 1, max weight 8, H_X H_Z^T = 0; distance witnesses of weight 15 on both sides (weight-15 logical strings along lattice paths).</p>
 <p>Source: arXiv:2609.21376v1, Appendix D (coordinates and check supports) and Table 7 (resource polynomials). Circuits and data bundle: Zenodo 10.5281/zenodo.22820614.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/127-1-15.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/136-35-10.html">[[136,35,10]] — 136-35-10</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[136,35,10]] by check deletion from 136-34-12</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
+<h4>Construction</h4>
+<p>Parent: the board entry <code>codes/136-34-12.json</code>. Row 17 of H_X is removed and every other check is untouched.</p>
+<h4>What was swept</h4>
+<p>All 480 single-row deletions of the board entries small enough to re-derive the distance cheaply, each re-measured for k, distance and Tanner connectivity. Deletions that dropped the distance too far, or disconnected the Tanner graph, were discarded. The survivors were then screened against the live board; this is one of the few still undominated.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search first. That search returns the minimum over both sides, so when one side is much lighter the other never surfaces even though the schema needs a witness for it. The missing side is then searched on its own in the quotient ker(H_opposite) / rowspace(H_own), by randomly permuting and reducing a kernel basis and keeping the lightest row that stays outside the row space.</p>
+<p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/136-35-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/136-35-9.html">[[136,35,9]] — 136-35-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[136,35,9]] by check deletion from 136-34-12</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
@@ -108,6 +164,40 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/136-35-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/136-36-10.html">[[136,36,10]] — 136-36-10</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[136,36,10]] by two-row check deletion from 136-34-12</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/136-34-12.json</code>. Rows [18, 32] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/136-36-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/136-36-9.html">[[136,36,9]] — 136-36-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[136,36,9]] by check deletion from 136-35-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
+<h4>Construction</h4>
+<p>Parent: the board entry <code>codes/136-35-9.json</code>. Row 1 of H_X is removed and every other check is untouched.</p>
+<h4>What was swept</h4>
+<p>All 480 single-row deletions of the board entries small enough to re-derive the distance cheaply, each re-measured for k, distance and Tanner connectivity. Deletions that dropped the distance too far, or disconnected the Tanner graph, were discarded. The survivors were then screened against the live board; this is one of the few still undominated.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search first. That search returns the minimum over both sides, so when one side is much lighter the other never surfaces even though the schema needs a witness for it. The missing side is then searched on its own in the quotient ker(H_opposite) / rowspace(H_own), by randomly permuting and reducing a kernel basis and keeping the lightest row that stays outside the row space.</p>
+<p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/136-36-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/136-37-9.html">[[136,37,9]] — 136-37-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[136,37,9]] by two-row check deletion from 136-35-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/136-35-9.json</code>. Rows [33, 36] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/136-37-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/17-1-5-b.html">[[17,1,5]] — 17-1-5-b</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[17,1,5]]-b — 4.8.8 color code patch with a d=5 boundary (the open 4m+1 class)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-8</code> × <code>local-2d-single</code>. arXiv:2609.21376 (&quot;Denser Planar Color Codes&quot;) gives the triangular 4.8.8 family only at d = 4m−1 (3, 7, 11, 15) and explicitly leaves the other odd-distance class, d = 4m+1 (5, 9, 13, …), open: &quot;an open question is whether alternative boundaries and extraction schedules can realize&quot; them. This submission answers that at d=5 with a nearest-neighbor 4.8.8 brickwork patch — and lands the [[17,1,5]] parameters in <code>local-2d-single</code>, a cell the existing [[17,1,5]] entry (doubling construction, arXiv:2608.11160, measured interaction radius 4.2 → <code>local-2d-bilayer</code>) cannot reach.</p>
@@ -179,6 +269,29 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/228-85-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/228-86-9.html">[[228,86,9]] — 228-86-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[228,86,9]] by check deletion from 228-85-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
+<h4>Construction</h4>
+<p>Parent: the board entry <code>codes/228-85-9.json</code>. Row 5 of H_X is removed and every other check is untouched.</p>
+<h4>What was swept</h4>
+<p>All 480 single-row deletions of the board entries small enough to re-derive the distance cheaply, each re-measured for k, distance and Tanner connectivity. Deletions that dropped the distance too far, or disconnected the Tanner graph, were discarded. The survivors were then screened against the live board; this is one of the few still undominated.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search first. That search returns the minimum over both sides, so when one side is much lighter the other never surfaces even though the schema needs a witness for it. The missing side is then searched on its own in the quotient ker(H_opposite) / rowspace(H_own), by randomly permuting and reducing a kernel basis and keeping the lightest row that stays outside the row space.</p>
+<p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/228-86-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/228-87-9.html">[[228,87,9]] — 228-87-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[228,87,9]] by two-row check deletion from 228-85-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/228-85-9.json</code>. Rows [9, 12] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/228-87-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/276-102-10.html">[[276,102,10]] — 276-102-10</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[276,102,10]] by check deletion from 276-101-10</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
@@ -191,6 +304,17 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/276-102-10.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/276-103-10.html">[[276,103,10]] — 276-103-10</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[276,103,10]] by two-row check deletion from 276-101-10</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/276-101-10.json</code>. Rows [23, 52] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/276-103-10.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/300-2-30.html">[[300,2,30]] — 300-2-30</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[300,2,30]] weight-8 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 8 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
@@ -277,6 +401,39 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/315-67-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/315-67-7.html">[[315,67,7]] — 315-67-7</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[315,67,7]] by two-row check deletion from 315-65-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/315-65-9.json</code>. Rows [66, 121] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/315-67-7.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/315-68-5.html">[[315,68,5]] — 315-68-5</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[315,68,5]] by two-row check deletion from 315-66-5</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/315-66-5.json</code>. Rows [18, 119] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/315-68-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/320-66-9.html">[[320,66,9]] — 320-66-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[320,66,9]] by two-row check deletion from 320-64-14</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/320-64-14.json</code>. Rows [57, 123] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/320-66-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/330-2-32.html">[[330,2,32]] — 330-2-32</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[330,2,32]] weight-8 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 8 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
@@ -305,6 +462,17 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/330-67-7.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/330-68-7.html">[[330,68,7]] — 330-68-7</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[330,68,7]] by two-row check deletion from 330-66-9</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/330-66-9.json</code>. Rows [86, 108] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/330-68-7.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/350-71-15.html">[[350,71,15]] — 350-71-15</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[350,71,15]] by check deletion from 350-70-18</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
@@ -341,6 +509,50 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-71-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/350-72-15.html">[[350,72,15]] — 350-72-15</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[350,72,15]] by two-row check deletion from 350-70-18</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/350-70-18.json</code>. Rows [83, 87] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-72-15.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/350-72-5.html">[[350,72,5]] — 350-72-5</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[350,72,5]] by two-row check deletion from 350-70-10</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/350-70-10.json</code>. Rows [90, 134] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-72-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/350-72-6.html">[[350,72,6]] — 350-72-6</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[350,72,6]] by two-row check deletion from 350-70-10</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/350-70-10.json</code>. Rows [32, 121] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-72-6.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/350-72-9.html">[[350,72,9]] — 350-72-9</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[350,72,9]] by two-row check deletion from 350-70-14</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/350-70-14.json</code>. Rows [12, 77] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/350-72-9.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/356-4-31.html">[[356,4,31]] — 356-4-31</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[356,4,31]] weight-8 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 8 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
@@ -369,6 +581,17 @@
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-75-8.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/360-76-5.html">[[360,76,5]] — 360-76-5</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[360,76,5]] by two-row check deletion from 360-74-8</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/360-74-8.json</code>. Rows [31, 140] of H_X are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-76-5.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/360-8-27.html">[[360,8,27]] — 360-8-27</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[360,8,27]] — weight-7 bivariate bicycle code on Z_30 x Z_6, long-range record</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-8 x unrestricted locality (a weight-7 code competes there). The board&#x27;s only [[360,8,*]] entry, [[360,8,48]], sits at check weight 29 (weight-9plus cell), so the w&lt;=8 cell at (n=360, k=8) had no entry with large d. The qcode-discovery catalog (arXiv:2606.02418) lists a weight-7 mixed-monomial BB code at these parameters with MILP incumbent d=44, which screened as board-advancing on the optimistic test.</p>
@@ -498,6 +721,17 @@ HX, HZ = build_bb(30, 6,
 <p>Witness search on each side, 200k then 2M random information-set trials, with each witness classified by the conditions it actually satisfies (in the kernel of the opposite matrix, outside the row space of its own) rather than by the search&#x27;s argument order. Deleting a row leaves H_X and H_Z with different shapes, and the argument order stops being a reliable side label there.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s distance claim is inherited context, not re-derived here. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/42-11-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/42-13-4.html">[[42,13,4]] — 42-13-4</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[42,13,4]] by two-row check deletion from 42-11-4</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/42-11-4.json</code>. Rows [12, 15] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/42-13-4.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/444-2-41.html">[[444,2,41]] — 444-2-41</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[444,2,41]] weight-8 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 8 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
@@ -574,6 +808,17 @@ HX, HZ = build_bb(30, 6,
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/48-17-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/48-18-4.html">[[48,18,4]] — 48-18-4</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[48,18,4]] by two-row check deletion from 48-16-5</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/48-16-5.json</code>. Rows [6, 8] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/48-18-4.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/50-19-3.html">[[50,19,3]] — 50-19-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[50,19,3]] by check deletion from 50-18-4</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
@@ -880,6 +1125,48 @@ assert doc[&quot;checks&quot;][&quot;Z&quot;] == hz
 <pre>
 uv run --frozen python verify/qldpc_verify.py codes/682-172-76.json
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/682-172-76.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/682-182-64.html">[[682,182,64]] — 682-182-64</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/DennisWayo">@DennisWayo</a> &middot; OpenAI GPT-5 (Codex)</div><details ><summary>note</summary><div class=notebody><h3>[[682,182,64]] - weight-24 cyclic generalized-bicycle representation</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>This search targeted the unrestricted, weight-9plus cell below the challenge&#x27;s <code>n &lt;= 700</code> limit. The hypothesis was that a large bank of previously screened cyclic generalized-bicycle candidates still contained useful low-check-weight representations after their optimistic distance estimates were corrected.</p>
+<p>The current <code>codes/682-182-66.json</code> and <code>codes/682-182-66-b.json</code> entries have effective parameters <code>[[682,182,d&lt;=66]]</code> and maximum check weight 32. This submission trades two distance points for a reduction to maximum check weight 24. The trusted validator finds neither an exact fingerprint duplicate nor a matching WL signature on the base board. The contribution is therefore a distinct, Pareto-nondominated representation rather than a larger scalar <code>k*d^2/n</code> score.</p>
+<h4>What was searched</h4>
+<p>A bank of 6,842 reconstructed cyclic-GB records was normalized and compared with the live board on <code>(n,k,d,max check weight)</code>. Of those records, 6,794 had complete cyclic-GB dimensions and supports. The filter removed 1,110 records already dominated by the board and 4,313 dominated by another candidate, leaving 1,371 records in three frontier tuples.</p>
+<p>Four representatives per tuple entered the final fire batch. Representatives were required to carry a recoverable 400,000-trial structural witness before packaging. All four representatives of the <code>[[682,182,d&lt;=64]], w=24</code> tuple survived the final gate. This submission was selected because its Python RIS and 8M RIS-fast passes stayed at weights 87 and 76. The next strongest representative reached 86 and 76; the other two reached 84 and 75, and 82 and 75. Those alternatives were retained as unsubmitted backups.</p>
+<h4>Evidence trail</h4>
+<p>The submitted X witness has weight 64. Its Z witness is the weight-preserving generalized-bicycle involution image obtained by swapping the two circulant blocks and reversing their indices. Both witnesses were independently checked for commutation and nontriviality by the trusted GF(2) verifier.</p>
+<p>| Stage | Seed | Budget | Outcome | |---|---:|---:|---| | Source circulant-GB structural screen | 84929447858586164 | 400,000 | found submitted weight-64 X witness | | Final circulant-GB gate | 9218011 | 400,000 | no refutation; weight 64 | | Final Python RIS gate | 9218000 | 106,840, 240 s cap | no refutation; best sampled weight 87 | | Final RIS-fast gate | 9218007 | 8,000,000 | no refutation; best sampled weight 76 |</p>
+<p>The final uninterrupted gate took about 50.4 minutes locally. The claim remains a witness-backed <b>upper bound</b> <code>d &lt;= 64</code>, not an exact-distance certificate. Hosted CI uses a fresh seed and may still find a lighter logical.</p>
+<h4>Dead ends</h4>
+<p>The cheap scan alone was too permissive: 5,423 of the 6,794 valid records were dominated before deep testing. The four representatives in this tuple also share one WL signature and identical <code>(n,k,d,w)</code> values. Treating every one as an independent frontier contribution would spend CI time without adding a new board axis, so only the representative with the strongest combined final refutation margin was promoted.</p>
+<p>This supports a two-stage policy for future mining: Pareto-filter the complete bank first, then spend structural, Python RIS, and 8M RIS-fast budgets on a small number of representatives per tuple.</p>
+<h4>Tools</h4>
+<p>Coordinating model: <b>OpenAI GPT-5 (Codex)</b>, matching <code>provenance.model</code>. The workflow used a cyclic-ideal generalized-bicycle miner, exact GF(2) rank and commutation checks, a live-board Pareto filter, the trusted circulant-GB structural gate, Python RIS, and the native <code>gf2_fast</code> refuter. Model attribution is self-reported; the public verifier performs all mathematical acceptance checks.</p>
+<h4>Reproduction</h4>
+<p>Let <code>C(S)</code> be the 341 by 341 binary circulant whose row <code>i</code> has ones at columns <code>(i+s) mod 341</code> for <code>s</code> in <code>S</code>. Use <code>H_X = [C(A) | C(B)]</code> and <code>H_Z = [C(B)^T | C(A)^T]</code>, with</p>
+<pre>
+A = [0,3,10,22,28,77,96,106,198,214,320,323]
+B = [10,17,20,41,64,68,119,185,192,209,265,271]
+</pre>
+<p>The following standard-library-only snippet reconstructs the submitted rows:</p>
+<pre>
+import json
+from pathlib import Path
+
+m = 341
+A = [0,3,10,22,28,77,96,106,198,214,320,323]
+B = [10,17,20,41,64,68,119,185,192,209,265,271]
+hx = [sorted([(i+a) % m for a in A] +
+             [m+(i+b) % m for b in B]) for i in range(m)]
+hz = [sorted([(i-b) % m for b in B] +
+             [m+(i-a) % m for a in A]) for i in range(m)]
+doc = json.loads(Path(&quot;codes/682-182-64.json&quot;).read_text())
+assert doc[&quot;checks&quot;][&quot;X&quot;] == hx
+assert doc[&quot;checks&quot;][&quot;Z&quot;] == hz
+</pre>
+<p>Verify the schema, CSS relations, ranks, check weight, and both logical witnesses from the repository root:</p>
+<pre>
+uv run --frozen python verify/qldpc_verify.py codes/682-182-64.json
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/682-182-64.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/71-1-11.html">[[71,1,11]] — 71-1-11</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GLM 5.3 Flash</div><details ><summary>note</summary><div class=notebody><h3>[[71,1,11]] — triangular 4.8.8 color code (brickwork embedding)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-8</code> × <code>local-2d-single</code>. The board&#x27;s k=1 color-code entries were all triangular 6.6.6 codes ([[49,1,7]], [[121,1,11]], [[225,1,15]]), whose data-qubit count follows n_D = (3d²+1)/4. The 4.8.8 (square-octagon) color code needs only n_D = (d²+2d−1)/2 at the same distance and the same maximum check weight (8), so at every d = 4m−1 it should strictly dominate the 6.6.6 incumbent on n at equal (k, d, w). arXiv:2609.21376 (&quot;Denser Planar Color Codes&quot;, N. Shutty) works this out with a nearest-neighbor brickwork embedding and proves circuit distance d_circ = d at d = 3, 7, 11, 15; this submission reproduces the d = 11 member as a board entry, dominating [[121,1,11]] (71 &lt; 121 data qubits at equal k, d, w).</p>
@@ -958,6 +1245,17 @@ HX, HZ = build_open_directional(19, 19, Sf, Sg,
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/73-38-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/73-39-4.html">[[73,39,4]] — 73-39-4</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[73,39,4]] by two-row check deletion from 73-37-6</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/73-37-6.json</code>. Rows [8, 11] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/73-39-4.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/738-4-31.html">[[738,4,31]] — 738-4-31</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[738,4,31]] weight-5 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 5 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
@@ -974,6 +1272,29 @@ HX, HZ = build_open_directional(19, 19, Sf, Sg,
 <p>Score kd^2/n = 5.209 at check weight 5. Undominated in its cell against the board at submission time.</p>
 <h4>Boundary</h4>
 <p>The distance is an upper bound from witness search, not a proof. Literature novelty is unverified: cyclic GB codes are a classical family and these parameters may appear in the 2BGA literature.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/738-4-31.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/85-41-5.html">[[85,41,5]] — 85-41-5</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[85,41,5]] by check deletion from 85-40-5</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_Z returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
+<h4>Construction</h4>
+<p>Parent: the board entry <code>codes/85-40-5.json</code>. Row 7 of H_Z is removed and every other check is untouched.</p>
+<h4>What was swept</h4>
+<p>All 480 single-row deletions of the board entries small enough to re-derive the distance cheaply, each re-measured for k, distance and Tanner connectivity. Deletions that dropped the distance too far, or disconnected the Tanner graph, were discarded. The survivors were then screened against the live board; this is one of the few still undominated.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search first. That search returns the minimum over both sides, so when one side is much lighter the other never surfaces even though the schema needs a witness for it. The missing side is then searched on its own in the quotient ker(H_opposite) / rowspace(H_own), by randomly permuting and reducing a kernel basis and keeping the lightest row that stays outside the row space.</p>
+<p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/85-41-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/85-42-5.html">[[85,42,5]] — 85-42-5</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[85,42,5]] by two-row check deletion from 85-40-5</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
+<h4>Whether the trade is worth taking</h4>
+<p>Usually not. Across 5,033 pair deletions of board entries, 12.5% kept a distance of 3 or more, against 40% for single-row deletion on the same parents. Dropping a second generator costs far more distance than the first. This code is one of the few where it lands undominated anyway, in a k + 2 region of its cell that nothing on the board covers.</p>
+<h4>Construction</h4>
+<p>Parent: <code>codes/85-40-5.json</code>. Rows [7, 11] of H_Z are removed; every other check is untouched. The pair is checked for independence (the rank must fall by exactly two) and the result for Tanner connectivity before anything else runs.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search, then the heavier side on its own in the quotient ker(H_opposite) / rowspace(H_own), since a two-sided search returns the minimum over both sides and never surfaces the heavier one. Deleting rows leaves H_X and H_Z with different shapes, so every witness is classified by the conditions it actually satisfies rather than by the search&#x27;s argument order.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/85-42-5.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/96-35-3.html">[[96,35,3]] — 96-35-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[96,35,3]] by check deletion from 96-34-4</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
@@ -986,6 +1307,18 @@ HX, HZ = build_open_directional(19, 19, Sf, Sg,
 <p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
 <h4>Boundary</h4>
 <p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/96-35-3.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/96-36-3.html">[[96,36,3]] — 96-36-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[96,36,3]] by check deletion from 96-35-3</h3>
+<h4>Hypothesis</h4>
+<p>Every stabiliser generator costs one logical qubit, so deleting a single row of H_X returns a code with k + 1 logical qubits on the same n physical qubits at a distance that can only fall or stay put. The submittable cases are the ones where the drop is small enough that the result still lands undominated.</p>
+<h4>Construction</h4>
+<p>Parent: the board entry <code>codes/96-35-3.json</code>. Row 12 of H_X is removed and every other check is untouched.</p>
+<h4>What was swept</h4>
+<p>All 480 single-row deletions of the board entries small enough to re-derive the distance cheaply, each re-measured for k, distance and Tanner connectivity. Deletions that dropped the distance too far, or disconnected the Tanner graph, were discarded. The survivors were then screened against the live board; this is one of the few still undominated.</p>
+<h4>Distance</h4>
+<p>Two-sided random information-set search first. That search returns the minimum over both sides, so when one side is much lighter the other never surfaces even though the schema needs a witness for it. The missing side is then searched on its own in the quotient ker(H_opposite) / rowspace(H_own), by randomly permuting and reducing a kernel basis and keeping the lightest row that stays outside the row space.</p>
+<p>Deleting a row also leaves H_X and H_Z with different shapes, so the argument order of a two-sided search stops being a reliable side label. Every witness here is classified by the conditions it actually satisfies rather than by which call produced it.</p>
+<h4>Boundary</h4>
+<p>Distance is an upper bound from witness search, not a proof. The parent&#x27;s own distance claim is inherited context, not re-derived. Literature novelty is unverified.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/96-36-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/96-37-3.html">[[96,37,3]] — 96-37-3</a></h3><div class=kv style="color:var(--mut)">2026-09-21 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[96,37,3]] by two-row check deletion from 96-35-3</h3>
 <h4>Hypothesis</h4>
 <p>Every stabiliser generator costs one logical qubit, so dropping two independent generators returns k + 2 on the same n physical qubits at a distance that can only fall.</p>
