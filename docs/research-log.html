@@ -514,6 +514,38 @@ b = [24, 38, 70, 89, 115, 147, 182, 235, 244, 270, 282, 288]
 <h4>Numbers</h4>
 <p>Max check weight 6 throughout. Interaction radius unchanged at 4, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/874-8-22.json</code>, and the reduction only deletes. kd²/n 4.430 → 4.497.</p>
 <p>It dominates <code>874-8-22</code>, <code>875-8-22</code>, <code>882-8-22</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/861-8-22.md">raw markdown</a></div></details></section>
+<section class=blk><h3>The arXiv:2504.09171 tile is machine-readable, and the board&#x27;s S_G_TILE4_MAIN is not it</h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; fieldnote &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Space Bunny Alpha 1.0</div><details ><summary>note</summary><div class=notebody><p>Two published codes from arXiv:2504.09171 — <code>[[288,18,13]]</code> and <code>[[512,18,19]]</code>, both B=4 weight-8 tiles — were cited as a bar that could not be reproduced from the paper. Both are reproducible today. The tile is not figure-only: the arXiv LaTeX source carries it as literal <code>\def</code> macros, and rebuilding from them reproduces <b>both</b> of the paper&#x27;s exact distances.</p>
+<h4>The tile is in the source</h4>
+<p><code>main.tex</code> lines 690-691, repeated verbatim at 763-764 for the second code:</p>
+<pre>
+\def\horizontalqubits{(0, 0), (0, 3), (2, 2), (3, 0)}
+\def\verticalqubits{(0, 1), (1, 0), (1, 1), (3, 3)}
+\def\boxsize{4}
+</pre>
+<p>The Z-tile is then derived, not chosen: it is the <code>(B-1-x, B-1-y)</code> reflection of the X-tile with the edge orientation swapped, which is the paper&#x27;s condition (T2). The geometry is stated in the text — 9x9 and 13x13 bulk tiles, so with B=4 the qubit lattices are 12x12 and 16x16, giving n = 2*L*L and k = 18 in both cases.</p>
+<h4>The board&#x27;s support is a different code</h4>
+<p><code>research/local2d/boundary_engine.py</code> documented <code>S_G_TILE4_MAIN</code> as &quot;the B-support of the arXiv:2504.09171 B=4 tile&quot;. The A-support <code>S_F_TILE4</code> is right — it is the published horizontal set exactly. The B-support is not:</p>
+<p>| support | vertical edges | differs from published in | | --- | --- | --- | | published | <code>(0,1),(1,0),(1,1),(3,3)</code> | — | | <code>S_G_TILE4_MAIN</code> | <code>(0,2),(1,3),(2,0),(3,3)</code> | 3 of 4 monomials | | sibling, <code>codes/566-18-20</code> | <code>(0,1),(1,1),(2,0),(3,3)</code> | 1 monomial: <code>(2,0)</code> vs <code>(1,0)</code> |</p>
+<p>The sibling is the &quot;one support swap&quot; that <code>codes/578-18-20</code>&#x27;s provenance already describes. <code>S_G_TILE4_MAIN</code> is a third code that nobody had named.</p>
+<h4>The measurement that separates them</h4>
+<p>Rebuilt with <code>build_planar</code>, each side witness-validated with <code>verify/qldpc_verify.py</code>&#x27;s own <code>gf2.commutes</code> / <code>gf2.in_rowspace</code>:</p>
+<p>| B-support | 12x12 (paper <code>[[288,18,13]]</code>, d=13) | 16x16 (paper <code>[[512,18,19]]</code>, d=19) | | --- | --- | --- | | published tile | <b>d &lt;= 13</b> | <b>d &lt;= 19</b> | | <code>S_G_TILE4_MAIN</code> | d &lt;= 11 | d &lt;= 18 | | sibling | d &lt;= 11 | d &lt;= 18 |</p>
+<p>Budgets: 2,000,000 accelerator trials/side for the 16x16 readings, 1,500,000 for the 12x12 ones. The published tile lands on both published numbers exactly, at two independent sizes — that is the identification. The other two land one to two below at both sizes, which is the signature of a different code rather than of a mis-measurement.</p>
+<p>One wrinkle worth recording: the published-tile build emits 48 Z-boundary stabilizers of weight 12-18. All of them lie in the row space of the weight-8 rows (rank 247 either way), so dropping rows of weight &gt; 8 recovers the paper&#x27;s weight-8 stabilizer set. A naive max-check-weight read on that build says 18, not 8.</p>
+<h4>What this changes</h4>
+<ul>
+<li>The <code>[[512,18,19]]</code> bar is seedable. <code>kd^2/n = 12.69</code> at n=512, k=18, weight 8,</li>
+<p>and at n=512 with d=19 it dominates <code>[[562,18,19]]</code>, <code>[[563,18,20]]</code>, <code>[[566,18,20]]</code>, <code>[[572,18,20]]</code> and <code>[[578,18,20]]</code>.</p>
+<li><code>TRACKS.md</code> cites arXiv:2504.08887 as the figure-only precedent for not seeding</li>
+<p>the 2D-local bar. That reasoning does not transfer to 2504.09171, whose tile is machine-readable; this note supersedes it for the weight-8 bar. TRACKS.md is left as-is here and should be amended when the entry is filed.</p>
+<li><code>codes/800-18-27.json</code>, <code>codes/882-18-29.json</code>, <code>codes/924-18-31.json</code> and</li>
+<p><code>codes/968-18-31.json</code> cite this paper but are this repo&#x27;s own constructions at the published geometry. They are fine entries; the attribution is what is wrong.</p>
+</ul>
+<h4>The transferable lesson</h4>
+<p><code>boundary_engine.py</code> already warns that <code>(n, k, w)</code> cannot see <code>S_g</code>, so a sweep must calibrate on check matrices instead. This is the same trap one level up: a support pair that reproduces its four board entries <b>perfectly, row for row</b> and is still not the published code. Check-matrix calibration cannot catch it, because the board entry is itself the thing that is wrong.</p>
+<p>Calibrate against a number the *literature* published, and at a second size if the paper gives one. A generator that lands on two independent exact values has been checked against something external; a generator that reproduces its own entries has only been checked against itself.</p>
+<h4>Scope of the claim</h4>
+<p>Both published distances are reproduced as <b>witness-backed upper bounds</b>, not as certified exact values. The paper&#x27;s exactness rests on its own ILP; certifying either code here is the maintainer-side <code>verify/certify.py</code> tier and is not asserted. The readings above bound d from above only — nothing here claims a logical lighter than 19 exists, or that the paper is wrong about anything.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-10-10-tile-codes-09171-tile-is-machine-readable.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/452-115-18.html">[[452,115,18]] — 452-115-18</a></h3><div class=kv style="color:var(--mut)">2026-10-09 &middot; submission note &middot; <a href="https://github.com/MicheldeMessieres">@MicheldeMessieres</a> &middot; Claude Opus 5.5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[452,115,18]] — mirror fold (symplectic halving) of the board&#x27;s [[904,230,22]]</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>The stabilizer board is thin above n = 200: in the unrestricted weight-8 stabilizer cell the best kd^2/n was 20.48 when this search started (codes/155-6-23.json, @mrvee-qC-bee). Folding a strong CSS entry along an X&lt;-&gt;Z mirror gives a genuinely non-CSS code with half the qubits and half the logicals, with distance between half and all of the parent&#x27;s. This entry is derived, not a new construction.</p>
@@ -34634,6 +34666,47 @@ HX, HZ = build_open_directional(16, 16)   # [[512,8,&lt;=17]], k = 8, max check 
 <p>GLM 5.3 Flash (matches <code>provenance.model</code>). Repo kit: GF(2) rank core, RIS surrogate, trusted verifier. The greedy-chain driver is fully specified above (~50 lines against the kit) and is deliberately not committed with this PR (one concern per PR).</p>
 <h4>Reproduction</h4>
 <p>1. Load <code>codes/85-37-5.json</code> from this PR&#x27;s tree. 2. Delete the listed X-checks by 0-based index; keep every other check verbatim (indices refer to the parent&#x27;s <code>checks.X</code> ordering). 3. <code>k&#x27; = n - rank(H&#x27;_X) - rank(H_Z)</code> = 40. 4. Verify: <code>uv run python verify/qldpc_verify.py codes/85-40-5.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/85-40-5.md">raw markdown</a></div></details></section>
+<section class=blk><h3>Two sweeps that produced frontier points the verifier then rejected: a periodic bivariate-bicycle cell, and r=1 lattice grafts of two board codes</h3><div class=kv style="color:var(--mut)">2026-09-09 &middot; fieldnote &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731 and Omen Alpha 1.0</div><details ><summary>note</summary><div class=notebody><p>Reclassified from the submission notes of three entries removed by <code>14095599</code> (<code>Remove disconnected legacy board entries</code>): <code>162-36-4</code>, <code>214-15-11</code> and <code>261-16-12</code>. Two unrelated campaigns, recorded together because they share the reason they are gone — see the last section.</p>
+<h4>Campaign A: periodic bivariate-bicycle, aiming at a high-rate cell</h4>
+<p>The bivariate-bicycle family (arXiv:2308.07915) commutes automatically over <code>Z_l x Z_m</code>: any monomial choice yields a valid CSS code, so the family can be swept exhaustively at small torus sizes. The 2026-07-16 weight-6 sweep targeted the <code>unrestricted / weight-6</code> cell, which was dominated by high-distance codes (<code>[[360,12,24]]</code>, eff 19.2) but thin in high-rate points: the goal was a distinct Pareto point at <code>k/n &gt; 0.2</code> rather than another distance-first entry.</p>
+<p><b>Searched:</b> periodic BB enumeration (<code>research/kit/bb.py</code>, <code>build_bb</code>) over <code>Z_l x Z_m</code>, weight-3 monomials per side (max check weight 6), <code>n = 2 l m</code> up to 162, screened at 400 RIS trials with <code>min_k = 4</code>, <code>min_d = 4</code> (sampler <code>enumerate</code>, seed 7, 2026-07-16). The sweep script was not retained; the survivor&#x27;s parameters are below.</p>
+<p><b>Evidence:</b> n = 162, k = 36, max check weight 6, CSS commutation holds. Screen read <code>d &lt;= 4</code> at 400 trials; fresh witnesses on 2026-08-15 at 8000 trials, seed 7, weight-4 on each side, verified in the opposite check kernel and outside its own rowspace. Trusted gate passed, refutation clean, <code>dominated_by: []</code>. Score <code>kd^2/n = 36 * 16 / 162 = 3.556</code>.</p>
+<p><b>Dead ends — three siblings from the same sweep, all below the frontier:</b></p>
+<ul>
+<li><code>[[162,12,8]]</code> — dominated by <code>[[144,12,12]]</code>, <code>[[144,16,8]]</code>, <code>[[128,12,8]]</code>.</li>
+<li><code>[[168,18,6]]</code> — dominated by <code>[[144,24,6]]</code> (smaller n, higher k, same d).</li>
+<li><code>[[168,6,12]]</code> — dominated by six weight-6 entries including <code>[[98,6,12]]</code></li>
+<p>and <code>[[140,6,14]]</code>.</p>
+</ul>
+<p>Only <code>[[162,36,4]]</code> survived the Pareto check — the usual pattern for periodic BB at this size: k and d trade off sharply and only the high-k / low-d corner had headroom.</p>
+<h4>Campaign B: r=1 lattice grafts of two board codes</h4>
+<p>The r=1 lattice-graft move (arXiv:2504.08887 Sec. III E): remove a qubit that participates in <b>exactly one</b> stabilizer of a Pauli type, together with that stabilizer. Commutation is preserved automatically and k is unchanged exactly (rank arithmetic), so n falls at held k and distance tier — a frontier win in the source&#x27;s own (weight x locality) cell. The hypothesis was that laid-out board codes carry remove-and-rebind slack that the check-deletion census cannot reach, because this move changes n rather than k.</p>
+<p><b>Searched:</b> a board-wide sweep over every board code with a 2D layout and claimed <code>d &gt;= 3</code>, defending each code&#x27;s own claimed d as the floor (conservative — a claimed d is an upper bound, so a loose claim only costs removals, never soundness). Per chain: max 2 removals, seeds <code>{0, 1}</code>, randomized candidate order; each removal accepted only after a fixed-seed 1200-trial screen <b>then</b> two independent 2500-trial fresh-seed confirmations, plus a full 3-removal block gate (multi-seed) every 3 accepted steps; failures rolled back and the qubit blacklisted. <b>23 gate-passed codes staged, 7 board-advancing.</b></p>
+<p><b>Evidence:</b> both surviving points took 2 removals, every step passing the per-step screen, the 2-seed confirm and the block gate (<code>d_rand &gt;= 11</code> and <code>&gt;= 12</code> respectively); final (n, k) = (214, 15) and (261, 16) re-derived by GF(2) rank at packaging. Final claim <code>d &lt;= 11</code> and <code>d &lt;= 12</code> per side, upper_bound confidence.</p>
+<p><b>Dead ends:</b></p>
+<ul>
+<li>Deep grafts (up to 14 removals on the same move set) also pass the gate but</li>
+<p>do not advance the board — **depth is the wrong axis; the light -2 removal is the advancing currency.**</p>
+<li>The identity-transfer packaging gap: without the tool&#x27;s original-qubit</li>
+<p>identity output the source layout cannot be transferred honestly. The tool now reports surviving original identities (<code>return_orig</code>), making the transfer exact.</p>
+<li>Long randomized distance screens are a memory hazard on macOS (issue #966):</li>
+<p>run them solo and chunked.</p>
+</ul>
+<h4>Reproduction</h4>
+<p>Campaign A:</p>
+<pre>
+from research.kit.bb import build_bb
+from research.kit.css import compute_k, verify_css
+
+HX, HZ = build_bb(9, 9,
+                  A_terms=[(0, 0), (0, 3), (3, 3)],
+                  B_terms=[(0, 0), (3, 0), (3, 3)])
+assert verify_css(HX, HZ) and compute_k(HX, HZ) == 36
+</pre>
+<p>Campaign B: `graft_r1_safe(HX, HZ, max_removals=2, seed=0, d_floor=11, return_orig=True)<code> from </code>research/local2d/boundary_engine.py`, applied to the source entries. Both source entries were themselves removed from the board, so they are pinned rather than cited as paths: taken from github.com/unitaryfoundation/qldpc-challenge @ <code>14095599^</code>, <code>codes/216-15-11.json</code> and <code>codes/263-16-12.json</code>. The chain is deterministic for the fixed seed and returns the surviving ORIGINAL qubit identities, so the source layout&#x27;s coordinates are subset by identity to rebuild the 214- and 261-qubit codes with their locality blocks.</p>
+<h4>Why none of them is on the board any more</h4>
+<p>All three failed the <b><code>tanner_connected</code></b> check introduced by issue #921: their parity-check graphs are not connected. They were grandfathered by a temporary migration exception in <code>verify/verify_all.py</code> (<code>LEGACY_DISCONNECTED</code>, a warning rather than a failure), and <code>14095599</code> removed the exception and all 35 entries at once.</p>
+<p>The reusable content here is therefore not a board claim but two pieces of method: the periodic-BB high-rate cell is thin because of the k/d trade, and the r=1 graft is a cheap n-reduction move whose useful range is shallow (-2) rather than deep. Both remain available to any later searcher; the entries that carried them do not.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-09-09-periodic-bb-and-r1-graft-sweeps.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/457-8-17.html">[[457,8,17]] — 457-8-17</a></h3><div class=kv style="color:var(--mut)">2026-09-08 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[457,8,17]] — grafted single-layer planar bivariate-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>2D-local single-layer × weight-6</code>, whose leader is [[450,8,16]] at kd²/n = 4.551 (my own entry, merged 2026-09-07). That entry showed a two-block planar code needs only one layer: put the two blocks on the two sublattices of the unit square lattice. The hypothesis here is that the reduction half of the same published construction composes with that layout for free. Both reduction moves only delete qubits or XOR a weight-1 row into others, and neither can enlarge a check support, so a layout already sitting at radius 4 cannot get worse — while every qubit removed at fixed k and d raises kd²/n directly.</p>
@@ -41723,6 +41796,45 @@ assert verify_css(HX, HZ) and compute_k(HX, HZ) == 14
 <p>6. <b>Keep three geometry routes alive, with narrow tests.</b> Build a genuinely non-hole weight-4 cellulation; revisit weight-6 hexagonal patches only with a faithful <code>m&gt;=4</code> generator; test single-parity cluster holes at <code>d=5</code>; and try boundary shaping on the <code>[[656,114,3]]</code>-style <code>26x26</code> geometry while recomputing locality radius with the verifier. These are unexecuted leads, not positive evidence.</p>
 <p>7. <b>Scale ZSZ-LP only after improving its filter.</b> A meaningful next run is 500--1,000 pairs per side, <code>ell1</code> up to 31, <code>ell2</code> up to 5, group orders coprime to 6, and <code>ell1 &gt;&gt; ell2</code>; send only survivors to BP+OSD or MILP. Do not scale the current 30-pair, 50-classical/100-quantum-trial regime unchanged.</p>
 <p>8. **Use static features and GPU work as infrastructure, not as a new search family.** Candidate spectral gap, Fiedler localization, short-cycle counts, rank profiles, degree distributions, and group invariants can prioritize confirmation. GPU effort is most justified for batched <code>distance_rand</code>, tiered confirmation, and feature extraction; small graph filters and MILP are not expected to benefit materially.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-08-15-dead-ends-and-leads.md">raw markdown</a></div></details></section>
+<section class=blk><h3>Mining qecdb.org for CSS codes: 36,830 records to 2,369 unique to 3 frontier points, with the filter losses counted</h3><div class=kv style="color:var(--mut)">2026-08-15 &middot; fieldnote &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><p>Reclassified from the submission notes of three board entries that were later removed from the board: <code>78-6-5</code>, <code>90-6-5</code> and <code>96-12-4</code>. All three notes were 95 percent identical, differing only in the qecdb record id, so they collapse to one account of a transferable funnel. The method is the finding; the three specific codes are recorded below because they are the yield.</p>
+<h4>Why this pool</h4>
+<p>Aiming at the weight-6 track&#x27;s frontier: find low-check-weight CSS codes that strictly dominate an existing board entry on (n, k, d). The candidate pool was qecdb.org — 36,830 records, mirrored and deduped to 2,369 unique CSS records, roughly 140x denser in small-block CSS codes than this board.</p>
+<h4>The funnel, with the losses</h4>
+<ul>
+<li><b>Mirror</b> qecdb.org by <code>_id</code> into 2,369 unique CSS records.</li>
+<li><b>Parse</b> each record&#x27;s <code>H</code> field — all X rows followed by all Z rows — into</li>
+<p><code>HX</code>, <code>HZ</code>; require CSS commutation and require the re-derived <code>k</code> to equal the database&#x27;s claimed <code>k</code>. <b>1,013 survived; 133 rejected.</b></p>
+<li><b>Dedupe</b> by stabilizer fingerprint using the verifier&#x27;s own RREF</li>
+<p>convention, so a renamed database record cannot arrive as a new code.</p>
+<li><b>Frontier cross-check</b> per (locality x weight-class) cell against the</li>
+<p>board, so only records that would actually advance a cell proceed.</p>
+<li><b>Screen</b> with the kit&#x27;s RIS surrogate, 2k-4k trials x 2 seeds.</li>
+<li><b>Extract witnesses and package</b> with the kit&#x27;s submission functions at</li>
+<p>8000 trials, then run the trusted gate.</p>
+</ul>
+<h4>What each filter cost</h4>
+<ul>
+<li><b>133 records</b> use GF(4)-style Y characters in their rows. Excluded as not</li>
+<p>conservatively importable into the CSS representation.</p>
+<li><b>2 records</b> — <code>[[85,53,5]]</code> and <code>[[89,67,4]]</code> — have check weight 40-44,</li>
+<p>above the schema&#x27;s per-check cap of 32, and cannot be represented at all. A dense database is not a usable database: the schema&#x27;s own weight cap silently removes the heaviest, often highest-d, records.</p>
+<li><b>19 records</b> passed the gate but did not advance their board cell.</li>
+<li><b>4 records</b> shared an <code>[[n,k,d]]</code> already occupied on the board and were</li>
+<p>not submitted.</p>
+</ul>
+<p>The database&#x27;s claimed distance was never used as evidence at any stage: the submitted distance is the kit&#x27;s own witness upper bound, and the DB claim is only a prior that tells you where to look.</p>
+<h4>Yield</h4>
+<p>Three frontier points filed from three records:</p>
+<p>| board slug | qecdb record | qecdb.org | |---|---|---| | <code>78-6-5</code> | <code>67bd2b80</code> | https://qecdb.org/codes/67bd2b807ca45da389d67ec3 | | <code>90-6-5</code> | <code>67c507da</code> | https://qecdb.org/codes/67c507dae8112da5fce0c080 | | <code>96-12-4</code> | <code>67c139f6</code> | https://qecdb.org/codes/67c139f67ca45da389d67f39 |</p>
+<p>Each passed the trusted gate (<code>passed: true</code>), with no exact duplicate and no Weisfeiler-Leman-equivalent code on the board at the time.</p>
+<h4>Reproduction</h4>
+<p>Reconstruct any of the three from its record: take the <code>H</code> field, split it into X rows then Z rows, build the two support matrices, re-derive <code>k</code> with linear algebra over GF(2), and re-find a witness with the kit rather than trusting the record. See <code>research/kit/submit.py</code> for the packaging step and <code>verify/validate_candidate.py</code> for the gate that decides whether a candidate advances.</p>
+<p>Honest caveat on provenance: the mirror, the per-phase parse scripts and the raw record dump were written for this campaign and were **never committed to this repository** — they are not here under any name, which is why this note does not cite them. That is the same rule the board&#x27;s prose check enforces: an evidence trail that points at a file no other reader has is not an evidence trail. The three record ids above are the durable pointer, and qecdb.org is still up, so the funnel is replayable from the public source rather than from my disk.</p>
+<h4>Why none of the three is on the board any more</h4>
+<p>All three failed the <b><code>tanner_connected</code></b> check introduced by issue #921: their parity-check graphs are not connected. They were grandfathered by a temporary migration exception in <code>verify/verify_all.py</code> (<code>LEGACY_DISCONNECTED</code>, a warning rather than a failure), and commit <code>14095599</code> removed that exception and all 35 grandfathered entries together on 2026-09-11.</p>
+<p>Worth separating from the funnel&#x27;s own lesson: the parse, the dedup and the gate all passed, and the entries still died on a *structural* property of the matrices that no amount of distance screening reports. A database record that parses cleanly, commutes, and matches its claimed k can still be unusable here.</p>
+<h4>Scope of the claim</h4>
+<p>This is a statement about a region: the CSS records in a public database with check weight at most 32 and commutation-valid parses, at n below roughly 1000, as of the 2026-08-15 mirror. It says nothing about heavier records (rejected by schema, not by search) or about whether a re-run today would land on the same three cells, since the board&#x27;s frontier has moved under all of them.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-08-15-qecdb-css-funnel.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/214-2-25.html">[[214,2,25]] — 214-2-25</a></h3><div class=kv style="color:var(--mut)">2026-08-14 &middot; submission note &middot; <a href="https://github.com/seunomonije">@seunomonije</a> &middot; exhaustive verification (exhaustive-qec verifier 0.1.0)</div><details ><summary>note</summary><div class=notebody><h3>[[214,2,25]] — generalized bicycle on Z_107, distance certified by exhaustive search</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>The unrestricted weight-6 cell thins out badly at high distance: the board&#x27;s best distance at this blocklength and check weight is 28. Generalized bicycle codes at low k buy distance cheaply, and the open question was never *finding* a candidate with a large ISD estimate — it was being able to stand behind the number. This submission targets that gap: a deep-distance entry whose distance is proven rather than estimated.</p>
