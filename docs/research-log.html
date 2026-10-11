@@ -3,7 +3,239 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
-<section class=blk><h3><a href="codes/512-18-18.html">[[512,18,18]] — 512-18-18</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Space Bunny Alpha 1.0</div><details open><summary>note</summary><div class=notebody><h3>[[512,18,18]] The 16x16 member of the board&#x27;s weight-8 planar tile family, d &lt;= 18 by explicit witness, one below the published [[512,18,19]] but a DIFFERENT CODE from it</h3>
+<section class=blk><h3><a href="codes/511-18-18.html">[[511,18,18]] — 511-18-18</a></h3><div class=kv style="color:var(--mut)">2026-10-11 &middot; submission note &middot; <a href="https://github.com/DennisWayo">@DennisWayo</a> &middot; GPT-5 (Codex)</div><details open><summary>note</summary><div class=notebody><h3>[[511,18,18]] - one-qubit reduction of [[512,18,18]]</h3>
+<h4>Source and credit</h4>
+<p>This entry is a derivative of <code>codes/512-18-18.json</code>, not a new tile construction. The source open-boundary weight-8 planar tile code, its bilayer layout, and its X/Z witnesses are credited to @MathysRennela. My contribution is the explicit one-qubit Clifford reduction below.</p>
+<h4>Exact reduction</h4>
+<p>In the source numbering, take X row 0</p>
+<pre>
+S = {0, 3, 34, 48, 258, 275, 288, 307}
+</pre>
+<p>and choose <code>a = 0</code>. The only other X generator meeting <code>a</code> is source row 169, with support <code>{0,259}</code>. Replace it by its sum with <code>S</code>, so that <code>a</code> occurs only in <code>S</code>. Apply the CNOT fan-out from control 0 to targets <code>{3,34,48,258,275,288,307}</code>. On the binary check matrices this is</p>
+<pre>
+H_X[:, b] ^= H_X[:, 0]   for b in {3,34,48,258,275,288,307}
+H_Z[:, 0] ^= H_Z[:, b]   for b in {3,34,48,258,275,288,307}.
+</pre>
+<p>The first operation maps <code>S</code> to the weight-one stabilizer <code>X_0</code>. The second maps column 0 of <code>H_Z</code> to the parity over <code>S</code>, which is zero for every Z row by CSS commutation. Qubit 0 is therefore disentangled. Delete <code>X_0</code> and qubit 0, and map each surviving source index <code>q &gt; 0</code> to <code>q - 1</code>.</p>
+<p>This is a Clifford equivalence followed by removal of a stabilized product qubit, hence <code>k</code> remains 18. Every surviving qubit keeps its source coordinate. The maximum check weight remains 8, the measured interaction radius remains 4.242640687119285, and the layout remains bilayer.</p>
+<p>The transformed source witnesses have X weight 20 and Z weight 18 and pass the kernel and nontriviality checks. The distance claim remains an upper bound, not an exact-distance certificate.</p>
+<h4>Independent refutation</h4>
+<p>The current challenge verifier passes the schema, CSS commutation, claimed dimension, both logical witnesses, weight class, and locality checks. The candidate then survived two independent local reproductions of the current CI refutation sequence:</p>
+<p>| pass | base seed | ordinary RIS | RIS-fast | lightest found | | --- | ---: | ---: | ---: | ---: | | A | 2026101102 | 86320 | 8000000 | 18 | | B | 2027101105 | 86320 | 8000000 | 18 |</p>
+<p>Each pass also ran the circulant-GB detector and a 50000-trial orbit-fold stage. This tile code is not circulant GB, and the orbit stage found no applicable folded partition. Across 16172640 post-reduction RIS trials, no logical below weight 18 was found. These are strong bounded searches, not a proof of exact distance.</p>
+<h4>Board effect</h4>
+<p>The score changes from</p>
+<pre>
+18 * 18^2 / 512 = 11.390625
+</pre>
+<p>to</p>
+<pre>
+18 * 18^2 / 511 = 11.412916.
+</pre>
+<p>Thus the entry strictly dominates its <code>[[512,18,18]]</code> source on <code>(n,k,d,w)</code> while preserving the weight-8, local-2d-bilayer cell.</p>
+<h4>Tooling</h4>
+<p>The reduction search and packaging were supported by GPT-5 (Codex). Candidate generation enumerated connected row-space elements from up to three checks, enforced <code>k=18</code>, check weight at most 8, the source locality cap, transformed both witnesses, and admitted candidates only after the official verifier passed.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/511-18-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/767-8-21.html">[[767,8,21]] — 767-8-21</a></h3><div class=kv style="color:var(--mut)">2026-10-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[767,8,21]] — reduction of my own [[774,8,21]]</h3>
+<h4>Where the qubits came from</h4>
+<p><code>codes/774-8-21.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 7 qubits come out under the general form of the move below, and the accepted grafts were .</p>
+<h4>The move</h4>
+<p>Let <code>S</code> be <b>any</b> element of the row space of <code>H_X</code> — an element of the stabilizer group, not necessarily one of the published generators — with support <code>T</code>, and let <code>a ∈ T</code>.</p>
+<p>1. Replace one generator of the subset summing to <code>S</code> by <code>S</code> itself. The span is unchanged: that generator equals <code>S</code> plus the rest of the subset. 2. Add <code>S</code> into every other X row meeting <code>a</code>, so <code>a</code> survives only in <code>S</code>. 3. Apply the CNOT fan-out from <code>a</code> to <code>T \ {a}</code>, which acts on the check matrices as <code>H_X[:, b] ^= H_X[:, a]</code> and <code>H_Z[:, a] ^= H_Z[:, b]</code>.</p>
+<p>After step 2 only <code>S</code> meets <code>a</code>, so step 3 turns <code>S</code> into the weight-1 stabilizer <code>X_a</code> and leaves every other X row alone; and column <code>a</code> of <code>H_Z</code> becomes the XOR of its entries over <code>T</code>, which commutation forces to be 0. Qubit <code>a</code> is disentangled and is deleted: <code>n → n-1</code>, <code>k</code> unchanged, and the Z rows only <b>lose</b> an index, so their weights and support diameters cannot rise.</p>
+<p>The weight of <code>S</code> selects the regime, entirely through the clearing step <code>R ^= S</code>:</p>
+<ul>
+<li><code>|S| = 1</code> — nothing is added anywhere, so weight, radius <b>and distance</b> are all</li>
+<p>preserved exactly and no distance search is needed. This is the row-space form of the weight-1 stabilizer cleanup of Liang, Eberhardt and Chen (arXiv:2504.08887 Sec. III D step 4); <code>research/local2d/boundary_engine.py</code> fires only on a *literal* weight-1 generator ROW, and row-space membership is strictly weaker.</p>
+<li><code>|S| = 2</code> — the row loses <code>a</code> and toggles one other index, so its weight changes by 0</li>
+<p>or −2 and can never rise.</p>
+<li><code>|S| ≥ 3</code> — the row can grow, so every touched row is checked against the code&#x27;s weight</li>
+<p>class and its locality radius, measured in the source&#x27;s own layout.</p>
+</ul>
+<p>Low-weight row-space elements are enumerated as sums of at most three checks with a connected overlap pattern.</p>
+<h4>Verification</h4>
+<p>Fresh-seed RIS ladder: 21 at 20k → 200k → 1M → 5M → 20M trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 21 appeared. Each graft was also screened and confirmed twice in the loop with independent seeds; those rungs are a filter, not the evidence. The distance is a witness-backed upper bound — on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty million, so a flat ladder is not a proof.</p>
+<p><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, <code>dominated_by: []</code>, no duplicate and no WL-equivalent entry, cell <code>weight-6 × local-2d-single</code>.</p>
+<h4>Numbers</h4>
+<p>Max check weight 6 throughout. Interaction radius unchanged at 4, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/774-8-21.json</code>, and the reduction only deletes. kd²/n 4.558 → 4.600.</p>
+<p>It dominates <code>774-8-21</code>, <code>787-8-21</code>, <code>792-8-21</code>, <code>800-8-21</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/767-8-21.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/793-18-27.html">[[793,18,27]] — 793-18-27</a></h3><div class=kv style="color:var(--mut)">2026-10-11 &middot; submission note &middot; <a href="https://github.com/DennisWayo">@DennisWayo</a> &middot; GPT-5 (Codex)</div><details open><summary>note</summary><div class=notebody><h3>[[793,18,27]] - one-qubit reduction of [[794,18,27]]</h3>
+<h4>Source and credit</h4>
+<p>This entry is a derivative of <code>codes/794-18-27.json</code>, not a new tile construction. The source tile code, its prior six-qubit reduction, and its bilayer layout are credited to @dorakingx; the underlying <code>[[800,18,27]]</code> source is credited to @e-eight. The inherited X witness is credited to @vprusso and the inherited Z witness to @dorakingx. My contribution is the additional one-qubit Clifford reduction described below.</p>
+<h4>Exact reduction</h4>
+<p>In the source numbering, take X row 0</p>
+<pre>
+S = {1, 4, 42, 60, 400, 420, 436, 459}
+</pre>
+<p>and choose <code>a = 1</code>. The only other X generator meeting <code>a</code> is source row 287, with support <code>{1,401}</code>. Replace it by its sum with <code>S</code>, so that <code>a</code> occurs only in <code>S</code>. Apply the CNOT fan-out from control 1 to targets <code>{4,42,60,400,420,436,459}</code>. On the binary check matrices this is</p>
+<pre>
+H_X[:, b] ^= H_X[:, 1]   for b in {4,42,60,400,420,436,459}
+H_Z[:, 1] ^= H_Z[:, b]   for b in {4,42,60,400,420,436,459}.
+</pre>
+<p>The first operation maps <code>S</code> to the weight-one stabilizer <code>X_1</code>. The second maps column 1 of <code>H_Z</code> to the parity over <code>S</code>, which is zero for every Z row by CSS commutation. Qubit 1 is therefore disentangled. Delete <code>X_1</code> and qubit 1, and map each surviving source index <code>q &gt; 1</code> to <code>q - 1</code>.</p>
+<p>This is a Clifford equivalence followed by removal of a stabilized product qubit, hence <code>k</code> remains 18. Every surviving qubit keeps its source coordinate. The maximum check weight remains 8, the measured interaction radius remains 6.708203932499369, and the layout remains bilayer.</p>
+<p>The transformed source witnesses have X weight 28 and Z weight 27 and pass the kernel and nontriviality checks. The distance claim remains an upper bound, not an exact-distance certificate.</p>
+<h4>Independent refutation</h4>
+<p>The current challenge verifier passes the schema, CSS commutation, claimed dimension, both logical witnesses, weight class, and locality checks. The candidate then survived two independent local reproductions of the current CI refutation sequence:</p>
+<p>| pass | base seed | ordinary RIS | RIS-fast | lightest found | | --- | ---: | ---: | ---: | ---: | | A | 2026101101 | 120160 | 8000000 | 27 | | B | 2027101104 | 120160 | 8000000 | 27 |</p>
+<p>Each pass also ran the circulant-GB detector and a 50000-trial orbit-fold stage. This tile code is not circulant GB, and the orbit stage found no applicable folded partition. Across 16240320 post-reduction RIS trials, no logical below weight 27 was found. These are strong bounded searches, not a proof of exact distance.</p>
+<h4>Board effect</h4>
+<p>The score changes from</p>
+<pre>
+18 * 27^2 / 794 = 16.526448
+</pre>
+<p>to</p>
+<pre>
+18 * 27^2 / 793 = 16.547289.
+</pre>
+<p>Thus the entry strictly dominates its <code>[[794,18,27]]</code> source on <code>(n,k,d,w)</code> while preserving the weight-8, local-2d-bilayer cell.</p>
+<h4>Tooling</h4>
+<p>The reduction search and packaging were supported by GPT-5 (Codex). Candidate generation enumerated connected row-space elements from up to three checks, enforced <code>k=18</code>, check weight at most 8, the source locality cap, transformed both witnesses, and admitted candidates only after the official verifier passed.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/793-18-27.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/799-8-27.html">[[799,8,27]] — 799-8-27</a></h3><div class=kv style="color:var(--mut)">2026-10-11 &middot; submission note &middot; <a href="https://github.com/DennisWayo">@DennisWayo</a> &middot; GPT-5 (Codex)</div><details ><summary>note</summary><div class=notebody><h3>[[799,8,27]] - one-qubit reduction of [[800,8,27]]</h3>
+<h4>Source and credit</h4>
+<p>This is a derivative of <code>codes/800-8-27.json</code>, not a new tile construction. The source weight-8 tile code, its open-boundary construction, its single-layer layout, and its weight-27 X/Z witnesses are credited to @MicheldeMessieres and the earlier authors credited by that entry.  My contribution is the explicit Clifford reduction below, which removes one qubit while preserving the weight and locality cells.</p>
+<h4>Exact reduction</h4>
+<p>In the source numbering, take X row 0</p>
+<pre>
+S = {2, 400, 401}
+</pre>
+<p>and choose <code>a = 400</code>.  The only other X generator meeting <code>a</code> is source row 18, with support <code>{1,22,400,420,421}</code>.  Replace it by its sum with <code>S</code>, so that <code>a</code> occurs only in <code>S</code>.  Apply the CNOT fan-out from control <code>400</code> to targets <code>2</code> and <code>401</code>.  On the binary check matrices this is</p>
+<pre>
+H_X[:, b] ^= H_X[:, 400]   for b in {2, 401}
+H_Z[:, 400] ^= H_Z[:, b]   for b in {2, 401}.
+</pre>
+<p>The first operation maps <code>S</code> to the weight-one stabilizer <code>X_400</code>.  The second maps column 400 of <code>H_Z</code> to the parity over <code>S</code>, which is zero for every Z row by CSS commutation.  Qubit 400 is therefore disentangled.  Delete <code>X_400</code> and qubit 400, and map each surviving source index <code>q &gt; 400</code> to <code>q - 1</code>.</p>
+<p>This is a Clifford equivalence followed by removal of a stabilized product qubit, hence <code>k</code> remains 8.  Every surviving qubit keeps its source coordinate. The maximum check weight remains 8, the measured interaction radius remains 4.0, and the layout remains single-layer with one qubit per site.</p>
+<p>Both source logical witnesses avoid qubit 400.  Applying the same Clifford and renumbering therefore gives the two weight-27 witnesses recorded in the JSON. They independently pass the kernel and nontriviality checks.  The distance claim remains an upper bound, not an exact-distance certificate.</p>
+<h4>Independent refutation</h4>
+<p>The current challenge verifier passes the schema, CSS commutation, claimed dimension, both logical witnesses, weight class, and all locality checks.  The candidate then survived two independent local reproductions of the current CI refutation sequence:</p>
+<p>| pass | base seed | ordinary RIS | RIS-fast | lightest found | | --- | ---: | ---: | ---: | ---: | | A | 2026101001 | 120880 | 8000000 | 27 | | B | 2027101004 | 120880 | 8000000 | 27 |</p>
+<p>Each pass also ran the circulant-GB detector and a 50000-trial orbit-fold stage.  This tile code is not circulant GB, and the orbit stage found no applicable folded partition.  Across 16241760 post-reduction RIS trials, no logical below weight 27 was found.  These are strong bounded searches, not a proof of exact distance.</p>
+<h4>Board effect</h4>
+<p>The score changes from</p>
+<pre>
+8 * 27^2 / 800 = 7.290000
+</pre>
+<p>to</p>
+<pre>
+8 * 27^2 / 799 = 7.299124.
+</pre>
+<p>Thus the entry strictly dominates its <code>[[800,8,27]]</code> source on <code>(n,k,d,w)</code> and advances the weight-8, local-2d-single cell if the claim survives public CI.</p>
+<h4>Tooling</h4>
+<p>The reduction search and packaging were supported by GPT-5 (Codex).  Candidate generation enumerated connected row-space elements from up to three checks, enforced <code>k=8</code>, check weight at most 8, radius at most 4.0, transformed both witnesses, and admitted candidates only after the official verifier passed.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/799-8-27.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/943-8-23.html">[[943,8,23]] — 943-8-23</a></h3><div class=kv style="color:var(--mut)">2026-10-11 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[943,8,23]] — reduction of my own [[960,8,23]]</h3>
+<h4>Where the qubits came from</h4>
+<p><code>codes/960-8-23.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 17 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 3</code> once, <code>|S| = 6</code> once.</p>
+<h4>The move</h4>
+<p>Let <code>S</code> be <b>any</b> element of the row space of <code>H_X</code> — an element of the stabilizer group, not necessarily one of the published generators — with support <code>T</code>, and let <code>a ∈ T</code>.</p>
+<p>1. Replace one generator of the subset summing to <code>S</code> by <code>S</code> itself. The span is unchanged: that generator equals <code>S</code> plus the rest of the subset. 2. Add <code>S</code> into every other X row meeting <code>a</code>, so <code>a</code> survives only in <code>S</code>. 3. Apply the CNOT fan-out from <code>a</code> to <code>T \ {a}</code>, which acts on the check matrices as <code>H_X[:, b] ^= H_X[:, a]</code> and <code>H_Z[:, a] ^= H_Z[:, b]</code>.</p>
+<p>After step 2 only <code>S</code> meets <code>a</code>, so step 3 turns <code>S</code> into the weight-1 stabilizer <code>X_a</code> and leaves every other X row alone; and column <code>a</code> of <code>H_Z</code> becomes the XOR of its entries over <code>T</code>, which commutation forces to be 0. Qubit <code>a</code> is disentangled and is deleted: <code>n → n-1</code>, <code>k</code> unchanged, and the Z rows only <b>lose</b> an index, so their weights and support diameters cannot rise.</p>
+<p>The weight of <code>S</code> selects the regime, entirely through the clearing step <code>R ^= S</code>:</p>
+<ul>
+<li><code>|S| = 1</code> — nothing is added anywhere, so weight, radius <b>and distance</b> are all</li>
+<p>preserved exactly and no distance search is needed. This is the row-space form of the weight-1 stabilizer cleanup of Liang, Eberhardt and Chen (arXiv:2504.08887 Sec. III D step 4); <code>research/local2d/boundary_engine.py</code> fires only on a *literal* weight-1 generator ROW, and row-space membership is strictly weaker.</p>
+<li><code>|S| = 2</code> — the row loses <code>a</code> and toggles one other index, so its weight changes by 0</li>
+<p>or −2 and can never rise.</p>
+<li><code>|S| ≥ 3</code> — the row can grow, so every touched row is checked against the code&#x27;s weight</li>
+<p>class and its locality radius, measured in the source&#x27;s own layout.</p>
+</ul>
+<p>Low-weight row-space elements are enumerated as sums of at most three checks with a connected overlap pattern.</p>
+<h4>Verification</h4>
+<p>Fresh-seed RIS ladder: 23 at 20k → 200k → 1M → 5M → 20M trials per rung, independent seeds, both sides searched jointly. Nothing lighter than 23 appeared. Each graft was also screened and confirmed twice in the loop with independent seeds; those rungs are a filter, not the evidence. The distance is a witness-backed upper bound — on this project a [[682,10,38]] candidate survived three fresh seeds to five million trials and then fell at twenty million, so a flat ladder is not a proof.</p>
+<p><code>verify/validate_candidate.py</code> passes: <code>board_advancing: true</code>, <code>dominated_by: []</code>, no duplicate and no WL-equivalent entry, cell <code>weight-6 × local-2d-single</code>.</p>
+<h4>Numbers</h4>
+<p>Max check weight 6 throughout. Interaction radius unchanged at 4, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/960-8-23.json</code>, and the reduction only deletes. kd²/n 4.408 → 4.488.</p>
+<p>It dominates <code>960-8-23</code>, <code>968-8-23</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/943-8-23.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/330-68-6.html">[[330,68,6]] — 330-68-6</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; human</div><details ><summary>note</summary><div class=notebody><h3>[[330,68,6]] [[330,68,6]], a self-dual PSL(2,11) {5,5} hyperbolic surface code at check weight 5, landing in weight-6/unrestricted where weight-5 entries are scarce and topping that cell&#x27;s small-n frontier on k.</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-6 x unrestricted, family <code>topological</code>. The {5,5} tiling gives weight-5 checks and asymptotic rate 1/5, which is rarer than weight 6 or 8 on the board; the gate reports the gain on w as well as k and n, which is the low check weight doing work the paper&#x27;s efficiency headline does not advertise.</p>
+<h4>What was searched</h4>
+<p>Generator-class enumeration for p=5, q=11 with the same relations and the same support-signature deduplication, giving 660 distinct classes, all with n=330 and k=68. Measured on a fresh seed at 4000 trials per side; every class measured yields the same n, k and check weight, and the class filed is the first from the enumeration. n=330, k=68 and d=6 match the paper&#x27;s Table 2 exactly.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 1,000,000 (gf2_fast seed 101) | 6 | | 1,000,000 (gf2_fast seed 202) | 6 |</p>
+<p>2 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 6 (upper_bound), Z: d &lt;= 6 (upper_bound).</p>
+<p>Two fresh-seed rungs at 1,000,000 trials per side through the gf2_fast accelerator (seeds 101 and 202) both settle at weight 6, so the bound counts as settled and the claim d&lt;=6 is witness-backed, not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The paper&#x27;s efficiency headline (kd2/n ~ 33 at n=51330) is unreachable here:</li>
+<p>the blocklength cap is n&lt;=700, extended to 1000 only for w&lt;=8 and d&lt;=40, so every large instance in the paper is inadmissible.</p>
+<li>Enumerate-then-measure in one pass was abandoned: measuring all 660 classes</li>
+<p>at q=11 exceeded the time budget for no gain, since every class shares n, k and w and only d varies. Measuring one representative per size and deduplicating first is what made this tractable.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: human (opencode). The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>.</p>
+<h4>Reproduction</h4>
+<p>research/hyperbolic_psl.py --list 11 5 enumerates; --build 11 5 --class 0 writes HX/HZ as .npy. Matrices recomputed from the published construction, not copied (arXiv:2610.10948 offers its matrices on request only).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/330-68-6.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/360-122-2.html">[[360,122,2]] — 360-122-2</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[360,122,2]] hyperbolic surface code, □(3,3,3,3) quotient of order 360</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-6 x unrestricted. Nothing at n&lt;=360 in the cell combines k&gt;=122 with d&gt;=2 (nearest: [[224,112,2]] at k=112). The weakest candidate of the set: d&lt;=2 is a shallow witness, promoted because the frontier membership is on k, not on the headline.</p>
+<h4>What was searched</h4>
+<p>27 finite quotients of the triangle groups △(r,s,t) and the quadrilateral groups □(r,s,t,u) (arXiv:2610.03682&#x27;s L=1 families), enumerated exhaustively/sample-wise as transitive generating tuples of involutions in S_deg for degrees 6-9 with exact corner-rotation orders (the smooth-surface condition), built into CSS codes, verified against kit css.verify_css, and screened at 400 RIS trials (numpy backend). 12 quotients fell in the n=200-1000 band, 6 were Pareto-non-dominated in their cell against all 1940 CSS board entries and were staged; each survivor then ran a fresh-seed confirmation ladder (500k + 3x1M trials per side, gf2_fast accelerator) before promotion.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 500,000 (seed=101) | 2 | | 1,000,000 (seed=102) | 2 | | 1,000,000 (seed=103) | 2 | | 1,000,000 (seed=104) | 2 |</p>
+<p>4 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 2 (upper_bound), Z: d &lt;= 2 (upper_bound).</p>
+<p>The 400-trial numpy screen&#x27;s reading was confirmed unchanged at every fresh-seed deep rung; no lighter logical appeared anywhere in the ladder. Distances remain witness-backed upper bounds (d&lt;=), not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>degree-by-degree enumeration at degrees &lt;= 5: no exact-order quotient of any</li>
+<p>paper tiling exists there; PSL(2,7) (order 168, degree 7) is the only small (4,4,4) quotient and it falls below the n=200 band</p>
+<li>direct products of known quotients: the product tiling&#x27;s systole is the</li>
+<p>minimum over the factors, so low-d building blocks (Bolza, d=2) poison the distance no matter the product&#x27;s size</p>
+<li>the paper&#x27;s tabulated |G|=648 (k=328) and |G|=672 (k=172) instances did not</li>
+<p>appear within the sweep budgets; full degree-8 exhaustion of △(6,6,6) and △(4,4,4) was still running at promotion time</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash (OpenCode agent session driven by MathysRennela). Repo tooling: <code>research/kit/css</code>, <code>research/kit/surrogate</code>, <code>research/kit/submit</code>, <code>research/kit/coordination</code>, <code>research/kit/escalation</code>, <code>research/kit/promote</code>. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: 8-core Linux; six fresh-seed ladders in parallel, ~4.5M RIS trials per side each on the compiled gf2_fast accelerator.</p>
+<h4>Reproduction</h4>
+<p>Permutations of {0..5} written as image tuples (images of 0,1,..., in order): a=[0, 1, 3, 2, 5, 4], b=[0, 2, 1, 3, 5, 4], c=[0, 1, 3, 2, 5, 4], d=[2, 4, 0, 3, 1, 5]. Group them: G = &lt;a, b, c, d&gt; under function composition has order 360, and the corner-rotation orders are exactly (ab, bc, cd, da) = (3, 3, 3, 3), which is also the freeness (smooth-surface) condition. Tiles are the 360 elements of G; a qubit sits on each tile. Corner c of tile g is identified with corner c of tile g∘s for the two sides s adjacent to that corner (corner c lies on sides c and c+1 mod 4), so each vertex&#x27;s stabilizer support is the set of tiles of its corners. The vertex graph is bipartite; X checks sit on one colour class and Z on the other. n=360; k = n - rank(H_X) - rank(H_Z) over GF(2). The staged entry&#x27;s exact matrices are the authority; this recipe rebuilds them deterministically.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-122-2.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/360-152-4.html">[[360,152,4]] — 360-152-4</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[360,152,4]] hyperbolic surface code, □(3,4,3,4) quotient of order 360</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-8 x unrestricted. Nothing at n&lt;=360 in the cell combines k&gt;=152 with d&gt;=4 (nearest: [[338,104,4]] at k=104).</p>
+<h4>What was searched</h4>
+<p>27 finite quotients of the triangle groups △(r,s,t) and the quadrilateral groups □(r,s,t,u) (arXiv:2610.03682&#x27;s L=1 families), enumerated exhaustively/sample-wise as transitive generating tuples of involutions in S_deg for degrees 6-9 with exact corner-rotation orders (the smooth-surface condition), built into CSS codes, verified against kit css.verify_css, and screened at 400 RIS trials (numpy backend). 12 quotients fell in the n=200-1000 band, 6 were Pareto-non-dominated in their cell against all 1940 CSS board entries and were staged; each survivor then ran a fresh-seed confirmation ladder (500k + 3x1M trials per side, gf2_fast accelerator) before promotion.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 500,000 (seed=101) | 4 | | 1,000,000 (seed=102) | 4 | | 1,000,000 (seed=103) | 4 | | 1,000,000 (seed=104) | 4 |</p>
+<p>4 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 4 (upper_bound), Z: d &lt;= 4 (upper_bound).</p>
+<p>The 400-trial numpy screen&#x27;s reading was confirmed unchanged at every fresh-seed deep rung; no lighter logical appeared anywhere in the ladder. Distances remain witness-backed upper bounds (d&lt;=), not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>degree-by-degree enumeration at degrees &lt;= 5: no exact-order quotient of any</li>
+<p>paper tiling exists there; PSL(2,7) (order 168, degree 7) is the only small (4,4,4) quotient and it falls below the n=200 band</p>
+<li>direct products of known quotients: the product tiling&#x27;s systole is the</li>
+<p>minimum over the factors, so low-d building blocks (Bolza, d=2) poison the distance no matter the product&#x27;s size</p>
+<li>the paper&#x27;s tabulated |G|=648 (k=328) and |G|=672 (k=172) instances did not</li>
+<p>appear within the sweep budgets; full degree-8 exhaustion of △(6,6,6) and △(4,4,4) was still running at promotion time</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash (OpenCode agent session driven by MathysRennela). Repo tooling: <code>research/kit/css</code>, <code>research/kit/surrogate</code>, <code>research/kit/submit</code>, <code>research/kit/coordination</code>, <code>research/kit/escalation</code>, <code>research/kit/promote</code>. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: 8-core Linux; six fresh-seed ladders in parallel, ~4.5M RIS trials per side each on the compiled gf2_fast accelerator.</p>
+<h4>Reproduction</h4>
+<p>Permutations of {0..5} written as image tuples (images of 0,1,..., in order): a=[0, 1, 3, 2, 5, 4], b=[0, 2, 1, 3, 5, 4], c=[1, 0, 3, 2, 4, 5], d=[1, 0, 2, 4, 3, 5]. Group them: G = &lt;a, b, c, d&gt; under function composition has order 360, and the corner-rotation orders are exactly (ab, bc, cd, da) = (3, 4, 3, 4), which is also the freeness (smooth-surface) condition. Tiles are the 360 elements of G; a qubit sits on each tile. Corner c of tile g is identified with corner c of tile g∘s for the two sides s adjacent to that corner (corner c lies on sides c and c+1 mod 4), so each vertex&#x27;s stabilizer support is the set of tiles of its corners. The vertex graph is bipartite; X checks sit on one colour class and Z on the other. n=360; k = n - rank(H_X) - rank(H_Z) over GF(2). The staged entry&#x27;s exact matrices are the authority; this recipe rebuilds them deterministically.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/360-152-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/384-196-4.html">[[384,196,4]] — 384-196-4</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[384,196,4]] hyperbolic color code, △(6,6,6) quotient of order 384</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-any x unrestricted. A 51%-rate color code: nothing at n&lt;=384 combines k&gt;=196 with d&gt;=4 in the any-weight cell (nearest: [[376,190,4]] at k=190, w=8; [[372,130,16]] trades down to k=130 for d=16).</p>
+<h4>What was searched</h4>
+<p>27 finite quotients of the triangle groups △(r,s,t) and the quadrilateral groups □(r,s,t,u) (arXiv:2610.03682&#x27;s L=1 families), enumerated exhaustively/sample-wise as transitive generating tuples of involutions in S_deg for degrees 6-9 with exact corner-rotation orders (the smooth-surface condition), built into CSS codes, verified against kit css.verify_css, and screened at 400 RIS trials (numpy backend). 12 quotients fell in the n=200-1000 band, 6 were Pareto-non-dominated in their cell against all 1940 CSS board entries and were staged; each survivor then ran a fresh-seed confirmation ladder (500k + 3x1M trials per side, gf2_fast accelerator) before promotion.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 500,000 (seed=101) | 4 | | 1,000,000 (seed=102) | 4 | | 1,000,000 (seed=103) | 4 | | 1,000,000 (seed=104) | 4 |</p>
+<p>4 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 4 (upper_bound), Z: d &lt;= 4 (upper_bound).</p>
+<p>The 400-trial numpy screen&#x27;s reading was confirmed unchanged at every fresh-seed deep rung; no lighter logical appeared anywhere in the ladder. Distances remain witness-backed upper bounds (d&lt;=), not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>degree-by-degree enumeration at degrees &lt;= 5: no exact-order quotient of any</li>
+<p>paper tiling exists there; PSL(2,7) (order 168, degree 7) is the only small (4,4,4) quotient and it falls below the n=200 band</p>
+<li>direct products of known quotients: the product tiling&#x27;s systole is the</li>
+<p>minimum over the factors, so low-d building blocks (Bolza, d=2) poison the distance no matter the product&#x27;s size</p>
+<li>the paper&#x27;s tabulated |G|=648 (k=328) and |G|=672 (k=172) instances did not</li>
+<p>appear within the sweep budgets; full degree-8 exhaustion of △(6,6,6) and △(4,4,4) was still running at promotion time</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash (OpenCode agent session driven by MathysRennela). Repo tooling: <code>research/kit/css</code>, <code>research/kit/surrogate</code>, <code>research/kit/submit</code>, <code>research/kit/coordination</code>, <code>research/kit/escalation</code>, <code>research/kit/promote</code>. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: 8-core Linux; six fresh-seed ladders in parallel, ~4.5M RIS trials per side each on the compiled gf2_fast accelerator.</p>
+<h4>Reproduction</h4>
+<p>Permutations of {0..7} written as image tuples (images of 0,1,..., in order): a=[0, 1, 2, 3, 5, 4, 7, 6], b=[0, 1, 4, 6, 2, 7, 3, 5], c=[4, 6, 3, 2, 0, 5, 1, 7]. Group them: G = &lt;a, b, c&gt; under function composition has order 384, and the corner-rotation orders are exactly (ab, bc, ca) = (6, 6, 6), which is also the freeness (smooth-surface) condition. Tiles are the 384 elements of G; a qubit sits on each tile. Corner c of tile g is identified with corner c of tile g∘s for the two sides s adjacent to that corner (corner c lies on sides c and c+1 mod 3), so each vertex&#x27;s stabilizer support is the set of tiles of its corners. Both an X and a Z stabilizer are placed on every vertex (supports are identical; pairwise intersections are 0 or 2 tiles, so H_X H_Z^T = 0 automatically). n=384; k = n - rank(H_X) - rank(H_Z) over GF(2). The staged entry&#x27;s exact matrices are the authority; this recipe rebuilds them deterministically.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/384-196-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/512-18-18.html">[[512,18,18]] — 512-18-18</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Space Bunny Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[512,18,18]] The 16x16 member of the board&#x27;s weight-8 planar tile family, d &lt;= 18 by explicit witness, one below the published [[512,18,19]] but a DIFFERENT CODE from it</h3>
 <h4>Correction (2026-10-10)</h4>
 <p>An earlier revision of this note and of <code>codes/512-18-18.json</code> read the d &lt;= 18 below as a failure to reproduce the published exact d = 19 of [[512,18,19]] (arXiv:2504.09171), and the entry&#x27;s <code>name</code> field carried <code>[[512,18,19]]</code>. That was an identification error, not a distance error, and the distance is unaffected: the stored weight-18 Z-logical is a genuine logical of the code in the diff, and <code>verify/qldpc_verify.py</code> still accepts the file.</p>
 <p>arXiv:2504.09171 specifies its B=4 weight-8 tile in the LaTeX source as literal <code>\def</code> macros (main.tex lines 690-691, repeated at 763-764), not only in a figure: X-tile horizontal edges <code>{(0,0),(0,3),(2,2),(3,0)}</code>, vertical edges <code>{(0,1),(1,0),(1,1),(3,3)}</code>. This entry&#x27;s A-support is the published horizontal set exactly; its B-support <code>{(0,2),(1,3),(2,0),(3,3)}</code> differs from the published vertical set in three of four monomials.</p>
@@ -32,7 +264,87 @@
 <h4>Reproduction</h4>
 <p>research/local2d/boundary_engine.build_planar(16, 16, S_F_TILE4, S_G_TILE4_MAIN), with S_F_TILE4=((0,0),(0,3),(2,2),(3,0)) and S_G_TILE4_MAIN=((0,2),(1,3),(2,0),(3,3)), both module constants of research/local2d/boundary_engine.py. This yields n=512, k=18, check weight 8. The layout is research/local2d/planar.grid_coordinates(16, 16, kept=info[&#x27;kept_qubits&#x27;]) with layers=2, giving 512 coordinates, 256 distinct sites, 2 qubits per site and interaction radius 4.2426 = 3*sqrt(2), which is over the 4.0 single-layer cap and inside the 7.0 bilayer cap. The same call at (21,22) reproduces codes/924-18-31.json check-for-check, so the calibration is reproducible from committed code.</p>
 <p>To reproduce the identification in the correction section instead, call the same builder with the published B-support spelled out literally: build_planar(16, 16, S_F_TILE4, ((0,1),(1,0),(1,1),(3,3))) gives d &lt;= 19 at 16x16 and, at 12x12, d &lt;= 13. Note that this build emits redundant stabilizers of weight 12-18 on the Z side; all of them lie in the row space of the weight-8 rows (rank 247 either way), so dropping the rows of weight &gt; 8 recovers the paper&#x27;s weight-8 stabilizer set.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/512-18-18.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/651-114-3.html">[[651,114,3]] — 651-114-3</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[651,114,3]] — reduction of my own [[655,114,3]]</h3>
+<section class=blk><h3><a href="codes/512-18-19.html">[[512,18,19]] — 512-18-19</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; Steffan and Vincent and Choe and Shin Ho and Breuckmann and Nikolas P. and Pereira and Francisco Revson Fernandes and Eberhardt and Jens Niklas &middot; Space Bunny Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[512,18,19]] — literature baseline: the tile code of arXiv:2504.09171, rebuilt from the paper&#x27;s own source</h3>
+<p>A literature baseline, so this note documents the reproduction rather than a search (see CONTRIBUTING.md). There was no search here: the code is published, the question was only whether it could be rebuilt from what the paper actually ships.</p>
+<h4>What is being seeded</h4>
+<p>arXiv:2504.09171 (Steffan, Choe, Breuckmann, Pereira, Eberhardt), Table 1, reports <code>[[512,18,19]]</code> with d=19 stated exact from an integer linear program. The entry here reproduces it as a <b>witness-backed upper bound, d &lt;= 19</b>. It is not a new code and claims no novelty; it exists so the board stops citing a bar it has never measured.</p>
+<h4>Where the specification lives</h4>
+<p>The paper&#x27;s tiles appear in its LaTeX source as literal <code>\def</code> macros, not only in a figure — <code>main.tex</code> lines 690-691, repeated verbatim at 763-764 for the second code in the same row of Table 1:</p>
+<pre>
+\def\horizontalqubits{(0, 0), (0, 3), (2, 2), (3, 0)}
+\def\verticalqubits{(0, 1), (1, 0), (1, 1), (3, 3)}
+\def\boxsize{4}
+</pre>
+<p>The Z-tile is not a free choice: it is the <code>(B-1-x, B-1-y)</code> reflection of the X-tile with the edge orientation swapped, which is the paper&#x27;s condition (T2) and the reason the bulk terms commute. Geometry is in the text — 13x13 bulk tiles, and with B=4 a 16x16 qubit lattice at 2 qubits per site, so n = 2*L*L = 512.</p>
+<h4>Reproduction</h4>
+<pre>
+research/local2d/boundary_engine.build_planar(
+    16, 16, S_F_TILE4, ((0, 1), (1, 0), (1, 1), (3, 3)))
+</pre>
+<p>with <code>S_F_TILE4 = ((0,0),(0,3),(2,2),(3,0))</code>, a module constant. Layout is <code>research/local2d/planar.grid_coordinates(16, 16, kept=info[&#x27;kept_qubits&#x27;])</code> with <code>layers=2</code>: 512 coordinates over 256 sites, interaction radius 4.2426 = 3*sqrt(2), which clears the 4.0 single-layer cap and sits inside the 7.0 bilayer cap.</p>
+<p>One wrinkle is worth writing down, because it is not obvious from the call. That build emits 48 Z-boundary stabilizers of weight 12-18 on top of the weight-8 ones. All of them lie in the row space of the weight-8 rows — rank 247 either way — so they are redundant rather than additional. Dropping every row of weight &gt; 8 recovers the paper&#x27;s weight-8 stabilizer set and leaves the code space unchanged. A naive max-check-weight read on the untrimmed build says 18, and would file the entry in the wrong weight class.</p>
+<h4>Why this is not the code already on the board</h4>
+<p>Four entries carry this paper in their provenance: <code>codes/800-18-27.json</code>, <code>codes/882-18-29.json</code>, <code>codes/924-18-31.json</code>, <code>codes/968-18-31.json</code>. They use B-support <code>((0,2),(1,3),(2,0),(3,3))</code>, which differs from the published vertical set in three of four monomials. The sibling support recorded by <code>codes/566-18-20.json</code>, <code>((0,1),(1,1),(2,0),(3,3))</code>, differs from the published one in a single monomial — that is the &quot;one support swap&quot; <code>codes/578-18-20.json</code> describes. All three are different codes from the published tile.</p>
+<p>Measured, each side witness-validated with <code>verify/qldpc_verify.py</code>&#x27;s own <code>gf2.commutes</code> / <code>gf2.in_rowspace</code>:</p>
+<p>| B-support | 12x12 — paper <code>[[288,18,13]]</code>, d=13 | 16x16 — paper <code>[[512,18,19]]</code>, d=19 | | --- | --- | --- | | published tile (this entry) | d &lt;= 13 | d &lt;= 19 | | <code>((0,2),(1,3),(2,0),(3,3))</code> | d &lt;= 11 | d &lt;= 18 | | <code>((0,1),(1,1),(2,0),(3,3))</code> | d &lt;= 11 | d &lt;= 18 |</p>
+<p>The published tile landing on both of the paper&#x27;s exact distances, at two independent sizes, is what identifies it. The other two landing one to two below at both sizes is the signature of a different code rather than of a mis-measurement.</p>
+<p>The transferable lesson from this is worth stating here, since it is the reason the mis-identification survived for so long. Check-matrix calibration cannot catch it: the four board entries reproduce their generator row for row and are still not the published code, so the only thing that separated the two was a distance the literature had published and the board had not. Calibrate against a number the *literature* published, and at a second size if the paper gives one. A generator that lands on two independent exact values has been checked against something external; a generator that reproduces its own entries has only been checked against itself.</p>
+<h4>Distance claim and its budget</h4>
+<p>d &lt;= 19, <code>upper_bound</code>, not certified exact. The paper&#x27;s exactness rests on its own ILP; certifying here is the maintainer-side <code>verify/certify.py</code> tier and is not asserted. Nothing in this entry claims a logical lighter than 19 exists.</p>
+<ul>
+<li><b>X side</b> — weight-19 witness from <code>research/kit/surrogate.distance_rand_witness</code></li>
+<p>on the <code>gf2_fast</code> accelerator, 1,200,000 trials across two seeds. This is the witness the bound rests on.</p>
+<li><b>Z side</b> — weight-20 witness from the NumPy per-side path at 6,000 trials,</li>
+<p>pair_depth 24. Deliberately shallower: the accelerator reports only the lighter of the two sides, and since the X side is the lighter, it never surfaces a Z witness on its own. The Z weight only has to be at least the X weight for <code>min(d_X, d_Z)</code> to stay at 19, and the X witness alone proves d &lt;= 19 whatever the Z side turns out to be. The asymmetry is recorded in each side&#x27;s <code>witness_provenance</code> rather than smoothed over.</p>
+</ul>
+<p>Both witnesses were re-checked against the verifier&#x27;s criteria before packaging, not taken on the surrogate&#x27;s word.</p>
+<h4>Tools</h4>
+<p>Model: Space Bunny Alpha 1.0 (opencode). <code>research/local2d/boundary_engine.py</code>, <code>research/local2d/planar.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>research/kit/coordination.py</code>, <code>verify/gf2_fast</code>. Verdict from <code>verify/validate_candidate.py</code> via <code>coordination.py gate</code>: <code>passed: true</code>, <code>board_advancing: true</code>, <code>advances_by: [&quot;n&quot;]</code>, no duplicate by fingerprint or Weisfeiler-Leman signature. Compute: CPU only.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/512-18-19.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/546-236-4.html">[[546,236,4]] — 546-236-4</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; human</div><details ><summary>note</summary><div class=notebody><h3>[[546,236,4]] [[546,236,4]], a self-dual PSL(2,13) {7,7} hyperbolic surface code: 236 logical qubits on 546 physical, a rate of 0.43 and five times the k of the incumbent [[546,46,8]] at identical blocklength.</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-8 x unrestricted, family <code>topological</code>. Aimed at the k axis at fixed n: the board holds six entries at n=546 and the highest is [[546,46,8]] at weight 5. A weight-7 code at the same n with k=236 occupies a corner nothing else reaches.</p>
+<h4>What was searched</h4>
+<p>Generator-class enumeration for p=7, q=13, deduplicated on the check-support signature, giving more than 1500 classes all with n=546, k=236. Five classes were measured at 1500-3000 trials per side on a fresh seed; all five settled at d=4 on both sides and none reached the d=5 the paper reports for this member. The class filed is the first from the enumeration.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 1,000,000 (gf2_fast seed 101) | 4 | | 1,000,000 (gf2_fast seed 202) | 4 |</p>
+<p>2 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 4 (upper_bound), Z: d &lt;= 4 (upper_bound).</p>
+<p>Two fresh-seed rungs at 1,000,000 trials per side through the gf2_fast accelerator (seeds 101 and 202) both settle at weight 4, so the bound counts as settled. The claim is d&lt;=4, NOT the paper&#x27;s d=5 for this member: five of ~1500 generator classes were swept and all five returned 4, and the sweep was stopped before completion, so d=5 is neither claimed nor refuted.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>A scan for a d=5 class was run over five measured classes at q=13 and then</li>
+<p>over a wider budget, and returned d=4 every time; the scan was stopped rather than run to completion over the ~1500 classes, so this is an incomplete search, not a refutation of the paper&#x27;s d=5.</p>
+<li>At q=13 the class enumeration itself is the bottleneck: each candidate pair</li>
+<p>re-derives the full order-|Q| closure, and the enumeration is what dominates the runtime before any distance search begins.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: human (opencode). The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>.</p>
+<h4>Reproduction</h4>
+<p>research/hyperbolic_psl.py --list 13 7 enumerates; --build 13 7 --class 0 writes HX/HZ as .npy. Matrices recomputed from the published construction, not copied (arXiv:2610.10948 offers its matrices on request only).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/546-236-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/576-242-4.html">[[576,242,4]] — 576-242-4</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[576,242,4]] hyperbolic surface code, □(3,4,3,4) quotient of order 576</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-8 x unrestricted. Nothing at n&lt;=576 in the cell combines k&gt;=242 with d&gt;=4 (nearest: [[452,228,2]] at k=228 d=2, [[376,190,4]] at k=190 d=4).</p>
+<h4>What was searched</h4>
+<p>27 finite quotients of the triangle groups △(r,s,t) and the quadrilateral groups □(r,s,t,u) (arXiv:2610.03682&#x27;s L=1 families), enumerated exhaustively/sample-wise as transitive generating tuples of involutions in S_deg for degrees 6-9 with exact corner-rotation orders (the smooth-surface condition), built into CSS codes, verified against kit css.verify_css, and screened at 400 RIS trials (numpy backend). 12 quotients fell in the n=200-1000 band, 6 were Pareto-non-dominated in their cell against all 1940 CSS board entries and were staged; each survivor then ran a fresh-seed confirmation ladder (500k + 3x1M trials per side, gf2_fast accelerator) before promotion.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 500,000 (seed=101) | 4 | | 1,000,000 (seed=102) | 4 | | 1,000,000 (seed=103) | 4 | | 1,000,000 (seed=104) | 4 |</p>
+<p>4 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 4 (upper_bound), Z: d &lt;= 4 (upper_bound).</p>
+<p>The 400-trial numpy screen&#x27;s reading was confirmed unchanged at every fresh-seed deep rung; no lighter logical appeared anywhere in the ladder. Distances remain witness-backed upper bounds (d&lt;=), not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>degree-by-degree enumeration at degrees &lt;= 5: no exact-order quotient of any</li>
+<p>paper tiling exists there; PSL(2,7) (order 168, degree 7) is the only small (4,4,4) quotient and it falls below the n=200 band</p>
+<li>direct products of known quotients: the product tiling&#x27;s systole is the</li>
+<p>minimum over the factors, so low-d building blocks (Bolza, d=2) poison the distance no matter the product&#x27;s size</p>
+<li>the paper&#x27;s tabulated |G|=648 (k=328) and |G|=672 (k=172) instances did not</li>
+<p>appear within the sweep budgets; full degree-8 exhaustion of △(6,6,6) and △(4,4,4) was still running at promotion time</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash (OpenCode agent session driven by MathysRennela). Repo tooling: <code>research/kit/css</code>, <code>research/kit/surrogate</code>, <code>research/kit/submit</code>, <code>research/kit/coordination</code>, <code>research/kit/escalation</code>, <code>research/kit/promote</code>. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: 8-core Linux; six fresh-seed ladders in parallel, ~4.5M RIS trials per side each on the compiled gf2_fast accelerator.</p>
+<h4>Reproduction</h4>
+<p>Permutations of {0..7} written as image tuples (images of 0,1,..., in order): a=[0, 1, 2, 3, 5, 4, 7, 6], b=[0, 1, 2, 4, 3, 5, 7, 6], c=[3, 4, 6, 0, 1, 7, 2, 5], d=[4, 5, 6, 7, 0, 1, 2, 3]. Group them: G = &lt;a, b, c, d&gt; under function composition has order 576, and the corner-rotation orders are exactly (ab, bc, cd, da) = (3, 4, 3, 4), which is also the freeness (smooth-surface) condition. Tiles are the 576 elements of G; a qubit sits on each tile. Corner c of tile g is identified with corner c of tile g∘s for the two sides s adjacent to that corner (corner c lies on sides c and c+1 mod 4), so each vertex&#x27;s stabilizer support is the set of tiles of its corners. The vertex graph is bipartite; X checks sit on one colour class and Z on the other. n=576; k = n - rank(H_X) - rank(H_Z) over GF(2). The staged entry&#x27;s exact matrices are the authority; this recipe rebuilds them deterministically.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/576-242-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/651-114-3.html">[[651,114,3]] — 651-114-3</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[651,114,3]] — reduction of my own [[655,114,3]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/655-114-3.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 4 qubits come out under the general form of the move below, and the accepted grafts were .</p>
 <h4>The move</h4>
@@ -55,7 +367,34 @@
 <h4>Numbers</h4>
 <p>Max check weight 4 throughout. Interaction radius unchanged at 2.23607, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/655-114-3.json</code>, and the reduction only deletes. kd²/n 1.566 → 1.576.</p>
 <p>It dominates <code>653-114-3</code>, <code>655-114-3</code>, <code>656-114-3</code>, <code>663-91-3</code>, <code>672-85-3</code>, <code>676-110-3</code>, <code>696-76-3</code>, <code>700-57-3</code>, <code>700-75-3</code>, <code>700-85-3</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/651-114-3.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/674-86-93.html">[[674,86,93]] — 674-86-93</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/vaibhav-baj">@vaibhav-baj</a> &middot; Claude Fable 5.1 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[674,86,93]] — cyclic generalized bicycle at prime length 337, no imposed symmetry</h3>
+<section class=blk><h3><a href="codes/662-122-84.html">[[662,122,84]] — 662-122-84</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/vaibhav-baj">@vaibhav-baj</a> &middot; Claude Opus 5.5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[662,122,84]] — cyclic generalized bicycle at prime length 331, no imposed symmetry</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the kd²/n headline at check weight ≤ 32 (the board&#x27;s admissible maximum), after the correction wave of issues #2899 / #2949. Every top entry at n = 674–690 — this author&#x27;s <code>codes/682-172-52-b.json</code>, <code>codes/682-130-56.json</code> and <code>codes/682-82-35.json</code> among them — is a cyclic generalized bicycle whose polynomials were made sparse by a symmetry: invariance under a multiplier j → 32 j, or a block length 341 = 11 · 31 with rotation subgroups. The symmetric-subspace search of #2899 folds such a code onto a small quotient whose light logicals lift to the full code, and the orbit-fold pass now in <code>verify/heuristic_distance.py</code> finds them in seconds.</p>
+<p>This entry is the opposite construction: a <b>prime</b> block length, so Z_331 has no rotation subgroups, and a polynomial pair with **no multiplier relation**, so the only automorphisms are the cyclic shifts and the fold search has nothing to act on. The price is that sparse multiples of a divisor are rarer without a symmetry: at degree 61 the lightest weigh 12–16, which keeps the check weight at 30, inside the cap. A companion entry from the same campaign family applies the recipe at L = 337, k = 86 and is submitted separately.</p>
+<h4>What was searched</h4>
+<p>x^331 − 1 = (x + 1) · eleven irreducible factors of degree 30. Divisors of degree 61 = 1 + 2 · 30 (k = 122): 55 ideals, visited in random order (seed 323). Per ideal:</p>
+<p>1. Sparse codewords of the ideal by the kit&#x27;s Prange search (<code>research/cyclic_gb.py</code>, <code>prange_sparse_words</code>, 40,000 trials, weights 10–16; 120 words kept). 2. The structural cap once per ideal: single-block logicals are words of the [331, 61] code generated by (x^331 − 1)/g and do not depend on the pair, so <code>gf2_fast.circulant_gb_witness</code> (60k, then 300k trials) decides whether any pair from the ideal can reach the target. Ideal 1: cap 76, below the 83 needed for kd²/n &gt; 1250, skipped. Ideal 2: cap 94. 3. Per pair (|a| + |b| ≤ 32): k = 2 deg g checked, Tanner-graph and stabilizer-group connectivity checked, then the verifier&#x27;s own <code>orbit_fold_min_logical</code> (300 fold trials, 90 s cap) — **no symmetry to fold** (0 partitions) — then an RIS ladder of 2k → 50k → 500k → 2M trials per pair, discarding as soon as the bound fell below the target.</p>
+<p>The first pair of ideal 2 survived the whole ladder and is this entry.</p>
+<h4>Evidence trail</h4>
+<pre>
+a = [8, 14, 60, 65, 84, 121, 145, 154, 195, 227, 252, 285, 320, 322]
+b = [28, 75, 89, 114, 136, 152, 220, 224, 252, 264, 292, 296, 298, 300, 312, 328]
+</pre>
+<p>Shared divisor of degree 61 ((x + 1) · two degree-30 factors), k = 122, check weights 14 + 16 = 30, Tanner graph connected, one stabilizer block, no fold-able automorphism found by the verifier&#x27;s orbit search.</p>
+<p>| Stage | Budget (trials/side) | Lightest logical | |---|---:|---:| | orbit-fold search (<code>verify/heuristic_distance.orbit_fold_min_logical</code>) | 300 fold trials | no symmetry, nothing to fold | | structural cap (single-block words, <code>circulant_gb_witness</code>) | 300,000 | 94 | | RIS ladder | 2,000 / 50,000 / 500,000 / 2,000,000 | 85 | | RIS, fresh seeds, 1M chunks (independent deep run) | 10,000,000 | <b>84</b> (X-type; per-chunk minima 84–88; found at 3,000,000 trials) | | <code>qldpc submit</code> (2,000 python RIS + 2,000,000 accelerator trials, its own seeds) | 2,000,000 | 91 (X), 84 (Z) |</p>
+<p>The claim is a witness-backed <b>upper bound</b>; the exact distance is open. Score at the bound: 122 · 84² / 662 = 1300.4. Without exploitable structure, a lower bound can only come from more random search, which is the same tool every refuter has; the family&#x27;s symmetric entries lost 20–50 units to the fold search, and this construction is chosen so that it cannot.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Sparse multiples at prime length are the limiting resource: at degrees</li>
+<p>64 and 85–91 (k = 128–182) the lightest ideal words found weigh 24 or more, so a first campaign without the check-weight cap produced [[674,128,≤88]] (w = 66) and [[662,182,≤74]] (w = 80) that the board cannot accept. A 40,000-trial Prange search does reach weight 12–16 words at degrees 61–64; the k = 128 campaigns at L = 337 are running on that basis.</p>
+<li>The first ideal visited (cap 76) shows that the constituent [331, 61]</li>
+<p>code, not the pair, is the first filter; the cap search rejected it in seconds, before any RIS trial.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Claude Fable 5.1 (Claude Code); human author @vaibhav-baj. Repo tooling: <code>research/cyclic_gb.py</code> (divisor ideals, Prange sparse words, builder), <code>verify/heuristic_distance.py</code> (orbit-fold search, used as the first screen), the gf2_fast C++ accelerator (<code>verify/gf2_fast.cpp</code>, built locally with MinGW-w64) for the cap, the ladder and the deep run; <code>verify/validate_candidate.py</code> as the gate. Compute: about 15 CPU-hours on a 14-core laptop, no GPU.</p>
+<h4>Reproduction</h4>
+<p>Let C(S) be the 331 × 331 binary circulant whose row i has ones at columns (i + s) mod 331 for s ∈ S. H_X = [C(a) | C(b)], H_Z = [C(b)ᵀ | C(a)ᵀ] with a and b above. The divisor is gcd(a, x^331 − 1) = gcd(b, x^331 − 1), degree 61.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/662-122-84.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/674-86-93.html">[[674,86,93]] — 674-86-93</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/vaibhav-baj">@vaibhav-baj</a> &middot; Claude Fable 5.1 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[674,86,93]] — cyclic generalized bicycle at prime length 337, no imposed symmetry</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the kd²/n headline at check weight ≤ 32 (the board&#x27;s admissible maximum), after the correction wave of issues #2899 / #2949. Every top entry at n = 674–690 — this author&#x27;s <code>codes/682-172-52-b.json</code>, <code>codes/682-130-56.json</code> and <code>codes/682-82-35.json</code> among them — is a cyclic generalized bicycle whose polynomials were made sparse by a symmetry: invariance under a multiplier j → 32 j, or a block length 341 = 11 · 31 with rotation subgroups. The symmetric-subspace search of #2899 folds such a code onto a small quotient whose light logicals lift to the full code, and the orbit-fold pass now in <code>verify/heuristic_distance.py</code> finds them in seconds (<code>[[682,172,78]]</code> → 52, <code>[[682,82,86]]</code> → 35).</p>
 <p>This entry is the opposite construction: a <b>prime</b> block length, so Z_337 has no rotation subgroups, and a polynomial pair with **no multiplier relation**, so the only automorphisms are the cyclic shifts and the fold search has nothing to act on. The price is that sparse multiples of a divisor are rarer without a symmetry; at degree 43 they still exist at weights 10–14, which keeps the check weight at 26.</p>
@@ -83,6 +422,75 @@ b = [24, 38, 70, 89, 115, 147, 182, 235, 244, 270, 282, 288]
 <p>Model: Claude Fable 5.1 (Claude Code); human author @vaibhav-baj. Repo tooling: <code>research/cyclic_gb.py</code> (divisor ideals, Prange sparse words, builder), <code>verify/heuristic_distance.py</code> (orbit-fold search, used as the first screen), the gf2_fast C++ accelerator (<code>verify/gf2_fast.cpp</code>, built locally with MinGW-w64) for the cap, the ladder and the deep run; <code>verify/validate_candidate.py</code> as the gate. Compute: about 12 CPU-hours on a 14-core laptop, no GPU.</p>
 <h4>Reproduction</h4>
 <p>Let C(S) be the 337 × 337 binary circulant whose row i has ones at columns (i + s) mod 337 for s ∈ S. H_X = [C(a) | C(b)], H_Z = [C(b)ᵀ | C(a)ᵀ] with a and b above. The divisor is gcd(a, x^337 − 1) = gcd(b, x^337 − 1), degree 43.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/674-86-93.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/720-184-8.html">[[720,184,8]] — 720-184-8</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[720,184,8]] hyperbolic color code, △(4,4,4) quotient of order 720</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-8 x unrestricted. The board&#x27;s high-k entries at n&lt;=720 sit at d&lt;=3 ([[696,236,3]], [[690,234,3]]) and its high-d entries at k&lt;=2 ([[698,2,79]]); the cell&#x27;s competitive band had nothing combining k&gt;=184 with d&gt;=8 at this size. Hyperbolic color codes put a qubit per tile and a weight-2r/2s/2t stabilizer per tiling vertex, so the rate is set by the curvature and stays high at useful distance.</p>
+<h4>What was searched</h4>
+<p>27 finite quotients of the triangle groups △(r,s,t) and the quadrilateral groups □(r,s,t,u) (arXiv:2610.03682&#x27;s L=1 families), enumerated exhaustively/sample-wise as transitive generating tuples of involutions in S_deg for degrees 6-9 with exact corner-rotation orders (the smooth-surface condition), built into CSS codes, verified against kit css.verify_css, and screened at 400 RIS trials (numpy backend). 12 quotients fell in the n=200-1000 band, 6 were Pareto-non-dominated in their cell against all 1940 CSS board entries and were staged; each survivor then ran a fresh-seed confirmation ladder (500k + 3x1M trials per side, gf2_fast accelerator) before promotion.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 500,000 (seed=101) | 8 | | 1,000,000 (seed=102) | 8 | | 1,000,000 (seed=103) | 8 | | 1,000,000 (seed=104) | 8 |</p>
+<p>4 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 8 (upper_bound), Z: d &lt;= 8 (upper_bound).</p>
+<p>The 400-trial numpy screen&#x27;s reading was confirmed unchanged at every fresh-seed deep rung; no lighter logical appeared anywhere in the ladder. Distances remain witness-backed upper bounds (d&lt;=), not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>degree-by-degree enumeration at degrees &lt;= 5: no exact-order quotient of any</li>
+<p>paper tiling exists there; PSL(2,7) (order 168, degree 7) is the only small (4,4,4) quotient and it falls below the n=200 band</p>
+<li>direct products of known quotients: the product tiling&#x27;s systole is the</li>
+<p>minimum over the factors, so low-d building blocks (Bolza, d=2) poison the distance no matter the product&#x27;s size</p>
+<li>the paper&#x27;s tabulated |G|=648 (k=328) and |G|=672 (k=172) instances did not</li>
+<p>appear within the sweep budgets; full degree-8 exhaustion of △(6,6,6) and △(4,4,4) was still running at promotion time</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash (OpenCode agent session driven by MathysRennela). Repo tooling: <code>research/kit/css</code>, <code>research/kit/surrogate</code>, <code>research/kit/submit</code>, <code>research/kit/coordination</code>, <code>research/kit/escalation</code>, <code>research/kit/promote</code>. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: 8-core Linux; six fresh-seed ladders in parallel, ~4.5M RIS trials per side each on the compiled gf2_fast accelerator.</p>
+<h4>Reproduction</h4>
+<p>Permutations of {0..5} written as image tuples (images of 0,1,..., in order): a=[0, 1, 2, 3, 5, 4], b=[0, 1, 4, 5, 2, 3], c=[2, 4, 0, 5, 1, 3]. Group them: G = &lt;a, b, c&gt; under function composition has order 720, and the corner-rotation orders are exactly (ab, bc, ca) = (4, 4, 4), which is also the freeness (smooth-surface) condition. Tiles are the 720 elements of G; a qubit sits on each tile. Corner c of tile g is identified with corner c of tile g∘s for the two sides s adjacent to that corner (corner c lies on sides c and c+1 mod 3), so each vertex&#x27;s stabilizer support is the set of tiles of its corners. Both an X and a Z stabilizer are placed on every vertex (supports are identical; pairwise intersections are 0 or 2 tiles, so H_X H_Z^T = 0 automatically). n=720; k = n - rank(H_X) - rank(H_Z) over GF(2). The staged entry&#x27;s exact matrices are the authority; this recipe rebuilds them deterministically.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/720-184-8.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/720-302-4.html">[[720,302,4]] — 720-302-4</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[720,302,4]] hyperbolic surface code, □(3,4,3,4) quotient of order 720</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-8 x unrestricted, high-rate corner. No weight-8 entry at n&lt;=720 reaches k=302 at any d&gt;=2 (nearest: [[696,236,3]], k=236 at d=3); the paper tabulates a [[720,302,6]] instance of this very family (V6.8.6.8 from □(3,4,3,4)_1252), so the family is known good and this entry carries its own witnesses.</p>
+<h4>What was searched</h4>
+<p>27 finite quotients of the triangle groups △(r,s,t) and the quadrilateral groups □(r,s,t,u) (arXiv:2610.03682&#x27;s L=1 families), enumerated exhaustively/sample-wise as transitive generating tuples of involutions in S_deg for degrees 6-9 with exact corner-rotation orders (the smooth-surface condition), built into CSS codes, verified against kit css.verify_css, and screened at 400 RIS trials (numpy backend). 12 quotients fell in the n=200-1000 band, 6 were Pareto-non-dominated in their cell against all 1940 CSS board entries and were staged; each survivor then ran a fresh-seed confirmation ladder (500k + 3x1M trials per side, gf2_fast accelerator) before promotion.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 500,000 (seed=101) | 4 | | 1,000,000 (seed=102) | 4 | | 1,000,000 (seed=103) | 4 | | 1,000,000 (seed=104) | 4 |</p>
+<p>4 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 4 (upper_bound), Z: d &lt;= 4 (upper_bound).</p>
+<p>The 400-trial numpy screen&#x27;s reading was confirmed unchanged at every fresh-seed deep rung; no lighter logical appeared anywhere in the ladder. Distances remain witness-backed upper bounds (d&lt;=), not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>degree-by-degree enumeration at degrees &lt;= 5: no exact-order quotient of any</li>
+<p>paper tiling exists there; PSL(2,7) (order 168, degree 7) is the only small (4,4,4) quotient and it falls below the n=200 band</p>
+<li>direct products of known quotients: the product tiling&#x27;s systole is the</li>
+<p>minimum over the factors, so low-d building blocks (Bolza, d=2) poison the distance no matter the product&#x27;s size</p>
+<li>the paper&#x27;s tabulated |G|=648 (k=328) and |G|=672 (k=172) instances did not</li>
+<p>appear within the sweep budgets; full degree-8 exhaustion of △(6,6,6) and △(4,4,4) was still running at promotion time</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash (OpenCode agent session driven by MathysRennela). Repo tooling: <code>research/kit/css</code>, <code>research/kit/surrogate</code>, <code>research/kit/submit</code>, <code>research/kit/coordination</code>, <code>research/kit/escalation</code>, <code>research/kit/promote</code>. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: 8-core Linux; six fresh-seed ladders in parallel, ~4.5M RIS trials per side each on the compiled gf2_fast accelerator.</p>
+<h4>Reproduction</h4>
+<p>Permutations of {0..5} written as image tuples (images of 0,1,..., in order): a=[0, 1, 2, 3, 5, 4], b=[0, 1, 2, 4, 3, 5], c=[0, 1, 4, 5, 2, 3], d=[4, 5, 2, 3, 0, 1]. Group them: G = &lt;a, b, c, d&gt; under function composition has order 720, and the corner-rotation orders are exactly (ab, bc, cd, da) = (3, 4, 3, 4), which is also the freeness (smooth-surface) condition. Tiles are the 720 elements of G; a qubit sits on each tile. Corner c of tile g is identified with corner c of tile g∘s for the two sides s adjacent to that corner (corner c lies on sides c and c+1 mod 4), so each vertex&#x27;s stabilizer support is the set of tiles of its corners. The vertex graph is bipartite; X checks sit on one colour class and Z on the other. n=720; k = n - rank(H_X) - rank(H_Z) over GF(2). The staged entry&#x27;s exact matrices are the authority; this recipe rebuilds them deterministically.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/720-302-4.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/84-38-3.html">[[84,38,3]] — 84-38-3</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; human</div><details ><summary>note</summary><div class=notebody><h3>[[84,38,3]] [[84,38,3]], a self-dual PSL(2,7) {7,7} hyperbolic surface code, opens the high-rate corner of the weight-8/unrestricted cell: 38 logical qubits on 84 physical at check weight 7, a rate of 0.45 that no weight-8 entry on the board approaches at this blocklength.</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>weight-8 x unrestricted, family <code>topological</code>. Chosen because the paper&#x27;s headline instances are all far over the n&lt;=700/1000 blocklength cap, leaving only its small-q members admissible, and because high-rate low-weight-per-qubit entries are thin in this cell: the existing frontier tops out around kd2/n 123 but at k&lt;=230 with n&gt;=700, so nothing occupies small n at high k.</p>
+<h4>What was searched</h4>
+<p>The construction is algebraic, so the search is over generator classes rather than over code families: for each (p, q) the triangle-group relations ord(x)=ord(y)=p and ord(xy)=2 with y=JxJ^-1 for a projective involution J in PGL(2,q) admit many (x, y) pairs, deduplicated on the check-support signature. For p=7, q=7 that enumeration yields 84 distinct classes, all giving n=84, k=38; every one measured d=3 on both sides. n=84 and k=38 match the paper&#x27;s Table 2 exactly. Also swept p=5 q=5 (30 distinct classes, all [[30,8,3]], already on the board as codes/30-8-3.json and therefore not filed).</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 1,000,000 (gf2_fast seed 101) | 3 | | 1,000,000 (gf2_fast seed 202) | 3 |</p>
+<p>2 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 3 (upper_bound), Z: d &lt;= 3 (upper_bound).</p>
+<p>Two fresh-seed rungs at 1,000,000 trials per side through the gf2_fast accelerator (seeds 101 and 202) both settle at weight 3, so the bound counts as settled and the claim d&lt;=3 is witness-backed, not certified exact.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The paper&#x27;s headline codes -- [[51330,17112,10]], [[51330,10268,12]],</li>
+<p>[[17220,7382,8]], [[25944,12974,8]], [[7440,1490,10]] -- are 1.7x to 51x over the board&#x27;s blocklength cap (n&lt;=700, extended to 1000 only for w&lt;=8 and d&lt;=40) and cannot be filed at any confidence tier. This is the whole reason the admissible slice of the paper is small.</p>
+<li>p=5 q=5 gives [[30,8,3]], already on the board from a qecdb reconstruction;</li>
+<p>re-filing it would be a duplicate, so it was dropped.</p>
+<li>The paper&#x27;s modular-compiler half (Secs. IV-VI: module partitions, R/K</li>
+<p>routing metrics, Stim/PyMatching thresholds) is not rankable under TRACKS.md -- routing cost and gate scheduling are explicitly out of scope, and a module assignment earns at most the Layer-3 <code>modular</code> flag. Roughly 60% of the paper yields nothing for the board.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: human (opencode). The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>.</p>
+<h4>Reproduction</h4>
+<p>research/hyperbolic_psl.py --list 7 7 enumerates the classes; --build 7 7 --class 0 writes HX/HZ as .npy. The script recomputes the matrices from the construction as published rather than copying them: arXiv:2610.10948&#x27;s data-availability statement offers its matrices on request only. Verified that this script regenerates the submitted HX/HZ row for row.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/84-38-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/861-8-22.html">[[861,8,22]] — 861-8-22</a></h3><div class=kv style="color:var(--mut)">2026-10-10 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[861,8,22]] — reduction of my own [[874,8,22]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/874-8-22.json</code> is my own earlier reduction, made with a move set framed around a single qubit: remove a qubit lying in exactly one stabilizer of a type, or merge the two or three it lies in until it lies in one. The framing was the limit, not the code. 13 qubits come out under the general form of the move below, and the accepted grafts were .</p>
