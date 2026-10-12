@@ -43267,7 +43267,7 @@ HX, HZ, info = build_planar(10, 24, Sf, Sg, cleanup=True)
 # n=401, k=12, w=8; RIS d &lt;= 18; gate: passed, board_advancing
 # graft: graft_r1_safe(HX, HZ, d_floor=18, trials=600, confirm_trials=1200, seed=7)
 </pre>
-<p>Staged: <code>research/candidates/boundary-graft/401-12-19.json</code> (d=18 in the doc), <code>research/candidates/boundary-graft/390-12-18.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/401-12-18.md">raw markdown</a></div></details></section>
+<p>Staged at the time as <code>401-12-19</code> (d = 18 in that document), later filed as <code>[[401,12,18]]</code>; a sibling graft from the same run, <code>[[390,12,18]]</code>, was staged alongside it. Both staged documents were working output outside this repository — the entry in <code>codes/</code> is what carries the matrices now.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/401-12-18.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/485-5-11.html">[[485,5,11]] — 485-5-11</a></h3><div class=kv style="color:var(--mut)">2026-08-13 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[485,5,11]] — dense-packed surface code, distance 11</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Companion to the d = 5, 7, 9 dense-packed submissions (<code>[[101,5,5]]</code>, <code>[[197,5,7]]</code>, <code>[[325,5,9]]</code>). Same construction family (arXiv:2511.06758, Fujiu et al., &quot;Dense packing of the surface code&quot;) at distance 11. The paper evaluates dense packing at d = 5, 7, 9, 11; this is the d = 11 member: five logical qubits, weight-4 checks, single-layer honest layout, nearest-neighbour tilted lattice (r = √2).</p>
@@ -43322,10 +43322,10 @@ k d^2 / n = 102 * 50^2 / 502 = 507.96812749003985.
 <p>Author: @mathysrennela. Model: DeepSeek V4 Flash 0731. Repo kit (<code>css.py</code>, <code>submit.py</code>), <code>verify/validate_candidate.py</code> as the gate, scipy MILP for the exact max independent set.</p>
 <h4>Reproduction</h4>
 <pre>
-uv run python research/candidates/_solve_m3.py   # exact MILP, margin 3, corrected rule
-uv run python research/candidates/_package_672_85.py
-uv run python verify/validate_candidate.py research/candidates/672-85-3.json
-</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/672-85-3.md">raw markdown</a></div></details></section>
+uv run python verify/validate_candidate.py &lt;staged candidate&gt;.json
+</pre>
+<p>Run on the staged document before filing, as recorded in the evidence trail above. Against the committed entry it exits 1 on self-dedup.</p>
+<p>The exact-MILP solve for the corrected rule and the packaging step were local scripts that were not committed; both are described above (the kit&#x27;s <code>css.py</code> and <code>submit.py</code>, scipy MILP for the exact max independent set).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/672-85-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/677-5-13.html">[[677,5,13]] — 677-5-13</a></h3><div class=kv style="color:var(--mut)">2026-08-13 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a></div><details ><summary>note</summary><div class=notebody><h3>[[677,5,13]] — dense-packed surface code, distance 13</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Companion to the d = 5, 7, 9, 11 dense-packed submissions (<code>[[101,5,5]]</code>, <code>[[197,5,7]]</code>, <code>[[325,5,9]]</code>, <code>[[485,5,11]]</code>). Same construction family (arXiv:2511.06758, Fujiu et al., &quot;Dense packing of the surface code&quot;) at distance 13. Five logical qubits, weight-4 checks, single-layer honest layout, nearest-neighbour tilted lattice (r = √2). This is the largest member that fits under the n ≤ 700 cap (n = 677).</p>
@@ -43375,7 +43375,7 @@ D =
 <h4>Direction &amp; hypothesis</h4>
 <p>Tested whether the [[700,85,3]] hole-packing trick (g = 1.09 at d=3, exact MILP max-hole) generalizes to growing distance. At r = sqrt(2), rho = 1, g = kd^2/n, so beating the surface code at distance D requires k/n &gt; 1/D^2. At D=3 single-cell holes are free (loop weight 4 &gt;= 3) and independent (k = 1 + holes); at D=5 a single cell gives loop weight 4 &lt; 5, so holes must be clusters, and the D=5 rule (loop weight &gt;= 5, same-parity Chebyshev &gt;= 5, diff-parity Manhattan &gt;= 5, margin 5) was the natural generalization. Hypothesis: the g &gt; 1 trick might climb to d=5 with a denser D-rule packing.</p>
 <h4>What was searched</h4>
-<p>Generalized the calibrated d=3 constructor (<code>research/candidates/_build_700_85_3.py</code>) to an arbitrary D-rule in <code>research/candidates/holey_general.py</code>: cluster enumeration (loop weight &gt;= D), MILP max independent set over hole placements, grid sweep (Lx, Ly) with Lx*Ly &lt;= 700, margins 3/4/5. Validation first: D=3 reproduces [[700,85,3]] exactly (84 holes, even 42, k=85, d&gt;=3 exact).</p>
+<p>Generalized the calibrated d=3 constructor behind <code>[[700,85,3]]</code> to an arbitrary D-rule: cluster enumeration (loop weight &gt;= D), MILP max independent set over hole placements, grid sweep (Lx, Ly) with Lx*Ly &lt;= 700, margins 3/4/5. Validation first: D=3 reproduces [[700,85,3]] exactly (84 holes, even 42, k=85, d&gt;=3 exact).</p>
 <p>D=5 screen (~80 shapes, 120s MILP cap per shape) + margin probe on 23x26, 25x28, 17x36 at margins 3/4/5, boundary-bit scan (16 choices), then <code>verify/certify.py</code> MILP per candidate.</p>
 <h4>Evidence trail</h4>
 <p>| shape | margin | holes | k | g=25k/n | certify d=5 | certify d=4 | |---|---|---|---:|---:|---|---| | 23x26 | 5 | 12 | 25 | 0.669 | REFUTED both sides | <b>exact</b> both sides | | 25x28 | 3 | 20 | 41 | 1.025* | - | refuted (Z-side) | | 25x28 | 4 | 16 | 33 | 0.825 | - | - | | 25x28 | 5 | 12 | 25 | 0.669 | - | - |</p>
@@ -43391,16 +43391,15 @@ D =
 <p>the k/n &gt; 1/25 threshold for g &gt; 1. The g &gt; 1 trick does not climb: [[700,85,3]] is an apex of the holey-surface family, not a leading edge.</p>
 </ul>
 <h4>Tools</h4>
-<p>DeepSeek V4 Flash 0731 (provenance.model). Repo tooling: <code>research/candidates/holey_general.py</code> (D-rule builder + screen), <code>holey_d5_margin_probe.py</code> (margin/bits/distance probe), <code>verify/certify.py</code> (scipy/HiGHS MILP exact distance), <code>verify/validate_candidate.py</code> (trusted gate). ~90 min MILP across shapes.</p>
+<p>DeepSeek V4 Flash 0731 (provenance.model). Repo tooling: a D-rule builder with its screen and a margin/bits/distance probe (both local scripts, not committed here), <code>verify/certify.py</code> (scipy/HiGHS MILP exact distance), <code>verify/validate_candidate.py</code> (trusted gate). ~90 min MILP across shapes.</p>
 <h4>Reproduction</h4>
+<p>The D-rule builder was a local script and was not committed; its recipe is the method stated above (cluster enumeration with loop weight &gt;= D, MILP max independent set over hole placements, grid sweep Lx x Ly &lt;= 700, margins 3/4/5). With the resulting document:</p>
 <pre>
-uv run python research/candidates/holey_general.py --validate   # D=3 repro: 84 holes
-uv run python research/candidates/holey_general.py --build --LX 23 --LY 26 --D 5 --BITS 1,1,0,1
-# then edit the doc: distance d=4 (not 5), with the certified witnesses
-uv run python verify/certify.py research/candidates/598-25-4-holey.json --tlim 300
-uv run python verify/validate_candidate.py research/candidates/598-25-4-holey.json
+uv run python verify/certify.py codes/598-25-4.json --tlim 300
+uv run python verify/validate_candidate.py &lt;staged candidate&gt;.json
 </pre>
-<p>Candidate: <code>research/candidates/598-25-4-holey.json</code>. Screen data: <code>research/candidates/_holey_D5_scan.json</code>, <code>research/candidates/_holey_D5_margin_probe.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/598-25-4.md">raw markdown</a></div></details></section>
+<p><code>certify.py</code> runs against the committed entry. <code>validate_candidate.py</code> was run on the staged document before filing; against the committed entry it exits 1 on self-dedup.</p>
+<p>Candidate: <code>codes/598-25-4.json</code>. The D5 scan and margin probe were screen working output and were not committed; their surviving readings are the numbers in the Evidence trail above.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/598-25-4.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/602-264-20.html">[[602,264,20]] — 602-264-20</a></h3><div class=kv style="color:var(--mut)">2026-08-12 &middot; submission note &middot; <a href="https://github.com/npdeep">@npdeep</a> &middot; Magic State Labs (Custom) v0.1</div><details ><summary>note</summary><div class=notebody><h3>[[602,264,20]]: distance revision of the board&#x27;s [[602,264,20]] entry</h3>
 <h4>Revision history</h4>
 <p>The entry keeps its parameters [[602,264,20]]. The code, its checks, its layout, and its original provenance are unchanged; only the distance block is corrected. A GPU random-information-set search (verify/ris_gpu.py, recover mode, 300,000,000 trials per side, pair depth 0, seed 4101) exhibits a weight-20 X logical, so the previous witness-backed bound was overstated on that side; the overall distance d = 20 is unchanged. Each lighter witness is carried in the entry with the budget it was found at; the other side keeps its original witness where it was not refuted. Distance remains an upper bound, not an exact claim.</p>
@@ -43434,7 +43433,7 @@ uv run python verify/validate_candidate.py research/candidates/598-25-4-holey.js
 <li>Independent exhaustive enumeration: zero weight-1 logicals and zero</li>
 <p>weight-2 logicals on either side (a weight-2 X-logical {a,b} exists iff H_Z columns a,b are identical and K_X columns a,b differ; checked completely). The same exhaustive check passes on the merged board reference code (control).</p>
 </ul>
-<p>Certificate artifact: <code>research/candidates/700-85-3-cert.json</code>.</p>
+<p>Certificate artifact: <code>certs/700-85-3.json</code>.</p>
 <h4>Why this beats the g&lt;1 ceiling</h4>
 <p>The 1/9 bound is specific to <b>uniform period-3 sublattices</b>; the d=3 rule is local, so irregular exact max independent sets on finite patches exceed it (84/484 ≈ 0.174 interior density on 25×28 vs 1/9 ≈ 0.111). Heuristic packers undercount badly (a greedy finds ~66 holes on 25×28 vs the exact 84), so prior &quot;g &lt; 1 for this family&quot; reasoning was an artifact of search strength, not a property of the family.</p>
 <h4>Caveats</h4>
@@ -43449,13 +43448,12 @@ uv run python verify/validate_candidate.py research/candidates/598-25-4-holey.js
 <h4>Tools</h4>
 <p>Author: @mathysrennela. Model: DeepSeek V4 Flash 0731. Repo kit (<code>css.py</code>, <code>submit.py</code>, <code>surrogate.py</code>), <code>verify/certify.py</code> for the exact tier, <code>verify/validate_candidate.py</code> as the gate, scipy MILP for the exact max independent set. Reference codes fetched from the board.</p>
 <h4>Reproduction</h4>
+<p>The constructor was a local script, not committed here; the exact hole set and boundary bits it produced are carried by the entry itself, and the construction string in <code>codes/700-85-3.json</code> is what reproduces it. The MILP scan that found the hole count and its checkpoint were working output from the same script and were not committed either.</p>
 <pre>
-uv run python research/candidates/_build_700_85_3.py
-# -&gt; research/candidates/700-85-3-holey.json (witnesses at 2000 trials)
-uv run python verify/certify.py research/candidates/700-85-3-holey.json --tlim 120
-uv run python verify/validate_candidate.py research/candidates/700-85-3-holey.json
+uv run python verify/certify.py codes/700-85-3.json --tlim 120
+uv run python verify/validate_candidate.py &lt;staged candidate&gt;.json
 </pre>
-<p>The exact hole set, boundary bits, and constructor are in <code>research/candidates/_build_700_85_3.py</code>; the MILP scan script and its checkpoint are <code>research/candidates/_hmax_exact_scan.py</code> + <code>research/candidates/_hmax_milp.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/700-85-3.md">raw markdown</a></div></details></section>
+<p><code>certify.py</code> runs against the committed entry. <code>validate_candidate.py</code> was run on the staged document before filing; against the committed entry it exits 1 on self-dedup.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/700-85-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/234-28-18.html">[[234,28,18]] — 234-28-18</a></h3><div class=kv style="color:var(--mut)">2026-08-10 &middot; submission note &middot; Dongheng Qian and Tianyi Li and <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; GPT-5.6 Luna</div><details ><summary>note</summary><div class=notebody><h3>[[234,28,18]] — abelian lifted-product reconstruction from arXiv:2608.08996v1</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>This is a direct reconstruction of the free-action abelian row in the Supplementary Information of arXiv:2608.08996v1. The paper reports <code>[[234,28,18]]</code> with exact MILP distance 18. The reconstruction advances the unrestricted weight-capable board cell.</p>
@@ -43525,7 +43523,8 @@ uv run python verify/validate_candidate.py research/candidates/700-85-3-holey.js
 <li><code>n=700, k=75, d=3, w=4, r=1.4142, layers=1, g=0.9643</code> — <code>verify/qldpc_verify.py</code> → <code>ok true</code>, <code>weight-4</code>, <code>local-2d-single</code>, <code>interaction_radius √2</code> (unit squares), <code>min_site_spacing 1.0</code>.</li>
 <li><code>d=3</code> witness: weight-3 hole-to-boundary string (both sides), <code>in_ker</code> + <code>not in_rowspace</code> + <code>weight==d</code> checks pass. Gate refutation <code>8000 RIS</code> finds no weight ≤2 logical (<code>not refuted</code>). Tier <code>upper_bound</code> (exact at <code>d=3</code> is cheap but left as upper bound per board convention).</li>
 <li><code>k=75</code> recomputed via <code>gf2.rank</code> (<code>n - rank(HX) - rank(HZ)</code>).</li>
-<li><code>validate_candidate</code> on staged <code>research/candidates/irregular-700-75-3.json</code> (pre-board, to avoid self-dedup) → <code>passed:true</code>, <code>board_advancing:true</code>, <code>advances the weight-4 × local-2d-single board</code>, no <code>exact_duplicate</code>/<code>wl_equivalent</code>.</li>
+<li><code>validate_candidate</code> on the staged candidate (run pre-board, to avoid</li>
+<p>self-dedup; the entry is now <code>codes/700-75-3.json</code>) → <code>passed:true</code>, <code>board_advancing:true</code>, <code>advances the weight-4 × local-2d-single board</code>, no <code>exact_duplicate</code>/<code>wl_equivalent</code>.</p>
 </ul>
 <h4>Dead ends &amp; why this beats uniform</h4>
 <ul>
@@ -43536,7 +43535,7 @@ uv run python verify/validate_candidate.py research/candidates/700-85-3-holey.js
 <h4>Tools</h4>
 <p>Built with <b>Amicode</b> harness (model: Muse Spark 1.2) — repo kit (<code>css.py</code>, <code>gf2_fast</code>, <code>submit.py</code>), <code>validate_candidate</code> gate on <code>erlich</code> (24c, 200 seeds × 5k RIS) + <code>mini</code> (10c) mirror.</p>
 <h4>Reproduction</h4>
-<p><code>research/candidates/irregular_holey_opt.py</code> (erlich <code>~/qldpc-challenge</code>, mini <code>~/armonia/repos/qldpc-challenge</code>): <code>greedy_max_holes(28,25,3,seed)</code> + hill climb 20, <code>build_rect(Lx=28,Ly=25, holes=holes)</code> with boundary scan, <code>gf2_fast.distance_rand_parallel(5000, seed)</code> for <code>d</code>, keep <code>k&gt;57</code>. This code: seed 15, 74 holes, <code>k=75</code>. Also <code>research/candidates/build_rect_holey.py</code> for the rectangular vehicle. Staged JSON: <code>research/candidates/irregular-700-75-3.json</code> (also <code>seed15</code>).</p>
+<p>A local optimizer, written for this search and not committed here, run on two machines: <code>greedy_max_holes(28,25,3,seed)</code> + hill climb 20, <code>build_rect(Lx=28,Ly=25, holes=holes)</code> with boundary scan, <code>gf2_fast.distance_rand_parallel(5000, seed)</code> for <code>d</code>, keep <code>k&gt;57</code>. This code: seed 15, 74 holes, <code>k=75</code>. A separate rectangular builder produced the uniform case. Staged JSON: now <code>codes/700-75-3.json</code> (also drafted as <code>seed15</code>).</p>
 <h4>Relation to prior</h4>
 <p>Dominates PR #449 (<code>[[700,57,3]] g=0.733</code>) on same cell — same <code>n,d,w,r</code> but <code>k 57→75</code>. The <code>g=1</code> asymptote remains (needs new <code>w=4</code> cellulation to exceed 1), but irregular packing is the strongest *holey* result under <code>n≤700</code> and <code>r=√2</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/700-75-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/80-8-8.html">[[80,8,8]] — 80-8-8</a></h3><div class=kv style="color:var(--mut)">2026-08-10 &middot; submission note &middot; <a href="https://github.com/aarontrowbridge">@aarontrowbridge</a> &middot; Muse Spark 1.2</div><details ><summary>note</summary><div class=notebody><h3>[[80,8,8]] — first quantum Tanner code on the board (family quantum-tanner)</h3>
@@ -43554,14 +43553,14 @@ H_X = [A | B] , H_Z = [B^T | A^T]  with A,B ∈ F2[C40] as above
 <li><code>validate_candidate</code> → <code>passed:true</code>, <code>exact_duplicate null</code>, <code>wl_equivalent null</code>, <code>board_advancing:false</code> (dominated by <code>[[80,9,8]]</code> in <code>weight-8 × unrestricted</code> — expected, the cell is dense), <code>literature novelty unverified</code>. Family first-mover is the novelty, not Pareto.</li>
 </ul>
 <h4>Reproduction</h4>
-<p><code>research/candidates/tanner_hunt.py</code> (and <code>tanner_quick.py</code> reproducer) on erlich <code>~/qldpc-challenge</code> + mini <code>~/armonia/repos/qldpc-challenge</code>:</p>
+<p>A local hunter (<code>tanner_hunt.py</code>) with a <code>tanner_quick.py</code> reproducer, written for this search and not committed here:</p>
 <pre>
 from products import hypergraph_product, lifted_product
 # here: lifted_product with group C40, a/b as above, w=8
 doc = make_submission(HX,HZ, name=&quot;[[80,8,8]] quantum-tanner&quot;, construction=&quot;quantum-tanner LP order 40 a=[9,12,17,25] b=[14,19,36,37]&quot;, authors=[&quot;aarontrowbridge&quot;], family=&quot;quantum-tanner&quot;, confidence=&quot;upper_bound&quot;)
 validate_candidate(doc) → passed
 </pre>
-<p>Staged: <code>research/candidates/tanner-80-8-8.json</code> (also <code>tanner-80-8-8-1.json</code> duplicate with different <code>a/b</code>).</p>
+<p>Staged: now <code>codes/80-8-8.json</code> (a second draft with different <code>a/b</code> was staged alongside it and never filed).</p>
 <h4>Relation to board</h4>
 <p>First <code>quantum-tanner</code> entry — filter <code>family=quantum-tanner</code> now has 1 code (was 0). Not Pareto-advancing in <code>weight-8 × unrestricted</code> (dense, needs <code>k≥9</code> or <code>d≥9</code> at <code>n=80</code> to advance), but opens the family for larger Tanner hunts (<code>n=200-600</code> with same LP).</p>
 <h4>Tools</h4>
@@ -43583,7 +43582,7 @@ validate_candidate(doc) → passed
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-4 x local-2d-single</code>, geometric efficiency <code>g = 4kd^2/(n·rho^2·r^4)</code>. The board&#x27;s best non-reference point is the holey rotated surface code <code>[[625,50,3]]</code> (L = 25) at g = 0.72 with r = sqrt(2), rho = 1. This code is the <b>L = 13 instance</b> of the same period-3 hole pattern (n = 169, k = 10, g = 0.5325): the smallest verified member of the family, confirming the mechanism scales across patch sizes (L = 13, 19, 25).</p>
 <h4>What was searched</h4>
-<p>The period-3 hole sublattice was reverse-engineered from <code>codes/625-50-3.json</code> and generalized in <code>research/candidates/oppC/src/c_holey.py</code>: X-holes at cells <code>(3a, 3b)</code> with <code>(i+j)</code> even, Z-holes at cells <code>(3a, 3b)</code> with <code>(i+j)</code> odd, margin 3 from every boundary, standard rotated-surface boundary pairs (X chains on the vertical edges, Z chains on the horizontal edges). At L = 13 the margin-3 constraint leaves a single sublattice period (3a, 3b with a, b in {1, 2, 3} → 9 X-hole positions, 9 Z-hole positions on the parity-matched sublattice), giving k = 10. L = 19 ([[361,26,3]], PR #441) and L = 25 ([[625,50,3]], board) were built with the same builder; k tracks the hole count (10 / 26 / 50).</p>
+<p>The period-3 hole sublattice was reverse-engineered from <code>codes/625-50-3.json</code> and generalized into a parameterized builder: X-holes at cells <code>(3a, 3b)</code> with <code>(i+j)</code> even, Z-holes at cells <code>(3a, 3b)</code> with <code>(i+j)</code> odd, margin 3 from every boundary, standard rotated-surface boundary pairs (X chains on the vertical edges, Z chains on the horizontal edges). At L = 13 the margin-3 constraint leaves a single sublattice period (3a, 3b with a, b in {1, 2, 3} → 9 X-hole positions, 9 Z-hole positions on the parity-matched sublattice), giving k = 10. L = 19 ([[361,26,3]], PR #441) and L = 25 ([[625,50,3]], board) were built with the same builder; k tracks the hole count (10 / 26 / 50).</p>
 <h4>Evidence trail</h4>
 <ul>
 <li>CSS, n = 169, k = 10, max check weight 4 (X 67 w4 + 12 w2 = 79 rows,</li>
@@ -43609,7 +43608,7 @@ validate_candidate(doc) → passed
 <h4>Tools</h4>
 <p>Model: DeepSeek V4 Flash 0731 (matches <code>provenance.model</code>). Repo kit (<code>research/kit/css.py</code>, <code>research/kit/submit.py</code>), <code>verify/validate_candidate.py</code> as the gate, <code>cli/qldpc.py submit</code> for witness search and PR drafting. Compute: ~1 CPU-minute (L = 13 is the cheapest size: 6k-trials RIS at n = 169).</p>
 <h4>Reproduction</h4>
-<p><code>research/candidates/oppC/src/c_holey.py: holey_rotated(13)</code>; export via <code>research/candidates/oppC/src/c_export.py</code> (hx/hz/coords in <code>.npz</code>), then</p>
+<p>build the period-3 hole sublattice at L = 13 exactly as described above (X-holes at <code>(3a, 3b)</code> with <code>i + j</code> even, Z-holes where <code>i + j</code> odd, margin 3 from every boundary, rotated-surface boundary pairs), export <code>hx</code>, <code>hz</code> and the coordinates to <code>.npz</code>, then</p>
 <pre>
 uv run python cli/qldpc.py submit holey_L13.npz --authors @mathysrennela \
   --model &quot;DeepSeek V4 Flash 0731&quot; --family topological --layers 1 --trials 6000
@@ -43617,9 +43616,9 @@ uv run python cli/qldpc.py submit holey_L13.npz --authors @mathysrennela \
 <p>Hole coordinates: X-holes at <code>(3a, 3b)</code> with <code>(i+j)</code> even in <code>[3, L-4]^2</code>, Z-holes at <code>(3a, 3b)</code> with <code>(i+j)</code> odd; margin 3 from every boundary.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/169-10-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/361-26-3.html">[[361,26,3]] — 361-26-3</a></h3><div class=kv style="color:var(--mut)">2026-08-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[361,26,3]] — holey rotated surface code, L=19 period-3 hole pattern</h3>
 <h4>Direction &amp; hypothesis</h4>
-<p>Target cell: <code>weight-4 x local-2d-single</code>, geometric efficiency <code>g = 4kd^2/(n·rho^2·r^4)</code>. The board&#x27;s best non-reference point is the holey rotated surface code <code>[[625,50,3]]</code> (L = 25) at g = 0.72 with r = sqrt(2), rho = 1. The hypothesis (from <code>fieldnotes/2026-08-08-leaderboard-opportunity-map.md</code>, Opportunity C) is that regularly spaced holes preserve the surface-code radius while adding logical qubits, and that the pattern generalizes across patch sizes. <code>[[361,26,3]]</code> is the L = 19 instance: same r = sqrt(2) floor, k = 26, a strictly smaller block than the L = 25 record.</p>
+<p>Target cell: <code>weight-4 x local-2d-single</code>, geometric efficiency <code>g = 4kd^2/(n·rho^2·r^4)</code>. The board&#x27;s best non-reference point is the holey rotated surface code <code>[[625,50,3]]</code> (L = 25) at g = 0.72 with r = sqrt(2), rho = 1. The hypothesis — &quot;Opportunity C&quot; in a leaderboard gap survey that was not committed to this repository — is that regularly spaced holes preserve the surface-code radius while adding logical qubits, and that the pattern generalizes across patch sizes. <code>[[361,26,3]]</code> is the L = 19 instance: same r = sqrt(2) floor, k = 26, a strictly smaller block than the L = 25 record.</p>
 <h4>What was searched</h4>
-<p>The period-3 hole sublattice was reverse-engineered from <code>codes/625-50-3.json</code>: X-holes at cells <code>(3a,3b)</code> with <code>(i+j)</code> even, Z-holes at cells <code>(3a,3b)</code> with <code>(i+j)</code> odd, margin 3 from every boundary, standard rotated-surface boundary pairs (X chains on the vertical edges, Z chains on the horizontal edges). The builder (<code>research/candidates/oppC/src/c_holey.py</code>) reproduces the board code row-for-row at L = 25 (k = 50). L = 19 (this code) and L = 25 were built; L = 31 is over the n &lt;= 700 cap (n = 961). k tracks the hole count (9 holes on the X side at L = 19 vs 25 at L = 25, giving k = 26 vs 50).</p>
+<p>The period-3 hole sublattice was reverse-engineered from <code>codes/625-50-3.json</code>: X-holes at cells <code>(3a,3b)</code> with <code>(i+j)</code> even, Z-holes at cells <code>(3a,3b)</code> with <code>(i+j)</code> odd, margin 3 from every boundary, standard rotated-surface boundary pairs (X chains on the vertical edges, Z chains on the horizontal edges). The builder reproduces the board code row-for-row at L = 25 (k = 50). L = 19 (this code) and L = 25 were built; L = 31 is over the n &lt;= 700 cap (n = 961). k tracks the hole count (9 holes on the X side at L = 19 vs 25 at L = 25, giving k = 26 vs 50).</p>
 <h4>Evidence trail</h4>
 <ul>
 <li>CSS, n = 361, k = 26, max check weight 4 (X 149 w4 + 18 w2, Z 150 w4 + 18 w2).</li>
@@ -43646,10 +43645,10 @@ uv run python cli/qldpc.py submit holey_L13.npz --authors @mathysrennela \
 <p>Hole coordinates: X-holes at <code>(3a, 3b)</code> with <code>(i+j)</code> even in <code>[3, L-4]^2</code>, Z-holes at <code>(3a, 3b)</code> with <code>(i+j)</code> odd; margin 3 from every boundary.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/361-26-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/384-12-17.html">[[384,12,17]] — 384-12-17</a></h3><div class=kv style="color:var(--mut)">2026-08-09 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[384,12,17]] — open-boundary planar BB code, bilayer weight-8</h3>
 <h4>Direction &amp; hypothesis</h4>
-<p>Target cell: <code>weight-8 x local-2d-bilayer</code>, operational efficiency <code>K = kd^2/n</code>. This is the &quot;populate the sparse 2D-local cells&quot; route (<code>research/candidates/_planar_pop_sweep.py</code>): open-boundary planar bivariate-bicycle codes (Liang--Eberhardt--Chen, arXiv:2504.08887) are genuinely 2D-local by construction (qubits on a bilayer grid, every check within a bounded radius), so every staged code enters a <code>local-2d-*</code> cell rather than the unrestricted cell. The sparse cells — notably <code>weight-8 x local-2d-bilayer</code> — had few entries, and the mechanism&#x27;s flagship <code>[[288,8,12]]</code> already validated against the paper&#x27;s Table V.</p>
+<p>Target cell: <code>weight-8 x local-2d-bilayer</code>, operational efficiency <code>K = kd^2/n</code>. This is the &quot;populate the sparse 2D-local cells&quot; route: open-boundary planar bivariate-bicycle codes (Liang--Eberhardt--Chen, arXiv:2504.08887) are genuinely 2D-local by construction (qubits on a bilayer grid, every check within a bounded radius), so every staged code enters a <code>local-2d-*</code> cell rather than the unrestricted cell. The sparse cells — notably <code>weight-8 x local-2d-bilayer</code> — had few entries, and the mechanism&#x27;s flagship <code>[[288,8,12]]</code> already validated against the paper&#x27;s Table V.</p>
 <p>This entry, <code>[[384,12,17]]</code>, is the best of the open-boundary sweep&#x27;s results: K = 12·17²/384 = <b>9.03</b>, beating the cell&#x27;s previous leader <code>[[263,16,12]]</code> (K = 8.76) and <code>[[216,15,11]]</code> (K = 8.40).</p>
 <h4>What was searched</h4>
-<p><code>_planar_pop_sweep.py</code> sweeps the (S_f, S_g) support pairs of the w6/w8 planar-BB families over lattice sizes (Lx, Ly) with 2·Lx·Ly &lt;= 700, builds each via <code>boundary_engine.build_planar</code> (directional anyon condensation, greedy corner-drop for anticommutation), requires CSS + k stable, screens <code>distance_rand</code> at 300 trials, dedups by fingerprint, and stages every distinct valid code under <code>research/candidates/planar_pop/</code>. 409 hits total; the top by eff is this 384-qubit family member computed at Lx=10, Ly=23.</p>
+<p><code>_planar_pop_sweep.py</code> sweeps the (S_f, S_g) support pairs of the w6/w8 planar-BB families over lattice sizes (Lx, Ly) with 2·Lx·Ly &lt;= 700, builds each via <code>boundary_engine.build_planar</code> (directional anyon condensation, greedy corner-drop for anticommutation), requires CSS + k stable, screens <code>distance_rand</code> at 300 trials, dedups by fingerprint, and stages every distinct valid code it finds. 409 hits total; the top by eff is this 384-qubit family member computed at Lx=10, Ly=23.</p>
 <h4>Evidence trail</h4>
 <ul>
 <li>Construction: planar BB, supports f=[(0,0),(1,0),(2,3),(2,-2)],</li>
@@ -43683,7 +43682,7 @@ HX, HZ, info = build_planar(10, 23, [(0,0),(1,0),(2,3),(2,-2)],
                             [(0,0),(0,1),(-1,-1),(-1,3)], cleanup=True)
 # n=384, k=12, w=8; RIS d &lt;= 17; deep-refutation CLEAR
 </pre>
-<p>Source file: <code>research/candidates/planar_pop/384-12-17-clean.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/384-12-17.md">raw markdown</a></div></details></section>
+<p>Source file: the staged candidate for this entry, now committed as <code>codes/384-12-17.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/384-12-17.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/700-57-3.html">[[700,57,3]] — 700-57-3</a></h3><div class=kv style="color:var(--mut)">2026-08-09 &middot; submission note &middot; <a href="https://github.com/aarontrowbridge">@aarontrowbridge</a> &middot; Muse Spark 1.2</div><details ><summary>note</summary><div class=notebody><h3>[[700,57,3]] — rectangular holey rotated surface code — g=0.73 (r=√2)</h3>
 <h4>Construction</h4>
 <p>Rectangular 28×25 extension of the holey rotated surface code [[625,50,3]] (PR #433).</p>
@@ -43704,14 +43703,15 @@ HX, HZ, info = build_planar(10, 23, [(0,0),(1,0),(2,3),(2,-2)],
 uv run python verify/qldpc_verify.py codes/700-57-3.json
 → css_commutation ok, k=57 matches, max_check_weight 4, distance_X/Z_witness weight=3 in_ker &amp; nontrivial, interaction_radius 1.4142, locality_class local-2d-single, ok true
 
-uv run python verify/validate_candidate.py research/candidates/700-57-3-rect-holey.json (pre-board)
+uv run python verify/validate_candidate.py &lt;staged candidate&gt;.json
 → passed: true, verify ok, refute false (no lighter logical in 8000 RIS trials), dedup null, novelty board_advancing true, advances weight-4 x local-2d-single board
 </pre>
+<p>The gate was run on the staged document, before filing, and that is the run the output above records. Run against the committed entry instead it exits 1, on the board&#x27;s own dedup: the candidate is now identical to board entry <code>codes/700-57-3.json</code>. The <code>qldpc_verify.py</code> line above *does* run against the committed entry and still passes.</p>
 <p>Claim tier <code>upper_bound</code> (witness-backed d≤3, distance 3 is minimal hole spacing so d=3 tight).</p>
 <h4>Reproduction</h4>
-<p><code>research/candidates/build_rect_holey.py</code>: build_rect(Lx=28,Ly=25, margin=3, period=3) with CSS boundary search (brute 16 combos, picks 1,0,0,0 for 28×25). Then <code>submit.make_submission(..., coordinates, layers=1)</code> and <code>validate_candidate</code>.</p>
+<p>A local rectangular builder (not committed here): `build_rect(Lx=28, Ly=25, margin=3, period=3)` with CSS boundary search (brute 16 combos, picks 1,0,0,0 for 28×25). Then <code>submit.make_submission(..., coordinates, layers=1)</code> and <code>validate_candidate</code>.</p>
 <h4>Provenance</h4>
-<p>Rectangular generalization of research/campaigns/rotated_holey.py (square L×L, margin 3, period 3). Even-L CSS fix derived from boundary parity scan. No external references beyond surface-code base.</p>
+<p>Rectangular generalization of the square L×L, margin 3, period 3 holey builder used for the uniform cases (a local script, not committed here). Even-L CSS fix derived from boundary parity scan. No external references beyond surface-code base.</p>
 <h4>Tools</h4>
 <p>Built with <b>Amicode</b> harness (model: Muse Spark 1.2) — <code>research/kit</code> + <code>verify/gf2_fast</code> + <code>validate_candidate</code> gate on <code>mini</code>/<code>erlich</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/700-57-3.md">raw markdown</a></div></details></section>
 <section class=blk><h3>Choose m prime and the period/coset-union refutation sectors are empty by construction; a classical cap gate rejects whole cells before any quantum matrix is built</h3><div class=kv style="color:var(--mut)">2026-08-08 &middot; fieldnote &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>This was the submission note behind the board entry now filed at <code>[[482,146,33]]</code>, reclassified here because its distance was revised twice after it was written: the code was filed at <code>[[482,146,42]]</code>, refuted to <code>[[482,146,36]]</code>, and refuted again to <code>[[482,146,33]]</code> (X side 36 to 33, orbit-fold at 1M trials per folded code, seed 101). A submission note names one <code>[[n,k,d]]</code>, so it could not follow the entry any further. What remains below is the construction method, the search budget, and the dead ends — all of which still hold for the live entry.</p>
@@ -44705,7 +44705,7 @@ HX, HZ = build_2bga(cayley, a, b)
 <h4>Direction &amp; hypothesis</h4>
 <p>Targeted the weight-8 × unrestricted board cell. The hypothesis: nonabelian 2BGA constructions can produce codes with <b>odd k</b> — a property abelian bivariate bicycle (BB) codes literally cannot achieve. Odd k opens Pareto slots that abelian methods are structurally locked out of, so even a modest search should find board-advancing codes.</p>
 <h4>What was searched</h4>
-<p>Systematic 2BGA sweep over nonabelian groups of order 60–200, with weight-4 supports (row weight 8), filtering for odd k. Groups enumerated via GAP bridge (<code>gap_bridge.py</code>), cached to <code>research/candidates/_gap_cache/</code>. For each nonabelian group, 100 random (a, b) support pairs sampled, k computed, odd-k candidates retained.</p>
+<p>Systematic 2BGA sweep over nonabelian groups of order 60–200, with weight-4 supports (row weight 8), filtering for odd k. Groups enumerated via a GAP bridge (a local script, never committed under any path), with the enumeration cached between runs outside this repository. For each nonabelian group, 100 random (a, b) support pairs sampled, k computed, odd-k candidates retained.</p>
 <ul>
 <li><b>Total candidates generated</b>: ~140k (orders 60–200, 100 samples per group)</li>
 <li><b>Odd-k candidates</b>: ~5% of total (odd k requires inversion a→a⁻¹ to flip rank parity)</li>
@@ -44729,12 +44729,16 @@ HX, HZ = build_2bga(cayley, a, b)
 <h4>Tools</h4>
 <ul>
 <li>Model: Xiaomi Mimo-V2.5</li>
-<li>Kit modules: <code>gap_bridge.py</code>, <code>group_algebra.py</code>, <code>surrogate.py</code>, <code>search.py</code>, <code>submit.py</code></li>
+<li>Kit modules: <code>group_algebra.py</code>, <code>surrogate.py</code>, <code>search.py</code>, <code>submit.py</code>, plus a</li>
+<p>GAP bridge (<code>gap_bridge.py</code>) that was written for this search and never committed under any path</p>
 <li>GAP 4.15.1 for group enumeration (cached)</li>
 <li>gf2_fast C extension for matrix operations</li>
 </ul>
 <h4>Reproduction</h4>
 <pre>
+# `gap_bridge.all_groups_of_order` comes from the local GAP bridge named above,
+# which was never committed. It enumerates the small groups of a given order by
+# GAP ID and returns them in GAP&#x27;s own order.
 import sys; sys.path.insert(0, &#x27;research/kit&#x27;); sys.path.insert(0, &#x27;verify&#x27;)
 import numpy as np
 from gap_bridge import all_groups_of_order
@@ -45105,7 +45109,7 @@ PY
 <h4>Tools</h4>
 <p>Claude Fable 5 agent (GAP install, convention validation, build); gf2_fast for the deep rungs; MILP exact certification via the repo&#x27;s certifier for the two [[80,·,·]] validation rows.</p>
 <h4>Reproduction pointer</h4>
-<p>GAP script + matrices + validation artifacts: <code>research/candidates/campaign-20260714/baseline-240-16-20/</code> (in the campaign branch history); construction string in <code>codes/240-16-20.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/240-16-20.md">raw markdown</a></div></details></section>
+<p>Construction string in <code>codes/240-16-20.json</code>. The GAP script, matrices and validation artifacts behind this point were campaign working output and were never committed here, so the construction string is what the entry is reproducible from.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/240-16-20.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/254-44-24.html">[[254,44,24]] — 254-44-24</a></h3><div class=kv style="color:var(--mut)">2026-07-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Fable 5</div><details ><summary>note</summary><div class=notebody><h3>[[254,44,24]]: distance revision of the board&#x27;s [[254,44,24]] entry</h3>
 <h4>Revision history</h4>
 <p>The entry keeps its parameters [[254,44,24]]. The code, its checks, its layout, and its original provenance are unchanged; only the distance block is corrected. A GPU random-information-set search (verify/ris_gpu.py, recover mode, 300,000,000 trials per side, pair depth 0, seed 4101) exhibits a weight-24 X logical, so the previous witness-backed bound was overstated on that side; the overall distance d = 24 is unchanged. Each lighter witness is carried in the entry with the budget it was found at; the other side keeps its original witness where it was not refuted. Distance remains an upper bound, not an exact claim.</p>
@@ -45131,7 +45135,7 @@ PY
 <h4>Tools</h4>
 <p>Claude Fable 5 multi-agent campaign on the repo&#x27;s research/ kit; gf2_fast for all deep RIS runs (~9–30s per 1M trials/side at this n); BP+OSD via the decode/ stack for the independent check. ~45 min generation, ~hours of confirmation across parallel agents.</p>
 <h4>Reproduction</h4>
-<p><code>research/kit/group_algebra.py::build_2bga</code> on Z_129 with the supports above (exponents of a(x), b(x)); or see the construction string in <code>codes/258-32-22.json</code>. Code-capacity performance study (BP+OSD, MWPM comparison): <code>research/candidates/campaign-20260714/plots/</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/258-32-22.md">raw markdown</a></div></details></section>
+<p><code>research/kit/group_algebra.py::build_2bga</code> on Z_129 with the supports above (exponents of a(x), b(x)); or see the construction string in <code>codes/258-32-22.json</code>. Code-capacity performance study (BP+OSD, MWPM comparison) ran as campaign working output; those plots were never committed.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/258-32-22.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/288-16-16.html">[[288,16,16]] — 288-16-16</a></h3><div class=kv style="color:var(--mut)">2026-07-14 &middot; submission note &middot; <a href="https://github.com/willzeng">@willzeng</a> &middot; Claude Fable 5</div><details ><summary>note</summary><div class=notebody><h3>[[288,16,16]] — annealed 2BGA on the metacyclic group C12⋊C12</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target: the weight-6 × unrestricted cell (best 13.50, [[288,12,18]]; frontier k-max 12). Hypothesis: nonabelian metacyclic groups of order 100–180 are outside Lin–Pryadko&#x27;s exhaustive n ≤ 200 enumeration, so novelty is possible, and annealing should out-search blind sampling once tuned.</p>
