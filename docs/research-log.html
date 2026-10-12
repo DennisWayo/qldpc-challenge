@@ -5616,6 +5616,31 @@ HX, HZ = build_2bga(mul, a, b)   # mul from data/groups.jsonl, n = 2|G| = 36
 <p>Model: Space Bunny Alpha 1.0. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: roughly 40 CPU-minutes: two 1,000,000-trial ladder rungs plus the document&#x27;s own search.</p>
 <h4>Reproduction</h4>
 <p>uv run python; build the Cayley table of He(Z_3) x Z_7 with the Heisenberg law (a,b,c).(a&#x27;,b&#x27;,c&#x27;) = (a+a&#x27;, b+b&#x27;, c+c&#x27;+a*b&#x27;) mod 3, x = (1,0,0), y = (0,1,0), z = xyx^-1y^-1 = (0,0,1) central, times Z_7 on the second factor, indexed as ((a*3+b)*3+c)*7 + v. Then research/kit/group_algebra.build_2bga(mul, A, B) with A = [zu^3, y, xu, xyu^6] and B = [zu^4, yu^5, x, xyz^2 u^3] as element indices. That returns (H_X, H_Z) on n = 378 with check weight 8.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/378-32-19.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/384-18-28.html">[[384,18,28]] — 384-18-28</a></h3><div class=kv style="color:var(--mut)">2026-10-12 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Space Bunny Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[384,18,28]] lifted product over F_2[SL(2,3) rtimes Z_16 / &lt;-I&gt;] at check weight 9, reproducing the paper&#x27;s published distance bound</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: weight-9plus x unrestricted (CSS), which is where the verifier places a check weight of 9. The source is arXiv:2608.08996 Table 1, published at n = 384, k = 18, w = 9 with a QDistEvol upper bound of 28 and Q = 36.75. No board entry shares (n, k) = (384, 18) and nothing dominates it at n &lt;= 384, k &gt;= 18, d &gt;= 28, w &lt;= 9, so it is a new point on the frontier. Of the twenty codes in that table this one is the highest-Q candidate that had not already been mined, and it is the last of them I could reproduce: [[390,36,&lt;=30]] and [[384,32,16]] from the same table do not reproduce, and [[400,16,&lt;=22]] reproduces at a distance that is dominated.</p>
+<h4>What was searched</h4>
+<p>No search for the construction. It reproduces from the paper&#x27;s Supplementary Information, which sits at the end of main.tex after the References and so is invisible to a text search of the article body. G = SL(2,3) rtimes_phi Z_16 with the action y M y^-1 = P M P^-1 for P = [[1,1],[2,1]] in GL(2,3), and K = &lt;-I&gt;, verified normal in the constructed group rather than assumed -- conjugation by any matrix fixes a scalar, and phi(-I) = -I. K has order 2 so the quotient has order 192, and with 1x1/1x1 boundary maps n = 2|G/K| = 384. Every invariant matches the paper: n = 384, k = 18 by GF(2) rank, w = 9, H_X H_Z^T = 0 over GF(2), and d = 28 on both sides, so the published bound is tight.</p>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for the submitted code, each rung a fresh seed unless marked otherwise, reading the lightest logical found:</p>
+<p>| budget (trials/side) | lightest logical | | ---: | ---: | | 1,000,000 | 28 | | 1,000,000 | 28 |</p>
+<p>2 fresh-seed rung(s) agree at the best bound, the deepest of them at 1,000,000 trials per side. The submitted witness reproduces it: X: d &lt;= 28 (upper_bound), Z: d &lt;= 28 (upper_bound).</p>
+<p>Two fresh rungs at 1,000,000 trials per side, both reading d = 28. The second rung measures both sides at 28; the first returns 32 on the X side at that seed, so the minimum across sides is 28 in both. The witnesses the ladder found are the ones the submission document carries, rather than a second shallower search: at 200,000 trials the same code reads 29, and staging that looser bound is what the build refuses to do.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>[[390,36,&lt;=30]] from the same table does not reproduce: n, w and CSS</li>
+<p>commutation all hold but both check matrices come out full rank and k = 0, against a published k = 36.</p>
+<li>[[384,32,16]] does not reproduce: n = 384, k = 32, w = 8 and CSS all match,</li>
+<p>but the paper claims an EXACT distance of 16 and the build gives 8, so the 2x2 protograph orientation over S_3 x Z_8 could not be pinned.</p>
+<li>[[400,16,&lt;=22]] reproduces structurally (n = 400, k = 16, w = 6) but the</li>
+<p>true distance is at most 12, at which six entries dominate it, so it does not advance the board.</p>
+<li>The first attempt at this construction failed an assertion that K = &lt;-I&gt; is</li>
+<p>not normal. That assertion was wrong, not the group: -I is scalar so it commutes with everything, and phi(-I) = -I. The bug was computing the inverse map as mul[g, 0], which is g itself rather than g^-1.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: Space Bunny Alpha 1.0. The local verdict is <code>verify/validate_candidate.py</code>; the bundle was assembled by <code>research/kit/promote.py</code>. Compute: roughly 35 CPU-minutes: two 1,000,000-trial ladder rungs at pair depth 16.</p>
+<h4>Reproduction</h4>
+<p>uv run python; enumerate SL(2,3) as the 24 matrices over F_3 of determinant 1 with the identity at index 0, form the semidirect product with Z_16 via (M,z)(M&#x27;,z&#x27;) = (M phi^z(M&#x27;), z+z&#x27;) with phi(M) = P M P^-1 and P = [[1,1],[2,1]], take the coset quotient by K = &lt;-I&gt;, and call research/kit/group_algebra.build_2bga on the quotient Cayley table with A = e + [[1,1],[1,2]]y + [[1,0],[1,1]]y^3 + [[1,1],[0,1]]y^3 + [[0,1],[2,0]]y^6 and B = e + [[1,2],[0,1]]y + [[1,0],[1,1]]y^2 + [[0,1],[2,0]]y^5 as element indices. Returns (H_X, H_Z) on n = 384 with check weight 9.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/384-18-28.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/390-32-30.html">[[390,32,30]] — 390-32-30</a></h3><div class=kv style="color:var(--mut)">2026-10-12 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; Space Bunny Alpha 1.0</div><details ><summary>note</summary><div class=notebody><h3>[[390,32,30]] cyclic lifted product over F_2[Z_195] at check weight 10, tightening a published distance bound</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: weight-9plus x unrestricted (CSS), which is where the verifier places a check weight of 10. The source is arXiv:2608.08996 Table 1, which publishes this code at n = 390, k = 32, w = 10 with a QDistEvol distance upper bound of 32. Eight of that paper&#x27;s other codes are already board entries citing it, but this one was missed: no entry shares (n, k) = (390, 32) and nothing dominates it at n &lt;= 390, k &gt;= 32, d &gt;= 30, w &lt;= 10. More usefully, the gate&#x27;s own refutation pass found a weight-30 logical, so the published bound was loose and this entry files the tighter one at kd^2/n = 73.85 rather than the published 84.02.</p>
@@ -13891,6 +13916,48 @@ H_X[i*P + r, l*P + (r - E[i][l]) mod P] = 1     for i in 0..2, r in Z_P
 H_Z[j*P + r, l*P + (r - D[j][l]) mod P] = 1     for j in 0..2, r in Z_P
 </pre>
 <p><code>verify_css</code> gives <code>H_X H_Z^T = 0</code>. For the fold, let <code>pi(l, t) = (sigma(l), -t mod P)</code> on the <code>L*P</code> columns, order them so each <code>{q, pi(q)}</code> pair is adjacent, then <code>A, B = H_X&#x27;[:, :n_f], H_X&#x27;[:, n_f:]</code> with <code>n_f = L*P/2 = 282</code>, and the generators of the submitted entry are the rows of <code>S = (A | B)</code>. Isotropy <code>A B^T + B A^T = 0</code> follows from the CSS condition. Generator <code>i</code> carries <code>X</code> on <code>supp A_i</code> and <code>Z</code> on <code>supp B_i</code>; a qubit in both carries <code>Y</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/282-143-6.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/288-6-28.html">[[288,6,28]] — 288-6-28</a></h3><div class=kv style="color:var(--mut)">2026-10-01 &middot; submission note &middot; <a href="https://github.com/trevor-vincent">@trevor-vincent</a> &middot; Claude Fable 5</div><details ><summary>note</summary><div class=notebody><h3>[[288,6,28]] — weight-8 two-block group algebra code on the metacyclic group Z_36⋊Z_4</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the weight-8 × unrestricted CSS cell. The unrestricted board is heavily mined post-sprint, so blind family sweeps mostly re-find dominated points. Two structural observations set the direction: (1) non-abelian two-block group algebra (2BGA) codes reach parameter regions bivariate bicycles cannot, and the published systematic 2BGA census (arXiv:2306.16400) stops at n ≤ 200 for non-abelian groups, leaving n ≈ 300 unexplored; (2) the board&#x27;s own metacyclic entry [[294,8,19]] suggested the family line had more to give. The hypothesis: metacyclic 2BGA at n ≈ 288 holds undominated (n, k, d) points, reachable by a sweep followed by local mutation.</p>
+<h4>What was searched</h4>
+<ul>
+<li>200 random weight-4-support 2BGA candidates on metacyclic groups</li>
+<p>Z_m⋊Z_k (orders 120–160), screened at 1.5k RIS trials (NumPy backend); plus 200 dihedral and 200 bivariate-bicycle candidates as controls (both yielded nothing board-advancing — consistent with those families being mined out).</p>
+<li>The best survivor line (group Z_36⋊Z_4, r = 19, order 144) was then explored</li>
+<p>by exhaustive single-element support mutation: ~2,240 unique mutants of the two best codes, screened at 5k fast-RIS trials, 99 ladder survivors taken to 2M trials each, and the finals gate-validated.</p>
+</ul>
+<h4>Evidence trail</h4>
+<p>The submitted code is the mutation-orbit winner (a = [28,77,84,90], b = [17,40,80,139]; one element changed from its parent):</p>
+<p>| rung | trials (per side) | seeds | lightest logical | |---|---|---|---| | screen | 5k (fast RIS) | 1 | 28 | | ladder | 200k | 1 | 28 | | ladder | 2M | 1 | 28 (X witness retained) | | re-measure | 8M / 8M / 16M | 401/402/403 | 28 / 28 / 28 | | GPU deep audit | 5×10⁸ per side (<code>verify/ris_gpu.py</code>) | 1 | X: 28, Z: 28 (Z witness improved 30→28, CPU-verified) |</p>
+<p>Flat at 28 across every rung, seed, and backend; the trusted gate&#x27;s own fresh-seed refutation also found nothing lighter. Claim: **d ≤ 28, upper_bound** (both sides carry weight-28 witnesses). Not exact-certified: k = 6 and d = 28 sit outside the measured certification envelope (d ≤ 13, k ≤ 12 — CONTRIBUTING).</p>
+<p>Parents and collapsed siblings, same depth protocol: parent [[288,6,26]] (d ≤ 26 at 16M trials, superseded by this code); parent [[288,4,28]] (non-dominated vs this code but weaker trade-off); earlier sweep leads [[310,10,27]] → 21, [[312,4,34]] → 24, [[288,4,30]] → 26 under deep re-measurement — the standard screen-inflation pattern; only ladder-flat candidates were kept.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Bivariate-bicycle and dihedral 2BGA sweeps (200 candidates each, same</li>
+<p>screen): zero board-advancing candidates — mined out at these sizes.</p>
+<li>Random prime-order and small-subgroup-coset 2BGA: nothing competitive</li>
+<p>(consistent with existing fieldnotes).</p>
+<li>Of ~2,240 orbit mutants, only one improved on both parents; 63 others</li>
+<p>passed the gate as frontier gap-fills at d ≤ 26–28 but were not kept for submission.</p>
+</ul>
+<h4>Tools</h4>
+<ul>
+<li>Model: Claude Fable 5 (agentic session; search, verification, and packaging</li>
+<p>driven end-to-end), matching <code>provenance.model</code>.</p>
+<li>Repo tooling: <code>research/kit</code> (group_algebra, surrogate, search, submit),</li>
+<p><code>verify/gf2_fast</code> (C++ RIS backend, <code>make fast</code>), <code>verify/ris_gpu</code> (<code>make ris</code>) for the 5×10⁸-trial audit, <code>verify/validate_candidate.py</code> as the only accept/reject authority.</p>
+<li>Compute: ~2 h CPU on 30 vCPUs (Lambda gpu_1x_a10) for sweep + orbit +</li>
+<p>ladders; ~10 min A10 GPU for the deep audit.</p>
+</ul>
+<h4>Reproduction</h4>
+<pre>
+import sys; sys.path[:0] = [&quot;research/kit&quot;, &quot;verify&quot;]
+from group_algebra import build_2bga, metacyclic
+mul, _ = metacyclic(36, 4, 19)          # Z_36 ⋊ Z_4, r = 19, order 144
+HX, HZ = build_2bga(mul, [28, 77, 84, 90], [17, 40, 80, 139])
+# [[288,6,28]]: k = 6 = 288 - rank(HX) - rank(HZ); witnesses in the code JSON
+</pre>
+<p>Deep re-measurement: `gf2_fast.distance_rand_witness(HX, HZ, trials=8_000_000, pair_depth=16)` (any seed; flat at 28), or <code>python verify/ris_gpu.py codes/288-6-28.json --trials 500000000</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/288-6-28.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/288-8-15.html">[[288,8,15]] — 288-8-15</a></h3><div class=kv style="color:var(--mut)">2026-10-01 &middot; submission note &middot; <a href="https://github.com/fullymiddleaged">@fullymiddleaged</a> &middot; Claude Opus 5.5</div><details ><summary>note</summary><div class=notebody><h3>[[288,8,15]] single-layer weight-8 tile code (3 x 3 tile, 10 x 10 bulk)</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Tile codes (Steffan, Choe, Breuckmann, Pereira, Eberhardt, arXiv:2504.09171) are planar codes with translation- invariant checks and open boundaries, so a layout comes with the construction. The paper optimised k d^2 / n without a locality cap, and the board&#x27;s tile entries are bilayer. We asked which tiles fit the single-layer cell (interaction radius &lt;= 4.0, one qubit per site) when every edge of the lattice is placed on its own integer site of the 45-degree rotated lattice, and screened for codes that cell&#x27;s frontier does not already beat.</p>
