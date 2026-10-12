@@ -56,15 +56,69 @@
 <div class=kv><b>locality</b> unrestricted <span class=claimed>(computed from the layout)</span></div>
 <div class=kv><b>weight class</b> weight &gt; 8 <span class=claimed>(computed)</span></div>
 </section>
-<section class=blk><h3>How this code was found</h3><div class=kv style="color:var(--mut)">the research note submitted with this code &middot; <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/640-16-40.md">raw markdown</a> &middot; <a href="../research-log.html">all notes</a></div><div class=notebody><h3>[[640,16,40]]: distance revision of the board&#x27;s [[640,16,88]] entry</h3>
+<section class=blk><h3>How this code was found</h3><div class=kv style="color:var(--mut)">the research note submitted with this code &middot; <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/640-16-40.md">raw markdown</a> &middot; <a href="../research-log.html">all notes</a></div><div class=notebody><h3>[[640,16,40]] — 2BGA lifted product on metacyclic Z_40 ×|₁₃ Z_8</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Targeted the <b>weight-9plus × unrestricted</b> track cell, where the existing LP codes have low k and the Pareto frontier is thin. The hypothesis was that metacyclic 2BGA codes (non-abelian, order ~320) with weight-5 supports could reach k ≈ 16 and d ≈ 88, filling a gap between the weight-8 codes (k ≤ 14, d ≤ 81) and the high-weight codes (k &gt; 80). The prediction is kept as written; the distance that gap actually holds turned out to be far smaller than the screening suggested — see the revision chain below.</p>
+<p>The starting point was the polynomial-domain LP framework of arXiv:2609.01305, which shows that conjugate-compatible lifting guarantees CSS orthogonality for any base matrix over F_2[D]/(D^L + 1). The 2BGA construction generalizes this to non-abelian groups, and metacyclic groups Z_n ×|_r Z_k provide a structured search space with provable group-theoretic properties.</p>
+<h4>What was searched</h4>
+<p><b>Phase 1 — Group parameter sweep.</b> Enumerated all valid metacyclic parameters (n, k, r) with n × k ∈ [300, 350] (giving n_code = 2 × order ∈ [600, 700]):</p>
+<ul>
+<li>8 groups tested: meta(40,8,r), meta(56,6,r), meta(80,4,r), meta(42,8,r),</li>
+<p>meta(49,7,r), meta(32,10,r) with all valid r values.</p>
+</ul>
+<p><b>Phase 2 — Support search.</b> For each group, tried 10-30 random support sets of weight 4 and weight 5 (a, b ⊂ G, |a| = |b| = w). Screened at 500-1000 RIS trials via gf2_fast. Kept codes with k ≥ 8, d ≥ 30.</p>
+<p><b>Phase 3 — Weight sweep.</b> Tested weight = 3, 4, 5. Weight 3 produced no competitive codes (too few terms). Weight 4 gave the best k/d balance. Weight 5 (k=16, w=10) produced the submitted code.</p>
+<p><b>Phase 4 — Deep verification.</b> The top ~20 candidates from screening were re-verified with <code>lightest_logical</code> (5000 trials/side, Python NumPy backend). Screen distances were typically inflated 2-6×. Only the submitted 640-qubit code survived with d ≥ 100.</p>
+<h4>Evidence trail</h4>
+<p>Ladder as run at submission:</p>
+<p>| Stage | dX | dZ | Method | |-------|----|----|--------| | Screen (gf2_fast, 1k trials) | 108 | 108 | distance_rand_witness | | Deep verify (lightest_logical, 5k) | 102 | 108 | _search_lightest | | CLI submission (10k RIS + 20k fast) | 88 | 102 | qldpc verify (CI refutation) |</p>
+<p>The X witness was weight 104 at first submission and the Z witness weight 88, found by RIS-fast during CI refutation; dZ was the binding side. That reading is superseded twice over below.</p>
 <h4>Revision history</h4>
-<p>[[640,16,52]] supersedes the board&#x27;s [[640,16,88]] entry. The code, its checks, its layout, and its original provenance are unchanged; only the distance claim is corrected. A GPU random-information-set search (verify/ris_gpu.py, recover mode, 300,000,000 trials per side, seed 2027) exhibits a weight-52 X-logical and a weight-52 Z-logical, so the previous witness-backed bound d &lt;= 88 was overstated and the honest parameter set is [[640,16,52]]. The headline falls from kd^2/n = 193.6 to 67.6. Each lighter witness is carried in the entry with the budget it was found at and survived; the other side keeps its original witness where it was not refuted. Distance remains an upper bound, not an exact claim.</p>
-<h4>Evidence</h4>
-<p>Every GPU proposal was re-validated on the CPU against the sparse check matrices (in the kernel of the opposite side&#x27;s checks, outside the row space of its own side) before it was recorded.</p>
+<p>The code, its checks, its layout, and its original provenance are unchanged at every step; only the distance claim moves.</p>
+<ul>
+<li><b>104 -&gt; 92 -&gt; 88:</b> each step a CI refutation by a lower-weight witness.</li>
+<li><b>88 -&gt; 52:</b> a GPU random-information-set search (<code>verify/ris_gpu.py</code>,</li>
+<p>recover mode, 300,000,000 trials per side, seed 2027) exhibits a weight-52 X-logical and a weight-52 Z-logical, re-validated on the CPU against the committed check matrices (in the kernel of the opposite side&#x27;s checks, outside the row space of its own side). The headline falls from kd^2/n = 193.6 to 67.6. The pass that produced it ran the same search over every verified-new entry on the board; this entry was one of the few whose declared distance did not hold.</p>
+</ul>
 <p>| side | claimed | lightest logical found | trials | seed | CPU-verified | |---|---|---|---|---|---| | X | 104 | 52 | 300,000,000 | 2027 | yes | | Z | 88 | 52 | 300,000,000 | 2027 | yes |</p>
-<p>The pass that produced this ran the same search over every verified-new entry on the board; this entry is one of the few whose declared distance did not hold.</p>
-<h4>Correction (2026-10-09)</h4>
-<p>The distance above was an over-claim: the orbit-fold search now in the verifier (<code>verify/heuristic_distance.py</code>, PR #2902) finds lighter logicals constant on the orbits of the code&#x27;s symmetries (X: 52 -&gt; 48; Z: 52 -&gt; 40), so the entry is filed at d &lt;= 40 with those witnesses and renamed from slug 640-16-52. The over-claim was reported by @MicheldeMessieres (issue #2899). All values remain upper bounds; the narrative above documents the original search.</p></div></section>
+<ul>
+<li><b>52 -&gt; 40:</b> the orbit-fold search now in the verifier</li>
+<p>(<code>verify/heuristic_distance.py</code>, PR #2902) finds lighter logicals constant on the orbits of the code&#x27;s symmetries — X: 52 -&gt; 48, Z: 52 -&gt; 40 — so the entry is filed at d &lt;= 40 with those witnesses and the slug was renamed. The over-claim was reported by @MicheldeMessieres (issue #2899).</p>
+</ul>
+<p>All values remain witness-backed upper bounds, not exact claims. The current witnesses are weight 48 (X) and weight 40 (Z).</p>
+<h4>Dead ends</h4>
+<ul>
+<li><b>Cyclic group LP (abelian Z_L):</b> Systematically swept Z_L for L ∈ [150, 350].</li>
+<p>Best deep-verified result: [[602,8,86]] eff=98 — not competitive. The abelian structure limits code diversity.</p>
+</ul>
+<ul>
+<li><b>Metacyclic with weight-4 supports:</b> Many codes screened at d ≥ 90 but</li>
+<p>collapsed to d ≤ 30 under deep verification. The screen-to-true distance inflation ratio was 2-6× for metacyclic 2BGA codes.</p>
+</ul>
+<ul>
+<li><b>meta(56,6,11) with weight-4:</b> Screened at d=99 (k=19, eff=277), but deep</li>
+<p>verification found d=24 — a 4× inflation. This was the most dramatic collapse.</p>
+</ul>
+<ul>
+<li><b>meta(56,6,19) with weight-4:</b> Screened at d=106 (k=12), collapsed to d=16</li>
+<p>under 200k total RIS trials. Completely dominated by the screen estimate.</p>
+</ul>
+<h4>Tools</h4>
+<ul>
+<li>Model: mimo-v2.5 (opencode-go/mimo-v2.5)</li>
+<li>Agent harness: opencode CLI</li>
+<li>Repo tooling: research/kit (group_algebra, products, css, surrogate, search),</li>
+<p>gf2_fast accelerator, verify/validate_candidate.py</p>
+<li>Compute: ~15 minutes total (sweep + deep verify + packaging)</li>
+</ul>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, metacyclic
+mul, _ = metacyclic(40, 8, 13)  # Z_40 ×|_13 Z_8, order 320
+a = [49, 196, 214, 249, 293]    # left support (weight 5)
+b = [6, 38, 129, 226, 305]      # right support (weight 5)
+HX, HZ = build_2bga(mul, a, b)  # n=640, k=16, w=10
+</pre></div></section>
 <section class=blk><h3>Parity checks</h3>
 <div class=kv><b>X-checks</b> 320 (max weight 10) &middot; <b style="min-width:auto">Z-checks</b> 320 (max weight 10)</div>
 <details><summary>H_X (320 checks, sparse supports)</summary><div class=wit>[50, 111, 132, 151, 227, 322, 354, 391, 550, 599]

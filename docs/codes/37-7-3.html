@@ -121,7 +121,7 @@
 <p>from increasing <code>k</code> while retaining the same local geometry.</p>
 </ul>
 <h4>Tools</h4>
-<p>OpenAI GPT-5.6 Luna; repository research kit; <code>research/geometry_audit.py</code>; <code>research/local_family_screen.py</code>; NumPy/GF(2) rank and RIS screening; <code>verify/validate_candidate.py</code>; and SciPy/HiGHS <code>verify/certify.py</code>.</p>
+<p>OpenAI GPT-5.6 Luna; repository research kit; local geometry-audit and family-screening scripts (written for this search, never committed here); NumPy/GF(2) rank and RIS screening; <code>verify/validate_candidate.py</code>; and SciPy/HiGHS <code>verify/certify.py</code>.</p>
 <h4>Reproduction</h4>
 <p>Load <code>codes/37-1-7.json</code>, remove X/Z face rows with indices <code>1</code>, <code>11</code>, and <code>14</code>, and retain the parent&#x27;s <code>locality.coordinates</code> and <code>layers=1</code>. Package with <code>research/kit/submit.make_submission</code> using <code>trials=12000</code> and seed <code>20260802</code>. Validate with:</p>
 <p><code>python verify/validate_candidate.py codes/37-7-3.json</code></p></div></section>
