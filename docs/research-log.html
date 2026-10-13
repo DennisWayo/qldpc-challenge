@@ -26,6 +26,39 @@
 <h4>Numbers</h4>
 <p>Max check weight 8 throughout. Interaction radius unchanged at 7, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/512-18-18.json</code>, and the reduction only deletes. kd²/n 11.391 → 12.304.</p>
 <p>It dominates <code>511-18-18</code>, <code>512-18-18</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/474-18-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/514-96-58.html">[[514,96,58]] — 514-96-58</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
+<h3>[[514,96,58]] — cyclic generalized-bicycle code from a designed divisor ideal</h3>
+<p>No board entry at <code>n &lt;= 514</code> reaches <code>k &gt;= 96</code> and <code>d &gt;= 58</code> together. The nearest entries with that dimension and distance sit at <code>n = 610</code> and above, and the best entry at this blocklength is <code>[[514,128,52]]</code> at <code>kd^2/n = 673.4</code> against 628.3 here, so this adds a distinct corner rather than a better score.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>For a cyclic generalized-bicycle code on <code>x^m - 1</code>, <code>k = 2 deg gcd(a, b, x^m - 1)</code>, so the dimension follows from a polynomial gcd and can be chosen. The target was <code>m = 257</code>, which is prime: a proper divisor <code>t</code> of <code>m</code> gives a quotient-fold ceiling of <code>(m/t) d_t</code>, so a prime modulus admits no quotient fold at all and the only structural ceilings left are the two-orbit block swap and the single-block bound.</p>
+<h4>What was searched</h4>
+<p><code>m = 257</code> with <code>ord_2(257) = 16</code>. The cyclotomic cosets of <code>x^257 - 1</code> over GF(2) are one of size 1 and sixteen of size 16, so the reachable divisor degrees are multiples of 16 plus an optional 1. A sweep over degrees 32, 48, 80 and 96 drew <code>a</code> and <code>b</code> as low-weight codewords of each divisor&#x27;s ideal by Prange information-set decoding, screening every draw against the quotient-lift, single-block and orbit-fold bounds before any confirmation time was spent.</p>
+<p>Degree 48 gives this code. Triage read 70 at 20,000 trials; the 24-seed confirmation settled it at 58, which is the usual direction and size of that correction in this family.</p>
+<h4>Evidence trail</h4>
+<p>Divisor degree 48, so <code>k = 96</code>. Both single-block gcds equal 48, matching <code>deg gcd(a, b, x^m - 1)</code>, so neither circulant block carries a kernel wider than <code>k</code> requires.</p>
+<ul>
+<li>General RIS, 24 random information-set seeds at 2,000,000 trials each</li>
+<p>(10,712 s): lightest logical weight 58 on Z and 60 on X, per-seed spread 58 to 64 with a median of 62.</p>
+<li>Orbit fold over every equal-orbit partition of the 514 qubits</li>
+<p>(<code>research/foldbound.py</code>): lightest validated lift weight 146. A prime modulus leaves only the two-orbit block swap, and it is not binding here.</p>
+<li>Single-block circulant search, 12 seeds at 600,000 trials: nothing under 58.</li>
+</ul>
+<p>The claim is <code>d = 58</code>, a witness-backed upper bound. Both witnesses are in the submission and were re-checked against <code>H_X</code> and <code>H_Z</code> with plain integer arithmetic.</p>
+<h4>Dead ends</h4>
+<p>The information-set draw adds the factor <code>x + 1</code> on its own, and at this modulus that costs real distance. <code>(x+1)</code> divides a polynomial exactly when its weight is even, so it divides <code>gcd(a, b)</code> exactly when both weights are even, and the draw returns even weights roughly half the time. A sweep aiming at degree 48 then lands on <code>k = 98</code> rather than 96 with nothing to detect it: the common gcd really is degree 49.</p>
+<p>Landing two above is the worst case, because the root-1 coset collapses the BCH bound on the single-block cyclic code. At <code>m = 257</code> that bound reads 90, 86 and 74 at <code>k</code> = 32, 64 and 96, and 64, 52 and 44 at <code>k</code> = 34, 66 and 98. Measured: the <code>k = 98</code> draws gate at 54 while the first <code>k = 96</code> draws reach 70 at triage and 58 under confirmation. Rejecting a draw whose two weights are both even costs under half the draws and is what separates those two columns.</p>
+<p>Degrees 80, 96 and 112 (<code>k</code> = 160, 192 and 224) produced nothing undominated across 300 draws each on eight processes, despite domination thresholds of only <code>d &gt; 30</code> at <code>k = 160</code> and <code>d &gt; 13</code> at <code>k = 192</code>. The general distance does not reach even those, so a low threshold is not on its own a reason to search a cell.</p>
+<h4>Tools</h4>
+<p>Claude Opus 5 under Claude Code. <code>gf2_fast</code> from <code>verify/</code> for the accelerated RIS and single-block searches, <code>verify/gf2.py</code> for GF(2) rank, nullspace and logical bases, <code>research/foldbound.py</code> for the orbit fold, and <code>verify/validate_candidate.py</code> for the verdict. Divisor assembly and the information-set draw are described above rather than committed. The 24-seed confirmation ran 10,712 s on 6 cores, about 18 core-hours.</p>
+<h4>Reproduction</h4>
+<p><code>m = 257</code>, <code>n = 514</code>, <code>k = 96</code>.</p>
+<pre>
+a(x) = 1 + x^45 + x^74 + x^76 + x^82 + x^109 + x^120 + x^130 + x^176 + x^219
+     + x^252
+b(x) = x^8 + x^10 + x^48 + x^80 + x^104 + x^126 + x^186 + x^195 + x^200
+     + x^230 + x^239
+</pre>
+<p><code>H_X = [circ(a) | circ(b)]</code> and <code>H_Z = [circ(b)^T | circ(a)^T]</code>, with <code>circ(p)[i, j] = 1</code> exactly when <code>j - i mod 257</code> is an exponent of <code>p</code>. The exact supports are in <code>codes/514-96-58.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/514-96-58.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/514-98-54.html">[[514,98,54]] — 514-98-54</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><h3>[[514,98,54]] weight-20 cyclic generalized-bicycle from a designed divisor</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>No board entry at n &lt;= 514 reaches k &gt;= 98 and d &gt;= 54 at any row weight. A residue construction cannot aim there, since it fixes k between 20 and 34 whatever the ring. Because k = 2 deg gcd(a, b, x^m - 1), choosing a divisor of x^m - 1 and drawing a and b from its ideal selects the dimension instead, and here a degree-49 divisor gives k = 98.</p>
@@ -45,7 +78,7 @@
 <h4>Reproduction</h4>
 <p>ring   x^257 - 1 H_X = [circ(a) | circ(b)] H_Z = [circ(b)^T | circ(a)^T]</p>
 <p>n = 2m = 514 and k = 2 deg gcd(a, b, x^m - 1) = 98. The exponents of a and b are in <code>codes/514-98-54.json</code> under <code>provenance.construction</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/514-98-54.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/682-102-90.html">[[682,102,90]] — 682-102-90</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
+<section class=blk><h3><a href="codes/682-102-90.html">[[682,102,90]] — 682-102-90</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[682,102,90]] — cyclic generalized-bicycle code from a designed divisor ideal</h3>
 <p>No board entry at any blocklength reaches <code>k &gt;= 102</code> and <code>d &gt;= 90</code> together. At <code>n &lt;= 682</code> with <code>d &gt;= 90</code> and row weight at most 22 there are six entries, and the largest dimension among them is 42. The nearest high-dimension neighbours sit at <code>[[682,142,82]]</code> with weight 32 and <code>[[662,122,84]]</code> with weight 30, so this code trades dimension for 8 more distance at two thirds the row weight.</p>
 <h4>Direction &amp; hypothesis</h4>

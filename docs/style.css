@@ -330,6 +330,11 @@ border-radius:10px;font-size:13px;color:var(--mut)}
 .rcwrap{margin:26px 0 4px}
 .rcwrap .plot{padding:10px 12px 6px}
 .rcsub{font-size:13px;color:var(--mut);margin:2px 0 10px;max-width:760px}
+/* frontier map (issue #3346): stacked under the race without JS, swapped in
+   by the Frontier mode button with it; points are SVG links */
+.rcwrap .frplot{margin-top:8px}
+.rcwrap .frplot a{text-decoration:none}
+.rcwrap .frplot circle.hit{cursor:pointer}
 /* phones: scroll the wide chart instead of scaling its text away */
 @media(max-width:680px){.rcwrap .plot{overflow-x:auto;
 -webkit-overflow-scrolling:touch}
