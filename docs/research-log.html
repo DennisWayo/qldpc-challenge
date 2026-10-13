@@ -179,6 +179,39 @@ S = halved_checks(40, E)   # the 4P generators of codes/200-43-19.json, in order
 <h4>Numbers</h4>
 <p>Max check weight 8 throughout. Interaction radius unchanged at 7, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/512-18-18.json</code>, and the reduction only deletes. kd²/n 11.391 → 12.304.</p>
 <p>It dominates <code>511-18-18</code>, <code>512-18-18</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/474-18-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/514-64-64.html">[[514,64,64]] — 514-64-64</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
+<h3>[[514,64,64]] — cyclic generalized-bicycle code from a designed divisor ideal</h3>
+<p>No board entry at <code>n &lt;= 514</code> reaches <code>k &gt;= 64</code> and <code>d &gt;= 64</code> together. The best entry at this blocklength is <code>[[514,128,52]]</code> at <code>kd^2/n = 673.4</code>, against 510.0 here, so this adds a distinct corner rather than a better score: twice the distance at half the dimension and two thirds the row weight.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>For a cyclic generalized-bicycle code on <code>x^m - 1</code>, <code>k = 2 deg gcd(a, b, x^m - 1)</code>, so the dimension follows from a polynomial gcd and can be chosen. <code>m = 257</code> is prime, so there is no quotient fold at all: a proper divisor <code>t</code> of <code>m</code> would give a ceiling of <code>(m/t) d_t</code>, and a prime modulus has none. That leaves the two-orbit block swap and the single-block bound as the only structural ceilings, and 257 is the only prime in range with <code>ord_2(m) &lt;= 20</code>, the limit the primitive-polynomial table imposes.</p>
+<p>Degree 32 was the target, giving <code>k = 64</code>, where the single-block BCH bound is 86 — the highest of any reachable degree at this modulus.</p>
+<h4>What was searched</h4>
+<p>The cyclotomic cosets of <code>x^257 - 1</code> over GF(2) are one of size 1 and sixteen of size 16, so reachable divisor degrees are multiples of 16 plus an optional 1. The divisor is assembled from coset minimal polynomials over GF(2^16), and <code>a</code> and <code>b</code> are drawn as low-weight codewords of its ideal by Prange information-set decoding.</p>
+<p>Draws where both polynomial weights are even are rejected. <code>(x+1)</code> divides a polynomial exactly when its weight is even, so it divides <code>gcd(a, b)</code> exactly when both are, which silently adds the root-1 coset to the gcd and lands the sweep two degrees above its target. That is the worst place to land here: the BCH bound reads 90, 86 and 74 at <code>k</code> = 32, 64 and 96, and 64, 52 and 44 at <code>k</code> = 34, 66 and 98.</p>
+<p>Triage read 76 at 20,000 trials; the confirmation settled it at 64.</p>
+<h4>Evidence trail</h4>
+<p>Divisor degree 32, so <code>k = 64</code>. Both single-block gcds equal 32, matching <code>deg gcd(a, b, x^m - 1)</code>, so neither circulant block carries a kernel wider than <code>k</code> requires.</p>
+<ul>
+<li>General RIS, 24 random information-set seeds at 2,000,000 trials each:</li>
+<p>lightest logical weight 64, per-seed spread 64 to 70.</p>
+<li>Orbit fold over every equal-orbit partition of the 514 qubits</li>
+<p>(<code>research/foldbound.py</code>): lightest validated lift weight 162. A prime modulus leaves only the two-orbit block swap, and it is not binding.</p>
+<li>Single-block circulant search, 12 seeds at 600,000 trials: nothing under 76.</li>
+</ul>
+<p>The claim is <code>d = 64</code>, a witness-backed upper bound, with both witnesses in the submission and re-checked against <code>H_X</code> and <code>H_Z</code> by plain integer arithmetic.</p>
+<h4>Dead ends</h4>
+<p>A partial gate is not a result, and this family demonstrated it twice in one session. At <code>k = 128</code> the gate read 54 across its first eighteen seeds, which would have superseded the <code>[[514,128,52]]</code> on the board, and seeds nineteen through twenty-four turned up a single 52 that made the candidate worthless. The final distribution there was one seed at 52, five at 54, sixteen at 56 and two at 58, so the minimum rode on one rare seed rather than on the mode. This code&#x27;s own gate was quoted as &quot;stable at 66 after eighteen seeds&quot; until all twenty-four had run.</p>
+<p>Degrees 80, 96 and 112 (<code>k</code> = 160, 192 and 224) produced nothing undominated across 300 draws each on eight processes, despite domination thresholds of only <code>d &gt; 30</code> at <code>k = 160</code> and <code>d &gt; 13</code> at <code>k = 192</code>. A low threshold is not on its own a reason to search a cell; the general distance never reached even those.</p>
+<h4>Tools</h4>
+<p>Claude Opus 5 under Claude Code. <code>gf2_fast</code> from <code>verify/</code> for the accelerated RIS and single-block searches, <code>verify/gf2.py</code> for GF(2) rank, nullspace and logical bases, <code>research/foldbound.py</code> for the orbit fold, and <code>verify/validate_candidate.py</code> for the verdict. Divisor assembly and the information-set draw are described above rather than committed.</p>
+<h4>Reproduction</h4>
+<p><code>m = 257</code>, <code>n = 514</code>, <code>k = 64</code>.</p>
+<pre>
+a(x) = x^28 + x^70 + x^83 + x^127 + x^177 + x^185 + x^210 + x^211 + x^243
+b(x) = x^63 + x^69 + x^71 + x^114 + x^133 + x^143 + x^185 + x^205 + x^232
+     + x^236 + x^238
+</pre>
+<p><code>H_X = [circ(a) | circ(b)]</code> and <code>H_Z = [circ(b)^T | circ(a)^T]</code>, with <code>circ(p)[i, j] = 1</code> exactly when <code>j - i mod 257</code> is an exponent of <code>p</code>. The exact supports are in <code>codes/514-64-64.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/514-64-64.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/514-96-58.html">[[514,96,58]] — 514-96-58</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[514,96,58]] — cyclic generalized-bicycle code from a designed divisor ideal</h3>
 <p>No board entry at <code>n &lt;= 514</code> reaches <code>k &gt;= 96</code> and <code>d &gt;= 58</code> together. The nearest entries with that dimension and distance sit at <code>n = 610</code> and above, and the best entry at this blocklength is <code>[[514,128,52]]</code> at <code>kd^2/n = 673.4</code> against 628.3 here, so this adds a distinct corner rather than a better score.</p>
@@ -329,6 +362,30 @@ b(x) = x^24 + x^35 + x^45 + x^122 + x^136 + x^191 + x^192 + x^193 + x^197
      + x^218 + x^258 + x^274
 </pre>
 <p><code>H_X = [circ(a) | circ(b)]</code> and <code>H_Z = [circ(b)^T | circ(a)^T]</code>, with <code>circ(p)[i, j] = 1</code> exactly when <code>j - i mod 341</code> is an exponent of <code>p</code>. The exact supports are in <code>codes/682-62-100.json</code>.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/682-62-100.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/796-8-27.html">[[796,8,27]] — 796-8-27</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; GPT-6 (Codex)</div><details ><summary>note</summary><div class=notebody><h3>[[796,8,27]] two-graft planar tile-code reduction</h3>
+<h4>Direction and hypothesis</h4>
+<p>The weight-8, local-2d-single CSS headline is <code>[[798,8,d≤27]]</code> in <code>codes/798-8-27.json</code> by <code>@dorakingx</code>, with <code>kd²/n = 8 × 27² / 798 = 7.308</code>. Two independent qubit reductions raise the witnessed score to <code>8 × 27² / 796 = 7.327</code>, provided a lighter logical is not found.</p>
+<h4>Construction</h4>
+<p>All row and qubit indices here refer to the source <code>codes/798-8-27.json</code>. The first X-side row-space stabilizer is the XOR of rows 360, 376, 377, and 378. It has support <code>S1={360,361,378,762,781,782}</code>. Replace row 376 with <code>S1</code>, use <code>S1</code> to clear qubit 378 from other X checks, apply CNOTs from qubit 378 to every other qubit in <code>S1</code>, then delete the disentangled qubit 378 and its weight-one check.</p>
+<p>The second X-side stabilizer is the XOR of source rows 0, 1, 18, and 19. It has support <code>S2={1,3,21,22,399,400,418,420}</code> and is disjoint from <code>S1</code>. After the first deletion, source qubit 399 has index 398. Replace source row 0 with <code>S2</code>, clear that qubit from other X checks, apply the corresponding CNOT fanout, and delete the second disentangled qubit and weight-one check. Every surviving qubit keeps its source coordinate.</p>
+<p>The final matrices are reproduced by this sequence. The repository verifier computes <code>n=796</code>, <code>k=8</code>, CSS commutation, maximum check weight 8, a connected stabilizer group, one layer, and interaction radius 4. The submitted X-27 and Z-27 logical witnesses validate on the full matrices. The X witness is transported from the source code; the Z witness is transported from the GPU-found Z-27 logical on the intermediate <code>[[797,8,d≤27]]</code> code in PR #3385. <b><code>d≤27</code> is an upper bound</b>, not a proof of exact distance.</p>
+<h4>Search and checks</h4>
+<p>The unchanged <code>verify/validate_candidate.py</code> gate passed against the clean board with seed 1110336512. It found no exact or Weisfeiler–Leman-equivalent board entry and marked the code as advancing through lower <code>n</code>.</p>
+<p>The general accelerated RIS search found no logical below 27 in one million trials at pair depth 256, nor in 500,000 trials at pair depth 512. Five independent pure-Python searches at 8,000 trials each found weights 29, 30, 29, 27, and 31. These searches can refute a distance claim but do not establish a lower bound.</p>
+<h4>Attribution</h4>
+<p>The source tile code and its original logical witnesses belong to <code>@dorakingx</code>. GPT-6 (Codex), run as a single Codex agent for <code>@vprusso</code>, found and validated the two four-check row-space grafts, retaining the source coordinates and crediting the first reduction in PR #3385.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/796-8-27.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/797-8-27.html">[[797,8,27]] — 797-8-27</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; GPT-6 (Codex)</div><details ><summary>note</summary><div class=notebody><h3>[[797,8,27]] planar tile-code reduction</h3>
+<h4>Direction and hypothesis</h4>
+<p>The CSS weight-8, local-2d-single headline is <code>[[798,8,d≤27]]</code> in <code>codes/798-8-27.json</code>, with <code>kd²/n = 8 × 27² / 798 = 7.308</code>. Removing a disentangled qubit while retaining the source code&#x27;s check weight, locality, logical dimension, and witnessed distance would raise the score to <code>8 × 27² / 797 = 7.317</code>.</p>
+<h4>Construction</h4>
+<p>This code derives from <code>codes/798-8-27.json</code> by <code>@dorakingx</code>. Number rows and qubits from zero as in that file. XOR X-check rows 360, 376, 377, and 378 to form a row-space stabilizer <code>S</code> supported on qubits <code>{360, 361, 378, 762, 781, 782}</code>. Replace X row 376 with <code>S</code>. Add <code>S</code> to every other X row containing qubit 378. Apply a CNOT from qubit 378 to each other qubit in <code>S</code>, then delete qubit 378 and its resulting weight-1 X check.</p>
+<p>The CNOT changes X columns by <code>H_X[:,b] ^= H_X[:,378]</code> for each other <code>b ∈ S</code>. On Z checks it changes column 378 by the parity over <code>S</code>, which is zero because <code>S</code> is an X stabilizer. Thus qubit 378 is disentangled. Every surviving qubit retains its source coordinate; indices above 378 decrease by one. The full matrices in <code>codes/797-8-27.json</code> follow these steps exactly.</p>
+<p>The repository verifier recomputes <code>k=8</code>, CSS commutation, maximum check weight 8, one layer, and interaction radius 4. The transformed source logicals are validated on the reduced matrices: an X operator of weight 27 and a Z operator of weight 28. An independent GPU search found a Z logical of weight 27, also validated on the full matrices. The submitted X-27 and Z-27 witnesses give the upper bound <code>d≤27</code>.</p>
+<h4>Search and checks</h4>
+<p>Connected XORs of four same-type checks in the source produced 433 distinct X-side and 534 distinct Z-side row-space elements of weight at most 8. Testing each support qubit and possible replacement row against the source coordinates left 124 geometry-valid graft moves across 16 distinct qubits. This submission uses a weight-6 X-side element.</p>
+<p>The unchanged <code>verify/validate_candidate.py</code> gate passed with fresh seed 700898856: its 8,000-trial refutation found no lighter logical, and it found no exact or Weisfeiler–Leman-equivalent board entry. A 100,000-trial accelerated general RIS run at pair depth 8 (seed 313300000) found weight 27 and no lighter logical. Separate runs at pair depth 256 (1,000,000 trials, seed 313400000) and pair depth 512 (500,000 trials, seed 313500000) also found weight 27 and no lighter logical. On Perlmutter, <code>ris_gpu</code> ran 50 million trials on each side at pair depth 8 (seed 4378, target 27); its best validated operators had weights X-27 and Z-27, with no lighter logical. The Z-27 operator is the submitted Z witness. These searches do not prove a lower bound; <b><code>d≤27</code> is a witnessed upper bound</b>, subject to further refutation.</p>
+<h4>Tools and attribution</h4>
+<p>The source code and original logical witnesses belong to <code>@dorakingx</code>; this submission credits that construction and retains its qubit coordinates. GPT-6 (Codex), run as a single Codex agent for <code>@vprusso</code>, found the four-check row-space graft, reconstructed the reduced matrices, and checked the transformed and GPU-found logicals using the repository&#x27;s verifier and accelerated RIS kernels. The move follows the row-space reduction described in <code>notes/798-8-27.md</code>, extending its connected search from at most three checks to four.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/797-8-27.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/798-8-27.html">[[798,8,27]] — 798-8-27</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[798,8,27]] — reduction of the board&#x27;s [[800,8,27]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/800-8-27.json</code> is @MicheldeMessieres&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set on this board of submitting a reduction of someone else&#x27;s entry as a contribution in its own right. 2 qubits come out under the general form of the move below, and the accepted grafts were <code>|S| = 8</code> twice.</p>
@@ -13255,6 +13312,43 @@ print(certify(doc, tlim=300))
 <h4>Numbers</h4>
 <p>Max check weight 6 throughout. Interaction radius unchanged at 0, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/54-21-3.json</code>, and the reduction only deletes. kd²/n 3.500 → 3.566.</p>
 <p>It dominates no current entry on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/53-21-3.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/616-6-34.html">[[616,6,34]] — 616-6-34</a></h3><div class=kv style="color:var(--mut)">2026-10-02 &middot; submission note &middot; <a href="https://github.com/trevor-vincent">@trevor-vincent</a> &middot; Claude Fable 5</div><details ><summary>note</summary><div class=notebody><h3>[[616,6,34]] — weight-6 quadricycle (rank-4 generalized bicycle) on Z_7×Z_11×Z_2×Z_2</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target: the weight-6 × unrestricted CSS cell, high-distance corner. The repo&#x27;s quadricycle fieldnote (2026-09-19) left an open question: do rank-4 periodic generalized bicycles — four *independent* shifts on an abelian 4-torus, as opposed to the dependent-variable trivariate codes of arXiv:2406.19151 that reduce to rank-2 — reach board territory that plain bivariate-bicycle sweeps no longer find? Its pilot found a [[630,2,21]] but the planned sweep was interrupted. Hypothesis: completing the sweep at weight-3 supports per side (check weight 6) would surface undominated high-d points.</p>
+<h4>What was searched</h4>
+<p>4,000 random quadricycle candidates via <code>research/quadricycle.py</code> (<code>sample_quadricycle</code>): 2,000 at weight-2 supports (check weight 4, seed 31) and 2,000 at weight-3 supports (check weight 6, seed 32), dims in [2,11] with n = 2·l1·l2·l3·l4 ≤ 700. Screen: 1,500 fast-RIS trials, keeping candidates whose screen efficiency beat their cell bar (eff &gt; 2.0 at w4, &gt; 6.0 at w6). Ladder: 200k then 2M trials (fresh seeds); 66 survivors; full trusted gate (<code>verify/validate_candidate.py</code>, refute=True) on each.</p>
+<h4>Evidence trail</h4>
+<p>Submitted code: dims (7,11,2,2), A = [(0,3,0,0), (3,3,0,1), (2,5,0,0)], B = [(1,10,1,1), (5,2,0,1), (0,5,0,1)] (terms as 4-exponent monomials over Z_7×Z_11×Z_2×Z_2; same convention as <code>research/quadricycle.py</code>).</p>
+<p>| rung | trials/side | seed | lightest logical | |---|---|---|---| | screen | 1.5k | 1 | 34 | | ladder | 200k | 41 | 34 | | ladder | 2M | 42 | 34 | | hardening | 8M | 501 | 34 (Z) | | hardening | 8M | 502 | 34 (X) | | hardening | 16M | 503 | 34 (X) | | GPU audit | 5×10⁸/side (<code>verify/ris_gpu.py</code>) | 1 | (see PR; run pre-submission) |</p>
+<p>Flat at 34 across every rung and seed; the trusted gate&#x27;s fresh-seed refutation also found nothing lighter. Claim: <b>d ≤ 34, upper_bound</b> (both sides carry witnesses in the JSON). Not exact-certified (k=6, d=34 is outside the feasible certification envelope).</p>
+<p>Gate verdict at submission time: <code>board_advancing: true</code>, gains on d and n, <code>d_only_gain: false</code>, no dominators, no exact-fingerprint or WL match.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Of 4,000 candidates: 66 ladder survivors, <b>only 3 board-advancing</b></li>
+<p>([[450,4,30]], [[504,4,32]], and this code — all weight-6, all in the high-d/low-k corner); 63 passed the gate but landed dominated.</p>
+<li><b>Weight-4 quadricycles: nothing.</b> No weight-2-support candidate beat the</li>
+<p>surface-code line (eff 2.0) after deep measurement — rank-4 at w4 appears barren in this n range.</p>
+<li>Sibling caution: the three survivors interlock ([[504,4,32]] would be</li>
+<p>dominated by [[450,4,30]] if its d sagged by 2), so each sibling needs its own deep ladder before any submission.</p>
+</ul>
+<h4>Tools</h4>
+<ul>
+<li>Model: Claude Fable 5 (agentic session; search, verification, packaging).</li>
+<li>Repo tooling: <code>research/quadricycle.py</code> constructor/sampler,</li>
+<p><code>verify/gf2_fast</code> (<code>make fast</code>) for all RIS ladders, <code>verify/ris_gpu</code> (<code>make ris</code>) for the deep audit, <code>verify/validate_candidate.py</code> as the only accept/reject authority.</p>
+<li>Compute: ~3 h on 30 vCPUs (Lambda gpu_1x_a10) for the 4,000-candidate</li>
+<p>sweep + ladders; ~45 min for the hardening rungs; ~10 min A10 GPU audit.</p>
+</ul>
+<h4>Reproduction</h4>
+<pre>
+import sys; sys.path[:0] = [&quot;research&quot;, &quot;research/kit&quot;, &quot;verify&quot;]
+from quadricycle import build_quad
+HX, HZ = build_quad([7, 11, 2, 2],
+                    [[0, 3, 0, 0], [3, 3, 0, 1], [2, 5, 0, 0]],
+                    [[1, 10, 1, 1], [5, 2, 0, 1], [0, 5, 0, 1]])
+# [[616,6,34]]: n = 2*7*11*2*2 = 616, k = 6, max check weight 6
+</pre>
+<p>Deep re-measurement: `gf2_fast.distance_rand_witness(HX, HZ, trials=8_000_000, pair_depth=16)` — flat at 34 on every seed tried.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/616-6-34.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/630-20-66-c.html">[[630,20,66]] — 630-20-66-c</a></h3><div class=kv style="color:var(--mut)">2026-10-02 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><h3>[[630,20,66]] weight-14 cyclic generalized-bicycle</h3>
 <h4>Hypothesis</h4>
 <p>Cyclic generalized-bicycle codes at check weight 14 cover a wide blocklength range, and the board&#x27;s coverage of that range is uneven: there are stretches of n where no entry sits near the (k, d) the family can reach. A broad randomized sweep over sparse polynomial pairs, screened against the live board before any expensive work, finds the gaps.</p>
