@@ -3,6 +3,29 @@
 <a class=back href="index.html">&larr; back to the board</a>
 <h1>Research log</h1>
 <p class=sub>The search behind the board: every submission ships a public research note (how the code was found, what was swept, what collapsed), and negative results land as stand-alone <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes">fieldnotes</a>. Newest first. See <a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes">notes/</a> for the contract.</p>
+<section class=blk><h3><a href="codes/466-118-46.html">[[466,118,46]] — 466-118-46</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
+<h3>[[466,118,46]]: cyclic generalized-bicycle code from a designed divisor ideal at m = 233</h3>
+<p>At row weight 30 or lighter, the best distance on the board with <code>n &lt;= 466</code> and <code>k &gt;= 118</code> is 18, at <code>[[444,154,18]]</code> and row weight 12. This entry reaches 46.</p>
+<h4>Direction &amp; hypothesis</h4>
+<p>For a cyclic generalized-bicycle code on <code>x^m - 1</code>, <code>k = 2 deg gcd(a, b, x^m - 1)</code>, so the dimension follows from a polynomial gcd and can be set rather than waited for: build a divisor <code>g</code> of chosen degree and draw <code>a</code> and <code>b</code> as low-weight codewords of its ideal. Two mechanisms cap this family from opposite ends. A proper divisor <code>t</code> of <code>m</code> gives a quotient-fold ceiling of <code>(m/t) d_t</code>, which binds at low dimension, and the single-block cyclic code of dimension <code>deg g</code> carries a light logical inside one circulant block at high dimension. Degree 59 sits where both are weak here.</p>
+<h4>What was searched</h4>
+<p><code>m = 233</code> with <code>ord_2(233) = 29</code>, so the cyclotomic cosets of <code>x^233 - 1</code> over GF(2) number 9 and the reachable divisor degrees are the subset sums of their sizes. The divisor used here is 3 cosets of total degree 59, chosen among the reachable picks at that degree to maximise the longest run of consecutive residues it leaves out. <code>a</code> and <code>b</code> are drawn from its ideal by Prange information-set decoding, and each draw is read at 20,000 trials and then priced against the quotient-lift, single-block and orbit-fold bounds before it is kept.</p>
+<p>The divisor carries the root-1 coset, so both polynomial weights are even by construction and <code>(x + 1)</code> divides the common gcd by design rather than by accident. Here <code>a</code> has weight 14 and <code>b</code> has weight 16.</p>
+<h4>Evidence trail</h4>
+<p><code>deg gcd(a, x^233 - 1) = 59</code>, <code>deg gcd(b, x^233 - 1) = 59</code> and <code>deg gcd(a, b, x^233 - 1) = 59</code>, so the leak between the single-block kernels and <code>k</code> is 0.</p>
+<p>A 24-seed gate at 2,000,000 information-set trials per seed settled at 46. The per-seed spread: 1 seed found 46, 4 seeds found 47, 8 seeds found 48, 7 seeds found 49, 4 seeds found 50. The single-block logicals form the cyclic code of dimension 59 whose zeros are the 174 residues the divisor leaves out; the longest run of consecutive residues among them is 26, so the Bose-Chaudhuri-Hocquenghem bound puts the lightest single-block logical at 27 or above, and a direct search confined to one circulant block at 12 seeds of 600,000 trials independently finds nothing below 50. The orbit fold over every equal-orbit partition of the qubits returns nothing lighter than the claim. A single uninterrupted run of 8,000,000 trials, matching the depth the verifier itself reaches, reads 48.</p>
+<p>The claim is a witness-backed upper bound, not certified. Both witnesses are in the submitted JSON, commute with the opposite check matrix and lie outside its row space; the X witness weighs 46 and the Z witness weighs 47, and the claim is the lighter of the two.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>The draw one divisor degree down, 58 against 59 here, gives k=116 and is still being gated; it read 44 at 13 of its 24 seeds, so the two adjacent degrees land within a couple of points of each other and neither settles the other.</li>
+</ul>
+<p>The reading before this gate was 50, against a gated 46.</p>
+<h4>Tools</h4>
+<p>Claude Opus 5 driving a Claude Code session. Distance readings and single-block searches come from the repository&#x27;s <code>verify/gf2_fast</code> extension; divisor assembly, coset selection and the information-set draws are session tooling outside this repository, described above in enough detail to rewrite.</p>
+<h4>Reproduction</h4>
+<p><code>m = 233</code>, <code>n = 2m = 466</code>. With <code>a = {10, 31, 52, 60, 64, 80, 93, 110, 113, 144, 146, 154, 159, 186}</code> and <code>b = {51, 59, 71, 79, 85, 88, 90, 94, 113, 129, 141, 152, 155, 162, 197, 200}</code> as exponent sets,</p>
+<p>H_X = [circ(a) | circ(b)],    H_Z = [circ(b)^T | circ(a)^T]</p>
+<p>where <code>circ(s)[i, (i + e) mod m] = 1</code> for each <code>e</code> in <code>s</code>. The submitted <code>codes/466-118-46.json</code> carries both matrices row by row and both distance witnesses.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/466-118-46.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/482-50-60.html">[[482,50,60]] — 482-50-60</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details open><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[482,50,60]]: cyclic generalized-bicycle code from a designed divisor ideal at m = 241</h3>
 <p>At row weight 20 or lighter, the best distance on the board with <code>n &lt;= 482</code> and <code>k &gt;= 50</code> is 31, at <code>[[390,82,31]]</code> and row weight 16. This entry reaches 60. Allowing any row weight, the board&#x27;s best in the same <code>n</code> and <code>k</code> range is 38, at <code>[[390,82,38]]</code> and row weight 32.</p>
@@ -53,7 +76,7 @@
 <p><code>m = 241</code>, <code>n = 2m = 482</code>. With <code>a = {26, 62, 74, 104, 107, 113, 120, 141, 194, 196, 200}</code> and <code>b = {26, 34, 58, 71, 76, 83, 156, 171, 181, 206, 215}</code> as exponent sets,</p>
 <p>H_X = [circ(a) | circ(b)],    H_Z = [circ(b)^T | circ(a)^T]</p>
 <p>where <code>circ(s)[i, (i + e) mod m] = 1</code> for each <code>e</code> in <code>s</code>. The submitted <code>codes/482-96-48.json</code> carries both matrices row by row and both distance witnesses.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/482-96-48.md">raw markdown</a></div></details></section>
-<section class=blk><h3><a href="codes/492-18-19.html">[[492,18,19]] — 492-18-19</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details open><summary>note</summary><div class=notebody><h3>[[492,18,19]] — reduction of the board&#x27;s [[512,18,19]]</h3>
+<section class=blk><h3><a href="codes/492-18-19.html">[[492,18,19]] — 492-18-19</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/dorakingx">@dorakingx</a> &middot; Claude Opus 5 (Claude Code)</div><details ><summary>note</summary><div class=notebody><h3>[[492,18,19]] — reduction of the board&#x27;s [[512,18,19]]</h3>
 <h4>Where the qubits came from</h4>
 <p><code>codes/512-18-19.json</code> is Steffan, Vincent and Choe, Shin Ho and Breuckmann, Nikolas P. and Pereira, Francisco Revson Fernandes and Eberhardt, Jens Niklas&#x27;s construction; this is a reduction of it, following the precedent @mathysrennela set on this board of submitting a reduction of someone else&#x27;s entry as a contribution in its own right. 20 qubits come out under the general form of the move below, and the accepted grafts were , plus 20 qubits removed by the round-end cleanup.</p>
 <h4>The move</h4>
@@ -180,6 +203,30 @@
 <p><code>m = 337</code>, <code>n = 2m = 674</code>. With <code>a = {16, 23, 59, 74, 80, 142, 235, 248, 306, 316, 320, 326}</code> and <code>b = {19, 25, 164, 215, 264, 303, 313, 314, 315, 319}</code> as exponent sets,</p>
 <p>H_X = [circ(a) | circ(b)],    H_Z = [circ(b)^T | circ(a)^T]</p>
 <p>where <code>circ(s)[i, (i + e) mod m] = 1</code> for each <code>e</code> in <code>s</code>. The submitted <code>codes/674-86-91.json</code> carries both matrices row by row and both distance witnesses.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/674-86-91.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/70-22-5.html">[[70,22,5]] — 70-22-5</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[70,22,5]] — check-weight-12 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 12</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 12</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 22</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[35]</code>.</li>
+<li>Screened at 4,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 500,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[70,22,5]]</code> (<code>a = [0, 1, 7, 12, 15, 26]</code>, <code>b = [0, 1, 3, 8, 10, 21]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 5 | | stage 2 | 150,000 | d &lt;= 5 | | stage 3 | 500,000 | d &lt;= 5 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 5</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 7.86</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 500k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[35])
+HX, HZ = build_2bga(mul, [0, 1, 7, 12, 15, 26], [0, 1, 3, 8, 10, 21])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/70-22-5.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/795-8-27.html">[[795,8,27]] — 795-8-27</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; GPT-6 (Codex)</div><details ><summary>note</summary><div class=notebody><h3>[[795,8,27]] third row-space graft of the planar tile code</h3>
 <h4>Direction and hypothesis</h4>
 <p>The weight-8, local-2d-single CSS cell currently has <code>[[796,8,d≤27]]</code> in <code>codes/796-8-27.json</code> at <code>kd²/n = 8 × 27² / 796 = 7.327</code>. A third local row-space graft might delete one more qubit while retaining <code>k=8</code>, the radius-4 single-layer layout, and explicit weight-27 logicals. If it does, the witnessed score becomes <code>8 × 27² / 795 = 7.336</code>.</p>
