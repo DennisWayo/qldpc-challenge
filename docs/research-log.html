@@ -254,6 +254,53 @@ S = halved_checks(40, E)   # the 4P generators of codes/200-43-19.json, in order
 <h4>Numbers</h4>
 <p>Max check weight 8 throughout. Interaction radius unchanged at 7, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/512-18-18.json</code>, and the reduction only deletes. kd²/n 11.391 → 12.304.</p>
 <p>It dominates <code>511-18-18</code>, <code>512-18-18</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/474-18-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/512-54-24.html">[[512,54,24]] — 512-54-24</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; MiMo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[512,54,24]] — [[8,3,3]] inner x [[64,18,8]] outer: a non-CSS concatenation</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>The stabilizer (non-CSS) board holds 150 of the board&#x27;s 2210 entries, and its <code>weight-9plus / unrestricted</code> cell is sparse at moderate <code>n</code>. The hypothesis was that a *finite* reading of the concatenate-then-unconcatenate mechanism of arXiv:2610.04694 would reach it: that paper reads each of its phase-space examples as a stabilizer code concatenated with a GKP code, and a GKP qudit has order 4, so it has no image as a qubit Pauli. Substituting a small non-CSS qubit code for the GKP inner code keeps the mechanism and the output.</p>
+<p>Concatenating an outer code <code>(n_o, k_o, d_o)</code> with an inner one <code>(n_i, k_i, d_i)</code> gives <code>n = n_i n_o</code>, <code>k = k_i k_o</code>, and <code>d &gt;= d_i d_o</code>, because a logical Pauli is nontrivial on a block only if its restriction there is a nontrivial inner logical, so a nontrivial outer logical costs at least <code>d_o</code> blocks at <code>&gt;= d_i</code> each. Since the inner code is non-CSS, so is the product, which is what moves it onto the other board. The efficiency multiplies: <code>kd^2/n = (k_i d_i^2/n_i) * (k_o d_o^2/n_o)</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Inner candidates: the board&#x27;s non-CSS entries with <code>n &lt;= 40</code> and <code>k &lt;= 7</code></li>
+<p>(45 of them, the bound coming from enumerating a whole logical space).</p>
+<li>For each, a min-weight symplectic basis of its logical Pauli space, by greedy</li>
+<p>Witt extension over the coefficient space of <code>css.logical_basis</code>. Two numbers come out of it and only two matter: <code>beta</code>, the heaviest basis vector, which sets the product&#x27;s check weight <code>w = max(w_in, beta * w_out)</code>, and the lightest vector in the X- and Z-subspaces, which sets the witnessable distance <code>d = min_wt * d_o</code>.</p>
+<li>Outer candidates: every CSS entry, paired under <code>n_i n_o &lt;= 700</code>.</li>
+<li>3136 products came back undominated on the stabilizer board under that weight</li>
+<p>model; the schema&#x27;s 32-qubit cap on a generator then removed most of them.</p>
+<li>Screening: <code>verify/heuristic_distance.ris_min_pauli_logical</code>, 1000 samples x 2</li>
+<p>seeds per finalist (seeds 0, 1).</p>
+</ul>
+<h4>Evidence trail</h4>
+<ul>
+<li>Witness for <code>d &lt;= 24</code>: the outer&#x27;s own X witness of weight 8 lifted through a</li>
+<p>weight-3 logical of <code>[[8,3,3]]</code>, i.e. 16 X and 16 Z positions with 8 shared, which the verifier confirms is a nontrivial element of the normalizer outside the rowspace. That weight is also the concatenation bound <code>d_i d_o = 3 * 8</code>, so the claim is witnessed *and* argued.</p>
+<li>RIS over the product&#x27;s own normalizer returned a weight-26 operator at 2000</li>
+<p>samples (seeds 0 and 1) and never the 24 one, which is why the constructed witness rather than the search sets the claim.</p>
+<li>Gate: <code>passed: true</code>, <code>verify.ok: true</code>, refutation</li>
+<p>&quot;no lighter logical in 8000 RIS trials (seed 124356530)&quot;, no exact or WL-equivalent board entry, <code>board_advancing: true</code>, empty <code>dominated_by</code>.</p>
+<li>Claim is <code>upper_bound</code>, not exact: <code>verify/certify.py</code> does not minimize a</li>
+<p>Pauli weight, so no non-CSS entry on the board can be <code>d=</code>.</p>
+</ul>
+<h4>Dead ends</h4>
+<ul>
+<li><b>Ring-valued checks add nothing.</b> The paper&#x27;s integer-lift statement says</li>
+<p>every mixed-qudit stabilizer subgroup is a lattice reduced mod the local dimensions. Reduced mod 2 that is the F_2 code on the same supports: a <code>Z_4</code> bicycle satisfies <code>A B^T + B A^T = 0 (mod 4)</code>, hence <code>0 (mod 2)</code>, and its image is the F_2 bicycle on the same monomials.</p>
+<li><b>Shears are relabels.</b> A symplectic shear of a CSS code is a non-local</li>
+<p>Clifford, so its image must be declared <code>provenance.clifford_relabel_of</code> (issue #2802) and counts as a relabeling, not a construction.</p>
+<li><b>The paper&#x27;s non-decomposability criterion does not transfer.</b> It is torsion</li>
+<p>of the stabilizer lattice, which needs a local dimension at least 4; a binary <code>D</code> is an F_2 vector space and has none.</p>
+<li><b>Scoring logicals by <code>|X| + |Z|</code> over-weights Y.</b> Pauli weight counts a Y</li>
+<p>once. With the wrong metric the first packaged claim was <code>d &lt;= 32</code>; the real witness is 24.</p>
+<li><b><code>beta * w_out &gt; 32</code> is not a weak candidate, it is rejected.</b></li>
+<p><code>schema/code.schema.json</code> caps a generator at 32 qubits, so <code>[[496,30,36]]</code> (<code>kd^2/n</code> 78.4, <code>8-3-3</code> x <code>62-10-9</code>) is refused outright.</p>
+</ul>
+<h4>Tools</h4>
+<p>Model: MiMo-V2.6-Flash, opencode harness. Four purpose-built scripts for this campaign, written on top of <code>research/kit/css.py</code> and <code>verify/heuristic_distance.py</code>: a concatenation builder (the product and its witnesses), a packaging script, a product search run first with the wrong weight model and then with the measured one, and an RIS pass over the normalizer. They were session-local scratch and are deliberately not committed here, so the recipe below states the algorithm rather than an invocation. Compute: minutes on CPU, no accelerator.</p>
+<h4>Reproduction</h4>
+<p>The builder loads <code>codes/8-3-3.json</code> and <code>codes/64-18-8.json</code>, takes a symplectic basis of the inner logical space, emits the inner stabilizers on each of the 56 blocks plus each outer check lifted through that basis, and writes the symplectic halves under keys <code>a</code>, <code>b</code>. Packaging then lifts the outer&#x27;s stored witnesses through the lightest X- and Z-subspace vectors — scored by Pauli weight, <code>|X union Z|</code>, never <code>|X| + |Z|</code>, which is what first inflated the claim to 32 — and stages the submission. The gate is the repo&#x27;s own:</p>
+<pre>
+uv run --extra research python research/kit/coordination.py gate &lt;file&gt;
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/512-54-24.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/514-32-46.html">[[514,32,46]] — 514-32-46</a></h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[514,32,46]]: cyclic generalized-bicycle code from a designed divisor ideal at m = 257</h3>
 <p>At row weight 10 or lighter, the best distance on the board with <code>n &lt;= 514</code> and <code>k &gt;= 32</code> is 30, at <code>[[390,32,30]]</code> and row weight 10. This entry reaches 46. Allowing any row weight, the board&#x27;s best in the same <code>n</code> and <code>k</code> range is 64, at <code>[[514,64,64]]</code> and row weight 20.</p>
@@ -728,6 +775,40 @@ def halved_checks(P, E):
 E = [[7, 8, 0, 14, 7, 10, 7, 9, 17, 7], [18, 8, 15, 15, 16, 16, 2, 16, 3, 13], [13, 3, 15, 16, 5, 14, 6, 0, 9, 9], [18, 9, 13, 7, 12, 9, 10, 1, 12, 5]]
 S = halved_checks(19, E)   # the 4P generators of codes/95-22-11.json, in order
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/95-22-11.md">raw markdown</a></div></details></section>
+<section class=blk><h3>Concatenating onto the non-CSS board: what arXiv:2610.04694 does and does not give a qubit board</h3><div class=kv style="color:var(--mut)">2026-10-13 &middot; fieldnote &middot; <a href="https://github.com/MathysRennela">@MathysRennela</a> &middot; Mimo-V2.6-Flash (opencode agent harness)</div><details ><summary>note</summary><div class=notebody><h4>Summary</h4>
+<p>*Stabilizer codes over general phase spaces* (Chakraborty and Albert, arXiv:2610.04694) is a theory paper: its codes live on <code>M = R^p x Z^q x Z_c</code>, the oscillator and rotor factors have no finite Hilbert dimension, and this board&#x27;s verifier recomputes <code>k</code> over <code>GF(2)</code>. Two-thirds of the session&#x27;s work was therefore a *negative*, and it is written down below so the next reader does not repeat it. One reading in it did pay: the paper says its examples are all &quot;a stabilizer code concatenated with a GKP code&quot;, and swapping the GKP inner code for a <b>small non-CSS stabilizer code</b> produces ordinary qubit codes that land on the non-CSS board, where the frontier is far thinner than on the CSS board.</p>
+<p>One such product, [[512,54,24]] with check weight 32, passed the trusted gate (<code>passed: true</code>, <code>board_advancing: true</code>, empty <code>dominator_slugs</code>, and a fresh refutation search that found nothing lighter); it is staged for a human to review, and the campaign ledger records the parameters, seeds and where each survivor sits. Five candidates were measured; one was refused by the schema outright, which is the most useful thing this campaign found. All distances here are witness-backed upper bounds.</p>
+<h4>The paper, and why most of it is not submittable here</h4>
+<p>The paper&#x27;s contribution is a common language (stabilizer lattices in phase space, symplectic duals, Clifford-Gaussian gates from lattice symplectries, weight enumerators) with qudit, oscillator and rotor codes as special cases. Its one finite-looking example, the hybrid Golay code, couples twelve oscillators to twelve qubits and encodes *one* logical qubit; qubitizing it is not even well defined, since an order-4 qudit shift is not a qubit Pauli and no homomorphism sends one to the other. The <code>arxiv_watch</code> screen had already filed this paper as <code>background</code> (2026-10-11), and that was the right call.</p>
+<h4>Dead end 1: the finite reading of &quot;integer lift&quot; collapses to F_2</h4>
+<p>The most quotable finite statement is Sec. II.4.1: *to construct a mixed-qudit stabilizer code, choose a full-rank integer lattice with integral symplectic Gram matrix and reduce it modulo the local dimensions; every such subgroup arises this way*. With all <code>c_i = 2</code> this parametrizes binary stabilizer codes, and the tempting move is to build one out of ring-valued data -- a <code>Z_4</code>-valued bivariate bicycle, say -- and reduce mod 2.</p>
+<p>It adds nothing. The mod-2 image of the lattice is the span of the mod-2 images of the chosen generators, so a <code>Z_4</code>-valued check matrix reduces to the <code>F_2</code> check matrix with the same supports: a <code>Z_4</code> bicycle with monomials <code>A, B</code> and <code>A B^T + B A^T = 0 (mod 4)</code> reduces to the <code>F_2</code> bicycle on the same monomials, since <code>mod 4</code> implies <code>mod 2</code>. The lattice parametrization is a repackaging of <code>k = n - rank</code> and of the symplectic dual, not a larger search space. The only way to leave the binary world and come back is a genuinely quaternary object whose *reduction* has mixed X/Z supports, which is just a non-CSS binary code again -- so one ends up searching binary stabilizer codes directly.</p>
+<p>Two related routes are closed for the same reason. A symplectic shear applied to a CSS code is a block Clifford, so its image is a declared relabel (<code>provenance.clifford_relabel_of</code>, issue #2802) and not a construction result. And the paper&#x27;s own criterion for intrinsic non-decomposability is *torsion* of the stabilizer lattice, which needs a local dimension of at least 4: a binary <code>D</code> is an <code>F_2</code> vector space and has none.</p>
+<h4>Dead end 2: the check weight is set by the heaviest logical, not the distance</h4>
+<p>Concatenating an outer code with an inner one imposes the outer code on *all* <code>k_in</code> logical layers of every block, so the builder needs a full symplectic basis of the inner logical space, not one pair -- the version that imposed a single layer gave <code>k = n_out(k_in - 1) + k_out</code> instead of <code>k_in k_out</code>, which is what the first build caught. Then:</p>
+<p>n = n_in n_out,  k = k_in k_out,  d &gt;= d_in d_out, check weight = max(w_in, w_out * max_j wt(L_j))</p>
+<p>The weight is set by the <b>heaviest</b> basis vector <code>beta</code>, while the witnessable distance is set by the <b>lightest</b> vector in the X- (or Z-) subspace. Measured over the board&#x27;s non-CSS entries with <code>n &lt;= 40</code>, <code>beta</code> is usually well above the distance: <code>[[36,4,8]]</code> needs basis vectors of weight 9, <code>[[36,6,6]]</code> of weight 24, <code>[[12,4,4]]</code> of weight 6 against a distance of 4. Only a handful of inners have a uniformly light basis -- <code>[[8,3,3]]</code> (<code>beta</code> 4, <code>d</code> 3), <code>[[8,2,3]]</code> (<code>beta</code> 3, <code>d</code> 3), <code>[[12,4,4]]</code> (<code>beta</code> 6, <code>d</code> 4) -- and those are what the surviving candidates use.</p>
+<p>The metric that makes this work is Pauli weight: a <code>Y</code> counts once. Scoring the basis by <code>|X| + |Z|</code> instead over-weights <code>Y</code>-heavy logicals, which is how the first packaged claim of <code>d &lt;= 32</code> on <code>[[512,54,*]]</code> was produced when the witness is really 24. <b>Score stabilizer logicals with <code>|X union Z|</code>.</b></p>
+<h4>Dead end 3: a hard cap on check weight, and it binds</h4>
+<p><code>schema/code.schema.json</code> allows at most 32 qubits per generator (<code>$defs/generatorList/items/properties/X</code> and <code>/Z</code>, and the same <code>maxItems: 32</code> on a CSS support list), so <code>w &gt; 32</code> is not a low-ranked candidate but a schema violation. <code>[[496,30,36]]</code> (inner <code>8-3-3</code>, outer <code>62-10-9</code>) was refused at <code>checks/S/310/Z ... is too long</code> and cannot be filed at any rank -- it is also the second-best <code>kd^2/n</code> this campaign produced. That cap is exactly where every non-CSS entry on the board stops, and the binding rule for this family is <code>beta * w_out &lt;= 32</code> alongside <code>n_in n_out &lt;= 700</code>.</p>
+<h4>What passed the gate</h4>
+<p>All three staged candidates ran the trusted gate and all three passed: <code>passed: true</code>, <code>verify.ok: true</code>, <code>refute.refuted: false</code> with the detail &quot;no lighter logical in 8000 RIS trials&quot; (seeds 124356530, 909393092 and 317404972), no exact or WL-equivalent board duplicate, and <code>novelty.board_advancing: true</code> with an empty <code>dominated_by</code> in the <code>weight-9plus / unrestricted</code> stabilizer cell.</p>
+<ul>
+<li><b>[[512,54,24]]</b>, check weight 32, <code>kd^2/n</code> 60.75: the CSS board entry</li>
+<p>[[64,18,8]] as outer with the non-CSS [[8,3,3]] as inner.</p>
+<li><b>[[576,42,24]]</b>, <code>w</code> 32, <code>kd^2/n</code> 42.0: [[72,14,8]] outer, same inner.</li>
+<li><b>[[672,28,30]]</b>, <code>w</code> 24, <code>kd^2/n</code> 37.5: [[84,14,10]] outer with the</li>
+<p>non-CSS [[8,2,3]] inner.</p>
+</ul>
+<p>In each the witness is the outer&#x27;s own witness lifted through a weight-3 logical of the inner code, which the verifier confirms is a genuine nontrivial logical, and in each that weight equals the concatenation bound <code>d_in d_out</code>, so the claim is witnessed *and* argued rather than merely exhibited -- subject, as always, to the parents&#x27; own <code>d&lt;=</code> claims.</p>
+<p>They are staged for a human to review, unadjudicated beyond the gate. They are kept because each costs nothing to hold and one may outlive a refutation of a parent&#x27;s distance; the campaign ledger holds the per-candidate verdicts behind this note.</p>
+<p>| inner x outer | product | <code>w</code> | <code>kd^2/n</code> | claim | gate | |---|---|---|---|---|---| | <code>8-3-3</code> x <code>64-18-8</code> | [[512,54,24]] | 32 | 60.75 | d &lt;= 24 = bound <code>3*8</code> | passed | | <code>8-3-3</code> x <code>72-14-8</code> | [[576,42,24]] | 32 | 42.0 | d &lt;= 24 = bound <code>3*8</code> | passed | | <code>8-2-3</code> x <code>84-14-10</code> | [[672,28,30]] | 24 | 37.5 | d &lt;= 30 = bound <code>3*10</code> | passed | | <code>8-3-3</code> x <code>56-12-8</code> | [[448,36,24]] | 32 | 46.3 | d &lt;= 24 = bound <code>3*8</code> | built, not staged | | <code>8-3-3</code> x <code>62-10-9</code> | [[496,30,36]] | 36 | 78.4 | <b>refused</b> | <code>maxItems: 32</code> |</p>
+<h4>The negative that matters more than the win</h4>
+<p>Every non-CSS entry on the board carries <code>d &lt;=</code>, because <code>verify/certify.py</code> does not minimize a Pauli weight yet. That makes *any* construction inherited from two upper bounds -- and this one is inherited twice -- soft in a way the CSS side is not: RIS over the product&#x27;s normalizer found a logical of weight 26 where the constructed witness was 32, i.e. the parents&#x27; distances do not compose the way their witnesses suggest. Measuring the product is not optional, and the claim must be the lightest thing anyone can construct, not the lightest thing the builder happened to build.</p>
+<h4>Reopen conditions</h4>
+<p>This route is bounded by <code>beta * w_out &lt;= 32</code> and by the board&#x27;s small non-CSS codes as inner codes. Reopen it with either of: an inner code with a large <code>k_in</code> and a uniformly weight-<code>d_in</code> symplectic basis (nobody on the board has one -- the measured <code>beta</code> never sits at <code>d_in</code> for <code>k_in &gt;= 3</code> except <code>[[8,3,3]]</code>, and there at 4 against 3); or a truncated product in the style of [[910,12,36]] / arXiv:2609.37231, which drops qubits instead of scaling <code>n</code> by <code>n_in</code> and might reach a low-weight cell. Stop a variant if <code>beta * w_out &gt; 32</code> before <code>n</code> is interesting, which is where most of them stop.</p>
+<h4>Provenance</h4>
+<p>Campaign run under model Mimo-V2.6-Flash, opencode harness, requested by the maintainer. Four purpose-built scripts carried the session, none committed to this repository: a concatenation builder, a packaging script that lifts the outer&#x27;s witnesses through the lightest inner subspace vectors, a product search run first with the wrong weight model and then with the measured one, and an RIS pass over the normalizer. The five measured candidates and their seeds are recorded in the campaign ledger; the builders were session-local scratch and are available from the author on request. Every distance here is a witness-backed upper bound; nothing is certified exact.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/fieldnotes/2026-10-13-concatenating-onto-the-non-css-board.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/100-2-15.html">[[100,2,15]] — 100-2-15</a></h3><div class=kv style="color:var(--mut)">2026-10-12 &middot; submission note &middot; Lee and Gideon &middot; Mimo-V2.6-Flash</div><details ><summary>note</summary><div class=notebody><h3>[[100,2,15]] — two-block group-algebra code over C5 x D10</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Cell <code>weight-8 x unrestricted</code>, CSS board. The argument is coverage, not discovery: this code is published in arXiv:2610.13880v1 (Lee, &quot;Bicycle Race&quot;), and nothing on the board occupied this (n, k, d, w) point. It advances the four-axis Pareto frontier by moving into a cell that was empty at these parameters.</p>
@@ -49331,24 +49412,23 @@ b = [ 3,  6, 23, 27, 41, 46, 47, 56]
 <ul>
 <li>Model: Xiaomi MiMo-V2.5 (provenance, self-reported).</li>
 <li>Repo tooling: <code>research/kit/group_algebra.py</code> (build_2bga),</li>
-<p><code>research/kit/surrogate.py</code> (RIS distance), <code>verify/validate_candidate.py</code> (trusted gate); GAP group enumeration via the kit&#x27;s GAP bridge scripts (SmallGroup(64, 61)).</p>
-<li>Compute: GAP enumeration via the kit&#x27;s bridge (catalog cached); distance</li>
-<p>searches ~1M trials on the winner.</p>
+<p><code>research/kit/surrogate.py</code> (RIS distance), <code>verify/validate_candidate.py</code> (trusted gate).</p>
+<li>GAP 4.15.1 for the group enumeration, through a local bridge</li>
+<p>(<code>gap_bridge.py</code>) written for this search and never committed under any path. The one table the code needs, SmallGroup(64, 61) in GAP&#x27;s <code>Elements(G)</code> order, is committed as <code>research/kit/groups/smallgroup_64_61.json</code>, exported by <code>research/kit/groups/cayley_table.g</code>.</p>
+<li>Compute: distance searches ~1M trials on the winner.</li>
 </ul>
 <h4>Reproduction</h4>
-<p>The committed builder <code>research/build_128_20_14.py</code> reproduces the full submission: it loads the order-64 Cayley table for ((C4xC2):C4):C2 (obtained by enumerating order-64 groups with GAP and selecting the group whose structure description is ((C4xC2):C4):C2, as the sweep did), calls <code>group_algebra.build_2bga</code> with the supports above, recomputes n/k/CSS, searches witnesses, and writes a schema-valid staged doc:</p>
+<p><code>research/build_128_20_14.py</code> reproduces the full submission without GAP: it reads the committed Cayley table, calls <code>group_algebra.build_2bga</code> with the supports above, recomputes n/k/CSS, searches witnesses, and writes a schema-valid staged doc:</p>
 <pre>
 uv run python research/build_128_20_14.py
 </pre>
-<p>Equivalently, in GAP <code>SmallGroup(64, 61)</code> is the order-64 group with that structure description; its Cayley table plus</p>
+<p>The same matrices in recipe form, checked against the board entry&#x27;s fingerprint (<code>7359bba32bf7a769</code>):</p>
 <pre>
-from research.kit.group_algebra import build_2bga
-from research.kit.css import compute_k, verify_css
-HX, HZ = build_2bga(mul64, a=[7, 9, 11, 30, 32, 34, 47, 59],
-                    b=[3, 6, 23, 27, 41, 46, 47, 56])
-assert verify_css(HX, HZ) and compute_k(HX, HZ) == 20
+uv run python research/kit/rebuild.py \
+    --constructor group_algebra.build_2bga_small_group \
+    --params &#x27;{&quot;order&quot;: 64, &quot;gap_id&quot;: 61, &quot;a&quot;: [7, 9, 11, 30, 32, 34, 47, 59], &quot;b&quot;: [3, 6, 23, 27, 41, 46, 47, 56]}&#x27;
 </pre>
-<p>with <code>mul64</code> the Cayley table of that group reproduces the code.</p>
+<p>The group is pinned by its catalog id, not by its structure description: in GAP 4.15.1 (smallgrp 1.5.4) <code>SmallGroup(64, i)</code> prints as <code>((C4 x C2) : C4) : C2</code> for i in {61, 62, 69, 74, 80}, and only id 61 with these supports gives the committed checks. The element indices in a and b refer to GAP&#x27;s <code>Elements(G)</code> order, identity first, which is the order the committed table uses. A table regenerated with <code>research/kit/groups/cayley_table.g</code> under another GAP version has to reproduce the fingerprint above before its indices can be trusted; <code>research/test_group_tables.py</code> makes that check.</p>
 <p>There is no public table row for this code; the group + supports fully determine (H_X, H_Z). The JSON in <code>codes/128-20-14.json</code> was built from the kit&#x27;s <code>submit.make_submission</code> on that matrix.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/128-20-14.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/144-2-12.html">[[144,2,12]] — 144-2-12</a></h3><div class=kv style="color:var(--mut)">2026-08-15 &middot; submission note &middot; <a href="https://github.com/mathysrennela">@mathysrennela</a> &middot; DeepSeek V4 Flash 0731</div><details ><summary>note</summary><div class=notebody><h3>[[144,2,12]] trivariate bicycle (multivariate-bicycle family)</h3>
 <p>Primary reference: <a href="https://arxiv.org/abs/2406.19151">arXiv:2406.19151</a> (Voss, Sim, Haug, Bharti), SM Table 2, weight-4 row.</p>
@@ -52027,14 +52107,14 @@ HX, HZ = build_cornucopia(16, INSTANCES[&quot;[[576,292,8]]&quot;][&quot;shifts&
 <p>Same as [[128,21,8]].</p>
 <h4>Reproduction</h4>
 <pre>
+# The sweep&#x27;s GAP bridge was never committed. Its order-64 table for C8 : Q8
+# (GAP SmallGroup(64, 182), Elements(G) order) is committed as
+# research/kit/groups/smallgroup_64_182.json and rebuilds the board entry&#x27;s
+# fingerprint (research/test_group_tables.py).
 import sys; sys.path.insert(0, &#x27;research/kit&#x27;); sys.path.insert(0, &#x27;verify&#x27;)
-import numpy as np
-from gap_bridge import all_groups_of_order
-from group_algebra import build_2bga
+from group_algebra import build_2bga, small_group
 
-groups = all_groups_of_order(64)
-g = groups[90]  # C8:Q8, GAP index 182
-cayley = np.array(g[&#x27;cayley_table&#x27;], dtype=np.int64)
+cayley = small_group(64, 182)  # C8:Q8, GAP index 182
 a, b = [2, 6, 17, 23], [6, 16, 37, 59]
 HX, HZ = build_2bga(cayley, a, b)
 # n=128, k=13, d≤10 (witness-backed upper bound)
@@ -52068,23 +52148,20 @@ HX, HZ = build_2bga(cayley, a, b)
 <ul>
 <li>Model: Xiaomi Mimo-V2.5</li>
 <li>Kit modules: <code>group_algebra.py</code>, <code>surrogate.py</code>, <code>search.py</code>, <code>submit.py</code>, plus a</li>
-<p>GAP bridge (<code>gap_bridge.py</code>) that was written for this search and never committed under any path</p>
+<p>GAP bridge (<code>gap_bridge.py</code>) that was written for this search and never committed under any path; the one table this code needs is committed as <code>research/kit/groups/smallgroup_64_120.json</code></p>
 <li>GAP 4.15.1 for group enumeration (cached)</li>
 <li>gf2_fast C extension for matrix operations</li>
 </ul>
 <h4>Reproduction</h4>
 <pre>
-# `gap_bridge.all_groups_of_order` comes from the local GAP bridge named above,
-# which was never committed. It enumerates the small groups of a given order by
-# GAP ID and returns them in GAP&#x27;s own order.
+# The sweep&#x27;s GAP bridge was never committed. Its order-64 table for C4 x Q16
+# (GAP SmallGroup(64, 120), Elements(G) order) is committed as
+# research/kit/groups/smallgroup_64_120.json and rebuilds the board entry&#x27;s
+# fingerprint (research/test_group_tables.py).
 import sys; sys.path.insert(0, &#x27;research/kit&#x27;); sys.path.insert(0, &#x27;verify&#x27;)
-import numpy as np
-from gap_bridge import all_groups_of_order
-from group_algebra import build_2bga
+from group_algebra import build_2bga, small_group
 
-groups = all_groups_of_order(64)
-g = groups[59]  # C4xQ16, GAP index 120
-cayley = np.array(g[&#x27;cayley_table&#x27;], dtype=np.int64)
+cayley = small_group(64, 120)  # C4xQ16, GAP index 120
 a, b = [6, 24, 37, 60], [5, 33, 44, 51]
 HX, HZ = build_2bga(cayley, a, b)
 # n=128, k=21, d≤8 (witness-backed upper bound)
