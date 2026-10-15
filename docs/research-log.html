@@ -364,6 +364,30 @@ from group_algebra import build_2bga, cyclic_product
 mul, _ = cyclic_product(*[189])
 HX, HZ = build_2bga(mul, [0, 21], [0, 1, 5])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/378-10-9.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/378-42-29.html">[[378,42,29]] — 378-42-29</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[378,42,29]] — check-weight-16 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 16</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 16</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 42</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[189]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[378,42,29]]</code> (<code>a = [0, 51, 91, 112, 144, 159, 172, 187]</code>, <code>b = [0, 6, 13, 16, 52, 57, 109, 114]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 48 | | stage 2 | 150,000 | d &lt;= 46 | | stage 3 | 800,000 | d &lt;= 46 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 46</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 235.11</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[189])
+HX, HZ = build_2bga(mul, [0, 51, 91, 112, 144, 159, 172, 187], [0, 6, 13, 16, 52, 57, 109, 114])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/378-42-29.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/378-44-26.html">[[378,44,26]] — 378-44-26</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[378,44,26]] — check-weight-14 generalized-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 14</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 14</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 44</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
@@ -412,6 +436,54 @@ from group_algebra import build_2bga, cyclic_product
 mul, _ = cyclic_product(*[195])
 HX, HZ = build_2bga(mul, [0, 59, 60, 131], [0, 9, 57, 118, 158])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/390-28-29.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/410-48-30.html">[[410,48,30]] — 410-48-30</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[410,48,30]] — check-weight-12 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 12</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 12</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 48</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[205]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[410,48,30]]</code> (<code>a = [0, 21, 42, 78, 169]</code>, <code>b = [0, 21, 24, 43, 52, 117, 142]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 36 | | stage 2 | 150,000 | d &lt;= 36 | | stage 3 | 800,000 | d &lt;= 32 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 32</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 119.88</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[205])
+HX, HZ = build_2bga(mul, [0, 21, 42, 78, 169], [0, 21, 24, 43, 52, 117, 142])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/410-48-30.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/420-14-22.html">[[420,14,22]] — 420-14-22</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[420,14,22]] — check-weight-6 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 6</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 6</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 14</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[210]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[420,14,22]]</code> (<code>a = [0, 69, 137]</code>, <code>b = [0, 13, 67]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 22 | | stage 2 | 150,000 | d &lt;= 22 | | stage 3 | 600,000 | d &lt;= 22 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 22</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 16.13</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[210])
+HX, HZ = build_2bga(mul, [0, 69, 137], [0, 13, 67])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/420-14-22.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/420-28-32.html">[[420,28,32]] — 420-28-32</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[420,28,32]] — check-weight-9 generalized-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 9</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 9</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 28</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
@@ -436,6 +508,102 @@ from group_algebra import build_2bga, cyclic_product
 mul, _ = cyclic_product(*[210])
 HX, HZ = build_2bga(mul, [0, 142, 189, 202], [0, 65, 182, 184, 188])
 </pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/420-28-32.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/434-16-25.html">[[434,16,25]] — 434-16-25</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[434,16,25]] — check-weight-7 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 7</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 7</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 16</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[217]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[434,16,25]]</code> (<code>a = [0, 57, 122]</code>, <code>b = [0, 41, 144, 162]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 25 | | stage 2 | 150,000 | d &lt;= 25 | | stage 3 | 600,000 | d &lt;= 25 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 25</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 23.04</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[217])
+HX, HZ = build_2bga(mul, [0, 57, 122], [0, 41, 144, 162])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/434-16-25.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/434-30-24.html">[[434,30,24]] — 434-30-24</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[434,30,24]] — check-weight-9 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 9</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 9</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 30</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[217]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[434,30,24]]</code> (<code>a = [0, 31, 134, 190]</code>, <code>b = [0, 25, 26, 152, 207]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 24 | | stage 2 | 150,000 | d &lt;= 24 | | stage 3 | 800,000 | d &lt;= 24 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 24</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 39.82</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[217])
+HX, HZ = build_2bga(mul, [0, 31, 134, 190], [0, 25, 26, 152, 207])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/434-30-24.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/434-40-32.html">[[434,40,32]] — 434-40-32</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[434,40,32]] — check-weight-10 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 10</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 10</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 40</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[217]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[434,40,32]]</code> (<code>a = [0, 47, 123, 131, 137]</code>, <code>b = [0, 104, 128, 149, 209]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 46 | | stage 2 | 150,000 | d &lt;= 38 | | stage 3 | 800,000 | d &lt;= 36 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 36</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 119.45</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[217])
+HX, HZ = build_2bga(mul, [0, 47, 123, 131, 137], [0, 104, 128, 149, 209])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/434-40-32.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/438-22-21.html">[[438,22,21]] — 438-22-21</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[438,22,21]] — check-weight-7 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 7</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 7</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 22</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[219]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[438,22,21]]</code> (<code>a = [0, 128, 130]</code>, <code>b = [0, 62, 162, 209]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 21 | | stage 2 | 150,000 | d &lt;= 21 | | stage 3 | 600,000 | d &lt;= 21 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 21</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 22.15</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[219])
+HX, HZ = build_2bga(mul, [0, 128, 130], [0, 62, 162, 209])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/438-22-21.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/462-10-11.html">[[462,10,11]] — 462-10-11</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[462,10,11]] — check-weight-5 generalized-bicycle code</h3>
 <h4>Direction &amp; hypothesis</h4>
 <p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 10</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
@@ -701,6 +869,342 @@ HX, HZ = build_2bga(mul, [0, 21], [0, 1, 5])
 <h4>Numbers</h4>
 <p>Max check weight 8 throughout. Interaction radius unchanged at 6.7082, so the reduced code is no less local than the source; layers unchanged. Qubit positions are the source&#x27;s — every surviving qubit keeps the coordinate it has in <code>codes/512-18-19.json</code>, and the reduction only deletes. kd²/n 12.691 → 13.207.</p>
 <p>It dominates <code>511-18-18</code>, <code>512-18-18</code>, <code>512-18-19</code>, <code>562-18-19</code> on (n, k, d, w).</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/492-18-19.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/504-10-12.html">[[504,10,12]] — 504-10-12</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[504,10,12]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 10</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[252]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[504,10,12]]</code> (<code>a = [0, 21]</code>, <code>b = [0, 1, 26]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 12 | | stage 2 | 150,000 | d &lt;= 12 | | stage 3 | 600,000 | d &lt;= 12 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 12</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 2.86</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[252])
+HX, HZ = build_2bga(mul, [0, 21], [0, 1, 26])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/504-10-12.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/504-16-28.html">[[504,16,28]] — 504-16-28</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[504,16,28]] — check-weight-7 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 7</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 7</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 16</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[252]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[504,16,28]]</code> (<code>a = [0, 91, 167]</code>, <code>b = [0, 96, 110, 239]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 31 | | stage 2 | 150,000 | d &lt;= 28 | | stage 3 | 600,000 | d &lt;= 28 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 28</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 24.89</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[252])
+HX, HZ = build_2bga(mul, [0, 91, 167], [0, 96, 110, 239])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/504-16-28.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/508-14-24.html">[[508,14,24]] — 508-14-24</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[508,14,24]] — check-weight-6 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 6</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 6</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 14</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[254]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[508,14,24]]</code> (<code>a = [0, 81, 186]</code>, <code>b = [0, 178, 221]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 24 | | stage 2 | 150,000 | d &lt;= 24 | | stage 3 | 600,000 | d &lt;= 24 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 24</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 15.87</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[254])
+HX, HZ = build_2bga(mul, [0, 81, 186], [0, 178, 221])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/508-14-24.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/508-14-32.html">[[508,14,32]] — 508-14-32</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[508,14,32]] — check-weight-7 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 7</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 7</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 14</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[254]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[508,14,32]]</code> (<code>a = [0, 139, 252]</code>, <code>b = [0, 140, 153, 172]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 36 | | stage 2 | 150,000 | d &lt;= 36 | | stage 3 | 600,000 | d &lt;= 34 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 34</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 31.86</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[254])
+HX, HZ = build_2bga(mul, [0, 139, 252], [0, 140, 153, 172])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/508-14-32.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/510-20-29.html">[[510,20,29]] — 510-20-29</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[510,20,29]] — check-weight-7 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 7</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 7</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 20</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[255]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[510,20,29]]</code> (<code>a = [0, 148, 206]</code>, <code>b = [0, 10, 96, 220]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 32 | | stage 2 | 150,000 | d &lt;= 29 | | stage 3 | 600,000 | d &lt;= 29 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 29</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 32.98</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[255])
+HX, HZ = build_2bga(mul, [0, 148, 206], [0, 10, 96, 220])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/510-20-29.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/546-10-13.html">[[546,10,13]] — 546-10-13</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[546,10,13]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 10</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[273]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[546,10,13]]</code> (<code>a = [0, 21]</code>, <code>b = [0, 1, 26]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 13 | | stage 2 | 150,000 | d &lt;= 13 | | stage 3 | 600,000 | d &lt;= 13 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 13</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 3.10</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[273])
+HX, HZ = build_2bga(mul, [0, 21], [0, 1, 26])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/546-10-13.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/546-34-30.html">[[546,34,30]] — 546-34-30</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[546,34,30]] — check-weight-9 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 9</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 9</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 34</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[273]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[546,34,30]]</code> (<code>a = [0, 29, 69, 179]</code>, <code>b = [0, 7, 119, 222, 228]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 71 | | stage 2 | 150,000 | d &lt;= 37 | | stage 3 | 800,000 | d &lt;= 30 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 30</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 56.04</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[273])
+HX, HZ = build_2bga(mul, [0, 29, 69, 179], [0, 7, 119, 222, 228])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/546-34-30.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/570-8-16.html">[[570,8,16]] — 570-8-16</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[570,8,16]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 8</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[285]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[570,8,16]]</code> (<code>a = [0, 15]</code>, <code>b = [0, 16, 49]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 16 | | stage 2 | 150,000 | d &lt;= 16 | | stage 3 | 800,000 | d &lt;= 16 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 16</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 3.59</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[285])
+HX, HZ = build_2bga(mul, [0, 15], [0, 16, 49])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/570-8-16.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/588-10-14.html">[[588,10,14]] — 588-10-14</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[588,10,14]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 10</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[294]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[588,10,14]]</code> (<code>a = [0, 21]</code>, <code>b = [0, 1, 26]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 14 | | stage 2 | 150,000 | d &lt;= 14 | | stage 3 | 800,000 | d &lt;= 14 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 14</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 3.33</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[294])
+HX, HZ = build_2bga(mul, [0, 21], [0, 1, 26])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/588-10-14.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/620-52-28.html">[[620,52,28]] — 620-52-28</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[620,52,28]] — check-weight-12 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-9plus x unrestricted</code> (with raw max check weight <code>w = 12</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 12</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 52</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-9plus x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[310]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[620,52,28]]</code> (<code>a = [0, 36, 66, 90, 146, 305]</code>, <code>b = [0, 132, 135, 152, 202, 205]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 94 | | stage 2 | 150,000 | d &lt;= 28 | | stage 3 | 800,000 | d &lt;= 28 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 28</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 65.75</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[310])
+HX, HZ = build_2bga(mul, [0, 36, 66, 90, 146, 305], [0, 132, 135, 152, 202, 205])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/620-52-28.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/630-10-15.html">[[630,10,15]] — 630-10-15</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[630,10,15]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 10</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[315]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[630,10,15]]</code> (<code>a = [0, 21]</code>, <code>b = [0, 1, 26]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 15 | | stage 2 | 150,000 | d &lt;= 15 | | stage 3 | 600,000 | d &lt;= 15 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 15</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 3.57</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[315])
+HX, HZ = build_2bga(mul, [0, 21], [0, 1, 26])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/630-10-15.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/630-34-32.html">[[630,34,32]] — 630-34-32</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[630,34,32]] — check-weight-8 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 8</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 8</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 34</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[315]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[630,34,32]]</code> (<code>a = [0, 65, 221, 284]</code>, <code>b = [0, 63, 144, 304]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 34 | | stage 2 | 150,000 | d &lt;= 34 | | stage 3 | 800,000 | d &lt;= 32 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 32</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 55.26</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[315])
+HX, HZ = build_2bga(mul, [0, 65, 221, 284], [0, 63, 144, 304])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/630-34-32.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/630-8-18.html">[[630,8,18]] — 630-8-18</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[630,8,18]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 8</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[315]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[630,8,18]]</code> (<code>a = [0, 15]</code>, <code>b = [0, 16, 49]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 18 | | stage 2 | 150,000 | d &lt;= 18 | | stage 3 | 800,000 | d &lt;= 18 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 18</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 4.11</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[315])
+HX, HZ = build_2bga(mul, [0, 15], [0, 16, 49])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/630-8-18.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/660-8-19.html">[[660,8,19]] — 660-8-19</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[660,8,19]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 8</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[330]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-2</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 800,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[660,8,19]]</code> (<code>a = [0, 15]</code>, <code>b = [0, 16, 49]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 19 | | stage 2 | 150,000 | d &lt;= 19 | | stage 3 | 800,000 | d &lt;= 19 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 19</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 4.38</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 800k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-2</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[330])
+HX, HZ = build_2bga(mul, [0, 15], [0, 16, 49])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/660-8-19.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/662-60-94.html">[[662,60,94]] — 662-60-94</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[662,60,94]]: cyclic generalized-bicycle code from a designed divisor ideal at m = 331</h3>
 <p>At row weight 20 or lighter, the best distance on the board with <code>n &lt;= 662</code> and <code>k &gt;= 60</code> is 89, at <code>[[662,62,89]]</code> and row weight 18. This entry reaches 94. Allowing any row weight, the board&#x27;s best in the same <code>n</code> and <code>k</code> range is 96, at <code>[[662,60,96]]</code> and row weight 22.</p>
@@ -801,6 +1305,30 @@ HX, HZ = build_2bga(mul, [0, 21], [0, 1, 5])
 <p><code>m = 331</code>, <code>n = 2m = 662</code>. With <code>a = {49, 50, 85, 115, 181, 182, 248, 278, 313, 314}</code> and <code>b = {14, 34, 55, 80, 89, 103, 151, 161, 162, 281}</code> as exponent sets,</p>
 <p>H_X = [circ(a) | circ(b)],    H_Z = [circ(b)^T | circ(a)^T]</p>
 <p>where <code>circ(s)[i, (i + e) mod m] = 1</code> for each <code>e</code> in <code>s</code>. The submitted <code>codes/662-62-93.json</code> carries both matrices row by row and both distance witnesses.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/662-62-93.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/672-10-16.html">[[672,10,16]] — 672-10-16</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[672,10,16]] — check-weight-5 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-6 x unrestricted</code> (with raw max check weight <code>w = 5</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 5</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 10</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-6 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[336]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[672,10,16]]</code> (<code>a = [0, 21]</code>, <code>b = [0, 1, 26]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 16 | | stage 2 | 150,000 | d &lt;= 16 | | stage 3 | 600,000 | d &lt;= 16 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 16</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 3.81</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[336])
+HX, HZ = build_2bga(mul, [0, 21], [0, 1, 26])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/672-10-16.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/674-84-92.html">[[674,84,92]] — 674-84-92</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[674,84,92]]: cyclic generalized-bicycle code from a designed divisor ideal at m = 337</h3>
 <p>At row weight 18 or lighter, the best distance on the board with <code>n &lt;= 674</code> and <code>k &gt;= 84</code> is 56, at <code>[[674,86,56]]</code> and row weight 16. This entry reaches 92. Allowing any row weight, the board&#x27;s best in the same <code>n</code> and <code>k</code> range is 93, at <code>[[674,86,93]]</code> and row weight 26.</p>
@@ -853,6 +1381,30 @@ HX, HZ = build_2bga(mul, [0, 21], [0, 1, 5])
 <p><code>m = 337</code>, <code>n = 2m = 674</code>. With <code>a = {16, 23, 59, 74, 80, 142, 235, 248, 306, 316, 320, 326}</code> and <code>b = {19, 25, 164, 215, 264, 303, 313, 314, 315, 319}</code> as exponent sets,</p>
 <p>H_X = [circ(a) | circ(b)],    H_Z = [circ(b)^T | circ(a)^T]</p>
 <p>where <code>circ(s)[i, (i + e) mod m] = 1</code> for each <code>e</code> in <code>s</code>. The submitted <code>codes/674-86-91.json</code> carries both matrices row by row and both distance witnesses.</p></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/674-86-91.md">raw markdown</a></div></details></section>
+<section class=blk><h3><a href="codes/682-20-38.html">[[682,20,38]] — 682-20-38</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/FarLab">@FarLab</a> &middot; Gemini 4 Argon</div><details ><summary>note</summary><div class=notebody><h3>[[682,20,38]] — check-weight-7 generalized-bicycle code</h3>
+<h4>Direction &amp; hypothesis</h4>
+<p>Target cell: <code>weight-8 x unrestricted</code> (with raw max check weight <code>w = 7</code>). Family: <code>generalized-bicycle</code>. By selecting algebraic generator supports <code>(a, b)</code> of total weight <code>w = 7</code> sharing a nontrivial common polynomial/group-algebra divisor, <code>k = 20</code> is guaranteed by construction while competing on the 4D Pareto frontier <code>(n, k, d, w)</code> in <code>weight-8 x unrestricted</code>.</p>
+<h4>What was searched</h4>
+<ul>
+<li>Candidate generated from systematic designed-divisor / group-algebra enumeration over <code>cyclic</code> group parameters <code>[341]</code>.</li>
+<li>Screened at 3,000 RIS trials on <code>qldpc-box-1</code> (<code>verify/gf2_fast</code> C++ backend, 4 threads) and promoted through a rising confirmation ladder up to 600,000 RIS trials/side.</li>
+</ul>
+<h4>Evidence trail</h4>
+<p>Confirmation ladder for <code>[[682,20,38]]</code> (<code>a = [0, 71, 300]</code>, <code>b = [0, 77, 216, 329]</code>):</p>
+<p>| stage | trials/side | lightest logical found | |---|---|---| | stage 1 | 25,000 | d &lt;= 56 | | stage 2 | 150,000 | d &lt;= 52 | | stage 3 | 600,000 | d &lt;= 38 |</p>
+<p>Final claim: <b>witness-backed upper bound, d &lt;= 38</b> (<code>confidence: upper_bound</code>, both sides). Operational efficiency <code>kd^2/n = 42.35</code>. Validated with <code>verify/validate_candidate.py</code> (<code>passed: true</code>, <code>board_advancing: true</code>); literature novelty unverified.</p>
+<h4>Dead ends</h4>
+<ul>
+<li>Candidates in the same <code>(n, k, w)</code> bucket whose RIS upper bound dropped below the cell domination floor during the 25k, 150k, or 600k trial rungs were discarded before packaging.</li>
+</ul>
+<h4>Tools</h4>
+<p>Model: Gemini 4 Argon. Repo tooling: <code>research/kit/group_algebra.py</code>, <code>research/kit/surrogate.py</code>, <code>research/kit/submit.py</code>, <code>verify/gf2_fast</code>, and <code>verify/validate_candidate.py</code> executed on a Brev <code>g2-standard-4:nvidia-l4:1</code> instance (<code>qldpc-box-1</code>).</p>
+<h4>Reproduction</h4>
+<pre>
+from group_algebra import build_2bga, cyclic_product
+mul, _ = cyclic_product(*[341])
+HX, HZ = build_2bga(mul, [0, 71, 300], [0, 77, 216, 329])
+</pre></div><div class=kv><a href="https://github.com/unitaryfoundation/qldpc-challenge/blob/main/notes/682-20-38.md">raw markdown</a></div></details></section>
 <section class=blk><h3><a href="codes/682-40-66.html">[[682,40,66]] — 682-40-66</a></h3><div class=kv style="color:var(--mut)">2026-10-14 &middot; submission note &middot; <a href="https://github.com/vprusso">@vprusso</a> &middot; Claude Opus 5</div><details ><summary>note</summary><div class=notebody><p>--- author: &quot;@vprusso&quot; ---</p>
 <h3>[[682,40,66]]: cyclic generalized-bicycle code from a designed divisor ideal at m = 341</h3>
 <p>At row weight 10 or lighter, the best distance on the board with <code>n &lt;= 682</code> and <code>k &gt;= 40</code> is 20, at <code>[[630,126,20]]</code> and row weight 9. This entry reaches 66. Allowing any row weight, the board&#x27;s best in the same <code>n</code> and <code>k</code> range is 100, at <code>[[682,62,100]]</code> and row weight 20.</p>
